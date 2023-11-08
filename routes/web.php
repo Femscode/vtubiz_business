@@ -29,6 +29,10 @@ Route::any('update_account_data', function () {
     }
 });
 
+Auth::routes();
+Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+    
+
 Route::any('/upgrade/{id}', [BusinessController::class, 'upgrade'])->name('upgrade');
 Route::any('/saveBeneficiary', [BusinessController::class, 'saveBeneficiary'])->name('saveBeneficiary');
 Route::any('/removeBeneficiary', [BusinessController::class, 'removeBeneficiary'])->name('removeBeneficiary');
@@ -39,9 +43,6 @@ Route::post('/submitSMSForm', [BulkSMSController::class, 'submitSMSForm'])->name
 Route::post('/sendSMS2', [BulkSMSController::class, 'sendSMS2'])->name('sendSMS2');
 Route::any('/resend_sms/{id}', [BulkSMSController::class, 'resendSMS'])->name('resend_sms');
 
-Auth::routes();
-Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
-    
 //the subdomain website routes
 Route::middleware(['user.type.router'])->group(function () {
     // Auth::routes();
