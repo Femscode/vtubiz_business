@@ -137,7 +137,7 @@ text-transform: uppercase;
             <h2>Internal Server Error.</h2>
             <p>Uh-oh! Our vendors are cooking up something delicious, kindly try again later! </p>
             
-           <a style='background:#ebab21' href="https://fastpay.cttaste.com">Go To Homepage</a>
+           <a style='background:#ebab21' href="https://vtubiz.com">Go To Homepage</a>
 
         </div>
     </div>

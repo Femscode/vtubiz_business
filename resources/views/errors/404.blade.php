@@ -137,7 +137,7 @@ text-transform: uppercase;
             <h2>Page Not Found</h2>
             <p>The page/resources you are looking for is currently not available. </p>
             
-           <a style='background:#ebab21' href="https://fastpay.cttaste.com">Go To Homepage</a>
+           <a style='background:#ebab21' href="https://vtubiz.com">Go To Homepage</a>
 
         </div>
     </div>
