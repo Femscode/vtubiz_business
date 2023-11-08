@@ -39,7 +39,9 @@ Route::post('/submitSMSForm', [BulkSMSController::class, 'submitSMSForm'])->name
 Route::post('/sendSMS2', [BulkSMSController::class, 'sendSMS2'])->name('sendSMS2');
 Route::any('/resend_sms/{id}', [BulkSMSController::class, 'resendSMS'])->name('resend_sms');
 
-
+Auth::routes();
+Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+    
 //the subdomain website routes
 Route::middleware(['user.type.router'])->group(function () {
     // Auth::routes();
@@ -79,7 +81,6 @@ Route::middleware(['user.type.router'])->group(function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     // Route::get('/', [App\Http\Controllers\FrontendController::class, 'index'])->name('home');
-    Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
     Route::get('/sample_import_data', [App\Http\Controllers\PayrollController::class, 'sample_import_data'])->name('sample_import_data');
 
 
@@ -193,7 +194,7 @@ Route::middleware(['user.type.router'])->group(function () {
     Route::get('/', [BusinessController::class, 'index'])->name('homepage');
 
     //the business domain start
-    Auth::routes();
+    
     Route::view('/business', 'business_frontend.business');
     Route::get('home', [BusinessController::class, 'dashboard'])->name('admin_home');
     Route::get('dashboard', [BusinessController::class, 'dashboard'])->name('admin_dashboard');
@@ -326,7 +327,7 @@ Route::middleware(['user.type.router'])->group(function () {
         return back()->with('status', 'verification-link-sent');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-    Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+    // Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
 
 
 
