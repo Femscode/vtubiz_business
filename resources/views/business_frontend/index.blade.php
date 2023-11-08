@@ -395,7 +395,7 @@
             <h1 class="display-1 mb-5 mx-md-n5 mx-lg-0">Top Up, <span style='color:#fb9129'>Pay Bills, <br></span> Stay
               Connected.</h1>
             {{-- <p class="lead fs-lg mb-7">Explore a world of convenience.</p> --}}
-            <span><a href='/register' class="btn btn-primary border-0 me-2">Login</a></span>
+            <span><a href='/login' class="btn btn-primary border-0 me-2">Login</a></span>
             <span><a href='/register' style='background-color:#001f3f' class="btn btn-primary border-0  me-2">Create
                 Account</a></span><br>
             <h4><a href='#free_vtu' style='color:#001f3f' class=" border-0  me-2 mt-2">Request A Free VTU Website →</a>
@@ -642,7 +642,7 @@
           <div class="col-lg-6">
             <h2 class="fs-16 text-uppercase text-muted mb-3">Be In Power</h2>
             <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for FREE😊.</h3>
-            <p>Start selling all products like we do at your own price with our ready-made, easily cutomizable website for free.</p>
+            <p>Start selling all products like we do at your own price with our ready-made, easily customizable website for free.</p>
             <a href="/business" class="btn btn-primary rounded-pill mb-0">Get Started</a>
           </div>
           <div class="col-lg-6 order-lg-2">
