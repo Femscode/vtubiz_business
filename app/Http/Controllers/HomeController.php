@@ -107,7 +107,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        return redirect()->route('dashboard');
+       
+        return redirect('/dashboard');
     }
 
     public function setpin(Request $request)
@@ -130,31 +131,30 @@ class HomeController extends Controller
     }
     public function dashboard()
     {
-
+      
         $data['user'] = $user = Auth::user();
         $data['company'] = User::where('id', $user->company_id)->first();
 
         // dd($user);
         $data['active'] = 'dashboard';
         if ($user->block == 1) {
-            return view('dashboard.unverified', $data);
+           
+            return response()->view('dashboard.unverified', $data);
         }
+        // dd('here',$user);
         if ($user->pin == null) {
-            return view('dashboard.setpin', $data);
-        } else {
-
-            if ($user->user_type == 'user') {
+            return response()->view('dashboard.setpin', $data);
+        } else {          
+           
                 // $data['banks'] = Bank::all();
                 $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
 
                 if ($notification && $notification->title !== null) {
                     $data['notification'] = $notification;
                 }
-                return view('dashboard.index', $data);
-            } else {
-                return view('dashboard.index', $data);
-                dd("The Admin/Vendor Page");
-            }
+            //    dd($data);
+                return response()->view('dashboard.index', $data);
+            
         }
     }
 

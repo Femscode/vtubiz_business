@@ -86,6 +86,7 @@ class RegisterController extends Controller
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'uuid' => $uid,
+                'user_type' => 'client_customer',
                 'password' => Hash::make($data['password']),
             ]);
         } else {
@@ -97,6 +98,7 @@ class RegisterController extends Controller
                 'phone' => $data['phone'],
                 'uuid' => $uid,
                 'password' => Hash::make($data['password']),
+                'user_type' => 'customer',
             ]);
             $user->company_id = $user->id;
             $user->save();

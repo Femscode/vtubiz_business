@@ -426,6 +426,13 @@
                             </a>
 
                         </li>
+                        <li>
+                            <a onclick='return confirmDowngrade()' href="/upgrade/{{ $user->id }}" class="">
+                                <i class="bx bx-sad"></i>
+                                <span key="t-layouts">Downgrade Account</span>
+                            </a>
+
+                        </li>
                        
                         <li>
                             <a href="/logout" onclick='return confirm("Are you sure you want to log out?")'>
@@ -539,6 +546,28 @@
     {{-- <script src="{{ asset('api_user/assets/js/pages/datatables.init.js')}}"></script> --}}
 
     {{-- <script src='/assets/js/professionallocker.js'></script> --}}
+    
+<script>
+    function confirmDowngrade() {
+   Swal.fire({
+     title: 'You are about to downgrade your account to a normal account?',
+   //   text: 'This action cannot be undone!',
+     icon: 'warning',
+     showCancelButton: true,
+     confirmButtonColor: '#3085d6',
+     cancelButtonColor: '#d33',
+     confirmButtonText: 'Yes, Downgrade!'
+   }).then((result) => {
+     if (result.isConfirmed) {
+       // User clicked "Yes, upgrade!" button, navigate to the upgrade page
+       window.location.href = "/upgrade/{{ $user->id }}";
+     }
+   });
+
+   // Prevent the default anchor tag behavior (navigation) until confirmation
+   return false;
+ }
+   </script>
     <script>
 
         $(document).ready(function() {

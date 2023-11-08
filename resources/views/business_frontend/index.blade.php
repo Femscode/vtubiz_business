@@ -392,7 +392,7 @@
           </div>
           <!-- /column -->
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-5 text-center text-lg-start">
-            <h1 class="display-1 mb-5 mx-md-n5 mx-lg-0">Top Up, <span style='color:#fb9129'>Pay Bills, </span> Stay
+            <h1 class="display-1 mb-5 mx-md-n5 mx-lg-0">Top Up, <span style='color:#fb9129'>Pay Bills, <br></span> Stay
               Connected.</h1>
             {{-- <p class="lead fs-lg mb-7">Explore a world of convenience.</p> --}}
             <span><a href='/register' class="btn btn-primary border-0 me-2">Login</a></span>
@@ -642,7 +642,7 @@
           <div class="col-lg-6">
             <h2 class="fs-16 text-uppercase text-muted mb-3">Be In Power</h2>
             <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for FREE😊.</h3>
-            <p>Start selling all products like we do at your own price.</p>
+            <p>Start selling all products like we do at your own price with our ready-made, easily cutomizable website for free.</p>
             <a href="/business" class="btn btn-primary rounded-pill mb-0">Get Started</a>
           </div>
           <div class="col-lg-6 order-lg-2">
@@ -1149,8 +1149,8 @@
               <!-- Begin Mailchimp Signup Form -->
               <div id="mc_embed_signup2">
                 <form
-                  action="https://elemisfreebies.us20.list-manage.com/subscribe/post?u=aa4947f70a475ce162057838d&amp;id=b49ef47a9a"
-                  method="post" id="mc-embedded-subscribe-form2" name="mc-embedded-subscribe-form"
+                  action="#"
+                  method="post"  name="mc-embedded-subscribe-form"
                   class="validate dark-fields" target="_blank" novalidate>
                   <div id="mc_embed_signup_scroll2">
                     <div class="mc-field-group input-group form-floating">

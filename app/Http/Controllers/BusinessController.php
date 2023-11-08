@@ -33,6 +33,20 @@ class BusinessController extends Controller
         return view('business_frontend.index');
         return 'good';
     }
+    public function upgrade($id)
+    {
+        $user = User::find($id);
+        // dd($user);
+        if ($user->user_type == 'customer') {
+            $user->user_type = 'admin';
+            $user->save();
+            return redirect('/dashboard')->with('message', 'Account Upgraded Successfully!');
+        } else {
+            $user->user_type = 'customer';
+            $user->save();
+            return redirect('/dashboard')->with('message', 'Account Downgraded Successfully!');
+        }
+    }
     public function user_management()
     {
         $data['user'] = $user = Auth::user();
@@ -577,8 +591,8 @@ class BusinessController extends Controller
 
         $electricity = Electricity::find($request->id);
 
-        if($request->real_amount < $electricity->actual_amount)
-        $electricity->real_amount = $request->real_amount;
+        if ($request->real_amount < $electricity->actual_amount)
+            $electricity->real_amount = $request->real_amount;
         $electricity->save();
 
         return redirect()->back()->with('success', 'Electricity Price Updated Successfully!');
@@ -589,7 +603,7 @@ class BusinessController extends Controller
         $this->validate($request, ['real_amount' => ['required', 'numeric', 'min:1']]);
         // dd($request->all());
         $user = Auth::user();
-        if($request->real_amount  > 3.8) {            
+        if ($request->real_amount  > 3.8) {
             $user->bulksms_price = $request->real_amount;
         }
         $user->save();
@@ -606,7 +620,7 @@ class BusinessController extends Controller
 
 
             $cable = Cable::find($value);
-            if ($requestData['admin_price'][$key] > 500 && $requestData['admin_price'][$key] >$cable->real_price) {
+            if ($requestData['admin_price'][$key] > 500 && $requestData['admin_price'][$key] > $cable->real_price) {
                 $cable->plan_name = $requestData['plan_name'][$key];
                 $cable->admin_price = $requestData['admin_price'][$key];
                 $cable->save();

@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'maindomain.auth' => \App\Http\Middleware\MainDomainAuthentication::class,
         'subdomain.auth' => \App\Http\Middleware\SubdomainAuthentication::class,
-    
+        'user.type.router' => \App\Http\Middleware\UserTypeRouter::class,
+
     ];
 }

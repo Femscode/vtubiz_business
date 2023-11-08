@@ -31,7 +31,7 @@
         <input
           autocomplete=""
           v-model="brand_name"
-          placeholder="Brand/Company name"
+          placeholder="Brandname/Username"
           type="text"
           class="form-control"
           required
