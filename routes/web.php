@@ -28,8 +28,10 @@ Route::any('update_account_data', function () {
         $theme->save();
     }
 });
+require __DIR__.'/auth.php';
 
-Auth::routes();
+
+// Auth::routes();
 Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
     
 
@@ -197,7 +199,7 @@ Route::middleware(['user.type.router'])->group(function () {
     //the business domain start
     
     Route::view('/business', 'business_frontend.business');
-    Route::get('home', [BusinessController::class, 'dashboard'])->name('admin_home');
+    Route::get('home', [BusinessController::class, 'dashboard'])->name('admin_home')->name('dashboard');
     Route::get('dashboard', [BusinessController::class, 'dashboard'])->name('admin_dashboard');
     Route::get('customized_domain', [BusinessController::class, 'customized_domain'])->name('customized_domain');
     Route::get('profile', [BusinessController::class, 'profile']);
