@@ -28,9 +28,9 @@ Route::any('update_account_data', function () {
         $theme->save();
     }
 });
+
+
 require __DIR__.'/auth.php';
-
-
 // Auth::routes();
 Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
     
