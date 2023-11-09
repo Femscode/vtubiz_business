@@ -134,7 +134,7 @@
         <!--end::Authentication - Sign-in-->
     </div>
     <!--end::Root-->
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{asset('cdn/sweetalert.min.js')}}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{asset('cdn/jquery-3.6.0.js')}}" crossorigin="anonymous"></script>
     {{-- <script src="{{ asset('assets/js/professionallocker.js')}}"></script> --}}

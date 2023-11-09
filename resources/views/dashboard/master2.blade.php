@@ -6879,7 +6879,7 @@
         })
 
     </script>
-     <script src="{{ mix('js/app.js') }}"></script>
+     <script src="{{ asset('js/app.js') }}"></script>
 
 </body>
 <!-- Mirrored from preview.keenthemes.com/metronic8/demo34/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 06 Feb 2023 08:02:15 GMT -->
