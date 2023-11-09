@@ -79,6 +79,7 @@ class BusinessController extends Controller
     public function dashboard()
     {
         $data['user'] = $user = Auth::user();
+        dd($user);
         if ($user->pin == null) {
             return view('dashboard.setpin', $data);
         }
