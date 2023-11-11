@@ -3,9 +3,9 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>Verify Email | Fastpay</title>
+    <title>VTUBIZ | Verify Email</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Payment Portal For CT_Taste" />
+    <meta name="description" content="Top Up, Pay Bills, Stay Connected" />
     <meta name="keywords" content="Quick pay with CT_Taste" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
@@ -106,8 +106,8 @@
                                             <!--begin:Logo-->
                                             <div style="margin-bottom: 10px">
                                                 <a rel="noopener" target="_blank">
-                                                    <img alt="Logo"  src="assets/media/logos/ct_yellow.png"
-                                                        style="height: 35px" />
+                                                    <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}" width='140px' height='35px' alt="">
+          
                                                 </a>
                                             </div>
                                             <!--end:Logo-->

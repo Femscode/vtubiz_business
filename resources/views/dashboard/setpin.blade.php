@@ -106,8 +106,8 @@
                                             <!--begin:Logo-->
                                             <div style="margin-bottom: 10px">
                                                 <a rel="noopener" target="_blank">
-                                                    <img alt="Logo" src="assets/media/logos/ct_yellow.png"
-                                                        style="height: 35px" />
+                                                    <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}" width='140px' height='35px' alt="">
+          
                                                 </a>
                                             </div>
                                             <!--end:Logo-->
@@ -127,7 +127,7 @@
                                 <tr>
                                     <td align="center" valign="center"
                                         style="font-size: 13px; padding:0 15px; text-align:center; font-weight: 500; color: #A1A5B7;font-family:Arial,Helvetica,sans-serif">
-                                        <p> &copy Copyright CT_Taste.
+                                        <p> &copy Copyright VTUBIZ.
                                            
                                         </p>
                                     </td>

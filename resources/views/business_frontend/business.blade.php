@@ -24,9 +24,9 @@
       <nav class="navbar navbar-expand-lg center-nav transparent navbar-light">
         <div class="container flex-lg-row flex-nowrap align-items-center">
           <div class="navbar-brand w-100">
-            <a href="index.html">
-              {{-- <img src="assets/img/logo-dark.png" srcset="./assets/img/logo-dark@2x.png 2x" alt="" /> --}}
-              <h1>VTUBIZ</h1>
+            <a href="#">
+              <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}" width='100px' height='25px' alt="">
+          
             </a>
           </div>
           <div class="navbar-collapse offcanvas offcanvas-nav offcanvas-start">

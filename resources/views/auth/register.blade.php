@@ -91,7 +91,8 @@
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
                     <a href="/index.html" class="mb-7">
-                        <img alt="Logo" src="/assets/media/logos/ct_white.png" style='width:150px;height:40px' />
+                        <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}" width='140px' height='35px' alt="">
+          
                     </a>
                     <!--end::Logo-->
 

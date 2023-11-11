@@ -3,15 +3,7 @@
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
-use App\Models\Payee;
-use App\Models\Theme;
-use Illuminate\Support\Str;
-use App\Models\BusinessUser;
-use App\Models\DataRecipient;
 use Illuminate\Http\Client\Request;
-use App\Models\DuplicateTransaction;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BulkSMSController;
@@ -73,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
         }
         return 'fee added';
     });
-    Route::view('offline', 'offline');
+    // Route::view('offline', 'offline');
     Route::any('fetch_email', function () {
         $datas = User::get()->pluck('email');
 

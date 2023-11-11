@@ -117,9 +117,9 @@
                     <!--begin::Logo-->
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 me-lg-18">
                         <a href="https://vtubiz.com">
-                            <img alt="Logo" src="{{ asset('assets/media/logos/logo-br.png')}}"
+                            <img alt="Logo" src="{{ asset('assets/img/logo/vtulogo.png')}}"
                                 class="h-25px d-sm-none" />
-                            <img alt="Logo" src="{{ asset('assets/media/logos/logo-br.png')}}"
+                            <img alt="Logo" src="{{ asset('assets/img/logo/vtulogo.png')}}"
                                 class="h-25px d-none d-sm-block" />
                         </a>
                     </div>
@@ -610,7 +610,8 @@
             <div class="app-wrapper  flex-column flex-row-fluid " id="kt_app_wrapper">
 
                 <!--begin::Toolbar-->
-                <div style='background:url({{ asset('assets/media/logos/fastpay_bg2.jpg') }});background-size:cover'
+                <div style='background:url({{ asset('/assets/media/auth/bg3.jpg') }});background-size:cover;width:100%'
+                {{-- <div style='background:url({{ asset('assets/media/logos/fastpay_bg2.jpg') }});background-size:cover' --}}
                     id="kt_app_toolbar" class="app-toolbar  py-6 ">
 
                     <!--begin::Toolbar container-->
@@ -634,7 +635,7 @@
                                     <!--begin::Item-->
                                     <li class="breadcrumb-item">
                                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                        <span class="svg-icon svg-icon-4 svg-icon-gray-700 mx-n1"><svg width="24"
+                                        <span class="svg-icon svg-icon-4 svg-icon-white-700 mx-n1"><svg width="24"
                                                 height="24" viewBox="0 0 24 24" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
@@ -648,7 +649,7 @@
 
 
                                     <!--begin::Item-->
-                                    <a href='https://vtubiz.com' class="breadcrumb-item text-dark  lh-1">
+                                    <a href='https://vtubiz.com' class="breadcrumb-item text-white  lh-1">
                                         vtubiz.com</a>
                                     <!--end::Item-->
 
@@ -667,7 +668,7 @@
                                     <!--begin::Title-->
 
                                     <h1 style=" 'Lato', sans-serif;"
-                                        class="page-heading d-flex text-black fw-semibold fs-2 flex-column justify-content-center my-0 mb-2">
+                                        class="page-heading d-flex text-white fw-bold fs-2 flex-column justify-content-center my-0 mb-2">
                                         Welcome back, {{ $user->name }}.
                                         <!--begin::Description-->
                                         <div class="card-title d-flex flex-column mt-4">
