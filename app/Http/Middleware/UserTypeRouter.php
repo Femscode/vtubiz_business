@@ -28,6 +28,7 @@ class UserTypeRouter
             $controllerMethod = $this->getControllerMethodForUserType($userType);
             // dd($controllerMethod);
             if ($controllerMethod) {
+                // dd($controllerMethod);
                 return $controllerMethod;
             }
         }
@@ -40,15 +41,16 @@ class UserTypeRouter
 
         switch ($userType) {
             case 'admin':
+                // dd($userType);
                 $controller = app(BusinessController::class)->dashboard();
                 break;
-            case 'customer':               
+            case 'customer':
                 $controller = app(HomeController::class)->dashboard();
-                return $controller;               
+                // return $controller;
                 break;
-            case 'client_customer':   
+            case 'client_customer':
                 $controller = app(HomeController::class)->dashboard();
-                return $controller;               
+                // return $controller;
                 break;
                 // Add more cases for other user types as needed
             default:

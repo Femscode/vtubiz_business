@@ -65,12 +65,12 @@
                                 <td>{{ count($group->recipient) }}</td>
                                 <td>NGN{{ number_format($group->recipient->sum('amount')) }}</td>
                                 <td>
-                                    <a href='/airtime_recipient/{{ $group->uid }}' class='btn btn-sm btn-primary'>Add/View
+                                    <a href='/premium-airtime_recipients/{{ $group->uid }}' class='btn btn-sm btn-primary'>Add/View
                                         Recipients</a>
                                     <a data-group_id='{{ $group->uid }}'
                                         data-total_amount="{{ number_format($group->recipient->sum('amount')) }}"
                                         class='recharge btn btn-sm btn-success'>Recharge Group</a>
-                                    <a href='/group_airtime_transactions/{{ $group->uid }}'
+                                    <a href='/premium-group_airtime_transactions/{{ $group->uid }}'
                                         class='btn btn-sm btn-info'>Transactions</a>
                                     <a onclick="return confirm('Are you sure you want to delete this group?')"
                                         href='/delete_airtime_group/{{ $group->uid }}' class='btn btn-sm btn-danger'>Delete

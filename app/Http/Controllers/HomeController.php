@@ -158,6 +158,7 @@ class HomeController extends Controller
         }
     }
 
+    
     public function delete_order(Request $request)
     {
         $session = MySession::find($request->id);

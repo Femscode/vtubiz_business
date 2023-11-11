@@ -24,10 +24,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Redirect;
 
 class BusinessController extends Controller
 {
+   
     use TransactionTrait;
+  
     public function index()
     {
         return view('business_frontend.index');
@@ -79,7 +82,11 @@ class BusinessController extends Controller
     public function dashboard()
     {
         $data['user'] = $user = Auth::user();
-        // dd($user);
+        if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
+        
+
         if ($user->pin == null) {
             return view('dashboard.setpin', $data);
         }
@@ -146,7 +153,10 @@ class BusinessController extends Controller
     }
     public function profile()
     {
-        $data['user'] = Auth::user();
+        $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+            return redirect('/my-profile');
+        }
         return view('business_backend.profile', $data);
     }
     public function updateprofile(Request $request)
@@ -237,6 +247,9 @@ class BusinessController extends Controller
     {
 
         $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+            return redirect('/user-fundwallet');
+        }
         $data['active'] = 'fundwallet';
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Payment Notification')->first();
 
@@ -366,15 +379,18 @@ class BusinessController extends Controller
     public function bulksms_transactions()
     {
         $data['user'] = $user = Auth::user();
-        $data['transactions'] = $transactions =  BulkSMSTransaction::where('company_id', $user->id)->latest()->get();
+        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+            return redirect('/premium-bulksms_transactions');
+        }
+        $data['transactions'] = $transactions =  BulkSMSTransaction::where('company_id', $user->id)->where('user_id',$user->id)->latest()->get();
         return view('business_backend.bulksms_transactions', $data);
     }
     public function data_prices()
     {
         $data['user'] = $user = Auth::user();
-
-
-
+        if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
         $datas = Data::where('user_id', 0)->get();
         $check_data = Data::where('user_id', $user->id)->first();
         // Data::where('user_id', $user->id)->delete();
@@ -418,6 +434,9 @@ class BusinessController extends Controller
     public function airtime_prices()
     {
         $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
         $airtime = Airtime::where('user_id', $user->id)->first();
         if (!$airtime) {
             Airtime::create([
@@ -455,6 +474,9 @@ class BusinessController extends Controller
     public function electricity_prices()
     {
         $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
         $electricity = Electricity::where('user_id', $user->id)->first();
         if (!$electricity) {
             Electricity::create([
@@ -472,11 +494,9 @@ class BusinessController extends Controller
     }
     public function bulksms_prices()
     {
-        $data['user'] = $user = Auth::user();
-
-
-        $data['user'] = $user = Auth::user();
-
+        $data['user'] = $user = Auth::user(); if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
 
         return view('business_backend.bulksms_price', $data);
     }
@@ -484,6 +504,9 @@ class BusinessController extends Controller
     {
 
         $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
         $cables = Cable::where('user_id', 0)->get();
         $check_cable = Cable::where('user_id', $user->id)->first();
         if (!$check_cable) {
@@ -507,6 +530,9 @@ class BusinessController extends Controller
     public function examination_prices()
     {
         $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        }
 
         $examination = Examination::where('user_id', $user->id)->first();
         if (!$examination) {

@@ -285,7 +285,7 @@
                                 <li><a href="/airtime" key="t-user-grid">Buy Airtime</a></li>
                                 <li><a href="/data" key="t-user-list">Buy Data</a></li>
                                 <li><a href="/cable" key="t-profile">Cable(Tv) Subscription</a></li>
-                                <li><a href="/electricitiy" key="t-profile">Pay Light Bills</a></li>
+                                <li><a href="/electricity" key="t-profile">Pay Light Bills</a></li>
                                 <li><a href="/examination" key="t-profile">Exam Result Checkers</a></li>
                                 <li><a href="/bulksms" key="t-profile">Bulk SMS</a></li>
                                 <li><a href="/contact_group" key="t-profile">Bulk SMS Contact Groups</a></li>

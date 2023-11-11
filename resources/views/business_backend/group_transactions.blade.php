@@ -12,10 +12,11 @@
 
                 <div class="card">
                     <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                        <div class="card-title">
+                        <div class="card-title d-sm-flex align-items-center justify-content-between">
                             <h2 class="fw-bolder">{{ $group->name }} <span class='text-danger'>Transactions</span>
                             </h2>
-                
+                            <a class='btn btn-secondary' href='/data_group'>←Back</a>
+            
                         </div>
                 
                       </div>

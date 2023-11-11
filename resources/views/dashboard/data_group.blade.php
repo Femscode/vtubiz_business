@@ -60,9 +60,9 @@
                             <td>{{ count($group->recipient) }}</td>
                             <td>NGN{{ number_format($group->recipient->sum('amount')) }}</td>
                             <td>
-                                <a href='/data_recipient/{{ $group->uid }}' class='btn btn-sm btn-primary'>Add/View Recipients</a>
+                                <a href='/premium-data_recipient/{{ $group->uid }}' class='btn btn-sm btn-primary'>Add/View Recipients</a>
                                 <a data-group_id='{{ $group->uid }}' data-total_amount="{{ number_format($group->recipient->sum('amount')) }}" class='recharge btn btn-sm btn-success'>Recharge Group</a>
-                                <a href='/group_transactions/{{ $group->uid }}' class='btn btn-sm btn-info'>Transactions</a>
+                                <a href='/premium-group_transactions/{{ $group->uid }}' class='btn btn-sm btn-info'>Transactions</a>
                                 <a onclick="return confirm('Are you sure you want to delete this group?')" href='/delete_group/{{ $group->uid }}' class='btn btn-sm btn-danger'>Delete Group</a>
                             
                             </td>

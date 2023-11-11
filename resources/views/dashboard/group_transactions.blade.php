@@ -21,6 +21,7 @@
                         <div class="p-4 m-4 page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">{{ $group->name }} <span class='text-danger'>Transactions</span>
                             </h4>
+                            <a class='btn btn-secondary' href='/data_group' >←Back</a>
                         </div>
                     </div>
                     <div class="card-body">

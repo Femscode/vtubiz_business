@@ -29,6 +29,9 @@ class BulkSMSController extends Controller
     {
         // return the contact group page
         $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+            return redirect('/premium-contact_group');
+        }
         $data['contacts'] = ContactGroup::where('user_id', $user->id)->latest()->get();
         return view('business_backend.contact_group', $data);
     }

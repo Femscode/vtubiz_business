@@ -9,105 +9,113 @@
 <div class="d-flex flex-column flex-column-fluid">
     <!--begin::Container-->
     <div id="kt_app_content" class="app-content  flex-column-fluid ">
-  
 
-    <div class="row">
-        <div class="col-xl-12">
 
-            <!-- end row -->
+        <div class="row">
+            <div class="col-xl-12">
 
-            <div class="card">
-                <div class="col-12">
-                    <div class="m-2 p-2 page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">{{ $group->name }} <span class='text-danger'>(NGN{{ number_format($recipients->sum('amount')) }})</span></h4>
-                        <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Create Airtime Recipient</a>
-                    </div>
-        
-        
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-        
-                                <div class="modal-body">
-                                    <h4 class='text-center p-2'><b>Create Recipient</b></h4>
-                                    <form id='create_form' method='post'>@csrf
-                                        <label><b>Name</b></label>
-                                        <input id='name' type='text' class='form-control' name='name'
-                                            placeholder='e.g My Mum' />
-                                        <input id='group_id' type='hidden' value='{{ $group->id }}' />
-                                        <label><b>Phone</b></label>
-                                        <input id='phone' oninput="fetchNetwork()" type='number' class='form-control'
-                                            name='phone' placeholder='08XXXXXXXXX' />
-                                        <label><b>Network</b></label>
-                                        <select required id="network" class="form-control">
-                                            <option>Select Network</option>
-                                            <option value="1">MTN</option>
-                                            <option value="2">GLO</option>
-                                            <option value="3">AIRTEL</option>
-                                            <option value="4">9MOBILE</option>
-                                        </select>
-                                        <label><b>Amount</b></label>
-                                        <input type='number' id='amount' required class="form-control"/>
-                                          
-        
-                                       
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Create</button>
-        
-                                </div>
-                                </form>
+                <!-- end row -->
+
+                <div class="card">
+                    <div class="col-12">
+                        <div class="m-2 p-2 page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">{{ $group->name }} <span class='text-danger'>(NGN{{
+                                    number_format($recipients->sum('amount')) }})</span></h4>
+                            <div>
+                                <a class='btn btn-secondary' href='/airtime_group'>←Back</a>
+                                <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Create
+                                    Airtime Recipient</a>
                             </div>
                         </div>
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+                                        <h4 class='text-center p-2'><b>Create Recipient</b></h4>
+                                        <form id='create_form' method='post'>@csrf
+                                            <label><b>Name</b></label>
+                                            <input id='name' type='text' class='form-control' name='name'
+                                                placeholder='e.g My Mum' />
+                                            <input id='group_id' type='hidden' value='{{ $group->id }}' />
+                                            <label><b>Phone</b></label>
+                                            <input id='phone' oninput="fetchNetwork()" type='number'
+                                                class='form-control' name='phone' placeholder='08XXXXXXXXX' />
+                                            <label><b>Network</b></label>
+                                            <select required id="network" class="form-control">
+                                                <option>Select Network</option>
+                                                <option value="1">MTN</option>
+                                                <option value="2">GLO</option>
+                                                <option value="3">AIRTEL</option>
+                                                <option value="4">9MOBILE</option>
+                                            </select>
+                                            <label><b>Amount</b></label>
+                                            <input type='number' id='amount' required class="form-control" />
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Create</button>
+
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
                     </div>
-        
-        
-        
-        
-        
-                </div>
-                <div class="card-body">
-                    <table id='myTable' class='table m-0'>
-                        <tr>
-                            <th>Name</th>
-                            <th>Contact</th>
-                            <th>Plan</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                        <tbody>
-                            @foreach($recipients as $reci)
+                    <div class="card-body">
+                        <table id='myTable' class='table m-0'>
                             <tr>
-                                <td>{{ $reci->name }}</td>
-                                <td>{{ $reci->phone }}</td>
-                                <td>{{ $reci->network_name }}</td>
-                                <td>NGN{{number_format($reci->amount) }}</td>
-
-                                <td>
-                                    <a onclick='return confirm("Are you sure you want to delete this recipient?")' href='/delete_airtime_recipient/{{ $reci->uid }}' class='btn btn-sm btn-danger'>Delete</a>
-
-                                </td>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Plan</th>
+                                <th>Amount</th>
+                                <th>Action</th>
                             </tr>
-                            @endforeach
-                        </tbody>
+                            <tbody>
+                                @foreach($recipients as $reci)
+                                <tr>
+                                    <td>{{ $reci->name }}</td>
+                                    <td>{{ $reci->phone }}</td>
+                                    <td>{{ $reci->network_name }}</td>
+                                    <td>NGN{{number_format($reci->amount) }}</td>
+
+                                    <td>
+                                        <a onclick='return confirm("Are you sure you want to delete this recipient?")'
+                                            href='/delete_airtime_recipient/{{ $reci->uid }}'
+                                            class='btn btn-sm btn-danger'>Delete</a>
+
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
 
 
-                    </table>
+                        </table>
+                    </div>
+                    <!-- end card body -->
                 </div>
-                <!-- end card body -->
             </div>
+
+
         </div>
+        <!-- end row -->
 
 
+        <!-- end row -->
     </div>
-    <!-- end row -->
-
-
-    <!-- end row -->
-</div>
 </div>
 @section('script')
 <script>

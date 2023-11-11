@@ -134,7 +134,10 @@ class UserController extends Controller
     }
     public function admin_changepin(Request $request)
     {
-        $data['user'] = Auth::user();
+        $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+            return redirect('/user-change-pin');
+        }
         $data['active'] = 'change_pin';
        
         return view('business_backend.changepin', $data);

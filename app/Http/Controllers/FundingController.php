@@ -33,7 +33,7 @@ class FundingController extends Controller
         }
     }
     public function checkout($subdomain,Request $request) {
-        dd('heree');
+      
         $this->validate($request, [
             'type' => 'required',
             'amount' => 'required',

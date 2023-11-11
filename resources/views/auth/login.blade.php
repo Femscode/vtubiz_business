@@ -108,7 +108,7 @@
             <!--begin::Aside-->
 
             <!--begin::Body-->
-            <div class="d-flex flex-center w-lg-50 p-10" >
+            <div class="d-flex flex-center w-lg-50 p-2">
                 <!--begin::Card-->
                 <div class="card rounded-3 w-md-550px" >
                     <!--begin::Card body-->

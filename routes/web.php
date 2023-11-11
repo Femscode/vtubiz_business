@@ -46,13 +46,13 @@ Route::post('/sendSMS2', [BulkSMSController::class, 'sendSMS2'])->name('sendSMS2
 Route::any('/resend_sms/{id}', [BulkSMSController::class, 'resendSMS'])->name('resend_sms');
 
 //the subdomain website routes
-Route::middleware(['user.type.router'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Auth::routes();
 
-    Route::any('/verify_purchase/{ref?}', [SubscriptionController::class, 'verify_purchase'])->name('verify_purchase');
-    Route::any('/verify_payment/{ref?}', [SubscriptionController::class, 'verify_payment'])->name('verify_payment');
-    Route::post('/check_verify_purchase', [SubscriptionController::class, 'check_verify_purchase'])->name('check_verify_purchase');
-    Route::any('/check_verify_payment', [SubscriptionController::class, 'check_verify_payment'])->name('check_verify_payment');
+    Route::any('/premium-verify_purchase/{ref?}', [SubscriptionController::class, 'verify_purchase'])->name('verify_purchase');
+    Route::any('/premium-verify_payment/{ref?}', [SubscriptionController::class, 'verify_payment'])->name('verify_payment');
+    Route::post('/premium-check_verify_purchase', [SubscriptionController::class, 'check_verify_purchase'])->name('check_verify_purchase');
+    Route::any('/premium-check_verify_payment', [SubscriptionController::class, 'check_verify_payment'])->name('check_verify_payment');
 
 
     Route::get('/', [BusinessController::class, 'landing'])->name('index');
@@ -87,13 +87,13 @@ Route::middleware(['user.type.router'])->group(function () {
     Route::get('/sample_import_data', [App\Http\Controllers\PayrollController::class, 'sample_import_data'])->name('sample_import_data');
 
 
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/my-dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('customer_dashboard');
     Route::post('/process_order', [App\Http\Controllers\HomeController::class, 'process_order'])->name('process_order');
     Route::get('/delete_order', [App\Http\Controllers\HomeController::class, 'delete_order'])->name('delete_order');
     // Route::post('/updateprofile', [App\Http\Controllers\HomeController::class, 'updateprofile'])->name('updateprofile');
     Route::post('/setpin', [App\Http\Controllers\HomeController::class, 'setpin'])->name('setpin');
-    Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
-    Route::get('fundwallet', [App\Http\Controllers\HomeController::class, 'fundwallet'])->name('fundwallet');
+    Route::get('my-profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+    Route::get('user-fundwallet', [App\Http\Controllers\HomeController::class, 'fundwallet'])->name('fundwallet');
 
 
     Route::post('/checkout/{checkout?}', [App\Http\Controllers\FundingController::class, 'checkout'])->name('checkout');
@@ -103,7 +103,7 @@ Route::middleware(['user.type.router'])->group(function () {
 
     Route::get('resend_verification', [App\Http\Controllers\HomeController::class, 'resend_verification'])->name('resend_verification');
     Route::get('transactions', [App\Http\Controllers\HomeController::class, 'transactions'])->name('transactions');
-    Route::get('bulksms_transactions', [App\Http\Controllers\HomeController::class, 'bulksms_transactions'])->name('bulksms_transactions');
+    Route::get('premium-bulksms_transactions', [App\Http\Controllers\HomeController::class, 'bulksms_transactions'])->name('bulksms_transactions');
     Route::get('analysis', [App\Http\Controllers\HomeController::class, 'analysis'])->name('analysis');
     Route::post('changePhoneAnalysis', [App\Http\Controllers\HomeController::class, 'analysis'])->name('analysis');
     Route::get('transfer', [App\Http\Controllers\FundingController::class, 'transfer'])->name('transfer');
@@ -117,34 +117,34 @@ Route::middleware(['user.type.router'])->group(function () {
     Route::get('/reserve_account', [App\Http\Controllers\FundingController::class, 'reserve_account']);
     Route::post('monnify/transaction_complete', [App\Http\Controllers\MonnifyController::class, 'monnifyTransactionComplete2']);
     //subscription routes
-    Route::get('/data', [App\Http\Controllers\SubscriptionController::class, 'data']);
+    Route::get('/premium-data', [App\Http\Controllers\SubscriptionController::class, 'data']);
     Route::post('/redo_transaction', [App\Http\Controllers\SubscriptionController::class, 'redo_transaction']);
-    Route::get('/airtime', [App\Http\Controllers\SubscriptionController::class, 'airtime']);
-    Route::get('/electricity', [App\Http\Controllers\SubscriptionController::class, 'electricity']);
-    Route::get('/cable', [App\Http\Controllers\SubscriptionController::class, 'cable']);
-    Route::get('/examination', [App\Http\Controllers\SubscriptionController::class, 'examination']);
-    Route::get('/bulksms', [App\Http\Controllers\SubscriptionController::class, 'bulksms']);
-    Route::get('/contact_group', [App\Http\Controllers\SubscriptionController::class, 'contact_group']);
+    Route::get('/premium-airtime', [App\Http\Controllers\SubscriptionController::class, 'airtime']);
+    Route::get('/premium-electricity', [App\Http\Controllers\SubscriptionController::class, 'electricity']);
+    Route::get('/premium-cable', [App\Http\Controllers\SubscriptionController::class, 'cable']);
+    Route::get('/premium-examination', [App\Http\Controllers\SubscriptionController::class, 'examination']);
+    Route::get('/premium-bulksms', [App\Http\Controllers\SubscriptionController::class, 'bulksms']);
+    Route::get('/premium-contact_group', [App\Http\Controllers\SubscriptionController::class, 'contact_group']);
 
 
-    Route::get('/data_group', [App\Http\Controllers\GroupController::class, 'data_group'])->name('data_group');
+    Route::get('/premium-data_group', [App\Http\Controllers\GroupController::class, 'data_group'])->name('data_group');
     Route::post('/createGroup', [App\Http\Controllers\GroupController::class, 'admin_createGroup'])->name('admin_createGroup');
     Route::post('/recharge_group/', [App\Http\Controllers\SubscriptionController::class, 'admin_rechargeGroup'])->name('admin_rechargeGroup');
-    Route::get('/group_transactions/{id}', [App\Http\Controllers\GroupController::class, 'group_transactions'])->name('group_transactions');
+    Route::get('/premium-group_transactions/{id}', [App\Http\Controllers\GroupController::class, 'group_transactions'])->name('group_transactions');
     Route::post('/deleteGroup/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteGroup'])->name('admin_deleteGroup');
-    Route::get('/data_recipient/{id}', [App\Http\Controllers\GroupController::class, 'data_recipient'])->name('data_recipient');
+    Route::get('/premium-data_recipient/{id}', [App\Http\Controllers\GroupController::class, 'data_recipient'])->name('data_recipient');
     Route::post('/saveRecipient', [App\Http\Controllers\GroupController::class, 'admin_saveRecipient'])->name('admin_saveRecipient');
     Route::get('/delete_recipient/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteRecipient'])->name('admin_deleteRecipient');
 
 
 
     //airtime_groups
-    Route::get('/airtime_group', [App\Http\Controllers\GroupController::class, 'airtime_group'])->name('airtime_group');
+    Route::get('/premium-airtime_group', [App\Http\Controllers\GroupController::class, 'airtime_group'])->name('airtime_group');
     Route::post('/createAirtimeGroup', [App\Http\Controllers\GroupController::class, 'admin_createAirtimeGroup'])->name('admin_createAirtimeGroup');
     Route::post('/recharge_airtime_group/', [App\Http\Controllers\SubscriptionController::class, 'admin_rechargeAirtimeGroup'])->name('admin_rechargeAirtimeGroup');
-    Route::get('/group_airtime_transactions/{id}', [App\Http\Controllers\GroupController::class, 'group_airtime_transactions'])->name('group_airtime_transactions');
+    Route::get('/premium-group_airtime_transactions/{id}', [App\Http\Controllers\GroupController::class, 'group_airtime_transactions'])->name('group_airtime_transactions');
     Route::get('/delete_airtime_group/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteAirtimeGroup'])->name('admin_deleteAirtimeGroup');
-    Route::get('/airtime_recipient/{id}', [App\Http\Controllers\GroupController::class, 'airtime_recipient'])->name('airtime_recipient');
+    Route::get('/premium-airtime_recipients/{id}', [App\Http\Controllers\GroupController::class, 'airtime_recipients'])->name('airtime_recipients');
     Route::post('/saveAirtimeRecipient', [App\Http\Controllers\GroupController::class, 'admin_saveAirtimeRecipient'])->name('admin_saveAirtimeRecipient');
     Route::get('/delete_airtime_recipient/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteAirtimeRecipient'])->name('admin_deleteAirtimeRecipient');
 
@@ -172,7 +172,7 @@ Route::middleware(['user.type.router'])->group(function () {
     Route::any('/resetpassword', [App\Http\Controllers\UserController::class, 'resetpassword'])->name('resetpassword');
     Route::any('/change-password', [App\Http\Controllers\UserController::class, 'changepassword'])->name('change-password');
     Route::any('/resetpin', [App\Http\Controllers\UserController::class, 'resetpin'])->name('resetpin');
-    Route::any('/change-pin', [App\Http\Controllers\UserController::class, 'changepin'])->name('change-pin');
+    Route::any('/user-change-pin', [App\Http\Controllers\UserController::class, 'changepin'])->name('change-pin');
     Route::any('/forgot-pin', [App\Http\Controllers\UserController::class, 'forgotpin'])->name('forgot-pin');
     Route::any('/reset-pin-with-token', [App\Http\Controllers\UserController::class, 'resetPinWithToken'])->name('reset-pin-with-token');
     Route::any('/reset-forgot-pin', [App\Http\Controllers\UserController::class, 'resetforgotpin'])->name('reset-forgot-pin');

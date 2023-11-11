@@ -23,8 +23,11 @@
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">{{ $group->name }} <span class='text-danger'>(NGN{{
                                     number_format($recipients->sum('amount')) }})</span></h4>
+                                    <div>
+                            <a class='btn btn-secondary' href='/data_group' >←Back</a>
                             <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Create
                                 Recipient</a>
+                                    </div>
                         </div>
         
         
