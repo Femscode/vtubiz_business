@@ -76,7 +76,7 @@
         <!--begin::Page bg image-->
         <style>
             body {
-                background-image: url('/assets/media/auth/bg4.jpg');
+                background-image: url('/assets/media/auth/bg3.jpg');
             }
 
             [data-bs-theme="dark"] body {
