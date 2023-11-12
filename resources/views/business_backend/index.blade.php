@@ -173,7 +173,7 @@
                                 </div>
                                 <div class='card col-md-12 p-2 m-2 bg-light-success'>
                                  
-                                    <a href="http://{{$user->brand_name}}.localhost:8000" style='background:#001f3f' class="btn btn-warning">Preview Website</a>
+                                    <a href="http://{{$user->brand_name}}.vtubiz.com" style='background:#001f3f' class="btn btn-warning">Preview Website</a>
                                   
                                 </div>
                             </div>
