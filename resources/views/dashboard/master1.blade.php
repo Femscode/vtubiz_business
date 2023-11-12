@@ -117,8 +117,7 @@
                     <!--begin::Logo-->
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 me-lg-18">
                         <a href="https://vtubiz.com">
-                            <img alt="Logo" src="{{ asset('assets/img/logo/vtulogo.png')}}"
-                                class="h-25px d-sm-none" />
+                            <img alt="Logo" src="{{ asset('assets/img/logo/vtulogo.png')}}" class="h-25px d-sm-none" />
                             <img alt="Logo" src="{{ asset('assets/img/logo/vtulogo.png')}}"
                                 class="h-25px d-none d-sm-block" />
                         </a>
@@ -169,144 +168,174 @@
 
                                 </a>
 
-                                <a href='/data'
-                                    class="menu-item  @if($active == 'data') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Buy
-                                            Data</span></span>
 
-                                </a>
-                                <a href='/airtime'
-                                    class="menu-item  @if($active == 'airtime') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Buy
-                                            Airtime</span></span>
-
-                                </a>
-                                <a href='/cable'
-                                    class="menu-item  @if($active == 'cable') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Tv
-                                            Subscription</span></span>
-
-                                </a>
-                                <a href='/electricity'
-                                    class="menu-item  @if($active == 'electricity') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Electricity
-                                            Bill </span></span>
-                                    <a href='/examination'
-                                        class="menu-item  @if($active == 'electricity') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                        <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Exam
-                                                Result Checker
-                                            </span></span>
-
-                                    </a>
-
-
-                                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                        data-kt-menu-placement="bottom-start"
-                                        class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-                                        <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Self
-                                                Service</span><span class="menu-arrow "></span></span>
-                                        <!--end:Menu link-->
-                                        <!--begin:Menu sub-->
-                                        <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
-                                            style="">
-                                            <!--begin:Menu item-->
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="/verify_purchase"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Verify Purchase
-                                                        Transactions</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
-                                            <!--end:Menu item-->
-                                            <!--begin:Menu item-->
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="verify_payment"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Verify Payment
-                                                        Transactions</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                    data-kt-menu-placement="bottom-start"
+                                    class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Personal
+                                            Purchase</span><span class="menu-arrow "></span></span>
+                                    <!--end:Menu link-->
+                                    <!--begin:Menu sub-->
+                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
+                                        style="">
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/data"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Buy Data
+                                                </span></a>
 
                                         </div>
-                                        <!--end:Menu sub-->
-                                    </div>
-                                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                        data-kt-menu-placement="bottom-start"
-                                        class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-                                        <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Bulk
-                                                SMS</span><span class="menu-arrow "></span></span>
-                                        <!--end:Menu link-->
-                                        <!--begin:Menu sub-->
-                                        <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
-                                            style="">
-                                            <!--begin:Menu item-->
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="/bulksms"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Send Bulk
-                                                        SMS</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
-                                            <!--end:Menu item-->
-                                            <!--begin:Menu item-->
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="/contact_group"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Bulk SMS Contact
-                                                        Groups</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="/bulksms_transactions"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Bulk SMS
-                                                        Records</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/airtime"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Buy Airtime
+                                                </span></a>
 
                                         </div>
-                                        <!--end:Menu sub-->
-                                    </div>
-                                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                        data-kt-menu-placement="bottom-start"
-                                        class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-                                        <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Group
-                                                Purchase</span><span class="menu-arrow "></span></span>
-                                        <!--end:Menu link-->
-                                        <!--begin:Menu sub-->
-                                        <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
-                                            style="">
-                                            <!--begin:Menu item-->
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="/airtime_group"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Airtime
-                                                        Group</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
-                                            <!--end:Menu item-->
-                                            <!--begin:Menu item-->
-                                            <div class="menu-item">
-                                                <!--begin:Menu link--><a class="menu-link" href="/data_group"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-dismiss="click" data-bs-placement="right"
-                                                    data-kt-initialized="1"><span class="menu-title">Data
-                                                        Group</span></a>
-                                                <!--end:Menu link-->
-                                            </div>
-
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/cable"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Tv Subscription
+                                                </span></a>
 
                                         </div>
-                                        <!--end:Menu sub-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/electricity"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Electricity Bill
+                                                </span></a>
+
+                                        </div>
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/examination"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Exam Result Checker
+                                                </span></a>
+
+                                        </div>
+
+
+
+                                    </div>
+                                    <!--end:Menu sub-->
+                                </div>
+
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                    data-kt-menu-placement="bottom-start"
+                                    class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Group
+                                            Purchase</span><span class="menu-arrow "></span></span>
+                                    <!--end:Menu link-->
+                                    <!--begin:Menu sub-->
+                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
+                                        style="">
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/airtime_group"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Airtime
+                                                    Group</span></a>
+                                            <!--end:Menu link-->
+                                        </div>
+                                        <!--end:Menu item-->
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/data_group"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Data
+                                                    Group</span></a>
+                                            <!--end:Menu link-->
+                                        </div>
+
+
+                                    </div>
+                                    <!--end:Menu sub-->
+                                </div>
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                data-kt-menu-placement="bottom-start"
+                                class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Bulk
+                                        SMS</span><span class="menu-arrow "></span></span>
+                                <!--end:Menu link-->
+                                <!--begin:Menu sub-->
+                                <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
+                                    style="">
+                                    <!--begin:Menu item-->
+                                    <div class="menu-item">
+                                        <!--begin:Menu link--><a class="menu-link" href="/bulksms"
+                                            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                            data-bs-placement="right" data-kt-initialized="1"><span
+                                                class="menu-title">Send Bulk
+                                                SMS</span></a>
+                                        <!--end:Menu link-->
+                                    </div>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <div class="menu-item">
+                                        <!--begin:Menu link--><a class="menu-link" href="/contact_group"
+                                            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                            data-bs-placement="right" data-kt-initialized="1"><span
+                                                class="menu-title">Bulk SMS Contact
+                                                Groups</span></a>
+                                        <!--end:Menu link-->
+                                    </div>
+                                    <div class="menu-item">
+                                        <!--begin:Menu link--><a class="menu-link" href="/bulksms_transactions"
+                                            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                            data-bs-placement="right" data-kt-initialized="1"><span
+                                                class="menu-title">Bulk SMS
+                                                Records</span></a>
+                                        <!--end:Menu link-->
                                     </div>
 
-                                   
+                                </div>
+                                <!--end:Menu sub-->
+                            </div>
+
+
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                    data-kt-menu-placement="bottom-start"
+                                    class="menu-item  @if($active == 'self_service') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Self
+                                            Service</span><span class="menu-arrow "></span></span>
+                                    <!--end:Menu link-->
+                                    <!--begin:Menu sub-->
+                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px"
+                                        style="">
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="/verify_purchase"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Verify Purchase
+                                                    Transactions</span></a>
+                                            <!--end:Menu link-->
+                                        </div>
+                                        <!--end:Menu item-->
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link--><a class="menu-link" href="verify_payment"
+                                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                                data-bs-placement="right" data-kt-initialized="1"><span
+                                                    class="menu-title">Verify Payment
+                                                    Transactions</span></a>
+                                            <!--end:Menu link-->
+                                        </div>
+
+                                    </div>
+                                    <!--end:Menu sub-->
+                                </div>
+                            
+
+
                             </div>
                             <!--end::Menu-->
                         </div>
@@ -611,8 +640,8 @@
 
                 <!--begin::Toolbar-->
                 <div style='background:url({{ asset('/assets/media/auth/bg3.jpg') }});background-size:cover;width:100%'
-                {{-- <div style='background:url({{ asset('assets/media/logos/fastpay_bg2.jpg') }});background-size:cover' --}}
-                    id="kt_app_toolbar" class="app-toolbar  py-6 ">
+                    {{-- <div style='background:url({{ asset(' assets/media/logos/fastpay_bg2.jpg')
+                    }});background-size:cover' --}} id="kt_app_toolbar" class="app-toolbar  py-6 ">
 
                     <!--begin::Toolbar container-->
                     <div id="kt_app_toolbar_container" class="app-container  container-xxl d-flex align-items-start ">
