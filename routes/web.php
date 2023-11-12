@@ -12,6 +12,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+Route::get('/', [BusinessController::class, 'index'])->name('homepage');
 
 Route::any('update_account_data', function () {
     $themes = Data::where('user_id', 0)->get();
@@ -47,11 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/premium-check_verify_payment', [SubscriptionController::class, 'check_verify_payment'])->name('check_verify_payment');
 
 
-    Route::get('/', [BusinessController::class, 'landing'])->name('index');
-    Route::get('checkpage_auth', function () {
-        return 'subdomain';
-    });
-
+    // Route::get('/', [BusinessController::class, 'landing'])->name('index');
+   
     // Route::view('/','coming_soon');
     // Route::any('/notify', [App\Http\Controllers\SubscriptionController::class, 'notify'])->name('notify');
     Route::get('/forgot-password', function () {
@@ -186,7 +184,7 @@ Route::middleware(['auth'])->group(function () {
 
         return back()->with('status', 'verification-link-sent');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-    Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+   
 
     //the business domain start
     
