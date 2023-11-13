@@ -352,18 +352,18 @@ class SubscriptionController extends Controller
         }
         // dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
         if($data->network == 1) {
-            $network = 'MTN';
+            $network_mi = 'MTN';
         }
         elseif($data->network == 2) {
-            $network = 'GLO';
+            $network_mi = 'GLO';
         }
         elseif($data->network == 3) {
-            $network = "Airtel";
+            $network_mi = "Airtel";
         }
         else {
-            $network = "9Mobile";
+            $network_mi = "9Mobile";
         }
-        $details = $network . " Data Purchase of " . $data->plan_name . " on " . $phone;
+        $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
         $check = $this->check_duplicate('check', $user->id,$data->data_price,"Data Purchase",$details);
        
         if ($check[0] == true) {
@@ -452,7 +452,15 @@ class SubscriptionController extends Controller
             // dd($reci, $response);
             array_push($purchase_status, $response);
         }
-        return [$purchase_status,true];
+        $response = [
+            'success' => true,
+            'message' => 'Incorrect Pin!',
+            'auto_refund_status' => 'Nil',
+            'data' => $purchase_status,
+        ];
+
+        return response()->json($response);
+        // return [$purchase_status,true];
 
         return redirect()->back()->with('message', 'Transaction Successful!');
     }
