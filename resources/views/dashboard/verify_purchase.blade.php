@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">Verify Purchase</h4>
                     <div>
-                        <form method='post' action='/check_verify_purchase'
+                        <form method='post' action='{{ route("check_verify_purchase") }}'
                             enctype='multipart/form-data'>
                             @csrf
 

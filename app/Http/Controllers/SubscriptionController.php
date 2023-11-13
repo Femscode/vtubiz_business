@@ -445,17 +445,22 @@ class SubscriptionController extends Controller
         foreach ($recipients as $reci) {
             $response = $this->handle_buy_data($reci->phone, $reci->network, $reci->plan_id, $request->group_id);
             // dd($reci, $response);
-            if ($response->getData()->success == false) {
-                if ($response->getData()->type == 'duplicate') {
-                    $response = [
-                        'success' => false,
-                        'message' => 'Please kindly clear your pending transactions before proceeding',
-                        'auto_refund_status' => 'Nil',
-                        'data' => $purchase_status,
-                    ];
-                    return response()->json($response);
+            if (is_object($response) && method_exists($response, 'getData')) {
+                $responseData = $response->getData();
+            
+                if (is_object($responseData) && property_exists($responseData, 'success') && $responseData->success === false) {
+                    if (!is_object($response) || !property_exists($responseData, 'type') || $responseData->type === 'duplicate') {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Please kindly clear your pending transactions before proceeding',
+                            'auto_refund_status' => 'Nil',
+                            'data' => $purchase_status,
+                        ];
+                        return response()->json($response);
+                    }
                 }
             }
+            
             array_push($purchase_status, $response);
         }
         $response = [
@@ -1770,7 +1775,7 @@ class SubscriptionController extends Controller
     }
     public function check_verify_purchase(Request $request)
     {
-
+        // dd($request->all());
         $this->validate($request, ['reference' => 'required']);
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
 
@@ -1788,7 +1793,7 @@ class SubscriptionController extends Controller
                 'reference' => $request->reference, //You can also enter your client_reference here only for data and airtime transactions.
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " .$env, //replace this with your authorization_token
+                "AuthorizationToken: " . $env, //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));

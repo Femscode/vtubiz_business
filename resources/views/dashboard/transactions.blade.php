@@ -36,6 +36,7 @@
                 <tr>
 
                   <th scope="col">Title</th>
+                  <th scope="col">Reference</th>
                   <th scope="col">Details</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Previous Balance</th>
@@ -64,6 +65,7 @@
                       data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
                     @endif
                   </td>
+                  <td>{{ $tranx->reference }}</td>
                   <td>{{ $tranx->description }}</td>
                   <td>₦{{ number_format($tranx->amount,2) }}</td>
                   <td>₦{{ number_format($tranx->before,2) }}</td>
@@ -75,6 +77,8 @@
 
                   </td>
                   <td>
+                    <a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
+                    
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
                 </tr>
@@ -94,6 +98,7 @@
                       data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
                     @endif
                   </td>
+                  <td>{{ $tranx->reference }}</td>
                   <td>{{ $tranx->description }}</td>
                   <td>₦{{ number_format($tranx->amount,2) }}</td>
                   <td>₦{{ number_format($tranx->before,2) }}</td>
@@ -107,6 +112,8 @@
 
                   </td>
                   <td>
+                    <a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
+                    
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
                 </tr>
@@ -126,6 +133,7 @@
                       data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
                     @endif
                   </td>
+                  <td>{{ $tranx->reference }}</td>
                   <td>{{ $tranx->description }}</td>
                   <td>₦{{ number_format($tranx->amount,2) }}</td>
                   <td>₦{{ number_format($tranx->before,2) }}</td>
@@ -139,6 +147,7 @@
 
                   </td>
                   <td>
+                    <a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
                 </tr>
