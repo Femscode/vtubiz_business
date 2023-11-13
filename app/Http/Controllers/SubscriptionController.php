@@ -265,7 +265,7 @@ class SubscriptionController extends Controller
         //purchase the data
         //just to replace env
         $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
-        return $env;
+       
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
@@ -283,7 +283,8 @@ class SubscriptionController extends Controller
                 'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                "AuthorizationToken: " . $env, //replace this with your authorization_token
+                // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
