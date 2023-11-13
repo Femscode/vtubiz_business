@@ -292,7 +292,7 @@ class SubscriptionController extends Controller
 
             $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
             $transaction = Transaction::find($trans_id);
-            $transaction->group_id = $group_id;
+            // $transaction->group_id = $group_id;
             $transaction->phone_number = $phone_number;
             $transaction->network = $request->network;
             $transaction->plan_id = $request->plan;
