@@ -162,7 +162,7 @@
             if (response.data.success == "true") {
               Swal.fire({
                 icon: "success",
-                title: "Purchase successful!",
+                title: "Purchase successful! Check group transaction table to confirm.",
                 showConfirmButton: true, // updated
                 confirmButtonColor: "#3085d6", // added
                 confirmButtonText: "Ok", // added

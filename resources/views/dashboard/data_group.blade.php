@@ -153,10 +153,10 @@
           .post("/recharge_group", fd)
           .then((response) => {
             console.log(response, 'the res')
-            if (response.data.success == "true") {
+            if (response.data.success == true || response.success == true) {
               Swal.fire({
                 icon: "success",
-                title: "Purchase successful!",
+                title: "Purchase successful! Check the group transactions to confirm.",
                 showConfirmButton: true, // updated
                 confirmButtonColor: "#3085d6", // added
                 confirmButtonText: "Ok", // added
@@ -164,7 +164,7 @@
                 allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
               }).then((result) => {
                 if (result.isConfirmed) {
-                //   location.reload();
+                  location.reload();
                 }
               });
             } else {

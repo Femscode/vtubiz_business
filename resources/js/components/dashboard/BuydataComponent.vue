@@ -544,7 +544,7 @@ export default {
           icon: "info",
           html:
             "Click " +
-            '<a href="https://fastpay.cttaste.com/fundwallet">here</a> ' +
+            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
             "to fund your wallet.",
           showCloseButton: true,
           showCancelButton: true,

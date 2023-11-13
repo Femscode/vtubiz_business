@@ -161,10 +161,10 @@
           .post("/recharge_airtime_group", fd)
           .then((response) => {
             console.log(response, 'the res')
-            if (response.data.success == "true") {
+            if (response.data.success == true || response.success == 'true') {
               Swal.fire({
                 icon: "success",
-                title: "Purchase successful!",
+                title: "Purchase successful! Check transaction table to confirm",
                 showConfirmButton: true, // updated
                 confirmButtonColor: "#3085d6", // added
                 confirmButtonText: "Ok", // added
