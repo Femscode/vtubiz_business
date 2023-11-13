@@ -351,18 +351,32 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         // dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
-
-        //check duplicate
-        $check = $this->check_duplicate('check', $user->id);
-        if ($check == true) {
+        if($data->network == 1) {
+            $network = 'MTN';
+        }
+        elseif($data->network == 2) {
+            $network = 'GLO';
+        }
+        elseif($data->network == 3) {
+            $network = "Airtel";
+        }
+        else {
+            $network = "9Mobile";
+        }
+        $details = $network . " Data Purchase of " . $data->plan_name . " on " . $phone;
+        $check = $this->check_duplicate('check', $user->id,$data->data_price,"Data Purchase",$details);
+       
+        if ($check[0] == true) {
             $response = [
+                'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Duplicate Transaction!',
+                'message' => 'Please confirm the success of '.$check[1]->details. ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
             return response()->json($response);
         }
+        
         //purchase the data
         $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
        
@@ -513,6 +527,7 @@ class SubscriptionController extends Controller
 
             //check duplicate
             $check = $this->check_duplicate('check', $user->id);
+          
             if ($check == true) {
                 $response = [
                     'success' => false,
@@ -584,7 +599,7 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
 
-            $data = Data::where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+            $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
             if ($data == null) {
                 $response = [
                     'success' => false,
@@ -594,9 +609,9 @@ class SubscriptionController extends Controller
 
                 return response()->json($response);
             }
-            $data_price =  $data->{'data_price_' . $company->id};
+            $data_price =  $data->admin_price;
             $real_dataprice = $data->data_price;
-            // dd($data_price, $real_dataprice, $data->data_price);
+           // dd($data_price, $real_dataprice, $data->data_price);
             //check balance
             if ($user->balance < $data_price ) {
                 $response = [
@@ -609,16 +624,36 @@ class SubscriptionController extends Controller
             }
 
             //check duplicate
-            $check = $this->check_duplicate('check', $user->id);
-            if ($check == true) {
-                $response = [
-                    'success' => false,
-                    'message' => 'Duplicate Transaction!',
-                    'auto_refund_status' => 'Nil'
-                ];
 
-                return response()->json($response);
+           
+            if($data->network == 1) {
+                $network = 'MTN';
             }
+            elseif($data->network == 2) {
+                $network = 'GLO';
+            }
+            elseif($data->network == 3) {
+                $network = "Airtel";
+            }
+            else {
+                $network = "9Mobile";
+            }
+            
+            $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
+        
+            $check = $this->check_duplicate('check', $user->id,$data->data_price,"Data Purchase",$details);
+       
+        if ($check[0] == true) {
+            $response = [
+                'type' => 'duplicate',
+                'success' => false,
+                'message' => 'Please confirm the success of '.$check[1]->details. ' before resuming service usage.',
+                'auto_refund_status' => 'Nil'
+            ];
+
+            return response()->json($response);
+        }
+           
             //purchase the data
             $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
        
