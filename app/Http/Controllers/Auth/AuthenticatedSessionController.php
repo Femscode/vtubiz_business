@@ -28,8 +28,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
-        // dd('here');
+        $check = $request->authenticate();
+        if($check == 'runaway') {
+            return redirect()->route('login') // Use the correct route name or URL
+            ->withErrors("Invalid Credentials Provided")
+            ->withInput();
+        }
+       
 
         $request->session()->regenerate();
         // return redirect('/dashboard');

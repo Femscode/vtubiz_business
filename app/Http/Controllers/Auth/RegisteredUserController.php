@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
-  
+
 
 
     /**
@@ -43,43 +43,41 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required'],
+            'brand_name' => ['unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+        if ($validator->fails()) {
+            return redirect()->route('register') // Use the correct route name or URL
+                ->withErrors($validator)
+                ->withInput();
+        }
+      
         $data = $request->all();
         $uid = Str::uuid();
         // dd($request->all()); $uid = Str::uuid();
-        if (array_key_exists('company_id', $data)) {
-            if(strlen($data['phone']) == 10) {
-                $data['phone'] = "0".$data['phone'];
-            }     
 
-            $user = User::create([
-                'name' => $data['name'],               
-                'company_id' => $data['company_id'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'uuid' => $uid,
-                'user_type' => 'client_customer',
-                'password' => Hash::make($data['password']),
-            ]);
-        } else {
-            $brand_name = str_replace(' ', '-', $data['brand_name']);
-            $user = User::create([
-                'name' => $data['name'],
-                'brand_name' => $brand_name,             
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'uuid' => $uid,
-                'password' => Hash::make($data['password']),
-                'user_type' => 'customer',
-            ]);
-            $user->company_id = $user->id;
-            $user->save();
-        }
+        $brand_name = str_replace(' ', '-', $data['brand_name']);
+        $user = User::create([
+            'name' => $data['name'],
+            'brand_name' => $brand_name,
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'uuid' => $uid,
+            'password' => Hash::make($data['password']),
+            'user_type' => 'customer',
+        ]);
+        $user->company_id = $user->id;
+        $user->save();
+
 
         event(new Registered($user));
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
         Auth::login($user);
+        return redirect('/dashboard');
         return $user;
     }
-
-  
 }

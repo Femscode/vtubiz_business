@@ -98,7 +98,7 @@
 
                     <!--begin::Title-->
                     <h2 class="text-white fw-normal m-0">
-                        Register A VTUBIZ Account.
+                        Register A VTUBIZ Account
                     </h2>
                     <!--end::Title-->
                 </div>
@@ -118,7 +118,142 @@
                             <!--begin::Form-->
                            
                             <div id='app'>
-                                <register-component></register-component>
+
+                                <div>
+                                    <!--begin::Heading-->
+                                    <form method='post' action='{{ route("register") }}'>@csrf
+                                      <div class="text-center mb-11">
+                                        <!--begin::Title-->
+                                        <!-- <img class="mx-auto h-100px h-lg-150px  theme-light-show" src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png" alt=""> -->
+                                        <h1 class="text-dark fw-bolder mb-3">Sign Up</h1>
+                                        @if($errors->any())
+                                        <div class="alert alert-danger">
+                                          <p><strong>Opps Something went wrong</strong></p>
+                                          <ul>
+                                            @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                            @endforeach
+                                          </ul>
+                                        </div>
+                                        @endif
+                                      </div>
+                                      <!--begin::Heading-->
+                                
+                                      <!--begin::Input group--->
+                                      <div class="fv-row mb-3">
+                                        <!--begin::Email-->
+                                        <input
+                                          autocomplete=""
+                                          id="user_name"
+                                          placeholder="Full name"
+                                          type="text"
+                                          class="form-control"
+                                          required
+                                          name="name"
+                                        />
+                                
+                                        <!--end::Email-->
+                                      </div>
+                                      <div class="fv-row mb-3">
+                                        <!--begin::Email-->
+                                        <input
+                                          autocomplete=""
+                                          id="company_id"
+                                          type="text"
+                                         
+                                          class="form-control"
+                                          required
+                                          placeholder="Brandname/Username"
+                                          name="brand_name"
+                                        />
+                                
+                                        <!--end::Email-->
+                                      </div>
+                                      <div class="fv-row mb-3">
+                                        <!--begin::Email-->
+                                        <input
+                                          autocomplete=""
+                                          id="user_phone"
+                                          placeholder="Phone number"
+                                          type="number"
+                                          class="form-control"
+                                          required
+                                          name="phone"
+                                        />
+                                
+                                        <!--end::Email-->
+                                      </div>
+                                      <div class="fv-row mb-3">
+                                        <!--begin::Email-->
+                                        <input
+                                          type="email"
+                                          id="email"
+                                          placeholder="Email address"
+                                          class="form-control bg-transparent"
+                                          name='email'
+                                          required
+                                        />
+                                
+                                        <!--end::Email-->
+                                      </div>
+                                
+                                      <!--end::Input group--->
+                                      <div class="fv-row mb-3">
+                                        <!--begin::Password-->
+                                        <input
+                                          type="password"
+                                          id="password"
+                                          placeholder="Password"
+                                          autocomplete=""
+                                         name='password'
+                                          class="form-control bg-transparent"
+                                          required
+                                        />
+                                        <!--end::Password-->
+                                      </div>
+                                
+                                      <div class="fv-row mb-3">
+                                        <!--begin::Password-->
+                                        <input
+                                          id="password_confirmation"
+                                          type="password"
+                                          class="form-control"
+                                          name="password_confirmation"
+                                          required
+                                          autocomplete=""
+                                          @input="confirmPassword"
+                                          placeholder="Confirm password"
+                                        />
+                                        <!--end::Password-->
+                                      </div>
+                                      <div style='display:none' id='match_alert' class="alert alert-success">
+                                        Password matched
+                                      </div>
+                                      <!--end::Input group--->
+                                
+                                      <!--begin::Wrapper-->
+                                
+                                      <!--begin::Submit button-->
+                                      <div class="d-grid mb-10">
+                                        <button
+                                          disabled
+                                          id='sign_up'
+                                          type="submit"
+                                          class="btn btn-primary"
+                                        >
+                                          Sign Up
+                                        </button>
+                                      </div>
+                                      <!--end::Submit button-->
+                                
+                                      <!--begin::Sign up-->
+                                    </form>
+                                    <div class="text-gray-500 text-center fw-semibold fs-6">
+                                      Already registered?
+                                
+                                      <a href="/login" class="link-success"> Sign In </a>
+                                    </div>
+                                  </div>
                             </div>
                             <!--end::Form-->
 
@@ -135,34 +270,32 @@
         <!--end::Authentication - Sign-in-->
     </div>
     <!--end::Root-->
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     <script src="{{asset('cdn/sweetalert.min.js')}}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{asset('cdn/jquery-3.6.0.js')}}" crossorigin="anonymous"></script>
-    {{-- <script src="{{ asset('assets/js/professionallocker.js')}}"></script> --}}
-
-{{-- <script>
-$(document).ready(function() {
-    Swal.fire('nice one, another issues')
-})
-    </script> --}}
-
-    {{-- <!--begin::Javascript-->
     <script>
-        var hostUrl = "/assets/index.html";        
-    </script>
-
-    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-    <script src="/assets/plugins/global/plugins.bundle.js"></script>
-    <script src="/assets/js/scripts.bundle.js"></script>
-    <!--end::Global Javascript Bundle--> --}}
-
-
-    <!--begin::Custom Javascript(used for this page only)-->
-    {{-- <script src="/assets/js/custom/authentication/sign-in/general.js"></script> --}}
+        $(document).ready(function () {
+            
+          $("#password, #password_confirmation").on("input", function () {
+            var password = $("#password").val();
+            var passwordConfirmation = $("#password_confirmation").val();
+      
+            if (password === passwordConfirmation && password.length >= 5) {
+                $("#match_alert").show()
+                $("#sign_up").prop("disabled", false);
+                console.log('matched')
+          
+            } else {
+                $("#match_alert").hide()
+                $("#sign_up").prop("disabled", true);
+                console.log('Unmathed')
+          
+            }
+          });
+      
+         
+        });
+        </script>
 
 </body>
-<!--end::Body-->
-
-<!-- Mirrored from preview.keenthemes.com/metronic8/demo34/authentication/layouts/creative/sign-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 06 Feb 2023 08:11:23 GMT -->
-
 </html>
