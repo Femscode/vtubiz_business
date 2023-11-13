@@ -13,11 +13,35 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+Route::any('format_data', function () {
+    Data::where('user_id', '!=', 0)->delete();
+    $themes = Data::where('user_id', 0)->get();
+    foreach ($themes as $theme) {
+        $string = $theme->plan_name;
 
+        // Split the string by "-"
+        $parts = explode('-', $string, 2);
+
+        // Take the part before the "-"
+        $newString = trim($parts[0]);
+        $theme->plan_name = $newString;
+         $theme->save();
+    }
+});
 Route::any('update_account_data', function () {
     $themes = Data::where('user_id', 0)->get();
     foreach ($themes as $theme) {
         $theme->account_price = intval(0.05 * $theme->data_price) + intval($theme->data_price);
+        $theme->save();
+    }
+});
+
+Route::any('update_cable_price', function () {
+    $themes = Cable::where('user_id', 0)->get();
+    Cable::where('user_id', '!=', 0)->delete();
+    foreach ($themes as $theme) {
+        $theme->real_price = intval(0.05 * $theme->actual_price) + intval($theme->actual_price);
+        $theme->admin_price = intval(0.07 * $theme->actual_price) + intval($theme->actual_price);
         $theme->save();
     }
 });

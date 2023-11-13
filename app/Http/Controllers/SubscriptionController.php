@@ -261,7 +261,7 @@ class SubscriptionController extends Controller
 
             return response()->json($response);
         }
-        dd($check);
+        // dd($check);
         //purchase the data
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -314,7 +314,7 @@ class SubscriptionController extends Controller
 
     private function handle_buy_data($phone, $network, $plan_id,$group_id=null)
     {
-        dd($phone, $network, $plan_id);
+        // dd($phone, $network, $plan_id);
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
 
@@ -781,7 +781,7 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
 
-        dd($amount, $request->all());
+        // dd($amount, $request->all());
         //check duplicate
         $check = $this->check_duplicate('check', $user->id);
         if ($check == true) {
@@ -871,7 +871,7 @@ class SubscriptionController extends Controller
 
             return response()->json($response);
         }
-        dd($amount, $discounted_amount, $request->all());
+        // dd($amount, $discounted_amount, $request->all());
         // dd($request->all(),$discounted_amount);
         if ($user->balance < $amount  ) {
             $response = [
@@ -1129,7 +1129,7 @@ class SubscriptionController extends Controller
         // dd($request->all());
         $actual_price = Airtime::where('network', $request->network)->where('user_id', $user->company_id)->first()->airtime_price;
         $real_airtimeprice = $request->amount - ($actual_price / 100) * $request->amount;
-        dd($real_airtimeprice, $actual_price);
+        // dd($real_airtimeprice, $actual_price);
 
         if ($user->balance < $request->discounted_amount ) {
             $response = [
@@ -1212,7 +1212,7 @@ class SubscriptionController extends Controller
         // dd($request->all());
         $actual_price = Airtime::where('network', $network)->where('user_id', $user->company_id)->first()->airtime_price;
         $real_airtimeprice = $amount - ($actual_price / 100) * $amount;
-        dd($real_airtimeprice, $actual_price);
+        // dd($real_airtimeprice, $actual_price);
 
         if ($user->balance < $discounted_amount ) {
             $response = [
