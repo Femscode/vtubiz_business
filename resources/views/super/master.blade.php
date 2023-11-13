@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>Fastpay | CT_Taste</title>
+    <title>VTUBIZ | CT_Taste</title>
     <meta charset="utf-8" />
     <meta name="description" content="Payment Portal For CT_Taste" />
     <meta name="keywords" content="Quick pay with CT_Taste" />
@@ -634,7 +634,7 @@
     </div>
 
 
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js')}}"></script>
