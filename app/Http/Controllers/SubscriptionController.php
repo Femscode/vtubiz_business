@@ -286,7 +286,7 @@ class SubscriptionController extends Controller
         ));
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
-        return [$response_json,env('EASY_ACCESS_WEB_AUTH')];
+        return [$response_json,env('EASY_ACCESS_WEB_AUTH'),ENV('EASY_ACCESS_AUTH'),'so bad'];
 
         if ($response_json['success'] === "true") {
             $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $request->phone_number;
