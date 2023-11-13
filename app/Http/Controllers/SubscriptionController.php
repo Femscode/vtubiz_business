@@ -452,6 +452,7 @@ class SubscriptionController extends Controller
             // dd($reci, $response);
             array_push($purchase_status, $response);
         }
+        return [$purchase_status,true];
 
         return redirect()->back()->with('message', 'Transaction Successful!');
     }
