@@ -263,6 +263,9 @@ class SubscriptionController extends Controller
         }
         // dd($check);
         //purchase the data
+        //just to replace env
+        $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
+        return $env;
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
