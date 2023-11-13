@@ -77,7 +77,7 @@
 
                   </td>
                   <td>
-                    <a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
+                    <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
                     
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
@@ -112,7 +112,7 @@
 
                   </td>
                   <td>
-                    <a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
+                    <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
                     
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
@@ -147,7 +147,7 @@
 
                   </td>
                   <td>
-                    <a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
+                    <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
                 </tr>

@@ -72,15 +72,12 @@
                                 @elseif($tranx->status == 0)
 
                                 <tr class='alert alert-danger'>
-                                    <td>{{ $tranx->user->name }}<br>
-                                        <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
-                                            $tranx->user->phone }}</a>
-                                    </td>
+                                  
                                     <td>{{ $tranx->title }}</td>
                                     <td>₦{{ number_format($tranx->amount,2) }}</td>
                                     <td>{{ $tranx->description }}</td>
-                                    <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
-                                        number_format($tranx->admin_after) }}</td>
+                                    <td>₦{{ number_format($tranx->before) }} / ₦{{
+                                        number_format($tranx->after) }}</td>
                                     <td>
                                         @if($tranx->status == 1)
                                         <span class='btn-sm btn btn-success'>Success</span>
@@ -95,15 +92,12 @@
 
                                 @else
                                 <tr class='alert alert-success'>
-                                    <td>{{ $tranx->user->name }}<br>
-                                        <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
-                                            $tranx->user->phone }}</a>
-                                    </td>
+                                  
                                     <td>{{ $tranx->title }}</td>
                                     <td>₦{{ number_format($tranx->amount,2) }}</td>
                                     <td>{{ $tranx->description }}</td>
-                                    <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
-                                        number_format($tranx->admin_after) }}</td>
+                                    <td>₦{{ number_format($tranx->before) }} / ₦{{
+                                        number_format($tranx->after) }}</td>
                                     <td>
                                         @if($tranx->status == 1)
                                         <span class='btn-sm btn btn-success'>Success</span>

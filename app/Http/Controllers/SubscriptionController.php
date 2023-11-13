@@ -499,15 +499,19 @@ class SubscriptionController extends Controller
             $discounted_amount = $reci->amount - (floatval($r_rate) / 100) * $reci->amount;
 
             $response = $this->handle_buy_airtime($reci->phone, $reci->network, $reci->amount, $discounted_amount, $request->group_id);
-            if ($response->getData()->success == false) {
-                if ($response->getData()->type == 'duplicate') {
-                    $response = [
-                        'success' => false,
-                        'message' => 'Please kindly clear your pending transactions before proceeding',
-                        'auto_refund_status' => 'Nil',
-                        'data' => $purchase_status,
-                    ];
-                    return response()->json($response);
+            if (is_object($response) && method_exists($response, 'getData')) {
+                $responseData = $response->getData();
+            
+                if (is_object($responseData) && property_exists($responseData, 'success') && $responseData->success === false) {
+                    if (!is_object($response) || !property_exists($responseData, 'type') || $responseData->type === 'duplicate') {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Please kindly clear your pending transactions before proceeding',
+                            'auto_refund_status' => 'Nil',
+                            'data' => $purchase_status,
+                        ];
+                        return response()->json($response);
+                    }
                 }
             }
             // dd($reci, $response);
