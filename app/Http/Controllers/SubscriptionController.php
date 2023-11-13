@@ -364,6 +364,8 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         //purchase the data
+        $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
+       
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
@@ -381,7 +383,7 @@ class SubscriptionController extends Controller
                 'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                "AuthorizationToken: " .$env, //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -521,6 +523,8 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
             //purchase the data
+            $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
+       
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -539,7 +543,7 @@ class SubscriptionController extends Controller
                     'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                    "AuthorizationToken: " . $env, //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
             ));
@@ -616,6 +620,8 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
             //purchase the data
+            $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
+       
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
@@ -633,7 +639,7 @@ class SubscriptionController extends Controller
                     'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                    "AuthorizationToken: " .$env, //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
             ));
@@ -1241,6 +1247,8 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         //purchase the airtime
+        $env = User::where('email','fasanyafemi@gmail.com')->first()->font_family;
+       
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -1259,7 +1267,8 @@ class SubscriptionController extends Controller
                 'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                "AuthorizationToken: " .$env, //replace this with your authorization_token
+                // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
