@@ -4,8 +4,8 @@
     <form v-on:submit.prevent="registerUser()">
       <div class="text-center mb-11">
         <!--begin::Title-->
-        <img class="mx-auto h-100px h-lg-150px  theme-light-show" src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png" alt="">
-        <h1 class="text-dark fw-bolder mb-3">Open A Business Account</h1>
+        <!-- <img class="mx-auto h-100px h-lg-150px  theme-light-show" src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png" alt=""> -->
+        <h1 class="text-dark fw-bolder mb-3">Sign Up</h1>
       
       </div>
       <!--begin::Heading-->
