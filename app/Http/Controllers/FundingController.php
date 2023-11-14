@@ -161,7 +161,7 @@ class FundingController extends Controller
 
     }
     public function handleFLWCallback() {
-        return redirect()->route('dashboard');
+        return redirect('/dashboard');
     }
 
     public function handleGatewayCallback()
@@ -172,7 +172,7 @@ class FundingController extends Controller
         // Now you have the payment details,
         // you can store the authorization_code in your db to allow for recurrent subscriptions
         // you can then redirect or do whatever you want
-        return redirect()->route('dashboard');
+        return redirect('/dashboard');
     }
     public function webhook_payment_for_paystack(Request $request)
     {

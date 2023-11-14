@@ -440,6 +440,18 @@ class SubscriptionController extends Controller
         }
         $group = DataGroup::where('uid', $request->group_id)->first();
         $recipients = DataRecipient::where('group_id', $group->id)->get();
+        $total_amount = $recipients->sum('amount');
+        if($total_amount > $user->balance) {
+            $response = [
+                'success' => false,
+                'message' => 'Insufficient balance to process transaction!',
+                'auto_refund_status' => 'Nil'
+            ];
+
+            return response()->json($response);
+
+        }
+       
 
         $purchase_status = [];
         foreach ($recipients as $reci) {
@@ -491,6 +503,17 @@ class SubscriptionController extends Controller
         }
         $group = AirtimeGroup::where('uid', $request->group_id)->first();
         $recipients = AirtimeRecipient::where('group_id', $group->id)->get();
+        $total_amount = $recipients->sum('amount');
+        if($total_amount > $user->balance) {
+            $response = [
+                'success' => false,
+                'message' => 'Insufficient balance to process transaction!',
+                'auto_refund_status' => 'Nil'
+            ];
+
+            return response()->json($response);
+
+        }
 
         $purchase_status = [];
         foreach ($recipients as $reci) {
