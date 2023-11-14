@@ -271,6 +271,7 @@
                                     $("#available").hide()
                                     $("#loading").show()
                                     $("#search_food_tbody").show()
+                                    $("#search_food_tbody").empty()
 
                                     //another axios to suggest new domains
                                     axios.post('domain_suggestion',fd)
