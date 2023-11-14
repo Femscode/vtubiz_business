@@ -837,7 +837,7 @@ class BusinessController extends Controller
 
             $this->create_transaction('Manual Funding', $reference, $details, 'credit', $request->amount, $user->id, 1, $request->amount);
             $this->create_transaction('Admin Fund User', $reference, $details, 'debit', $request->amount, $company->id, 1, $request->amount);
-            return redirect()->route('user_management')->with('message', 'User Credited Successfully');
+            return redirect()->route('users')->with('message', 'User Credited Successfully');
         } else {
             return Redirect()->route('dashboard')->with('Message', 'Permission Denied');
         }

@@ -15,7 +15,7 @@
             <div class="row mb-3">
                 <div class="col-xl-4 col-sm-6">
                     <div class="mt-2">
-                        <h5>Data Prices</h5>
+                        <h5>User Management</h5>
                     </div>
                 </div>
 

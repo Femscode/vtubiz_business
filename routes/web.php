@@ -240,7 +240,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/select_theme', [BusinessController::class, 'select_theme'])->name('select_theme');
     Route::any('/notifications', [BusinessController::class, 'notifications'])->name('notifications');
     Route::any('/update_notification', [BusinessController::class, 'update_notification'])->name('update_notification');
-    Route::any('/users', [BusinessController::class, 'user_management'])->name('user_management');
+    Route::any('/users', [BusinessController::class, 'user_management'])->name('users');
     Route::any('/email_marketing', [BusinessController::class, 'email_marketing'])->name('email_marketing');
     Route::any('/send_bulk_email', [BusinessController::class, 'sendBulkEmail'])->name('send_bulk_email');
     Route::any('/fund_wallet/{id}', [BusinessController::class, 'fund_wallet'])->name('fund_wallet');
