@@ -190,7 +190,7 @@ class FundingController extends Controller
         $details = "Account credited with NGN" . $amountpaid;
         $this->create_transaction('Account Funding', $request->input('data.reference'), $details, 'credit', $amountpaid, $user->id, 1);
         if ($user->first_time == 0) {
-            $bonus = intval(0.1 * $amountpaid);
+            $bonus = intval(0.02 * $amountpaid);
             $details = "You've received a welcome bonus of NGN" . $bonus;
             $this->create_transaction('Bonus Credited', $request->input('data.reference'), $details, 'credit',  $bonus, $user->id, 1);
             $user->first_time = 1;
