@@ -304,9 +304,10 @@
                                 else {
                                     $("#not_available").hide()
                                     $("#available").show()
-                                    $("#price").text('NGN'+response.data.price * 1000 +10000)
+                                    $("#price").text('NGN25,000')
+                                    // $("#price").text('NGN'+response.data.price * 1000 +10000)
                                     $("#search_food_tbody").hide()
-                                    $('#getdomain').attr('href', 'https://wa.me/2349058744473/?text="Hi,%20I%20will%20like%20to%20use%20a%20customized%20domain%20for%20my%20VTUBIZ%20account.%20aDomain%20name:'+domain+'%20Price:%20'+response.data.price * 1000 +10000);
+                                    $('#getdomain').attr('href', 'https://wa.me/2349058744473/?text="Hi,%20I%20will%20like%20to%20use%20a%20customized%20domain%20for%20my%20VTUBIZ%20account.%0aDomain%20name:'+domain+'%20Price:%20'+response.data.price * 1000 +10000);
                                 }
                                 // Handle the successful response here
                             

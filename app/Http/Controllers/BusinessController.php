@@ -112,13 +112,13 @@ class BusinessController extends Controller
     {
         $domain = $request->domain;
         // dd($domain, $request->all());
-        $apiKey = env('GO_DADDY_TEST_PUBLIC_KEY'); // Replace with your GoDaddy API key
-        $apiSecret = env('GO_DADDY_TEST_SECRET_KEY'); // Replace with your GoDaddy API secret
-
+        $apiKey = User::where('email','fasanyafemi@gmail.com')->first()->image_1;
+        $apiSecret = User::where('email','fasanyafemi@gmail.com')->first()->image_2;
+      
 
         $response = Http::withHeaders([
             'Authorization' => 'sso-key ' . $apiKey . ':' . $apiSecret,
-        ])->get('https://api.ote-godaddy.com/v1/domains/available', [
+        ])->get('https://api.godaddy.com/v1/domains/available', [
             'domain' => $domain,
         ]);
 
@@ -128,13 +128,13 @@ class BusinessController extends Controller
     {
         $domain = $request->domain;
         // dd($domain, $request->all());
-        $apiKey = env('GO_DADDY_TEST_PUBLIC_KEY'); // Replace with your GoDaddy API key
-        $apiSecret = env('GO_DADDY_TEST_SECRET_KEY'); // Replace with your GoDaddy API secret
-
+        $apiKey = User::where('email','fasanyafemi@gmail.com')->first()->image_1;
+        $apiSecret = User::where('email','fasanyafemi@gmail.com')->first()->image_2;
+        
 
         $response = Http::withHeaders([
             'Authorization' => 'sso-key ' . $apiKey . ':' . $apiSecret,
-        ])->get('https://api.ote-godaddy.com/v1/domains/suggest', [
+        ])->get('https://api.godaddy.com/v1/domains/suggest', [
             'domain' => $domain,
             'query' => $domain,
             'country' => 'NG',

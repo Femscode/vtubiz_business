@@ -91,11 +91,13 @@
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                 <h4 class="mb-sm-0 font-size-18">Welcome back, {{ $user->brand_name }}</h4>
+                <div class='alert alert-success'>Business Account.</div>
+                {{-- <div class='alert alert-success'>Upgraded Account😎🔒🔓🎉</div> --}}
             </div>
           
 
 
-            @if($user->approve == 0)
+            @if($user->upgrade == 0)
             {{-- <div style='background:hsl(210, 90%, 95%) !important;color:#001f3f' class="alert alert-danger border-0" role="alert"> --}}
             <div class="alert alert-danger border-0" role="alert">
 
@@ -105,6 +107,13 @@
                     class='btn btn-danger border-0'>Upgrade</a>
 
             </div>
+            @else 
+            <div class="alert alert-success border-0" role="alert">
+                You are now an upgraded user, and you are enjoying <strong>5% discount bonus</strong> on all data plans!😎🎉
+              
+
+            </div>
+
             @endif
 
         </div>
