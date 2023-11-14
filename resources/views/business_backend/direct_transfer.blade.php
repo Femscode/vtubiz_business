@@ -67,15 +67,15 @@
                                     <div>
                                         <div class="fs-6 fw-semibold text-gray-600">
                                         Acct. No :</div>
-                                        <div class="fs-4 fw-bold">{{ $account_no ?? "No account generated
-                                            yet!" }}</div>
+                                        <div class="fs-4 fw-bold"><strong>{{ $account_no ?? "No account generated
+                                            yet!" }}</strong></div>
                                             <div class="fs-6 fw-semibold text-gray-600">Bank Name :</div>
-                                        <div class="fs-6 fw-bold">{{ $bank_name ?? "No
-                                            account generated yet!" }}</div>
+                                        <div class="fs-6 fw-bold"><strong>{{ $bank_name ?? "No
+                                            account generated yet!" }}</strong></div>
                                             <div class="fs-6 fw-semibold text-gray-600">
                                               Amount :</div>
-                                              <div class="fs-4 fw-bold">NGN{{ number_format($amount) ?? "No account generated
-                                                  yet!" }}</div>
+                                              <div class="fs-4 fw-bold"><strong>NGN{{ number_format($amount) ?? "No account generated
+                                                  yet!" }}</strong></div>
                                                   <span class='text-danger'>Please only make a transfer of the exact amount above!</span>
                                     </div>
                                     <!--end::Details-->

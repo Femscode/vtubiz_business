@@ -73,7 +73,7 @@ class FundingController extends Controller
                 'amount' => $amount,
                 'firstname' =>$first_name,
                 'lastname' => $last_name,
-                'narration' => 'Fastpay/'.$first_name .'-'. $last_name,
+                'narration' => 'VTUBIZ/'.$first_name .'-'. $last_name,
             ]);
             
             // You can then access the response body and status code like this:
@@ -137,7 +137,7 @@ class FundingController extends Controller
                 'amount' => $amount,
                 'firstname' =>$first_name,
                 'lastname' => $last_name,
-                'narration' => 'Fastpay/'.$first_name .'-'. $last_name,
+                'narration' => 'VTUBIZ/'.$first_name .'-'. $last_name,
             ]);
             
             // You can then access the response body and status code like this:
@@ -367,7 +367,7 @@ class FundingController extends Controller
                 'after_balance' => $rest->balance + $amount,
                 'reference' => $reference,
                 'type' => 'credit',
-                'title' => 'Payment of order via fastpay',
+                'title' => 'Payment of order via VTUBIZ',
                 'details' => 'Payment of NGN' . $amount . ' from ' . $user->name,
                 'customer_name' => $user->name,
                 'customer_phone' => $user->phone,
