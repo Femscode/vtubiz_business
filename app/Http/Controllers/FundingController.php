@@ -230,7 +230,7 @@ class FundingController extends Controller
         // file_put_contents(__DIR__ . '/gethere.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
         $this->create_transaction('Account Funding', $request->input('data.id'), $details, 'credit', $amountpaid, $user->id, 1);
         if ($user->first_time == 0) {
-            $bonus = intval(0.1 * $amountpaid);
+            $bonus = intval(0.02 * $amountpaid);
             $details = "You've received a welcome bonus of NGN" . $bonus;
             $this->create_transaction('Bonus Credited', $request->input('data.id'), $details, 'credit',  $bonus, $user->id, 1);
             $user->first_time = 1;

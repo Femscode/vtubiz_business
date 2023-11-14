@@ -48,19 +48,19 @@
                     <div class="navbar-brand-box">
                         <a href="/" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="{{ asset('api_user/assets/images/logo.svg')}}" alt="" height="22">
+                                <img src="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{asset('assets/images/logo-wh.png')}}" alt="" height="30">
+                                <img src="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" height="30">
                             </span>
                         </a>
 
                         <a href="/" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="{{ asset('api_user/assets/images/logo-light.svg')}}" alt="" height="22">
+                                <img src="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{asset('assets/images/logo-wh.png')}}" alt="" height="30">
+                                <img src="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" height="30">
                             </span>
                         </a>
                     </div>
