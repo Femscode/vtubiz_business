@@ -1,4 +1,4 @@
-@extends('business_backend.master')
+@extends('dashboard.master1')
 
 @section('header')
 @endsection
@@ -60,7 +60,10 @@
 
                                 <!--begin::Wrapper-->
                                 <div class="d-flex align-items-center">
-                                  
+                                    <!--begin::Icon-->
+                               
+                                   
+
                                     <!--end::Icon-->
 
                                     <!--begin::Details-->

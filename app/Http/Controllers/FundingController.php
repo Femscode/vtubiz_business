@@ -32,7 +32,7 @@ class FundingController extends Controller
             return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
         }
     }
-    public function checkout($subdomain,Request $request) {
+    public function checkout(Request $request) {
       
         $this->validate($request, [
             'type' => 'required',
@@ -42,18 +42,21 @@ class FundingController extends Controller
         $data['amount'] = $amount = $request->amount;
         $data['active'] = 'fundwallet';
         if($request->type == 'card') {
-            $data['public_key'] = env('FLW_PUBLIC_KEY');
-            $data['callback_url'] = 'https://fastpay.cttaste.com/payment/callback';
+            $data['public_key'] = 'FLWPUBK_TEST-379d4f510b87e2e2ba9c01e3eee1ff79-X';
+            $data['callback_url'] = 'https://vtubiz.com/payment/callback';
+           if($user->user_type == 'admin') {
+               return view('business_backend.pay_with_card',$data);
+
+           }
             return view('dashboard.pay_with_card',$data);
 
         }
         else {
+        //    dd($user);
             $str_name = explode(" ",$user->name);
             $first_name = $str_name[0];
             $last_name = end($str_name);
-            // return view('dashboard.direct_transfer',$data);
-
-       
+            // return view('dashboard.direct_transfer',$data);       
             $trx_ref = Str::random(7);
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -82,6 +85,10 @@ class FundingController extends Controller
             $data['account_no'] = $responseData['data']['account_number'];
             $data['amount'] = $responseData['data']['amount'];
             $data['expiry_date'] = $responseData['data']['expiry_date'];
+            if($user->user_type == 'admin') {
+                return view('business_backend.direct_transfer',$data);
+            }
+            
             return view('dashboard.direct_transfer',$data);
 
         }
@@ -188,20 +195,34 @@ class FundingController extends Controller
     public function webhook_payment(Request $request)
     {
         file_put_contents(__DIR__ . '/flwlog.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
-        
+
         $email = $request->input('data.customer.email');
         $r_amountpaid = intval($request->input('data.amount'));
-        
+
         $amountpaid = $r_amountpaid;
-        
+        if ($amountpaid <= 200) {
+            $charges = 10;
+            $amountpaid -= $charges;
+        } elseif ($amountpaid < 1000) {
+            $charges = 30;
+            $amountpaid -= $charges;
+        } elseif ($amountpaid < 5000) {
+            $charges = 50;
+            $amountpaid -= $charges;
+        } else {
+            $charges = 100;
+            $amountpaid -= $charges;
+        }
+        $details_paid = $amountpaid + $charges;
+
         $user = User::where('email', $email)->firstOrFail();
-        $details = "Account credited with NGN" . $amountpaid;
+        $details = "Account credited with NGN" . $details_paid. " | Charges (NGN".$charges.")";
         // file_put_contents(__DIR__ . '/gethere.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
-        $this->create_transaction('Account Funding', $request->input('data.flw_ref'), $details, 'credit', $amountpaid, $user->id, 1);
+        $this->create_transaction('Account Funding', $request->input('data.id'), $details, 'credit', $amountpaid, $user->id, 1);
         if ($user->first_time == 0) {
             $bonus = intval(0.1 * $amountpaid);
             $details = "You've received a welcome bonus of NGN" . $bonus;
-            $this->create_transaction('Bonus Credited', $request->input('data.flw_ref'), $details, 'credit',  $bonus, $user->id, 1);
+            $this->create_transaction('Bonus Credited', $request->input('data.id'), $details, 'credit',  $bonus, $user->id, 1);
             $user->first_time = 1;
             $user->save();
         }
