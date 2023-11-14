@@ -156,7 +156,7 @@ class FundingController extends Controller
 
     public function handleGatewayCallback()
     {
-        $paymentDetails = Paystack::getPaymentData();
+        // $paymentDetails = Paystack::getPaymentData();
 
         // dd($paymentDetails);
         // Now you have the payment details,

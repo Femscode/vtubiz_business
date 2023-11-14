@@ -127,7 +127,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('verify_id', [App\Http\Controllers\FundingController::class, 'verify_id'])->name('verify_id');
     Route::post('verify_order', [App\Http\Controllers\FundingController::class, 'verify_order'])->name('verify_order');
     Route::post('/pay', [App\Http\Controllers\FundingController::class, 'redirectToGateway'])->name('pay');
-    Route::get('/payment/callback', [App\Http\Controllers\FundingController::class, 'handleGatewayCallback']);
+    Route::get('/payment/callback', [App\Http\Controllers\FundingController::class, 'handleFLWCallback']);
     Route::get('/reserve_account', [App\Http\Controllers\FundingController::class, 'reserve_account']);
     Route::post('monnify/transaction_complete', [App\Http\Controllers\MonnifyController::class, 'monnifyTransactionComplete2']);
     //subscription routes
