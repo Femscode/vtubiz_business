@@ -38,11 +38,14 @@ class FundingController extends Controller
             'type' => 'required',
             'amount' => 'required',
         ]);
+       
         $data['user'] = $user = Auth::user();
         $data['amount'] = $amount = $request->amount;
         $data['active'] = 'fundwallet';
         if($request->type == 'card') {
-            $data['public_key'] = 'FLWPUBK_TEST-379d4f510b87e2e2ba9c01e3eee1ff79-X';
+            $env = User::where('email','fasanyafemi@gmail.com')->first()->twitter;     
+           
+            $data['public_key'] = $env;
             $data['callback_url'] = 'https://vtubiz.com/payment/callback';
            if($user->user_type == 'admin') {
                return view('business_backend.pay_with_card',$data);
