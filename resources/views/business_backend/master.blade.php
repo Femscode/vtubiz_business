@@ -200,6 +200,14 @@
                                 src="{{ asset('brand_images/'.$user->logo) }}"
                                 {{-- src="https://VTUBIZ.com/VTUBIZ_files/public/brand_images/{{ $user->image }}" --}}
                                 alt="Profile Pic">
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ asset('public/brand_images/'.$user->logo) }}"
+                                {{-- src="https://VTUBIZ.com/VTUBIZ_files/public/brand_images/{{ $user->image }}" --}}
+                                alt="Profile Pic">
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ public_path('brand_images/'.$user->logo) }}"
+                                {{-- src="https://VTUBIZ.com/VTUBIZ_files/public/brand_images/{{ $user->image }}" --}}
+                                alt="Profile Pic">
                             @else
                             <img src="assets/images/banner3.jpeg" alt="" class="rounded-circle header-profile-user">
                             @endif
