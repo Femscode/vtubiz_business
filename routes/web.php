@@ -13,6 +13,8 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+
+Route::view('/business', 'business_frontend.business');
 Route::any('format_data', function () {
     Data::where('user_id', '!=', 0)->delete();
     $themes = Data::where('user_id', 0)->get();
@@ -212,7 +214,6 @@ Route::middleware(['auth'])->group(function () {
 
     //the business domain start
     
-    Route::view('/business', 'business_frontend.business');
     Route::get('home', [BusinessController::class, 'dashboard'])->name('admin_home')->name('dashboard');
     Route::get('dashboard', [BusinessController::class, 'dashboard'])->name('admin_dashboard');
     Route::get('customized_domain', [BusinessController::class, 'customized_domain'])->name('customized_domain');
