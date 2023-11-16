@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Traits\TransactionTrait;
 use App\Models\BulkSMSTransaction;
+use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -375,6 +376,17 @@ class BusinessController extends Controller
         $data['user'] = $user = Auth::user();
         $data['transactions'] = $transactions =  Transaction::where('company_id', $user->id)->where('title', '!=', 'Account Funded')->latest()->get();
         return view('business_backend.purchase_transactions', $data);
+    }
+    public function pending_transactions()
+    {
+        $data['user'] = $user = Auth::user();
+        $data['active'] = 'transactions';
+        $data['transactions'] = $transactions =  DuplicateTransaction::where('user_id', $user->id)->latest()->get();
+        if($user->user_type == 'admin') {
+            return view('business_backend.pending_transactions', $data);
+        }
+        return view('dashboard.pending_transactions', $data);
+        
     }
     public function bulksms_transactions()
     {

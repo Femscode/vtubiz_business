@@ -127,33 +127,41 @@ class SubscriptionController extends Controller
         $duplicate = DuplicateTransaction::find($tranx_id);
         $user = User::find($duplicate->user_id);
         // dd($user, $type,$duplicate);
-        if ($type == 'confirm') {
-            // dd($user);
-            $tranx =  Transaction::create([
-                'user_id' => $user->id,
-                'title' => $duplicate->title,
-                'reference' => 'data_purchase_' . Str::random(5),
-                'description' => $duplicate->details,
-                'before' => $user->balance,
-                'type' => 'debit',
-                'amount' => $duplicate->amount,
-                'status' => 1
-            ]);
-            $user->balance -= $duplicate->amount;
-            $user->total_spent += $duplicate->amount;
-            $user->save();
-            $tranx->after = $user->balance;
-            $tranx->save();
-            //delete duplicate
-            $duplicate->delete();
-            return redirect()->route('duplicate_transactions')->with('message', 'Duplicate confirmed successfully!');
-            return true;
-        } else {
-            $duplicate->delete();
-            return redirect()->route('duplicate_transactions')->with('message', 'Duplicate deleted successfully!');
-        }
+        if (Auth::user()->id == $user->id || Auth::user()->email == 'fasanyafemi@gmail.com') {
 
-        dd($duplicate);
+
+            if ($type == 'confirm') {
+                // dd($user);
+                $tranx =  Transaction::create([
+                    'user_id' => $user->id,
+                    'title' => $duplicate->title,
+                    'reference' => 'data_purchase_' . Str::random(5),
+                    'description' => $duplicate->details,
+                    'before' => $user->balance,
+                    'type' => 'debit',
+                    'amount' => $duplicate->amount,
+                    'status' => 1
+                ]);
+                $user->balance -= $duplicate->amount;
+                $user->total_spent += $duplicate->amount;
+                $user->save();
+                $tranx->after = $user->balance;
+                $tranx->save();
+                //delete duplicate
+                $duplicate->delete();
+                return redirect()->back()->with('message', 'Duplicate confirmed successfully!');
+                return true;
+            } else {
+                if ($user->email == 'fasanyafemi@gmail.com') {
+                    $duplicate->delete();
+                    return redirect()->back()->with('message', 'Duplicate deleted successfully!');
+                } else {
+                    return redirect()->back()->with('message', 'Access Denied!');
+                }
+            }
+        } else {
+            return redirect()->back()->with('message', 'Access Denied');
+        }
     }
     public function buydata(Request $request)
     {

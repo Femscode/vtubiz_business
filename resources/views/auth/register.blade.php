@@ -74,11 +74,13 @@
         <!--begin::Page bg image-->
         <style>
             body {
-                background-image: url('/assets/media/auth/bg4.jpg');
+             
+                background-image: url('/assets/media/auth/bg3.jpg');
+               
             }
 
             [data-bs-theme="dark"] body {
-                background-image: url('/assets/media/auth/bg4-dark.jpg');
+                background-image: url('/assets/media/auth/bg2-dark.jpg');
             }
         </style>
         <!--end::Page bg image-->

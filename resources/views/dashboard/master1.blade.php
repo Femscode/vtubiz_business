@@ -401,8 +401,14 @@
                                         <a href="/transactions" class="menu-link px-5">
                                             <span class="menu-text">My Transactions</span>
                                             <span class="menu-badge">
-                                                <span class="badge badge-light-danger badge-circle  fs-7">3</span>
+                                                <span class="badge badge-light-danger badge-circle  fs-7">New</span>
                                             </span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item px-5">
+                                        <a href="/pending_transactions" class="menu-link px-5">
+                                            <span class="menu-text">Pending Transactions</span>
+                                          
                                         </a>
                                     </div>
                                     <div class="menu-item px-5">

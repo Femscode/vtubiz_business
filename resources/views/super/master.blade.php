@@ -149,7 +149,7 @@
                                 <!--end:Menu item-->
                                 <!--begin:Menu item-->
                                
-                                <a href='/payment_transactions' class="menu-item  @if($active == 'pay_cttaste') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
+                                <a href='/all_payment_transactions' class="menu-item  @if($active == 'pay_cttaste') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Payment Transactions</span></span>
 
                                 </a>
