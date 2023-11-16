@@ -9,10 +9,10 @@
     <meta content="VTUBIZ|API-USER" name="description" />
     <meta content="VTUBIZ" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="https://VTUBIZ.com/assets/images/fav_01.png">
+    <link rel="shortcut icon" href="https://cttaste.com/assets/images/fav_01.png">
 
     <!-- Bootstrap Css -->
-    <link href="https://VTUBIZ.com/public/api_user/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet"
+    <link href="https://cttaste.com/public/api_user/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet"
     type="text/css" />
     <link href="{{ asset('api_user/assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet"
     type="text/css" />
@@ -20,7 +20,7 @@
     <link href="{{ asset('api_user/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
 
-    <link href="https://VTUBIZ.com/public/api_user/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="https://cttaste.com/public/api_user/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <link href="{{ asset('api_user/assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
     <script src="{{asset('cdn/sweetalert.min.js')}}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{asset('cdn/jquery-3.6.0.js')}}" crossorigin="anonymous"></script>
@@ -109,7 +109,7 @@
 
 
 
-                    <div class="dropdown d-inline-block">
+                    {{-- <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <div data-simplebar style="max-height: 230px;">
-                                {{-- <a href="" class="text-reset notification-item">
+                                <a href="" class="text-reset notification-item">
                                     <div class="d-flex">
                                         <div class="avatar-xs me-3">
                                             <span class="avatar-title bg-primary rounded-circle font-size-16">
@@ -146,7 +146,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </a> --}}
+                                </a>
                                 <a href="javascript: void(0);" class="text-reset notification-item">
                                     <div class="d-flex">
                                         <div class="avatar-xs me-3" style='width:80px'>
@@ -163,7 +163,7 @@
                                         </div>
                                     </div>
                                 </a>
-                                {{-- <a href="javascript: void(0);" class="text-reset notification-item">
+                                <a href="javascript: void(0);" class="text-reset notification-item">
                                     <div class="d-flex">
                                         <div class="avatar-xs me-3" style='width:50px'>
                                             <span class="avatar-title bg-success rounded-circle font-size-16">
@@ -178,7 +178,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </a> --}}
+                                </a>
 
                                
                             </div>
@@ -188,7 +188,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
@@ -197,7 +197,7 @@
 
 
                             <img class="rounded-circle header-profile-user"
-                                src="{{ asset('brand_images/'.$user->logo) }}"
+                                src="{{ asset('vtubiz_asset/brand_images/'.$user->logo) }}"
                                 {{-- src="https://VTUBIZ.com/VTUBIZ_files/public/brand_images/{{ $user->image }}" --}}
                                 alt="Profile Pic">
                           
@@ -205,11 +205,11 @@
                             <img src="assets/images/banner3.jpeg" alt="" class="rounded-circle header-profile-user">
                             @endif
                             <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $user->name }}</span>
-                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            {{-- <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i> --}}
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            <a class="dropdown-item" href="/manager_profile"><i
+                            <a class="dropdown-item" href="/profile"><i
                                     class="bx bx-user font-size-16 align-middle me-1"></i>
                                 <span>Profile</span></a>
 
@@ -536,7 +536,7 @@
     <script src="{{ asset('api_user/assets/libs/simplebar/simplebar.min.js')}}"></script>
     <script src="{{ asset('api_user/assets/libs/node-waves/waves.min.js')}}"></script>
     <script src="{{ asset('api_user/assets/js/pages/dashboard.init.js')}}"></script>
-    <script src="{{ asset('api_user/assets/js/pages/modal.init.js')}}"></script>
+    {{-- <script src="{{ asset('api_user/assets/js/pages/modal.init.js')}}"></script> --}}
     <script src="{{ asset('api_user/assets/js/app.js')}}"></script>
 
 

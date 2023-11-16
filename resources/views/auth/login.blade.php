@@ -116,7 +116,7 @@
         <!--begin::Card-->
         <div class="card rounded-3 w-md-550px">
           <!--begin::Card body-->
-          <div class="card-body d-flex flex-column p-10 p-lg-20 pb-lg-10">
+          <div class="card-body d-flex flex-column p-10 p-lg-20 pb-lg-10" style='width:350px;margin:0 auto'>
             <!--begin::Wrapper-->
             <div class="d-flex flex-center flex-column-fluid pb-15 pb-lg-20">
 
