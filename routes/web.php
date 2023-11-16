@@ -13,7 +13,11 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+Route::get('/asset-location', function () {
+    $publicPath = public_path();
 
+    return $publicPath;
+});
 Route::view('/business', 'business_frontend.business');
 Route::any('format_data', function () {
     Data::where('user_id', '!=', 0)->delete();
