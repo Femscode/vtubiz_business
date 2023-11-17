@@ -337,6 +337,7 @@ class BulkSMSController extends Controller
         $amount = $rq->amount;
         $real_amount = $rq->real_amount;
         $message_type = $rq->message_type;
+        dd($recipient);
 
         // THE API URL with parameters
         if ($rq->schedule) {
