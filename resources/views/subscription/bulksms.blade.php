@@ -23,7 +23,7 @@
 
                             <div class="wrap-form-control validate-input" data-validate="Sender Name is required">
                                 <label>Sender's Name</label>
-                                <input name='sender_name' id='sender_name' class="form-control" type="text"
+                                <input required name='sender_name' id='sender_name' class="form-control" type="text"
                                     maxlength="10" name="name" placeholder="Sender's Name">
                                 <span class="shadow-form-control"></span>
                             </div>
@@ -290,6 +290,7 @@
                         icon: 'info',
                         html:
                           `Total Recipients : <b>${response.count_recipient}</b><br> ` +
+                          `Total Pages : <b>${response.message_count}</b><br> ` +
                            
                           ` Total Charge : <b>NGN ${response.amount}</b><br><span class='text-danger'>Input your four(4) digit PIN to proceed</span>`,
                         showCloseButton: true,

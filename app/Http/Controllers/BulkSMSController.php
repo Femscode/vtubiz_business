@@ -244,7 +244,7 @@ class BulkSMSController extends Controller
         //calculate the charge before sending as a second validation for the amount to be charged, 160 words per page and get the total numnber of recipients.
 
         //check the user balance 
-        $message_count  = intval(Str::length($rq->message) / 160);
+        $message_count  = ceil(Str::length($rq->message) / 160);
         if ($message_count == 0) {
             $message_count = 1;
         }
@@ -279,7 +279,8 @@ class BulkSMSController extends Controller
             'real_amount' => $real_amount,
             'message_type' => $rq->message_type,
             'sender_name' => $rq->sender_name,
-            'count_recipient' => $contact_count
+            'count_recipient' => $contact_count,
+            'message_count' => $message_count,
         ];
 
         if ($rq->schedule_date) {
@@ -319,8 +320,11 @@ class BulkSMSController extends Controller
 
             return response()->json($response);
         }
-        $username = env('SMS_USERNAME');
-        $password = env('SMS_PASSWORD');
+        $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
+        $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
+
+        // $username = env('SMS_USERNAME');
+        // $password = env('SMS_PASSWORD');
       
         $sender = $rq->sender_name;
         $recipient = $rq->contacts;
@@ -415,8 +419,82 @@ class BulkSMSController extends Controller
             //sms not sent due to an error encountered from the API
             return redirect()->back()->with('error', 'Error encountered while sending SMS!');
         } else {
+            return redirect()->back()->with('error', 'Internal Error, kindly contact the administrator!');
             // INTERNAL ERROR FROM ME
             dd($the_work);
+        }
+    }
+
+    public function sendSMS($sender, $recipient, $message, $amount, $message_type)
+    {
+        // dd($rq->all());
+        $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
+        $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
+
+      
+        // $username = env('SMS_USERNAME');
+        // $password = env('SMS_PASSWORD');
+       
+
+        // THE API URL with parameters
+      
+            $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message";
+    
+
+        try {
+            $response = Http::get($apiUrl);
+            $statusCode = $response->status();
+            $responseData = $response->body();
+            $responseCode = abs($response->json());
+            //try and save all the response in txt file for references.
+            file_put_contents(__DIR__ . '/smslog.txt', json_encode($responseData, JSON_PRETTY_PRINT), FILE_APPEND);
+
+            // dd($response, $statusCode,  $responseData, $responseCode);
+
+
+            if ($statusCode == 200 && $responseCode == 0) {
+                
+                    $title = 'Successful Instant Bulk SMS';
+                    $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
+                
+                //save the record for succesfully sent SMS
+                $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type);
+                $response = [
+                    'success' => true,
+                    'message' => 'Sent Successfully!',
+
+
+                ];
+                return response()->json($response);
+            } else {
+                $statusCode = 0;
+                $title = "Failed Bulk SMS";
+                $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
+                //save the record for non successfully sent SMS due to error from the API
+                $this->create_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type);
+                $response = [
+                    'success' => false,
+                    'message' => 'Unable to send SMS, Try again later!',
+
+
+                ];
+                return response()->json($response);
+            }
+        } catch (\Exception $e) {
+            $statusCode = 0;
+            // Handle any exceptions or errors here
+            $title = "Failed Bulk SMS";
+            $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
+            // Save the record for non successully sent SMS due to an internal error from the application.
+            $this->create_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type);
+
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+
+
+            ];
+            return response()->json($response);
         }
     }
 
