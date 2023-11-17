@@ -135,7 +135,7 @@ class SubscriptionController extends Controller
                 $tranx =  Transaction::create([
                     'user_id' => $user->id,
                     'title' => $duplicate->title,
-                    'reference' => 'data_purchase_' . Str::random(5),
+                    'reference' => 'resolve_pending_' . Str::random(5),
                     'description' => $duplicate->details,
                     'before' => $user->balance,
                     'type' => 'debit',
