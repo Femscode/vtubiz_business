@@ -329,7 +329,7 @@ class BulkSMSController extends Controller
 
         // $username = env('SMS_USERNAME');
         // $password = env('SMS_PASSWORD');
-        dd($username, $password);
+       
       
         $sender = $rq->sender_name;
         $recipient = $rq->contacts;
