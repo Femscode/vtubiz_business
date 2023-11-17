@@ -310,16 +310,20 @@ class BulkSMSController extends Controller
 
             return response()->json($response);
         }
-        $check = $this->check_duplicate('check', $user->id);
-        if ($check == true) {
+        $details = "Bulk SMS to". $rq->contacts;
+        $check = $this->check_duplicate('check', $user->id, $rq->amount, "Bulk SMS", $details);
+
+        if ($check[0] == true) {
             $response = [
+                'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Duplicate Transaction!',
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
             return response()->json($response);
         }
+      
         $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
         $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
 
