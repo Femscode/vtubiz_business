@@ -354,7 +354,7 @@ class BulkSMSController extends Controller
             $responseCode = abs($response->json());
             //try and save all the response in txt file for references.
             file_put_contents(__DIR__ . '/smslog.txt', json_encode($responseData, JSON_PRETTY_PRINT), FILE_APPEND);
-
+            dd($apiUrl, $responseData)
             // dd($response, $statusCode,  $responseData, $responseCode);
 
 
