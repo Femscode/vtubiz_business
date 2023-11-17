@@ -344,7 +344,7 @@ class BulkSMSController extends Controller
             // $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message&dnd=true";
             $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message&schedule=$schedule";
         } else {
-            $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message";
+            $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=@@$sender@@&recipient=@@$recipient@@&message=@@$message@@";
         }
 
         try {
