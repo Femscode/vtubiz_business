@@ -403,8 +403,7 @@ class HomeController extends Controller
         $data['user'] = $user = Auth::user();
         $data['active'] = 'transaction';
         $data['transactions'] = BulkSMSTransaction::where('user_id', $user->id)->latest()->get();
-
-
+     
         return view('dashboard.bulksms_transactions', $data);
     }
     public function updateprofile(Request $request)

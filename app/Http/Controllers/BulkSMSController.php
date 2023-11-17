@@ -29,7 +29,7 @@ class BulkSMSController extends Controller
     {
         // return the contact group page
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             return redirect('/premium-contact_group');
         }
         $data['contacts'] = ContactGroup::where('user_id', $user->id)->latest()->get();
@@ -59,8 +59,16 @@ class BulkSMSController extends Controller
         // return the contact group page
         $data['user'] = $user = Auth::user();
         $data['transaction'] = $contact = Transaction::find($id);
-
-        return view('bulksms.view_details', $data);
+        if ($user->id == $contact->user_id) {
+            $data['active'] = 'bulksms';
+            if($user->user_type == 'admin') {
+                return view('business_backend.view_details', $data);
+                
+            }
+            return view('dashboard.view_details', $data);
+        } else {
+            return redirect()->back()->with('message', 'Access Denied!');
+        }
     }
     public function transactions()
     {
@@ -78,7 +86,7 @@ class BulkSMSController extends Controller
             $user = Auth::user();
 
             $this->validate($rq, [
-                'name' => 'required',             
+                'name' => 'required',
                 // 'contacts' => 'required',
             ]);
 
@@ -176,10 +184,10 @@ class BulkSMSController extends Controller
         } elseif ($rq->contact_type == 'select_group') {
             $contact = ContactGroup::find($rq->selected_group);
             if ($contact->type == 'manual') {
-             
+
                 $rq_contacts = $contact->contacts;
                 $contacts = explode(',', $rq_contacts);
-               
+
                 $r_contacts = [];
                 $contact_count = 0;
                 foreach ($contacts as $value) {
@@ -250,10 +258,10 @@ class BulkSMSController extends Controller
         }
 
 
-        $company = User::where('id',$user->company_id)->first();
+        $company = User::where('id', $user->company_id)->first();
         $company_amount = $company->bulksms_price;
         $real_amount =  number_format(3.8 * intval($contact_count) * $message_count, 2);
-        
+
         $amount = number_format($company_amount * intval($contact_count) * $message_count, 2); //3.95 should be changed to the admin specified amount.
         // dd($amount,$real_amount,$company_amount,$contact_count,$formatted_contacts,$message_count);
         // dd($amount,$contact_count, $rq->all());
@@ -296,9 +304,9 @@ class BulkSMSController extends Controller
 
 
     public function sendSMS2(Request $rq)
-    {       
-        $this->validate($rq, ['amount' =>['required','min:3','numeric']]);
-        
+    {
+        $this->validate($rq, ['amount' => ['required', 'min:3', 'numeric']]);
+
         $user = Auth::user();
         $hashed_pin = hash('sha256', $rq->pin);
         if ($user->pin !== $hashed_pin) {
@@ -310,7 +318,7 @@ class BulkSMSController extends Controller
 
             return response()->json($response);
         }
-        $details = "Bulk SMS to". $rq->contacts;
+        $details = "Bulk SMS to" . $rq->contacts;
         $check = $this->check_duplicate('check', $user->id, $rq->amount, "Bulk SMS", $details);
 
         if ($check[0] == true) {
@@ -323,21 +331,21 @@ class BulkSMSController extends Controller
 
             return response()->json($response);
         }
-      
+
         $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
         $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
 
         // $username = env('SMS_USERNAME');
         // $password = env('SMS_PASSWORD');
-       
-      
+
+
         $sender = $rq->sender_name;
         $recipient = $rq->contacts;
         $message = $rq->message;
         $amount = $rq->amount;
         $real_amount = $rq->real_amount;
         $message_type = $rq->message_type;
-       
+
         // THE API URL with parameters
         if ($rq->schedule) {
             $schedule = $rq->schedule;
@@ -367,7 +375,7 @@ class BulkSMSController extends Controller
                     $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
                 }
                 //save the record for succesfully sent SMS
-                $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type,$real_amount);
+                $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type, $real_amount);
                 $response = [
                     'success' => true,
                     'message' => 'Sent Successfully!',
@@ -381,7 +389,7 @@ class BulkSMSController extends Controller
                 $title = "Failed Bulk SMS";
                 $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
                 //save the record for non successfully sent SMS due to error from the API
-                $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type,$real_amount);
+                $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type, $real_amount);
                 $response = [
                     'success' => false,
                     'message' => 'Unable to send SMS, Try again later!',
@@ -397,7 +405,7 @@ class BulkSMSController extends Controller
             $title = "Failed Bulk SMS";
             $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
             // Save the record for non successully sent SMS due to an internal error from the application.
-            $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type,$real_amount);
+            $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type, $real_amount);
 
             $response = [
                 'success' => false,
@@ -436,15 +444,15 @@ class BulkSMSController extends Controller
         $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
         $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
 
-      
+
         // $username = env('SMS_USERNAME');
         // $password = env('SMS_PASSWORD');
-       
+
 
         // THE API URL with parameters
-      
-            $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message";
-    
+
+        $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message";
+
 
         try {
             $response = Http::get($apiUrl);
@@ -458,10 +466,10 @@ class BulkSMSController extends Controller
 
 
             if ($statusCode == 200 && $responseCode == 0) {
-                
-                    $title = 'Successful Instant Bulk SMS';
-                    $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
-                
+
+                $title = 'Successful Instant Bulk SMS';
+                $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
+
                 //save the record for succesfully sent SMS
                 $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type);
                 $response = [
@@ -504,7 +512,7 @@ class BulkSMSController extends Controller
     }
 
 
-    public function create_bulksms_transaction($title, $details, $sender, $message, $recipient, $amount, $status, $statusCode, $schedule, $message_type,$real_amount)
+    public function create_bulksms_transaction($title, $details, $sender, $message, $recipient, $amount, $status, $statusCode, $schedule, $message_type, $real_amount)
     {
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
@@ -527,11 +535,11 @@ class BulkSMSController extends Controller
 
         ]);
         //charging the user
-        if($status == 1) {
+        if ($status == 1) {
             $user->balance -= $amount;
             $user->save();
             $tranx->after = $user->balance;
-          
+
             //charging the admin       
             $profit = $amount - floatval($real_amount);
             $company->balance += $profit;
@@ -539,15 +547,13 @@ class BulkSMSController extends Controller
             $tranx->save();
             $company->save();
         } else {
-           
+
             $tranx->after = $user->balance;
-          
+
             //charging the admin       
-          
+
             $tranx->admin_after = $company->balance;
             $tranx->save();
-          
         }
-       
     }
 }

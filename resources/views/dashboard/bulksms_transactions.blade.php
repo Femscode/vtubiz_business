@@ -27,9 +27,9 @@
           </div>
           <div class="card-body">
             <div class='col-md-6'>
-            <input type="text" class="form-control" placeholder="Search..." id="searchTable">
+              <input type="text" class="form-control" placeholder="Search..." id="searchTable">
             </div>
-                           
+
 
             <table class="datatable table">
               <thead>
@@ -41,7 +41,7 @@
                   <th scope="col">Amount</th>
                   <th scope="col">Previous Balance</th>
                   <th scope="col">Later Balance</th>
-                 
+
                   <th scope="col">Status</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -49,29 +49,20 @@
               <tbody>
                 <input style='visibility:hidden' value='{{ $user->balance }}' id='user_amount' />
                 @foreach($transactions as $key => $tranx)
-               
+
                 @if($tranx->status == 1)
                 <tr class='bg bg-light-success'>
 
 
                   <td>{{ $tranx->title }}<br>
-                    @if($tranx->title == "Data Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title ==
-                    "Airtime Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title == "Electricity
-                    Payment" && $tranx->status == 1 && $tranx->redo == 1 )
-                    {{-- @if($tranx->title == "Data Purchase" && $tranx->status == 1 || $tranx->title == "Airtime
-                    Purchase" && $tranx->status == 1 || $tranx->title =='Electricity Payment' && $tranx->status == 1 ||
-                    $tranx->title == 'Cable Subscription' && $tranx->status == 1 ) --}}
-                    <a data-transaction_id="{{ $tranx->id }}" data-title="{{ $tranx->title }}"
-                      data-amount="{{ $tranx->amount }}" data-description='{{ $tranx->description }}'
-                      data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
-                    @endif
+                  
                   </td>
                   <td>{{ $tranx->sender }}</td>
                   <td>{{ $tranx->description }}</td>
                   <td>₦{{ number_format($tranx->amount,2) }}</td>
                   <td>₦{{ number_format($tranx->before,2) }}</td>
                   <td>₦{{ number_format($tranx->after,2) }}</td>
-                 
+
                   <td>@if($tranx->status == 1)
                     <span class='badge badge-light-success'>Success</span>
                     @else
@@ -81,30 +72,24 @@
                   </td>
                   <td>
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
+
+                    <a class='btn btn-info btn-sm' href='/view_details/{{ $tranx->id }}'>Details</a>
+
                   </td>
                 </tr>
-                @else 
+                @else
                 <tr class='bg bg-light-danger'>
 
 
                   <td>{{ $tranx->title }}<br>
-                    @if($tranx->title == "Data Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title ==
-                    "Airtime Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title == "Electricity
-                    Payment" && $tranx->status == 1 && $tranx->redo == 1 )
-                    {{-- @if($tranx->title == "Data Purchase" && $tranx->status == 1 || $tranx->title == "Airtime
-                    Purchase" && $tranx->status == 1 || $tranx->title =='Electricity Payment' && $tranx->status == 1 ||
-                    $tranx->title == 'Cable Subscription' && $tranx->status == 1 ) --}}
-                    <a data-transaction_id="{{ $tranx->id }}" data-title="{{ $tranx->title }}"
-                      data-amount="{{ $tranx->amount }}" data-description='{{ $tranx->description }}'
-                      data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
-                    @endif
+                  
                   </td>
                   <td>{{ $tranx->sender }}</td>
                   <td>{{ $tranx->description }}</td>
                   <td>₦{{ number_format($tranx->amount,2) }}</td>
                   <td>₦{{ number_format($tranx->before,2) }}</td>
                   <td>₦{{ number_format($tranx->after,2) }}</td>
-                 
+
                   <td>@if($tranx->status == 1)
                     <span class='badge badge-light-success'>Success</span>
                     @else
@@ -113,7 +98,11 @@
 
                   </td>
                   <td>
-                    <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
+                    {{-- <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a> --}}
+                    <a onclick='return confirm("Are you sure you want to resend this SMS?")'
+                      class='btn btn-primary btn-sm' href='/resend_sms/{{ $tranx->id }}'>Resend</a>
+                    <a class='btn btn-info btn-sm' href='/view_details/{{ $tranx->id }}'>Details</a>
+
                   </td>
                 </tr>
                 @endif

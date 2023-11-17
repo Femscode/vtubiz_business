@@ -137,6 +137,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reserve_account', [App\Http\Controllers\FundingController::class, 'reserve_account']);
     Route::post('monnify/transaction_complete', [App\Http\Controllers\MonnifyController::class, 'monnifyTransactionComplete2']);
     //subscription routes
+    Route::get('/view_details/{id}', [BulkSMSController::class, 'viewDetails'])->name('view_details');
+
     Route::get('/premium-data', [App\Http\Controllers\SubscriptionController::class, 'data']);
     Route::post('/redo_transaction', [App\Http\Controllers\SubscriptionController::class, 'redo_transaction']);
     Route::get('/premium-airtime', [App\Http\Controllers\SubscriptionController::class, 'airtime']);

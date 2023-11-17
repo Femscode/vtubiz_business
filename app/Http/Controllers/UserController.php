@@ -21,10 +21,14 @@ class UserController extends Controller
     
     public function print_transaction_receipt($id) {
         $data['transaction'] = $transaction = Transaction::find($id);
-        $data['user'] = Auth::user();
+        $data['user'] = $user = Auth::user();
         $data['active'] = 'transactions';
+        if($user->id == $transaction->user_id) {
+            return view('dashboard.receipt',$data);
+        } else {
+            return redirect()->back()->with('error', "Access Denied");
+        }
         // dd($transaction);
-        return view('dashboard.receipt',$data);
 
     }
     public function save_preference(Request $request)
