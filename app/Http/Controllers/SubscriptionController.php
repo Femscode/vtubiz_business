@@ -522,7 +522,7 @@ class SubscriptionController extends Controller
                     $schedule->save();
                     $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $tranx->phone_number;
 
-                    $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data->data_price, $user->id, 1, $real_dataprice);
+                    $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
 
                     $transaction = Transaction::find($trans_id);
                     $transaction->phone_number = $tranx->phone_number;
@@ -535,7 +535,7 @@ class SubscriptionController extends Controller
                 } else {
                     $reference = 'failed_data_' . Str::random(5);
                     $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $tranx->phone_number;
-                    $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0, $real_dataprice);
+                    $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
                     $tranx->status = 0;
                     $tranx->save();
                     $schedule->delete();
@@ -957,7 +957,7 @@ class SubscriptionController extends Controller
             if ($response_json['success'] === "true") {
                 $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $phone_number;
 
-                $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data->data_price, $user->id, 1, $real_dataprice);
+                $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
                 $transaction = Transaction::find($trans_id);
                 $transaction->phone_number = $phone_number;
                 $transaction->network = $tranx->network;
