@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:send_schedule_purchase')->everyMinute();
+        // $schedule->command('com:send')->everyFiveMinutes();
+        $schedule->command('command:run_schedule_purchase')->everyFiveMinutes();
     }
 
     /**
@@ -29,4 +30,5 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+    
 }

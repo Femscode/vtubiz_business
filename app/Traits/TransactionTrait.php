@@ -2,12 +2,13 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
-use App\Models\DuplicateTransaction;
 use App\Models\SchedulePurchase;
+use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -513,5 +514,204 @@ trait TransactionTrait
         // return true;
         // dd($title,$reference,$details,$user_id,$phone,$network,$discounted_amount,$amount,$date,$time);
 
+    }
+
+    public function run_schedule_purchase()
+    {
+        // dd($request->all());
+        $currentDate = Carbon::now()->toDateString();
+        $currentTime = Carbon::now()->toTimeString();
+
+
+        $schedules = SchedulePurchase::where('status', 0)
+            ->whereDate('date', $currentDate)
+            ->whereTime('time', '>=', Carbon::parse($currentTime)->subMinutes(5))
+            ->whereTime('time', '<=', $currentTime)
+            ->get();
+        // dd($schedules);
+        foreach ($schedules as $schedule) {
+            $tranx = Transaction::find($schedule->transaction_id);
+            $user = User::find($tranx->user_id);
+            if ($schedule->title == 'Data Purchase') {
+                $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                // dd($data);
+                if ($data == null) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+                    //in the future, there should be a mail notification here
+                    return false;
+                }
+                $data_price =  $data->admin_price;
+                $real_dataprice = $data->data_price;
+                if ($user->balance < $data_price) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+                    //in the future, there should be a mail notification here
+                    return false;
+                }
+
+                if ($data->network == 1) {
+                    $network = 'MTN';
+                } elseif ($data->network == 2) {
+                    $network = 'GLO';
+                } elseif ($data->network == 3) {
+                    $network = "Airtel";
+                } else {
+                    $network = "9Mobile";
+                }
+
+                $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
+
+                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details);
+
+                if ($check[0] == true) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+
+                    return false;
+                }
+
+                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => array(
+                        'network' => $tranx->network,
+                        'mobileno' => $tranx->phone_number,
+                        'dataplan' => $tranx->plan_id,
+                        'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
+                    ),
+                    CURLOPT_HTTPHEADER => array(
+                        "AuthorizationToken: " . $env, //replace this with your authorization_token
+                        "cache-control: no-cache"
+                    ),
+                ));
+                $response = curl_exec($curl);
+                $response_json = json_decode($response, true);
+                if ($response_json['success'] === "true") {
+                    $schedule->status = 1;
+                    $schedule->save();
+                    $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $tranx->phone_number;
+
+                    $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
+
+                    $transaction = Transaction::find($trans_id);
+                    $transaction->phone_number = $tranx->phone_number;
+                    $transaction->network = $tranx->network;
+                    $transaction->plan_id = $tranx->plan_id;
+                    $transaction->redo = 1;
+                    $transaction->save();
+                    // Transaction was successful
+                    // Do something here
+                } else {
+                    $reference = 'failed_data_' . Str::random(5);
+                    $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $tranx->phone_number;
+                    $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+                    //in the future, there should be a mail notification here
+                    return false;
+                }
+                $tranx->delete();
+                $this->check_duplicate("Delete", $user->id);
+
+                curl_close($curl);
+                return true;
+            } elseif ($schedule->title == 'Airtime Purchase') {
+                $phone_number = $tranx->phone_number;
+                $actual_price = Airtime::where('user_id', $user->company_id)->where('network', $tranx->network)->first()->actual_price;
+                $real_airtimeprice = $tranx->real_amount - ($actual_price / 100) * $tranx->real_amount;
+                if ($user->balance < $tranx->amount) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+                    //in the future, there should be a mail notification here
+                    return false;
+                }
+                $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
+                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
+
+                if ($check[0] == true) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+                    //in the future, there should be a mail notification here
+                    return false;
+                }
+                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => array(
+                        'network' => $tranx->network,
+                        'mobileno' => $phone_number,
+                        'amount' => $tranx->real_amount,
+                        'airtime_type' => 001,
+                        'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
+                    ),
+                    CURLOPT_HTTPHEADER => array(
+                        "AuthorizationToken: " . $env, //replace this with your authorization_token
+                        "cache-control: no-cache"
+                    ),
+                ));
+                $response = curl_exec($curl);
+                $response_json = json_decode($response, true);
+
+                if ($response_json['success'] === "true") {
+                    $schedule->status = 1;
+                    $schedule->save();
+                    $details = $response_json['network'] . " Airtime Purchase of NGN" . $tranx->real_amount . " on " . $phone_number;
+                    $trans_id = $this->create_transaction('Airtime Purchase', $response_json['reference_no'], $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice);
+                    $transaction = Transaction::find($trans_id);
+                    $transaction->phone_number = $phone_number;
+                    $transaction->network = $tranx->network;
+                    $transaction->discounted_amount = $tranx->discounted_amount;
+                    $transaction->redo = 1;
+                    $transaction->save();
+                    // Transaction was successful
+                    // Do something here
+                } else {
+                    $reference = 'failed_airtime_' . Str::random(5);
+                    $details = "Airtime Purchase of NGN" . $tranx->amount . " on " . $tranx->phone_number;
+                    $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->delete();
+                    //in the future, there should be a mail notification here
+                    return false;
+                }
+                $tranx->delete;
+                $this->check_duplicate("Delete", $user->id);
+
+                curl_close($curl);
+                return true;
+            } else {
+                $tranx->status = 0;
+                $tranx->save();
+                $schedule->delete();
+                //in the future, there should be a mail notification here
+                return false;
+            }
+        }
     }
 }
