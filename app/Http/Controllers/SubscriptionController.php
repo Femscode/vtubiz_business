@@ -449,6 +449,7 @@ class SubscriptionController extends Controller
         // dd($schedules);
         foreach ($schedules as $schedule) {
             $tranx = Transaction::find($schedule->transaction_id);
+            dd($tranx,$schedule);
             $user = User::find($tranx->user_id);
             if ($schedule->title == 'Data Purchase') {
                 $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
