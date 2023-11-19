@@ -564,16 +564,15 @@ class SubscriptionController extends Controller
                     return false;
                 }
                 $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
-                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
+                // $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
 
-                if ($check[0] == true) {
-                    $tranx->status = 0;
-                    $tranx->save();
-                    $schedule->status = 2;
-                    $schedule->save();
-                    //in the future, there should be a mail notification here
-                    return false;
-                }
+                // if ($check[0] == true) {
+                //     $tranx->status = 0;
+                //     $tranx->save();
+                //     $schedule->status = 2;
+                //     $schedule->save();
+                //     return false;
+                // }
                 $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
 
                 $curl = curl_init();
@@ -600,6 +599,7 @@ class SubscriptionController extends Controller
                 ));
                 $response = curl_exec($curl);
                 $response_json = json_decode($response, true);
+                dd($response_json);
 
                 if ($response_json['success'] === "true") {
                     $schedule->status = 1;
