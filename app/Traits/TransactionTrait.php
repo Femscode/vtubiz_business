@@ -538,7 +538,8 @@ trait TransactionTrait
                 if ($data == null) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -547,7 +548,8 @@ trait TransactionTrait
                 if ($user->balance < $data_price) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -569,7 +571,8 @@ trait TransactionTrait
                 if ($check[0] == true) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
 
                     return false;
                 }
@@ -620,7 +623,8 @@ trait TransactionTrait
                     $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -636,7 +640,8 @@ trait TransactionTrait
                 if ($user->balance < $tranx->amount) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -646,7 +651,8 @@ trait TransactionTrait
                 if ($check[0] == true) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -696,7 +702,8 @@ trait TransactionTrait
                     $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -708,7 +715,8 @@ trait TransactionTrait
             } else {
                 $tranx->status = 0;
                 $tranx->save();
-                $schedule->delete();
+                $schedule->status = 2;
+                $schedule->save();
                 //in the future, there should be a mail notification here
                 return false;
             }

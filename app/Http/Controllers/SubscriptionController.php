@@ -448,8 +448,7 @@ class SubscriptionController extends Controller
             ->get();
         // dd($schedules);
         foreach ($schedules as $schedule) {
-            $tranx = Transaction::find(intval($schedule->transaction_id));
-            dd($tranx,$schedule);
+            $tranx = Transaction::find($schedule->transaction_id);
             $user = User::find($tranx->user_id);
             if ($schedule->title == 'Data Purchase') {
                 $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
@@ -457,7 +456,8 @@ class SubscriptionController extends Controller
                 if ($data == null) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -466,7 +466,8 @@ class SubscriptionController extends Controller
                 if ($user->balance < $data_price) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -488,7 +489,8 @@ class SubscriptionController extends Controller
                 if ($check[0] == true) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
 
                     return false;
                 }
@@ -539,7 +541,8 @@ class SubscriptionController extends Controller
                     $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -555,7 +558,8 @@ class SubscriptionController extends Controller
                 if ($user->balance < $tranx->amount) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -565,7 +569,8 @@ class SubscriptionController extends Controller
                 if ($check[0] == true) {
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -615,7 +620,8 @@ class SubscriptionController extends Controller
                     $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
                     $tranx->status = 0;
                     $tranx->save();
-                    $schedule->delete();
+                    $schedule->status = 2;
+                    $schedule->save();
                     //in the future, there should be a mail notification here
                     return false;
                 }
@@ -627,7 +633,8 @@ class SubscriptionController extends Controller
             } else {
                 $tranx->status = 0;
                 $tranx->save();
-                $schedule->delete();
+                $schedule->status = 2;
+                $schedule->save();
                 //in the future, there should be a mail notification here
                 return false;
             }
