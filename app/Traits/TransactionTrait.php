@@ -442,6 +442,7 @@ trait TransactionTrait
                 'network' => $network,
                 'discounted_amount' => $discounted_amount,
                 'amount' => $amount,
+                'real_amount' => $amount,
 
                 'date' => $date,
                 'time' => $time,
