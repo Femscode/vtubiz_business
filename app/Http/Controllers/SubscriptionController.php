@@ -588,7 +588,7 @@ class SubscriptionController extends Controller
                     CURLOPT_POSTFIELDS => array(
                         'network' => $tranx->network,
                         'mobileno' => $phone_number,
-                        'amount' => $tranx->real_amount,
+                        'amount' => $tranx->amount,
                         'airtime_type' => 001,
                         'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
                     ),
