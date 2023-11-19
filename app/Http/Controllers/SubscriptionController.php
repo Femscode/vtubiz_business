@@ -599,7 +599,7 @@ class SubscriptionController extends Controller
                 ));
                 $response = curl_exec($curl);
                 $response_json = json_decode($response, true);
-                dd($response_json);
+                dd($response_json,$env);
 
                 if ($response_json['success'] === "true") {
                     $schedule->status = 1;
