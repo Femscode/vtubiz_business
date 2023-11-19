@@ -370,7 +370,7 @@ Route::middleware(['auth'])->group(function () {
     //subscription routes
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
+        // Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
         Route::any('/superadmin', [App\Http\Controllers\SuperController::class, 'index'])->name('superadmin');
         Route::any('/all_payment_transactions', [App\Http\Controllers\SuperController::class, 'payment_transactions'])->name('all_payment_transactions');
         Route::any('/all_withdrawals', [App\Http\Controllers\SuperController::class, 'all_withdrawals'])->name('all_withdrawals');
