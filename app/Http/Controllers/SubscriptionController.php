@@ -448,7 +448,7 @@ class SubscriptionController extends Controller
             ->get();
         // dd($schedules);
         foreach ($schedules as $schedule) {
-            $tranx = Transaction::find($schedule->transaction_id);
+            $tranx = Transaction::find(intval($schedule->transaction_id));
             dd($tranx,$schedule);
             $user = User::find($tranx->user_id);
             if ($schedule->title == 'Data Purchase') {
