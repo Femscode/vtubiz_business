@@ -654,11 +654,10 @@ trait TransactionTrait
                     $tranx->save();
                     $schedule->status = 2;
                     $schedule->save();
-                    //in the future, there should be a mail notification here
                     return false;
                 }
-                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
 
+                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -672,7 +671,7 @@ trait TransactionTrait
                     CURLOPT_POSTFIELDS => array(
                         'network' => $tranx->network,
                         'mobileno' => $phone_number,
-                        'amount' => $tranx->real_amount,
+                        'amount' => $tranx->amount,
                         'airtime_type' => 001,
                         'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
                     ),
@@ -683,6 +682,9 @@ trait TransactionTrait
                 ));
                 $response = curl_exec($curl);
                 $response_json = json_decode($response, true);
+
+                             
+            
 
                 if ($response_json['success'] === "true") {
                     $schedule->status = 1;
