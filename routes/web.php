@@ -19,6 +19,9 @@ Route::get('/asset-location', function () {
     return $publicPath;
 });
 Route::view('/business', 'business_frontend.business');
+Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
+        
+
 Route::any('format_data', function () {
     Data::where('user_id', '!=', 0)->delete();
     $themes = Data::where('user_id', 0)->get();

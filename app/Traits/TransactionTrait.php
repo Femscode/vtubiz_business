@@ -525,7 +525,7 @@ trait TransactionTrait
 
         $schedules = SchedulePurchase::where('status', 0)
             ->whereDate('date', $currentDate)
-            ->whereTime('time', '>=', Carbon::parse($currentTime)->subMinutes(5))
+            ->whereTime('time', '>=', Carbon::parse($currentTime)->subMinutes(35))
             ->whereTime('time', '<=', $currentTime)
             ->get();
         // dd($schedules);
