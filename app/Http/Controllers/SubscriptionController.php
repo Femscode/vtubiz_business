@@ -564,15 +564,15 @@ class SubscriptionController extends Controller
                     return false;
                 }
                 $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
-                // $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
+                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
 
-                // if ($check[0] == true) {
-                //     $tranx->status = 0;
-                //     $tranx->save();
-                //     $schedule->status = 2;
-                //     $schedule->save();
-                //     return false;
-                // }
+                if ($check[0] == true) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->status = 2;
+                    $schedule->save();
+                    return false;
+                }
 
                 $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
                 $curl = curl_init();
@@ -600,36 +600,8 @@ class SubscriptionController extends Controller
                 $response = curl_exec($curl);
                 $response_json = json_decode($response, true);
 
-                dd($response_json, $env, $tranx, $phone_number);
-
-                
-                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_POSTFIELDS => array(
-                        'network' => $tranx->network,
-                        'mobileno' => $phone_number,
-                        'amount' => $tranx->real_amount,
-                        'airtime_type' => 001,
-                        'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
-                    ),
-                    CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . $env, //replace this with your authorization_token
-                        "cache-control: no-cache"
-                    ),
-                ));
-                $response = curl_exec($curl);
-                $response_json = json_decode($response, true);
-                dd($response_json,$env);
+                             
+            
 
                 if ($response_json['success'] === "true") {
                     $schedule->status = 1;
