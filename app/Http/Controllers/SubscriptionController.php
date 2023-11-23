@@ -256,8 +256,9 @@ class SubscriptionController extends Controller
         } else {
             $network = "9Mobile";
         }
-        $details = $network . " Data Purchase of " . $data->plan_name . " on " . $request->phone_number;
-        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details);
+        $details = $network . "Data Purchase of " . $data->plan_name . " on " . $request->phone_number;
+        $client_reference =  'buy_data_' . Str::random(7);
+        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details,$client_reference);
 
         if ($check[0] == true) {
             $response = [
@@ -273,7 +274,7 @@ class SubscriptionController extends Controller
         //purchase the data
         //just to replace env
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-
+       
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
@@ -288,7 +289,7 @@ class SubscriptionController extends Controller
                 'network' => $request->network,
                 'mobileno' => $phone_number,
                 'dataplan' => $request->plan,
-                'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
+                'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
                 "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -314,10 +315,10 @@ class SubscriptionController extends Controller
             // Transaction was successful
             // Do something here
         } else {
-            $reference = 'failed_data_' . Str::random(5);
+            $reference = $client_reference;
             $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $request->phone_number;
 
-            $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0);
+            $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0, $real_dataprice);
         }
         $this->check_duplicate("Delete", $user->id);
 
@@ -369,7 +370,9 @@ class SubscriptionController extends Controller
             $network_mi = "9Mobile";
         }
         $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
-        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details);
+        $client_reference =  'buy_data_' . Str::random(7);
+       
+        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
         if ($check[0] == true) {
             $response = [
@@ -399,7 +402,7 @@ class SubscriptionController extends Controller
                 'network' => $network,
                 'mobileno' => $phone_number,
                 'dataplan' => $plan_id,
-                'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
+                'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
                 "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -423,10 +426,10 @@ class SubscriptionController extends Controller
             // Transaction was successful
             // Do something here
         } else {
-            $reference = 'failed_data_' . Str::random(5);
+            $reference = $client_reference;
             $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $phone;
 
-            $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0);
+            $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0, $real_dataprice);
         }
         $this->check_duplicate("Delete", $user->id);
 
@@ -483,8 +486,9 @@ class SubscriptionController extends Controller
                 }
 
                 $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
-
-                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details);
+                $client_reference =  'buy_data_' . Str::random(7);
+       
+                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
                 if ($check[0] == true) {
                     $tranx->status = 0;
@@ -511,7 +515,7 @@ class SubscriptionController extends Controller
                         'network' => $tranx->network,
                         'mobileno' => $tranx->phone_number,
                         'dataplan' => $tranx->plan_id,
-                        'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
+                        'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
                         "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -536,7 +540,7 @@ class SubscriptionController extends Controller
                     // Transaction was successful
                     // Do something here
                 } else {
-                    $reference = 'failed_data_' . Str::random(5);
+                    $reference = $client_reference;
                     $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $tranx->phone_number;
                     $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
                     $tranx->status = 0;
@@ -564,7 +568,8 @@ class SubscriptionController extends Controller
                     return false;
                 }
                 $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
-                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
+                $client_reference =  'buy_airtime_' . Str::random(7);
+                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
 
                 if ($check[0] == true) {
                     $tranx->status = 0;
@@ -590,7 +595,7 @@ class SubscriptionController extends Controller
                         'mobileno' => $phone_number,
                         'amount' => $tranx->amount,
                         'airtime_type' => 001,
-                        'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
+                        'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
                         "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -617,7 +622,7 @@ class SubscriptionController extends Controller
                     // Transaction was successful
                     // Do something here
                 } else {
-                    $reference = 'failed_airtime_' . Str::random(5);
+                    $reference = $client_reference;
                     $details = "Airtime Purchase of NGN" . $tranx->amount . " on " . $tranx->phone_number;
                     $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
                     $tranx->status = 0;
@@ -1473,7 +1478,9 @@ class SubscriptionController extends Controller
         //check duplicate
 
         $details =  "Airtime Purchase of " . $request->amount . " on " . $request->phone_number;
-        $check = $this->check_duplicate('check', $user->id, $request->amount, "Airtime Purchase", $details);
+        $client_reference =  'buy_airtime_' . Str::random(7);
+       
+        $check = $this->check_duplicate('check', $user->id, $request->amount, "Airtime Purchase", $details, $client_reference);
 
         if ($check[0] == true) {
             $response = [
@@ -1503,7 +1510,7 @@ class SubscriptionController extends Controller
                 'mobileno' => $phone_number,
                 'amount' => $request->amount,
                 'airtime_type' => 001,
-                'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
+                'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
                 "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -1526,7 +1533,7 @@ class SubscriptionController extends Controller
             // Transaction was successful
             // Do something here
         } else {
-            $reference = 'failed_airtime_' . Str::random(5);
+            $reference = $client_reference;
             $details = "Airtime Purchase of NGN" . $request->amount . " on " . $request->phone_number;
             $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $request->discounted_amount, $user->id, 0, $real_airtimeprice);
         }
@@ -1562,7 +1569,8 @@ class SubscriptionController extends Controller
         //check duplicate
 
         $details =  "Airtime Purchase of " . $amount . " on " . $phone;
-        $check = $this->check_duplicate('check', $user->id, $amount, "Airtime Purchase", $details);
+        $client_reference =  'buy_airtime_' . Str::random(7);
+        $check = $this->check_duplicate('check', $user->id, $amount, "Airtime Purchase", $details, $client_reference);
 
         if ($check[0] == true) {
             $response = [
@@ -1592,7 +1600,7 @@ class SubscriptionController extends Controller
                 'mobileno' => $phone_number,
                 'amount' => $amount,
                 'airtime_type' => 001,
-                'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
+                'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
                 "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -1617,7 +1625,7 @@ class SubscriptionController extends Controller
             // Transaction was successful
             // Do something here
         } else {
-            $reference = 'failed_airtime_' . Str::random(5);
+            $reference = $client_reference;
             $details = "Airtime Purchase of NGN" . $amount . " on " . $phone_number;
             $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $discounted_amount, $user->id, 0, $real_airtimeprice);
         }

@@ -5,6 +5,7 @@ namespace App\Traits;
 use Carbon\Carbon;
 use App\Models\Data;
 use App\Models\User;
+use App\Models\Airtime;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use App\Models\SchedulePurchase;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Http;
 trait TransactionTrait
 {
    
-    public function check_duplicate($type, $user_id, $amount = null, $title = null, $details = null)
+    public function check_duplicate($type, $user_id, $amount = null, $title = null, $details = null,$reference = null)
     {
         if ($type == 'check') {
 
@@ -29,7 +30,8 @@ trait TransactionTrait
                 'user_id' => $user_id,
                 'title' => $title,
                 'details' => $details,
-                'amount' => $amount
+                'amount' => $amount,
+                'reference' => $reference
             ]);
           
             return [false,$duplicate];
@@ -214,12 +216,14 @@ trait TransactionTrait
                 $company->save();
                 $tranx->after = $r_user->balance;
                 $tranx->admin_after = $company->balance;
+                $tranx->real_amount = $real_dataprice;
                 $tranx->save();
                 return $tranx->id;
             } else {
-                $tranx->description = "Failed Transaction : " . $tranx->description;
+                $tranx->description = $tranx->description;
                 $tranx->after = $r_user->balance;
                 $tranx->admin_after = $company->balance;
+                $tranx->real_amount = $real_dataprice;
                 $r_user->save();
                 $tranx->save();
             }
@@ -325,11 +329,13 @@ trait TransactionTrait
                 $company->save();
                 $tranx->after = $r_user->balance;
                 $tranx->admin_after = $company->balance;
+                $tranx->real_amount = $real_dataprice;
                 $tranx->save();
                 return $tranx->id;
             } else {
-                $tranx->description = "Failed Transaction : " . $tranx->description;
+                $tranx->description = $tranx->description;
                 $tranx->after = $r_user->balance;
+                $tranx->real_amount = $real_dataprice;
                 $tranx->admin_after = $company->balance;
                 $r_user->save();
                 $tranx->save();
@@ -516,10 +522,9 @@ trait TransactionTrait
         // dd($title,$reference,$details,$user_id,$phone,$network,$discounted_amount,$amount,$date,$time);
 
     }
-
     public function run_schedule_purchase()
     {
-        // dd($request->all());
+     
         $currentDate = Carbon::now()->toDateString();
         $currentTime = Carbon::now()->toTimeString();
 
@@ -566,8 +571,9 @@ trait TransactionTrait
                 }
 
                 $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
-
-                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details);
+                $client_reference =  'buy_data_' . Str::random(7);
+       
+                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
                 if ($check[0] == true) {
                     $tranx->status = 0;
@@ -594,7 +600,7 @@ trait TransactionTrait
                         'network' => $tranx->network,
                         'mobileno' => $tranx->phone_number,
                         'dataplan' => $tranx->plan_id,
-                        'client_reference' => 'buy_data_' . Str::random(7), //update this on your script to receive webhook notifications
+                        'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
                         "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -619,7 +625,7 @@ trait TransactionTrait
                     // Transaction was successful
                     // Do something here
                 } else {
-                    $reference = 'failed_data_' . Str::random(5);
+                    $reference = $client_reference;
                     $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $tranx->phone_number;
                     $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
                     $tranx->status = 0;
@@ -647,7 +653,8 @@ trait TransactionTrait
                     return false;
                 }
                 $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
-                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details);
+                $client_reference =  'buy_airtime_' . Str::random(7);
+                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
 
                 if ($check[0] == true) {
                     $tranx->status = 0;
@@ -673,7 +680,7 @@ trait TransactionTrait
                         'mobileno' => $phone_number,
                         'amount' => $tranx->amount,
                         'airtime_type' => 001,
-                        'client_reference' => 'buy_airtime_' . Str::random(7), //update this on your script to receive webhook notifications
+                        'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
                         "AuthorizationToken: " . $env, //replace this with your authorization_token
@@ -700,7 +707,7 @@ trait TransactionTrait
                     // Transaction was successful
                     // Do something here
                 } else {
-                    $reference = 'failed_airtime_' . Str::random(5);
+                    $reference = $client_reference;
                     $details = "Airtime Purchase of NGN" . $tranx->amount . " on " . $tranx->phone_number;
                     $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
                     $tranx->status = 0;
