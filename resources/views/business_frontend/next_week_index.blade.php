@@ -12,11 +12,8 @@
   <link rel="stylesheet" href="frontpage/assets/css/plugins.css">
   <link rel="stylesheet" href="frontpage/assets/css/style.css">
   <link rel="stylesheet" href="frontpage/assets/css/colors/yellow.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  {{--
-  <link rel="preload" href="frontpage/assets/css/fonts/thicccboi.css" as="style" onload="this.rel='stylesheet'"> --}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  {{-- <link rel="preload" href="frontpage/assets/css/fonts/thicccboi.css" as="style" onload="this.rel='stylesheet'"> --}}
   {{--
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
 
@@ -29,8 +26,7 @@
         <div class="container flex-lg-row flex-nowrap align-items-center">
           <div class="navbar-brand w-100">
             <a href="#">
-              <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}"
-                width='100px' height='25px' alt="">
+              <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}" width='100px' height='25px' alt="">
               {{-- <h4>VTUBIZ</h4> --}}
             </a>
           </div>
@@ -403,8 +399,7 @@
             <span><a href='/register' style='background-color:#001f3f' class="btn btn-primary border-0  me-2">Create
                 Account</a></span><br>
             <h4>
-              {{-- <a href='#free_vtu' style='color:#001f3f' class=" border-0  me-2 mt-2">Request A Free VTU Website
-                →</a> --}}
+              <a href='#free_vtu' style='color:#001f3f' class=" border-0  me-2 mt-2">Request A Free VTU Website →</a>
             </h4>
 
           </div>
@@ -644,7 +639,71 @@
     <!-- /section -->
     <section id='free_vtu' class="wrapper bg-gradient-reverse-primary angled upper-start lower-start">
       <div class="container py-14 pt-md-17 pb-md-15">
+        <div class="row gx-md-8 gx-xl-12 gy-10 mb-14 mb-md-18 align-items-center">
+          <div class="col-lg-6">
+            <h2 class="fs-16 text-uppercase text-muted mb-3">Be In Power</h2>
+            <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for FREE😊.</h3>
+            <p>Start selling all products like we do at your own price with our ready-made, easily customizable website for free.</p>
+            <a href="/business" class="btn btn-primary rounded-pill mb-0">Get Started</a>
+          </div>
+          <div class="col-lg-6 order-lg-2">
+            <div class="card shadow-lg me-lg-6">
+              <div class="card-body p-6">
+                <div class="d-flex flex-row">
+                  <div>
+                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
+                        class="number">01</span></span>
+                  </div>
+                  <div>
+                    <h4 class="mb-1">Register Your Brand/Business</h4>
+                    {{-- <p class="mb-0">You exclusively manage your user's purchases and payment transactions with
+                      ease.</p> --}}
+                  </div>
+                </div>
+              </div>
+              <!--/.card-body -->
+            </div>
+            <!--/.card -->
+            <div class="card shadow-lg ms-lg-13 mt-6">
+              <div class="card-body p-6">
+                <div class="d-flex flex-row">
+                  <div>
+                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
+                        class="number">02</span></span>
+                  </div>
+                  <div>
+                    <h4 class="mb-1">Choose Your Preferred Theme and Customize To Your Taste.</h4>
+                    {{-- <p class="mb-0">Fund your wallet to allow your customer's make purchases and withdraw your
+                      profit at
+                      any given time.</p> --}}
+                  </div>
+                </div>
+              </div>
+              <!--/.card-body -->
+            </div>
+            <!--/.card -->
+            <div class="card shadow-lg mx-lg-6 mt-6">
+              <div class="card-body p-6">
+                <div class="d-flex flex-row">
+                  <div>
+                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
+                        class="number">03</span></span>
+                  </div>
+                  <div>
+                    <h4 class="mb-1">Set Prices For All Products</h4>
+                    {{-- <p class="mb-0">Notify your customers about your brand in a unique and customized way.</p> --}}
+                  </div>
+                </div>
+              </div>
+              <!--/.card-body -->
+            </div>
+            <!--/.card -->
+          </div>
+          <!--/column -->
 
+          <!--/column -->
+        </div>
+        <!--/.row -->
 
         <!--/.row -->
       </div>
@@ -673,7 +732,7 @@
               <div class="col-md-6 col-xl-3">
                 <div class="card shadow-lg">
                   <div class="card-body">
-
+                   
                     <h4 class="mb-1">Transaction Redo</h4>
 
                     <p class="mb-2">Experience hassle-free transaction retries with a single click.</p>
@@ -688,7 +747,7 @@
               <div class="col-md-6 col-xl-3">
                 <div class="card shadow-lg">
                   <div class="card-body">
-
+                   
                     <h4 class="mb-1">Group Purchases</h4>
 
                     <p class="mb-2">Create as many group as you want, and initiate a purchase in one click.</p>
@@ -703,7 +762,7 @@
               <div class="col-md-6 col-xl-3">
                 <div class="card shadow-lg">
                   <div class="card-body">
-
+                   
                     <h4 class="mb-1">Schedule For Later Purchases</h4>
 
                     <p class="mb-2">Plan your purchase ahead, even when you are offline, we keep you connected!</p>
@@ -780,13 +839,11 @@
         <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
           <div class="col-lg-5">
             <h2 class="fs-16 text-uppercase text-muted mb-3 mt-lg-n6">Our Community</h2>
-            <img src='https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/unitedpalms-1/17.png'
-              style='width:350px;height:250px' />
-
-            {{-- <img src="{{ asset('assets/img/illustrations/i5.png') }}" style='width:300px;height:200px' /> --}}
+            <img src='https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/unitedpalms-1/17.png' style='width:350px;height:250px'/>
+            
+            {{-- <img src="{{ asset('assets/img/illustrations/i5.png') }}" style='width:300px;height:200px'/> --}}
             <h3 class="display-4 mb-5">Don't take our word for it. See what customers are saying about us.</h3>
-            {{-- <p>Experience our service through the eyes of our satisfied customers. Discover what real users have to
-              say
+            {{-- <p>Experience our service through the eyes of our satisfied customers. Discover what real users have to say
               about their VTU website creation journey with us.</p> --}}
             {{-- <a href="#" class="btn btn-primary rounded-pill mt-3">All Testimonials</a> --}}
           </div>
@@ -796,14 +853,13 @@
                 <div class="card shadow-lg">
                   <div class="card-body">
                     <blockquote class="icon mb-0">
-                      <p style='font-size:12px'>“VTUBIZ has simplified the way I handle my transactions. The option to
-                        schedule purchases is a game-changer, and the bulk SMS feature is a bonus. It's fast, efficient,
-                        reliable, and a must-have for anyone looking for convenience in their daily transactions.”</p>
+                      <p style='font-size:12px'>“Creating my VTU website with this platform was a breeze! The
+                        customization options are fantastic, and I love the theme choices. It has truly transformed my
+                        online presence. Highly recommended!”</p>
                       <div class="blockquote-details">
                         <div class="info p-0">
-                          <h5 class="mb-1">Patrick Mercy</h5>
-                          {{-- <a style='font-size:12px;color:red' href='https://my.vtubiz.com'>amusan.vtubiz.com</a>
-                          --}}
+                          <h5 class="mb-1">Amusan Sanya</h5>
+                          <a style='font-size:12px;color:red' href='https://my.vtubiz.com'>amusan.vtubiz.com</a>
                         </div>
                       </div>
                     </blockquote>
@@ -817,14 +873,14 @@
                 <div class="card shadow-lg">
                   <div class="card-body">
                     <blockquote class="icon mb-0">
-                      <p style='font-size:12px'>“Kudos to VTUBIZ! The platform's innovative features like saving
-                        beneficiaries and group/bulk purchase have made it my go-to for all things related to airtime,
-                        data, bills, and more. It's user-friendly, reliable, and simply the best in the business!”</p>
+                      <p style='font-size:12px'>“I was pleasantly surprised by the level of control I had over pricing
+                        my services. Being able to set my own rates for data plans and cable subscriptions has been a
+                        game-changer for my business.”</p>
                       <div class="blockquote-details">
                         <div class="info p-0">
-                          <h5 class="mb-1">Fasanya Victor</h5>
-                          {{-- <a style='font-size:12px;color:red'
-                            href='https://my.vtubiz.com'>Dee-enterprises.vtubiz.cam</a> --}}
+                          <h5 class="mb-1">Deborah Oshemege</h5>
+                          <a style='font-size:12px;color:red'
+                            href='https://my.vtubiz.com'>Dee-enterprises.vtubiz.cam</a>
                         </div>
                       </div>
                     </blockquote>
@@ -838,15 +894,12 @@
                 <div class="card shadow-lg">
                   <div class="card-body">
                     <blockquote class="icon mb-0">
-                      <p style='font-size:12px'>“As a reseller, partnering with VTUBIZ has significantly boosted my
-                        revenue. The wide array of services, coupled with features like transaction redo and bulk
-                        purchase, has set my business apart. It's not just a platform; it's a reseller's key to
-                        success!”</p>
+                      <p style='font-size:12px'>“The email marketing feature makes it so easy to keep my users updated
+                        with the latest offers and news. It's boosted my customer engagement significantly!.”</p>
                       <div class="blockquote-details">
                         <div class="info p-0">
-                          <h5 class="mb-1">Amusan Sanya</h5>
-                          {{-- <a style='font-size:12px;color:red' href='https://my.vtubiz.com'>tupac.vtubiz.com</a>
-                          --}}
+                          <h5 class="mb-1">Tupac Samuel</h5>
+                          <a style='font-size:12px;color:red' href='https://my.vtubiz.com'>tupac.vtubiz.com</a>
                         </div>
                       </div>
                     </blockquote>
@@ -860,14 +913,13 @@
                 <div class="card shadow-lg">
                   <div class="card-body">
                     <blockquote class="icon mb-0">
-                      <p style='font-size:12px'>“Exceptional service! VTUBIZ ability to save beneficiaries and
-                        facilitate group purchases has made life so much easier. Now, I can manage all my transactions
-                        in one place without any hassle.”</p>
+                      <p style='font-size:12px'>“I can't thank this platform enough for the exceptional customer
+                        support. Whenever I had a question or needed assistance, they were quick to respond and help.
+                        Top-notch service!”</p>
                       <div class="blockquote-details">
                         <div class="info p-0">
-                          <h5 class="mb-1">Somoye Hayinke Oluwatoba</h5>
-                          {{-- <a style='font-size:12px;color:red' href='https://my.vtubiz.com'>Igwetech.vtubiz.com</a>
-                          --}}
+                          <h5 class="mb-1">Sandra Igwe</h5>
+                          <a style='font-size:12px;color:red' href='https://my.vtubiz.com'>Igwetech.vtubiz.com</a>
                         </div>
                       </div>
                     </blockquote>
@@ -908,11 +960,11 @@
                     <h4 class="card-title mt-2">MTN Data Plans</h4>
                     <ul class="icon-list bullet-soft-primary mt-8 mb-9">
                       <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦250</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦500</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,600</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,700</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦25,500</strong> ~ 100GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦235</strong> ~ 1GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦480</strong> ~ 2GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,300</strong> ~ 5GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,400</strong> ~ 10GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦23,500</strong> ~ 100GB 30Days </span></li>
                     </ul>
                     <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
                   </div>
@@ -994,29 +1046,40 @@
         <!--/.row -->
 
         <!--/.row -->
-        <div class="">
-          <div class="row col-md-12  align-items-center">
-
-            <div class="col-4 col-md-4">
-              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img
-                  src="{{ asset('assets/img/cttaste_logo.png') }}" alt="" />
-              </figure>
-            </div>
-
-            <div class="col-4 col-md-4">
+        <div class="px-lg-5">
+          <div class="row gx-0 gx-md-8 gx-xl-12 gy-8 align-items-center">
+            <div class="col-4 col-md-2">
               <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img
                   src="{{ asset('assets/img/cthostel_logo.png') }}" alt="" />
               </figure>
             </div>
             <!--/column -->
-
-            <!--/column -->
-            <div class="col-4 col-md-4">
-              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4">
-                <img src="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" />
+            <div class="col-4 col-md-2">
+              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img
+                  src="{{ asset('assets/img/cttaste_logo.png') }}" alt="" />
               </figure>
             </div>
-
+            <!--/column -->
+            <div class="col-4 col-md-2">
+              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img src="assets/img/brands/c3.png" alt="" />
+              </figure>
+            </div>
+            <!--/column -->
+            <div class="col-4 col-md-2">
+              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img src="assets/img/brands/c4.png" alt="" />
+              </figure>
+            </div>
+            <!--/column -->
+            <div class="col-4 col-md-2">
+              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img src="assets/img/brands/c5.png" alt="" />
+              </figure>
+            </div>
+            <!--/column -->
+            <div class="col-4 col-md-2">
+              <figure class="px-5 px-md-0 px-lg-2 px-xl-3 px-xxl-4"><img src="assets/img/brands/c6.png" alt="" />
+              </figure>
+            </div>
+            <!--/column -->
           </div>
           <!--/.row -->
         </div>
@@ -1039,8 +1102,7 @@
       <div class="row gy-6 gy-lg-0">
         <div class="col-md-4 col-lg-3">
           <div class="widget">
-            <img class="mb-4" height='30px' width='100px' src="{{ asset('assets/img/logo/vtulogo.png') }}"
-              srcset="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" />
+            <img class="mb-4" src="assets/img/logo-light.png" srcset="./assets/img/logo-light@2x.png 2x" alt="" />
             <p class="mb-4">©
               <?php echo Date('Y');?> VTUBIZ. <br class="d-none d-lg-block" />All rights reserved.
             </p>
@@ -1087,8 +1149,10 @@
             <div class="newsletter-wrapper">
               <!-- Begin Mailchimp Signup Form -->
               <div id="mc_embed_signup2">
-                <form action="#" method="post" name="mc-embedded-subscribe-form" class="validate dark-fields"
-                  target="_blank" novalidate>
+                <form
+                  action="#"
+                  method="post"  name="mc-embedded-subscribe-form"
+                  class="validate dark-fields" target="_blank" novalidate>
                   <div id="mc_embed_signup_scroll2">
                     <div class="mc-field-group input-group form-floating">
                       <input type="email" value="" name="EMAIL" class="required email form-control"

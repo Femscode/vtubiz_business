@@ -201,6 +201,12 @@ class FundingController extends Controller
         }
         return response()->json("OK", 200);
     }
+    public function easywebhook(Request $request)
+    {
+        file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+       
+        return response()->json("OK", 200);
+    }
 
     public function webhook_payment(Request $request)
     {
