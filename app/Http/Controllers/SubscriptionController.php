@@ -1519,9 +1519,12 @@ class SubscriptionController extends Controller
         ));
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 1, $real_airtimeprice);
 
         if ($response_json['success'] === "true") {
             $details = $response_json['network'] . " Airtime Purchase of NGN" . $request->amount . " on " . $request->phone_number;
+            
+            
             $trans_id = $this->create_transaction('Airtime Purchase', $response_json['reference_no'], $details, 'debit', $request->discounted_amount, $user->id, 1, $real_airtimeprice);
             $transaction = Transaction::find($trans_id);
             $transaction->phone_number = $phone_number;
