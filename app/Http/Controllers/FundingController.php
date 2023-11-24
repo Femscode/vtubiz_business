@@ -210,6 +210,8 @@ class FundingController extends Controller
 
         // Decode the outer JSON string
         $decodedResponse = json_decode($webhookResponse, true);
+        file_put_contents(__DIR__ . '/easywebhookdecoded.txt',  $decodedResponse, FILE_APPEND);
+
 
         // Access the inner JSON string
         $innerJsonString = key($decodedResponse);
