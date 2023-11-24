@@ -203,7 +203,7 @@ class FundingController extends Controller
     {
         file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
 
-        $webhookResponse = json_encode($request->all(),JSON_PRETTY_PRINT);
+        $webhookResponse = json_encode($request->all());
 //         $webhookResponse = '{
 //     "{\"status\":\"success\",\"message\":\"Dear_Customer,_You_have_successfully_shared_1GB_Data_to_2348038539657__Your_SME_data_balance_is_19716_94GB_expires_28\\\/02\\\/2024__Thankyou\",\"reference\":\"DTd62d7c6971d153\",\"client_reference\":\"buy_data_kzUVm6Z\",\"transaction_date\":\"23-11-2023_05:04:25_pm\"}": null
 // }';
