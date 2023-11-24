@@ -202,26 +202,26 @@ class FundingController extends Controller
     public function easywebhook(Request $request)
     {
         file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+        $jsonData = $request->getContent();
 
-        $webhookResponse = json_encode($request->all());
-//         $webhookResponse = '{
-//     "{\"status\":\"success\",\"message\":\"Dear_Customer,_You_have_successfully_shared_1GB_Data_to_2348038539657__Your_SME_data_balance_is_19716_94GB_expires_28\\\/02\\\/2024__Thankyou\",\"reference\":\"DTd62d7c6971d153\",\"client_reference\":\"buy_data_kzUVm6Z\",\"transaction_date\":\"23-11-2023_05:04:25_pm\"}": null
-// }';
+        $outerData = json_decode($jsonData, true);
 
-        // Decode the outer JSON string
-        $decodedResponse = json_decode($webhookResponse, true);
-        file_put_contents(__DIR__ . '/easywebhookdecoded.txt',  $decodedResponse, FILE_APPEND);
+        $nestedJsonString = key($outerData);
 
+        
+        $nestedData = json_decode($nestedJsonString, true);
 
-        // Access the inner JSON string
-        $innerJsonString = key($decodedResponse);
+        // Access the 'client_reference' property
+        $reference = $nestedData['client_reference'];
+        $status = $nestedData['status'];
 
-        // Decode the inner JSON string to get the actual data
-        $innerData = json_decode($innerJsonString, true);
-
-        // Access the client_reference
-        $reference = $innerData['client_reference'];
-        $status = $innerData['status'];
+        // $webhookResponse = json_encode($request->all());
+        // $decodedResponse = json_decode($webhookResponse, true);
+        // file_put_contents(__DIR__ . '/easywebhookdecoded.txt',  $decodedResponse, FILE_APPEND);
+        // $innerJsonString = key($decodedResponse);
+        // $innerData = json_decode($innerJsonString, true);
+        // $reference = $innerData['client_reference'];
+        // $status = $innerData['status'];
         if ($status == 'success') {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
             $tranx->reference = $reference;
@@ -245,7 +245,6 @@ class FundingController extends Controller
             $tranx->save();
             $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
             $duplicate->delete();
-
         }
         return response()->json("OK", 200);
     }
