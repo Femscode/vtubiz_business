@@ -204,16 +204,22 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
         $jsonData = $request->getContent();
 
+        // Decode the outer JSON data
         $outerData = json_decode($jsonData, true);
-
-        $nestedJsonString = key($outerData);
-
         
+        // Get the key (which is the nested JSON string)
+        $nestedJsonStringKey = key($outerData);
+        
+        // Remove backslashes from the nested JSON string
+        $nestedJsonString = stripslashes($nestedJsonStringKey);
+        
+        // Decode the nested JSON string
         $nestedData = json_decode($nestedJsonString, true);
-
+        
         // Access the 'client_reference' property
         $reference = $nestedData['client_reference'];
-        $status = $nestedData['status'];
+        $status =  $nestedData['status'];
+        
 
         // $webhookResponse = json_encode($request->all());
         // $decodedResponse = json_decode($webhookResponse, true);
