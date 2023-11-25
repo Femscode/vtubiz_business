@@ -210,9 +210,28 @@ class FundingController extends Controller
         $status =  $data['status'];
         file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
-        $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
-        $response = Http::get($url);
+
         if ($status == 'success') {
+            file_put_contents(__DIR__ . '/easy_success_status.json', $client_reference);
+            $curl = curl_init();
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
+           
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => array(),
+                CURLOPT_HTTPHEADER => array(
+                    "AuthorizationToken: " , //replace this with your authorization_token
+                     "cache-control: no-cache"
+                ),
+            ));
+            $response = curl_exec($curl);
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         } else {
@@ -221,7 +240,8 @@ class FundingController extends Controller
         }
         return response()->json("OK", 200);
     }
-    public function test_debit($client_reference, $reference) {
+    public function test_debit($client_reference, $reference)
+    {
         $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
         $response = Http::get($url);
         dd($response);
