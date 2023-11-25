@@ -206,14 +206,6 @@ trait TransactionTrait
             $tranx->status = 1;
             $tranx->save();
         } elseif ($title == 'Data Purchase') {
-            $r_user->balance -= $amount;
-            $r_user->total_spent += $amount;
-            $r_user->save();
-            $profit = $amount - floatval($real_dataprice);
-            $company->balance += $profit;
-            $company->save();
-            $tranx->after = $r_user->balance;
-            $tranx->admin_after = $company->balance;
             $tranx->real_amount = $real_dataprice;
             $tranx->phone_number = $phone_number;
             $tranx->network = $network;

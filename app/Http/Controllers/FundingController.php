@@ -224,10 +224,14 @@ class FundingController extends Controller
             $tranx->admin_after = $company->balance;
             $tranx->redo = 1;
             $tranx->save();
-         } else {
+            $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
+            $duplicate->delete();
+        } else {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
             $tranx->reference = $jsonData['reference'];
             $tranx->save();
+            $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
+            $duplicate->delete();
         }
         return response()->json("OK", 200);
     }

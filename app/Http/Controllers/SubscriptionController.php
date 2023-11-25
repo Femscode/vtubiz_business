@@ -258,7 +258,21 @@ class SubscriptionController extends Controller
         }
         $details = $network . "Data Purchase of " . $data->plan_name . " on " . $request->phone_number;
         $client_reference =  'buy_data_' . Str::random(7);
+        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
+        if ($check[0] == true) {
+            $response = [
+                'type' => 'duplicate',
+                'success' => false,
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'auto_refund_status' => 'Nil'
+            ];
+
+            return response()->json($response);
+        }
+        // dd($check);
+        //purchase the data
+        //just to replace env
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
 
         $curl = curl_init();
@@ -286,7 +300,9 @@ class SubscriptionController extends Controller
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
         // return [$response_json,env('EASY_ACCESS_AUTH')];
-        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $phone_number, $request->network, $request->plan);
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice,$phone_number,$request->network,$request->plan);
+
+    
         curl_close($curl);
         return $response;
     }
@@ -896,7 +912,7 @@ class SubscriptionController extends Controller
 
             $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
             $client_reference =  'buy_data_' . Str::random(7);
-
+       
             $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
             if ($check[0] == true) {
