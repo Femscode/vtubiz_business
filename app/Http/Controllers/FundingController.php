@@ -212,6 +212,7 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
 
         if ($status == 'success') {
+            header("Location: https://vtubiz.com/run_debit/$client_reference/$reference");
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         } else {
