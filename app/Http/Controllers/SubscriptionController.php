@@ -258,7 +258,7 @@ class SubscriptionController extends Controller
         }
         $details = $network . "Data Purchase of " . $data->plan_name . " on " . $request->phone_number;
         $client_reference =  'buy_data_' . Str::random(7);
-        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
+        $check = $this->check_duplicate('check', $user->id, $data_price, "Data Purchase", $details, $client_reference);
 
         if ($check[0] == true) {
             $response = [

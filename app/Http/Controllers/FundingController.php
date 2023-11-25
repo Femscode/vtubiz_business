@@ -206,7 +206,8 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData);
         $reference = $jsonData['client_reference'];
         $status =  $jsonData['status'];
-        file_put_contents(__DIR__ . '/easy_json_data.json', $reference);
+        file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
+        file_put_contents(__DIR__ . '/easy_json_status.json', $status);
  
         if ($status == 'success') {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
