@@ -212,6 +212,10 @@ class FundingController extends Controller
         $status =  $data['status'];
         file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
+        $tran = Transaction::where('reference', $client_reference)
+        ->orderByDesc('created_at')
+        ->first();
+        file_put_contents(__DIR__ . '/easy_tran_status.json', $tran->reference);
 
         if ($status == 'success') {
 
