@@ -212,39 +212,47 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
 
         if ($status == 'success') {
-            file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
-            $tranx = DB::table('transactions')
-                ->where('reference', $client_reference)
-                ->orderByDesc('created_at')
-                ->first();
-            file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
-            $tranx->reference = $reference;
-            $user = User::find($tranx->user_id);
-            file_put_contents(__DIR__ . '/easy_json_user_status.json', $user->email);
-            $user->balance -= $tranx->amount;
-            $user->total_spent += $tranx->amount;
-            $user->save();
-            $company = User::where('id', $user->company_id)->first();
-            $profit = $tranx->amount - floatval($tranx->real_amount);
-            $company->balance += $profit;
-            $company->save();
-            $tranx->after = $user->balance;
-            $tranx->status = 1;
-            $tranx->admin_after = $company->balance;
-            $tranx->redo = 1;
-            $tranx->save();
-            $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
-            $duplicate->delete();
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
+            $response = Http::get($url);
         } else {
-            $tranx = Transaction::where('reference', $reference)->latest()->first();
-            $tranx->reference = $reference;
-            $tranx->save();
-            $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
-            $duplicate->delete();
+            $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
+            $response = Http::get($url);
         }
         return response()->json("OK", 200);
     }
-
+    public function run_debit($client_reference, $reference)
+    {
+        file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
+        $tranx = Transaction::where('reference', $client_reference)
+            ->orderByDesc('created_at')
+            ->first();
+        file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
+        $tranx->reference = $reference;
+        $user = User::find($tranx->user_id);
+        file_put_contents(__DIR__ . '/easy_json_user_status.json', $user->email);
+        $user->balance -= $tranx->amount;
+        $user->total_spent += $tranx->amount;
+        $user->save();
+        $company = User::where('id', $user->company_id)->first();
+        $profit = $tranx->amount - floatval($tranx->real_amount);
+        $company->balance += $profit;
+        $company->save();
+        $tranx->after = $user->balance;
+        $tranx->status = 1;
+        $tranx->admin_after = $company->balance;
+        $tranx->redo = 1;
+        $tranx->save();
+        $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
+        $duplicate->delete();
+    }
+    public function run_normal($client_reference, $reference)
+    {
+        $tranx = Transaction::where('reference', $client_reference)->latest()->first();
+        $tranx->reference = $reference;
+        $tranx->save();
+        $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
+        $duplicate->delete();
+    }
     public function webhook_payment(Request $request)
     {
         file_put_contents(__DIR__ . '/flwlog.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
