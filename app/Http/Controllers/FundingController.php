@@ -204,14 +204,15 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
         $jsonData = $request->getContent();
         file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData);
-        $reference = $jsonData['client_reference'];
-        $status =  $jsonData['status'];
+        $data = json_decode($jsonData, true);
+        $reference = $data['client_reference'];
+        $status =  $data['status'];
         file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
  
         if ($status == 'success') {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
-            $tranx->reference = $jsonData['reference'];
+            $tranx->reference = $data['reference'];
             $user = User::find($tranx->user_id);
             $company = User::where('id', $user->company_id)->first();
             $user->balance -= $tranx->amount;
@@ -229,7 +230,7 @@ class FundingController extends Controller
             $duplicate->delete();
         } else {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
-            $tranx->reference = $jsonData['reference'];
+            $tranx->reference = $data['reference'];
             $tranx->save();
             $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
             $duplicate->delete();
