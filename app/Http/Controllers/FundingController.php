@@ -242,7 +242,7 @@ class FundingController extends Controller
         $tranx->admin_after = $company->balance;
         $tranx->redo = 1;
         $tranx->save();
-        $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
+        $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
         $duplicate->delete();
     }
     public function run_normal($client_reference, $reference)
@@ -250,7 +250,7 @@ class FundingController extends Controller
         $tranx = Transaction::where('reference', $client_reference)->latest()->first();
         $tranx->reference = $reference;
         $tranx->save();
-        $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
+        $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
         $duplicate->delete();
     }
     public function webhook_payment(Request $request)
