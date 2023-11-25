@@ -225,7 +225,7 @@ class FundingController extends Controller
                 $response = $client->get($url);
                 file_put_contents(__DIR__ . '/easy_guzzlesuccess.json', $url);
             } catch (RequestException $e) {
-                file_put_contents(__DIR__ . '/easy_guzzleerror_url.json', $url);
+                file_put_contents(__DIR__ . '/easy_guzzleerror_url.json', $e->getMessage());
             }
         } else {
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
