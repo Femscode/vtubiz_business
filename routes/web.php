@@ -21,8 +21,8 @@ Route::get('/asset-location', function () {
 
 Route::view('/business', 'business_frontend.business');
 Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
-Route::any('/run_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_credit'])->name('run_credit');
-Route::any('/run_normal/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_credit'])->name('run_credit');
+Route::any('/run_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_debit'])->name('run_debit');
+Route::any('/run_normal/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_normal'])->name('run_normal');
         
 
 Route::any('format_data', function () {
