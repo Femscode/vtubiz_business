@@ -205,19 +205,20 @@ class FundingController extends Controller
         $jsonData = $request->getContent();
         file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData);
         $data = json_decode($jsonData, true);
-        $reference = $data['client_reference'];
+        $client_reference = $data['client_reference'];
+        $reference = $data['reference'];
         $status =  $data['status'];
         file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
  
         if ($status == 'success') {
-            $tranx = Transaction::where('reference', $reference)->latest()->first();
-            $tranx->reference = $data['reference'];
+            $tranx = Transaction::where('reference', $client_reference)->latest()->first();
+            $tranx->reference = $reference;
             $user = User::find($tranx->user_id);
-            $company = User::where('id', $user->company_id)->first();
             $user->balance -= $tranx->amount;
             $user->total_spent += $tranx->amount;
             $user->save();
+            $company = User::where('id', $user->company_id)->first();
             $profit = $tranx->amount - floatval($tranx->real_amount);
             $company->balance += $profit;
             $company->save();

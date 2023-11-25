@@ -18,6 +18,7 @@ Route::get('/asset-location', function () {
 
     return $publicPath;
 });
+
 Route::view('/business', 'business_frontend.business');
 Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
         
@@ -336,6 +337,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/fetch_meter_details', [App\Http\Controllers\SubscriptionController::class, 'fetch_meter_details']);
     Route::post('/fetch_decoder_details', [App\Http\Controllers\SubscriptionController::class, 'fetch_decoder_details']);
     Route::any('/user_delete_duplicate', [App\Http\Controllers\SubscriptionController::class, 'user_delete_duplicate']);
+
 
 
 
