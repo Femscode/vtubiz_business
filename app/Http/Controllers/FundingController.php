@@ -210,17 +210,14 @@ class FundingController extends Controller
         $status =  $data['status'];
         file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
-        
+
         if ($status == 'success') {
             file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
-            $tranx = Transaction::where('reference','ILIKE' ,$client_reference)->latest()->first();
-            if($tranx) {
-                file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
-            }
-            else {
-                file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $reference);
-
-            }
+            $tranx = DB::table('transactions')
+                ->where('reference', $client_reference)
+                ->orderByDesc('created_at')
+                ->first();
+            file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
             $tranx->reference = $reference;
             $user = User::find($tranx->user_id);
             file_put_contents(__DIR__ . '/easy_json_user_status.json', $user->email);
