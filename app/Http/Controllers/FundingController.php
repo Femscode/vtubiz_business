@@ -217,6 +217,7 @@ class FundingController extends Controller
             file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
             $tranx->reference = $reference;
             $user = User::find($tranx->user_id);
+            file_put_contents(__DIR__ . '/easy_json_user_status.json', $user->email);
             $user->balance -= $tranx->amount;
             $user->total_spent += $tranx->amount;
             $user->save();
