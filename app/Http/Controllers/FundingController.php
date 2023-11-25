@@ -207,12 +207,10 @@ class FundingController extends Controller
         $reference = $jsonData['client_reference'];
         $status =  $jsonData['status'];
         file_put_contents(__DIR__ . '/easy_json_data.json', $reference);
-
-
-      
+ 
         if ($status == 'success') {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
-            $tranx->reference = $reference;
+            $tranx->reference = $jsonData['reference'];
             $user = User::find($tranx->user_id);
             $company = User::where('id', $user->company_id)->first();
             $user->balance -= $tranx->amount;
@@ -224,15 +222,12 @@ class FundingController extends Controller
             $tranx->after = $user->balance;
             $tranx->status = 1;
             $tranx->admin_after = $company->balance;
+            $tranx->redo = 1;
             $tranx->save();
-            $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
-            $duplicate->delete();
-        } else {
+         } else {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
-            $tranx->reference = $reference;
+            $tranx->reference = $jsonData['reference'];
             $tranx->save();
-            $duplicate = DuplicateTransaction::where('reference', $reference)->latest()->first();
-            $duplicate->delete();
         }
         return response()->json("OK", 200);
     }

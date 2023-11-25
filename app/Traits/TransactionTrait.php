@@ -15,17 +15,17 @@ use Illuminate\Support\Facades\Http;
 
 trait TransactionTrait
 {
-   
-    public function check_duplicate($type, $user_id, $amount = null, $title = null, $details = null,$reference = null)
+
+    public function check_duplicate($type, $user_id, $amount = null, $title = null, $details = null, $reference = null)
     {
         if ($type == 'check') {
 
             $duplicate = DuplicateTransaction::where('user_id', $user_id)->first();
             // dd($duplicate);
             if ($duplicate !== null) {
-                return [true,$duplicate];
+                return [true, $duplicate];
             }
-           
+
             $duplicate = DuplicateTransaction::create([
                 'user_id' => $user_id,
                 'title' => $title,
@@ -33,8 +33,8 @@ trait TransactionTrait
                 'amount' => $amount,
                 'reference' => $reference
             ]);
-          
-            return [false,$duplicate];
+
+            return [false, $duplicate];
         } else {
             $duplicate = DuplicateTransaction::where('user_id', $user_id)->first();
             $duplicate->delete();
@@ -181,7 +181,7 @@ trait TransactionTrait
     }
 
 
-    public function create_transaction($title, $reference, $details, $type, $amount, $user, $status, $real_dataprice = null)
+    public function create_transaction($title, $reference, $details, $type, $amount, $user, $status, $real_dataprice = null, $phone_number = null, $network = null, $plan_id = null)
     {
         //    dd($title, $details, $type, intval($amount),intval($user),$name);
         $r_user = User::find($user);
@@ -206,50 +206,40 @@ trait TransactionTrait
             $tranx->status = 1;
             $tranx->save();
         } elseif ($title == 'Data Purchase') {
-
-            if ($status == 1) {
-                $r_user->balance -= $amount;
-                $r_user->total_spent += $amount;
-                $r_user->save();
-                $profit = $amount - floatval($real_dataprice);
-                $company->balance += $profit;
-                $company->save();
-                $tranx->after = $r_user->balance;
-                $tranx->admin_after = $company->balance;
-                $tranx->real_amount = $real_dataprice;
-                $tranx->save();
-                return $tranx->id;
-            } else {
-                $tranx->description = $tranx->description;
-                $tranx->after = $r_user->balance;
-                $tranx->admin_after = $company->balance;
-                $tranx->real_amount = $real_dataprice;
-                $r_user->save();
-                $tranx->save();
-            }
+            $r_user->balance -= $amount;
+            $r_user->total_spent += $amount;
+            $r_user->save();
+            $profit = $amount - floatval($real_dataprice);
+            $company->balance += $profit;
+            $company->save();
+            $tranx->after = $r_user->balance;
+            $tranx->admin_after = $company->balance;
+            $tranx->real_amount = $real_dataprice;
+            $tranx->phone_number = $phone_number;
+            $tranx->network = $network;
+            $tranx->plan_id = $plan_id;
+            $tranx->save();
+            return $tranx->id;
         } elseif ($title == 'Manual Funding') {
 
             $r_user->balance += $amount;
-          
+
 
             $r_user->save();
             $tranx->after = $r_user->balance;
 
             $tranx->status = 1;
             $tranx->save();
-        }
-        elseif ($title == 'Admin Fund User') {
+        } elseif ($title == 'Admin Fund User') {
 
             $r_user->balance -= $amount;
-         
+
             $r_user->save();
             $tranx->after = $r_user->balance;
 
             $tranx->status = 1;
             $tranx->save();
-        }
-        
-        elseif ($title == 'Payment Received') {
+        } elseif ($title == 'Payment Received') {
 
             $r_user->balance += $amount;
 
@@ -524,7 +514,7 @@ trait TransactionTrait
     }
     public function run_schedule_purchase()
     {
-     
+
         $currentDate = Carbon::now()->toDateString();
         $currentTime = Carbon::now()->toTimeString();
 
@@ -572,7 +562,7 @@ trait TransactionTrait
 
                 $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
                 $client_reference =  'buy_data_' . Str::random(7);
-       
+
                 $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
                 if ($check[0] == true) {
@@ -690,8 +680,8 @@ trait TransactionTrait
                 $response = curl_exec($curl);
                 $response_json = json_decode($response, true);
 
-                             
-            
+
+
 
                 if ($response_json['success'] === "true") {
                     $schedule->status = 1;
