@@ -204,35 +204,12 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
         $jsonData = $request->getContent();
         file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData);
-        
-        // Decode the outer JSON data
-        $outerData = json_decode($jsonData, true);
-        file_put_contents(__DIR__ . '/easy_json_outer_data.json', $outerData);
-        
-        // Get the key (which is the nested JSON string)
-        $nestedJsonStringKey = key($outerData);
-        file_put_contents(__DIR__ . '/easy_json_nested_data.json',  $nestedJsonStringKey);
-        
-        // Remove backslashes from the nested JSON string
-        $nestedJsonString = stripslashes($nestedJsonStringKey);
-        file_put_contents(__DIR__ . '/easy_json_nestedJ_data.json', $nestedJsonString);
-        
-        // Decode the nested JSON string
-        $nestedData = json_decode($nestedJsonString, true);
-        file_put_contents(__DIR__ . '/easy_json_nested_final_data.json',  $nestedData);
-        
-        // Access the 'client_reference' property
-        $reference = $nestedData['client_reference'];
-        $status =  $nestedData['status'];
-        
+        $reference = $jsonData['client_reference'];
+        $status =  $jsonData['status'];
+        file_put_contents(__DIR__ . '/easy_json_data.json', $reference);
 
-        // $webhookResponse = json_encode($request->all());
-        // $decodedResponse = json_decode($webhookResponse, true);
-        // file_put_contents(__DIR__ . '/easywebhookdecoded.txt',  $decodedResponse, FILE_APPEND);
-        // $innerJsonString = key($decodedResponse);
-        // $innerData = json_decode($innerJsonString, true);
-        // $reference = $innerData['client_reference'];
-        // $status = $innerData['status'];
+
+      
         if ($status == 'success') {
             $tranx = Transaction::where('reference', $reference)->latest()->first();
             $tranx->reference = $reference;

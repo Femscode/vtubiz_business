@@ -300,26 +300,27 @@ class SubscriptionController extends Controller
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
         // return [$response_json,env('EASY_ACCESS_AUTH')];
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
 
-        if ($response_json['success'] === "true") {
-            $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $request->phone_number;
+        // if ($response_json['success'] === "true") {
+        //     $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $request->phone_number;
 
-            $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
-            $transaction = Transaction::find($trans_id);
-            // $transaction->group_id = $group_id;
-            $transaction->phone_number = $phone_number;
-            $transaction->network = $request->network;
-            $transaction->plan_id = $request->plan;
-            $transaction->redo = 1;
-            $transaction->save();
-            // Transaction was successful
-            // Do something here
-        } else {
-            $reference = $client_reference;
-            $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $request->phone_number;
+        //     $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
+        //     $transaction = Transaction::find($trans_id);
+        //     // $transaction->group_id = $group_id;
+        //     $transaction->phone_number = $phone_number;
+        //     $transaction->network = $request->network;
+        //     $transaction->plan_id = $request->plan;
+        //     $transaction->redo = 1;
+        //     $transaction->save();
+        //     // Transaction was successful
+        //     // Do something here
+        // } else {
+        //     $reference = $client_reference;
+        //     $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $request->phone_number;
 
-            $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0, $real_dataprice);
-        }
+        //     $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data->data_price, $user->id, 0, $real_dataprice);
+        // }
         $this->check_duplicate("Delete", $user->id);
 
         curl_close($curl);
