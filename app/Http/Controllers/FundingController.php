@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Paystack;
 use Carbon\Carbon;
 use App\Models\User;
+use GuzzleHttp\Client;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
+use GuzzleHttp\Exception\RequestException;
 
 class FundingController extends Controller
 {
@@ -215,7 +217,16 @@ class FundingController extends Controller
 
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
             file_put_contents(__DIR__ . '/easy_check_url.json', $url);
-            $response = Http::get($url);
+            // $response = Http::get($url);
+            $client = new Client();
+            // $url = "https://vtubiz.com/run_debit/{$client_reference}/{$reference}";
+            
+            try {
+                $response = $client->get($url);
+                file_put_contents(__DIR__ . '/easy_guzzlesuccess.json', $url);
+            } catch (RequestException $e) {
+                file_put_contents(__DIR__ . '/easy_guzzleerror_url.json', $url);
+            }
         } else {
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
