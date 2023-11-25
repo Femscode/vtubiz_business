@@ -213,7 +213,7 @@ class FundingController extends Controller
         
         if ($status == 'success') {
             file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
-            $tranx = Transaction::where('reference', $client_reference)->latest()->first();
+            $tranx = Transaction::where('reference', $client_reference)->first();
             file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
             $tranx->reference = $reference;
             $user = User::find($tranx->user_id);
