@@ -221,6 +221,11 @@ class FundingController extends Controller
         }
         return response()->json("OK", 200);
     }
+    public function test_debit($client_reference, $reference) {
+        $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
+        $response = Http::get($url);
+        dd($response);
+    }
     public function run_debit($client_reference, $reference)
     {
         file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
