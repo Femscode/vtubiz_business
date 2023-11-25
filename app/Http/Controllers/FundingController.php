@@ -222,7 +222,7 @@ class FundingController extends Controller
             // $url = "https://vtubiz.com/run_debit/{$client_reference}/{$reference}";
             
             try {
-                $response = $client->post($url);
+                $response = $client->request('GET', $url);
                 file_put_contents(__DIR__ . '/easy_guzzlesuccess.json', $url);
             } catch (RequestException $e) {
                 file_put_contents(__DIR__ . '/easy_guzzleerror_url.json', $e->getMessage());
