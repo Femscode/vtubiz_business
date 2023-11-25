@@ -212,11 +212,10 @@ class FundingController extends Controller
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
 
         if ($status == 'success') {
-            file_put_contents(__DIR__ . '/easy_success_status.json', $client_reference);
-            for ($i = 0; $i < 3; $i++) {
-                $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
-                $response = Http::get($url);
-            }
+
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
+            file_put_contents(__DIR__ . '/easy_check_url.json', $url);
+            $response = Http::get($url);
         } else {
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
@@ -258,6 +257,7 @@ class FundingController extends Controller
     {
         $tranx = Transaction::where('reference', $client_reference)->latest()->first();
         $tranx->reference = $reference;
+        $tranx->status = 0;
         $tranx->save();
         $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
         $duplicate->delete();
