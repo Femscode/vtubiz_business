@@ -212,7 +212,18 @@ trait TransactionTrait
             $tranx->plan_id = $plan_id;
             $tranx->save();
             return $tranx->id;
-        } elseif ($title == 'Manual Funding') {
+        } 
+        elseif ($title == 'Airtime Purchase') {
+            $company = User::where('id', $r_user->company_id)->first();
+            $tranx->discounted_amount = $real_dataprice;
+            $tranx->phone_number = $phone_number;
+            $tranx->network = $network;
+            $tranx->real_amount = $plan_id;
+            $tranx->save();
+            return $tranx->id;
+         
+        }
+        elseif ($title == 'Manual Funding') {
 
             $r_user->balance += $amount;
 
@@ -299,15 +310,7 @@ trait TransactionTrait
             }
 
             return $tranx->id;
-        } elseif ($title == 'Airtime Purchase') {
-            $company = User::where('id', $r_user->company_id)->first();
-            $tranx->discounted_amount = $real_dataprice;
-            $tranx->phone_number = $phone_number;
-            $tranx->network = $network;
-            $tranx->real_amount = $plan_id;
-            $tranx->save();
-         
-        } elseif ($title == 'Cable Subscription') {
+        }  elseif ($title == 'Cable Subscription') {
 
             $company = User::where('id', $r_user->company_id)->first();
             if ($status == 1) {
@@ -607,6 +610,8 @@ trait TransactionTrait
                 }
 
                 $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+                $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
+             
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -630,38 +635,11 @@ trait TransactionTrait
                     ),
                 ));
                 $response = curl_exec($curl);
-                $response_json = json_decode($response, true);
-
-
-
-
-                if ($response_json['success'] === "true") {
-                    $schedule->status = 1;
-                    $schedule->save();
-                    $details = $response_json['network'] . " Airtime Purchase of NGN" . $tranx->real_amount . " on " . $phone_number;
-                    $trans_id = $this->create_transaction('Airtime Purchase', $response_json['reference_no'], $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice);
-                    $transaction = Transaction::find($trans_id);
-                    $transaction->phone_number = $phone_number;
-                    $transaction->network = $tranx->network;
-                    $transaction->discounted_amount = $tranx->discounted_amount;
-                    $transaction->redo = 1;
-                    $transaction->save();
-                    // Transaction was successful
-                    // Do something here
-                } else {
-                    $reference = $client_reference;
-                    $details = "Airtime Purchase of NGN" . $tranx->amount . " on " . $tranx->phone_number;
-                    $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
-                    $tranx->status = 0;
-                    $tranx->save();
-                    $schedule->status = 2;
-                    $schedule->save();
-                    //in the future, there should be a mail notification here
-                    return false;
-                }
+             
+                $schedule->status = 1;
+                $schedule->save();
                 $tranx->delete;
-                $this->check_duplicate("Delete", $user->id);
-
+              
                 curl_close($curl);
                 return true;
             } else {

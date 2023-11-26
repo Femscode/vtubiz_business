@@ -368,8 +368,10 @@ class SubscriptionController extends Controller
 
         //purchase the data
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-        $transact = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice);
-        $transact->group_id = $group_id;    
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice);
+        $transaction = Transaction::find($trans_id);
+        $transaction->group_id = $group_id;
+        $transaction->save();
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
@@ -514,6 +516,8 @@ class SubscriptionController extends Controller
                 }
 
                 $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+                $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
+                  
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -537,37 +541,9 @@ class SubscriptionController extends Controller
                     ),
                 ));
                 $response = curl_exec($curl);
-                $response_json = json_decode($response, true);
-
-
-
-
-                if ($response_json['success'] === "true") {
-                    $schedule->status = 1;
-                    $schedule->save();
-                    $details = $response_json['network'] . " Airtime Purchase of NGN" . $tranx->real_amount . " on " . $phone_number;
-                    $trans_id = $this->create_transaction('Airtime Purchase', $response_json['reference_no'], $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice);
-                    $transaction = Transaction::find($trans_id);
-                    $transaction->phone_number = $phone_number;
-                    $transaction->network = $tranx->network;
-                    $transaction->discounted_amount = $tranx->discounted_amount;
-                    $transaction->redo = 1;
-                    $transaction->save();
-                    // Transaction was successful
-                    // Do something here
-                } else {
-                    $reference = $client_reference;
-                    $details = "Airtime Purchase of NGN" . $tranx->amount . " on " . $tranx->phone_number;
-                    $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
-                    $tranx->status = 0;
-                    $tranx->save();
-                    $schedule->status = 2;
-                    $schedule->save();
-                    //in the future, there should be a mail notification here
-                    return false;
-                }
+                $schedule->status = 1;
+                $schedule->save();
                 $tranx->delete;
-                $this->check_duplicate("Delete", $user->id);
 
                 curl_close($curl);
                 return true;
@@ -766,6 +742,7 @@ class SubscriptionController extends Controller
             }
             //purchase the data
             $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+            $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -790,25 +767,6 @@ class SubscriptionController extends Controller
                 ),
             ));
             $response = curl_exec($curl);
-            $response_json = json_decode($response, true);
-
-            if ($response_json['success'] === "true") {
-                $details = $response_json['network'] . " Airtime Purchase of NGN" . $tranx->real_amount . " on " . $phone_number;
-                $trans_id = $this->create_transaction('Airtime Purchase', $response_json['reference_no'], $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice);
-                $transaction = Transaction::find($trans_id);
-                $transaction->phone_number = $phone_number;
-                $transaction->network = $tranx->network;
-                $transaction->discounted_amount = $tranx->discounted_amount;
-                $transaction->redo = 1;
-                $transaction->save();
-                // Transaction was successful
-                // Do something here
-            } else {
-                $reference = $client_reference;
-                $details = "Airtime Purchase of NGN" . $tranx->amount . " on " . $tranx->phone_number;
-                $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice);
-            }
-            $this->check_duplicate("Delete", $user->id);
 
             curl_close($curl);
             return $response;
@@ -1409,8 +1367,8 @@ class SubscriptionController extends Controller
 
         //purchase the airtime
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 1, $real_airtimeprice,$phone_number,$request->network,$request->amount);
-                
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $request->network, $request->amount);
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -1434,28 +1392,6 @@ class SubscriptionController extends Controller
             ),
         ));
         $response = curl_exec($curl);
-        // $response_json = json_decode($response, true);
-    
-        // if ($response_json['success'] === "true") {
-        //     $details = $response_json['network'] . " Airtime Purchase of NGN" . $request->amount . " on " . $request->phone_number;
-
-
-        //     $transaction = Transaction::find($trans_id);
-        //     $transaction->phone_number = $phone_number;
-        //     $transaction->network = $request->network;
-        //     $transaction->discounted_amount = $request->discounted_amount;
-        //     $transaction->real_amount = $request->amount;
-        //     $transaction->redo = 1;
-        //     $transaction->save();
-        //     // Transaction was successful
-        //     // Do something here
-        // } else {
-        //     $reference = $client_reference;
-        //     $details = "Airtime Purchase of NGN" . $request->amount . " on " . $request->phone_number;
-        //     $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $request->discounted_amount, $user->id, 0, $real_airtimeprice);
-        // }
-        // $this->check_duplicate("Delete", $user->id);
-
         curl_close($curl);
         return $response;
     }
@@ -1501,7 +1437,10 @@ class SubscriptionController extends Controller
         }
         //purchase the airtime
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 1, $real_airtimeprice,$phone, $network,$amount);
+        $transaction = Transaction::find($trans_id);
+        $transaction->group_id = $group_id;
+        $transaction->save();
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -1527,26 +1466,6 @@ class SubscriptionController extends Controller
         ));
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
-
-        if ($response_json['success'] === "true") {
-            $details = $response_json['network'] . " Airtime Purchase of NGN" . $amount . " on " . $phone_number;
-            $trans_id = $this->create_transaction('Airtime Purchase', $response_json['reference_no'], $details, 'debit', $discounted_amount, $user->id, 1, $real_airtimeprice);
-            $transaction = Transaction::find($trans_id);
-            $transaction->group_id = $group_id;
-            $transaction->phone_number = $phone_number;
-            $transaction->network = $network;
-            $transaction->discounted_amount = $discounted_amount;
-            $transaction->real_amount = $amount;
-            $transaction->redo = 1;
-            $transaction->save();
-            // Transaction was successful
-            // Do something here
-        } else {
-            $reference = $client_reference;
-            $details = "Airtime Purchase of NGN" . $amount . " on " . $phone_number;
-            $this->create_transaction('Airtime Purchase', $reference, $response_json['message'], 'debit', $discounted_amount, $user->id, 0, $real_airtimeprice);
-        }
-        $this->check_duplicate("Delete", $user->id);
 
         curl_close($curl);
         return $response_json;
