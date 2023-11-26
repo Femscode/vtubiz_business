@@ -300,28 +300,13 @@ trait TransactionTrait
 
             return $tranx->id;
         } elseif ($title == 'Airtime Purchase') {
-
             $company = User::where('id', $r_user->company_id)->first();
-            if ($status == 1) {
-                $r_user->balance -= $amount;
-                $r_user->total_spent += $amount;
-                $r_user->save();
-                $profit = $amount - floatval($real_dataprice);
-                $company->balance += $profit;
-                $company->save();
-                $tranx->after = $r_user->balance;
-                $tranx->admin_after = $company->balance;
-                $tranx->real_amount = $real_dataprice;
-                $tranx->save();
-                return $tranx->id;
-            } else {
-                $tranx->description = $tranx->description;
-                $tranx->after = $r_user->balance;
-                $tranx->real_amount = $real_dataprice;
-                $tranx->admin_after = $company->balance;
-                $r_user->save();
-                $tranx->save();
-            }
+            $tranx->discounted_amount = $real_dataprice;
+            $tranx->phone_number = $phone_number;
+            $tranx->network = $network;
+            $tranx->real_amount = $plan_id;
+            $tranx->save();
+         
         } elseif ($title == 'Cable Subscription') {
 
             $company = User::where('id', $r_user->company_id)->first();
@@ -591,7 +576,9 @@ trait TransactionTrait
                         "cache-control: no-cache"
                     ),
                 ));
-                $schedule->delete();
+                $schedule->status = 1;
+                $schedule->save();
+                $tranx->delete();
                 $response = curl_exec($curl);              
                 curl_close($curl);
                 return true;
