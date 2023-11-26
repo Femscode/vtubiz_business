@@ -5,18 +5,15 @@ namespace App\Http\Controllers;
 use Paystack;
 use Carbon\Carbon;
 use App\Models\User;
-use GuzzleHttp\Client;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Traits\TransactionTrait;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
-use GuzzleHttp\Exception\RequestException;
 
 class FundingController extends Controller
 {
@@ -205,28 +202,17 @@ class FundingController extends Controller
     {
         file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
         $jsonData = $request->getContent();
-        file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData);
+        file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData, FILE_APPEND);
         $data = json_decode($jsonData, true);
         $client_reference = $data['client_reference'];
         $reference = $data['reference'];
         $status =  $data['status'];
-        file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
-        file_put_contents(__DIR__ . '/easy_json_status.json', $status);
 
         if ($status == 'success' || $status == 'successful') {
 
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
             file_put_contents(__DIR__ . '/easy_check_url.json', $url);
-            // $response = Http::get($url);
-            $client = new Client();
-            // $url = "https://vtubiz.com/run_debit/{$client_reference}/{$reference}";
-
-            try {
-                $response = $client->request('GET', $url);
-                file_put_contents(__DIR__ . '/easy_guzzlesuccess.json', $url);
-            } catch (RequestException $e) {
-                file_put_contents(__DIR__ . '/easy_guzzleerror_url.json', $e->getMessage());
-            }
+            $response = Http::get($url);
         } else {
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
@@ -241,15 +227,11 @@ class FundingController extends Controller
     }
     public function run_debit($client_reference, $reference)
     {
-        file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
         $tranx = Transaction::where('reference', $client_reference)
-            ->orWhere('reference', '%like%', $client_reference)
             ->orderByDesc('created_at')
             ->first();
-        file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
         $tranx->reference = $reference;
         $user = User::find($tranx->user_id);
-        file_put_contents(__DIR__ . '/easy_json_user_status.json', $user->email);
         $user->balance -= $tranx->amount;
         $user->total_spent += $tranx->amount;
         $user->save();

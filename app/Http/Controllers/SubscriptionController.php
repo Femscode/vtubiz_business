@@ -274,6 +274,7 @@ class SubscriptionController extends Controller
         //purchase the data
         //just to replace env
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice,$phone_number,$request->network,$request->plan);
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -300,8 +301,7 @@ class SubscriptionController extends Controller
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
         // return [$response_json,env('EASY_ACCESS_AUTH')];
-        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice,$phone_number,$request->network,$request->plan);
-
+        
     
         curl_close($curl);
         return $response;
