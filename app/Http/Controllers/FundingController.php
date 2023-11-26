@@ -212,19 +212,15 @@ class FundingController extends Controller
         $status =  $data['status'];
         file_put_contents(__DIR__ . '/easy_json_referece.json', $reference);
         file_put_contents(__DIR__ . '/easy_json_status.json', $status);
-        $tran = DB::table('transactions')->where('reference', $client_reference)
-       
-        ->first();
-        file_put_contents(__DIR__ . '/easy_tran_status.json', $tran->reference);
 
-        if ($status == 'success') {
+        if ($status == 'success' || $status == 'successful') {
 
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
             file_put_contents(__DIR__ . '/easy_check_url.json', $url);
             // $response = Http::get($url);
             $client = new Client();
             // $url = "https://vtubiz.com/run_debit/{$client_reference}/{$reference}";
-            
+
             try {
                 $response = $client->request('GET', $url);
                 file_put_contents(__DIR__ . '/easy_guzzlesuccess.json', $url);
@@ -247,6 +243,7 @@ class FundingController extends Controller
     {
         file_put_contents(__DIR__ . '/easy_json_after_status.json', $client_reference);
         $tranx = Transaction::where('reference', $client_reference)
+            ->orWhere('reference', '%like%', $client_reference)
             ->orderByDesc('created_at')
             ->first();
         file_put_contents(__DIR__ . '/easy_json_afterreal_status.json', $tranx->reference);
