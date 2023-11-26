@@ -504,9 +504,10 @@ trait TransactionTrait
         // dd($title,$reference,$details,$user_id,$phone,$network,$discounted_amount,$amount,$date,$time);
 
     }
+
     public function run_schedule_purchase()
     {
-
+        // dd($request->all());
         $currentDate = Carbon::now()->toDateString();
         $currentTime = Carbon::now()->toTimeString();
 
@@ -567,6 +568,7 @@ trait TransactionTrait
                 }
 
                 $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+                $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice,$tranx->phone_number,$tranx->network,$tranx->plan_id);
 
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
@@ -589,37 +591,7 @@ trait TransactionTrait
                         "cache-control: no-cache"
                     ),
                 ));
-                $response = curl_exec($curl);
-                $response_json = json_decode($response, true);
-                if ($response_json['success'] === "true") {
-                    $schedule->status = 1;
-                    $schedule->save();
-                    $details = $response_json['network'] . " Data Purchase of " . $response_json['dataplan'] . " on " . $tranx->phone_number;
-
-                    $trans_id = $this->create_transaction('Data Purchase', $response_json['reference_no'], $details, 'debit', $data_price, $user->id, 1, $real_dataprice);
-
-                    $transaction = Transaction::find($trans_id);
-                    $transaction->phone_number = $tranx->phone_number;
-                    $transaction->network = $tranx->network;
-                    $transaction->plan_id = $tranx->plan_id;
-                    $transaction->redo = 1;
-                    $transaction->save();
-                    // Transaction was successful
-                    // Do something here
-                } else {
-                    $reference = $client_reference;
-                    $details =   $data->plan_name . " (" . $data->network . ")" . " data purchase on " . $tranx->phone_number;
-                    $this->create_transaction('Data Purchase', $reference, $details, 'debit', $data_price, $user->id, 0, $real_dataprice);
-                    $tranx->status = 0;
-                    $tranx->save();
-                    $schedule->status = 2;
-                    $schedule->save();
-                    //in the future, there should be a mail notification here
-                    return false;
-                }
-                $tranx->delete();
-                $this->check_duplicate("Delete", $user->id);
-
+                $response = curl_exec($curl);              
                 curl_close($curl);
                 return true;
             } elseif ($schedule->title == 'Airtime Purchase') {
@@ -714,4 +686,6 @@ trait TransactionTrait
             }
         }
     }
+
+  
 }

@@ -219,12 +219,7 @@ class FundingController extends Controller
         }
         return response()->json("OK", 200);
     }
-    public function test_debit($client_reference, $reference)
-    {
-        $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
-        $response = Http::get($url);
-        dd($response);
-    }
+   
     public function run_debit($client_reference, $reference)
     {
         $tranx = Transaction::where('reference', $client_reference)
