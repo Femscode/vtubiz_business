@@ -591,6 +591,7 @@ trait TransactionTrait
                         "cache-control: no-cache"
                     ),
                 ));
+                $schedule->delete();
                 $response = curl_exec($curl);              
                 curl_close($curl);
                 return true;
@@ -686,6 +687,6 @@ trait TransactionTrait
             }
         }
     }
-
+    
   
 }
