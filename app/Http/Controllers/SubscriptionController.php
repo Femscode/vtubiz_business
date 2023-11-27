@@ -742,7 +742,7 @@ class SubscriptionController extends Controller
             }
             //purchase the data
             $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-            $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
+            $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -1367,7 +1367,7 @@ class SubscriptionController extends Controller
 
         //purchase the airtime
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $request->network, $request->amount);
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $request->network, $request->amount);
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -1437,7 +1437,7 @@ class SubscriptionController extends Controller
         }
         //purchase the airtime
         $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 1, $real_airtimeprice,$phone, $network,$amount);
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 2, $real_airtimeprice,$phone, $network,$amount);
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
         $transaction->save();
