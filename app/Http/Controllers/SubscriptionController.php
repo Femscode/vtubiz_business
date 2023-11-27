@@ -725,7 +725,7 @@ class SubscriptionController extends Controller
 
             //check duplicate
 
-            $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
+            $details =  "Airtime Purchase of NGN" . $tranx->real_amount . " on " . $tranx->phone_number;
             $client_reference =  'buy_airtime_' . Str::random(7);
 
             $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
