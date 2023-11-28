@@ -161,7 +161,7 @@
                   v-for="plan in plans"
                   :value="plan.plan_id"
                 >
-                  {{ plan.plan_name }} - {{ plan['cable_price_'+user.company_id] }}
+                  {{ plan.plan_name }} - NGN{{ plan.admin_price }}
                 </option>
               </select>
             </div>

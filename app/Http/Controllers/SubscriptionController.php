@@ -293,8 +293,8 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . $env, //replace this with your authorization_token
-                // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                // "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -868,74 +868,6 @@ class SubscriptionController extends Controller
 
             curl_close($curl);
             return $response;
-        } elseif ($tranx->title == 'Cable Subscription') {
-        } elseif ($tranx->title == 'Electricity Payment') {
-            $company = User::where('id', $user->company_id)->first();
-            // dd($request->all(),$discounted_amount);
-            if ($user->balance < $tranx->discounted_amount) {
-                $response = [
-                    'success' => false,
-                    'message' => 'Insufficient balance for the plan you want to get!',
-                    'auto_refund_status' => 'Nil'
-                ];
-
-                return response()->json($response);
-            }
-
-            //check duplicate
-            $check = $this->check_duplicate('check', $user->id);
-            if ($check == true) {
-                $response = [
-                    'success' => false,
-                    'message' => 'Duplicate transactions, please try again in few more minuetes!',
-                    'auto_refund_status' => 'Nil'
-                ];
-
-                return response()->json($response);
-            }
-            //purchase the data
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://easyaccessapi.com.ng/api/payelectricity.php",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => array(
-                    'company' => $tranx->company,
-                    'metertype' => $tranx->meter_type,
-                    'meterno' => $tranx->meter_number,
-                    'amount' => $tranx->discounted_amount,
-                ),
-                CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
-                    "cache-control: no-cache"
-                ),
-            ));
-            $response = curl_exec($curl);
-            $response_json = json_decode($response, true);
-
-            if ($response_json['success'] === "true") {
-                file_put_contents(__DIR__ . '/electricitylog.txt', json_encode($response_json, JSON_PRETTY_PRINT), FILE_APPEND);
-
-                $details = "Payment for " . $response_json['message']['content']['transactions']['product_name'] . ", Meter No: " . $request->meter_number . ". Amount : NGN" . $tranx->amount . " " . $response_json['message']['purchased_code'];
-                $this->create_transaction('Electricity Payment', $response_json['message']['requestId'], $details, 'debit', $tranx->amount, $user->id, 1);
-
-                // Transaction was successful
-                // Do something here
-            } else {
-
-                $details = "Failed Electricity Payment, amount: " . $amount;
-                $reference = 'failed_electricity_' . Str::random(10);
-                $this->create_transaction('Electricity Payment', $reference, $details, 'debit', $amount, $user->id, 0);
-            }
-            $this->check_duplicate("Delete", $user->id);
-
-            curl_close($curl);
-            return $response;
         } else {
             $response = [
                 'success' => false,
@@ -967,6 +899,7 @@ class SubscriptionController extends Controller
             }
             $amount = $cable->admin_price;
             $real_amount = $cable->real_price;
+           
         }
         $hashed_pin = hash('sha256', $request->pin);
         if ($user->pin !== $hashed_pin) {
@@ -991,16 +924,23 @@ class SubscriptionController extends Controller
 
         // dd($amount, $request->all());
         //check duplicate
-        $check = $this->check_duplicate('check', $user->id);
-        if ($check == true) {
+
+        $details =  "Cable Subscription : Plan Name " . $cable->plan_name . " Decoder No:  " . $request->decoder_number. " Amount :NGN" . $amount;
+        $client_reference =  'cable_subscription_' . Str::random(7);
+        $check = $this->check_duplicate('check', $user->id, $amount, "Cable Subscription", $details, $client_reference);
+
+        if ($check[0] == true) {
             $response = [
+                'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Duplicate Transaction, try again in few minuetes time!',
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
             return response()->json($response);
         }
+
+   
         //make the subscription
 
         $curl = curl_init();
@@ -1092,16 +1032,23 @@ class SubscriptionController extends Controller
         }
 
         //check duplicate
-        $check = $this->check_duplicate('check', $user->id);
-        if ($check == true) {
+
+        $details =  "Electricity Subscription, Meter No:  " . $request->meter_number. " Amount :NGN" . $amount;
+        $client_reference =  'electricity_subscription_' . Str::random(7);
+        $check = $this->check_duplicate('check', $user->id, $amount, "Electricity Subscription", $details, $client_reference);
+
+        if ($check[0] == true) {
             $response = [
+                'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Duplicate transactions, please try again in few more minuetes!',
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
             return response()->json($response);
         }
+
+
         //purchase the data
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -1138,7 +1085,7 @@ class SubscriptionController extends Controller
             $transaction->meter_type = $request->meter_type;
             $transaction->meter_number = $request->meter_number;
             $transaction->discounted_amount = $discounted_amount;
-            $transaction->redo = 1;
+            // $transaction->redo = 1;
             $transaction->save();
             // Transaction was successful
             // Do something here
@@ -1189,16 +1136,22 @@ class SubscriptionController extends Controller
         }
 
         //check duplicate
-        $check = $this->check_duplicate('check', $user->id);
-        if ($check == true) {
+        $details =  "Examination Token : Exam Type " . $request->exam_type . " Amount :NGN" . $amount;
+        $client_reference =  'cable_subscription_' . Str::random(7);
+        $check = $this->check_duplicate('check', $user->id, $amount, "Examination Token", $details, $client_reference);
+
+        if ($check[0] == true) {
             $response = [
+                'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Duplicate transactions, please try again in few more minuetes!',
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
             return response()->json($response);
         }
+
+
         if ($request->exam_type == 'WAEC RESULT CHECKER') {
             //purchase the eexampin
             $curl = curl_init();
@@ -1802,6 +1755,8 @@ class SubscriptionController extends Controller
     public function fetch_decoder_details(Request $request)
     {
         // dd($request->all(),'decoder_details');
+        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
+           
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/verifytv.php",
@@ -1820,6 +1775,7 @@ class SubscriptionController extends Controller
             ),
             CURLOPT_HTTPHEADER => array(
                 "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                // "AuthorizationToken: " . $env, //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
