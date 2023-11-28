@@ -20,6 +20,7 @@
             </div>
           </div>
           <!--begin::Form Group-->
+          
           <div class="form-group row m-2">
             <h6 class="col-md-3">Account ID</h6>
             <div class="col-md-6">
@@ -174,7 +175,7 @@ export default {
             axios
               .post("/make_transfer", fd)
               .then((response) => {
-                if (response.data == true) {
+                if (response.data.status == true) {
                   Swal.fire({
                     icon: "success",
                     title: "Transfer successful!",
@@ -192,7 +193,7 @@ export default {
                 } else {
                   Swal.fire({
                     icon: "error",
-                    title: response.data,
+                    title: response.data.message,
                     // text: "Updating...",
                     showConfirmButton: true, // updated
                     confirmButtonColor: "#3085d6", // added

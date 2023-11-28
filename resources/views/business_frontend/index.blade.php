@@ -37,110 +37,52 @@
           <div class="navbar-collapse offcanvas offcanvas-nav offcanvas-start" style="visibility: hidden;"
             aria-hidden="true">
             <div class="offcanvas-header d-lg-none">
-              <h3 class="text-black fs-30 mb-0">VTUBIZ</h3>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+              <h3 class="text-black fs-30 mb-0">  <img src="{{ asset('assets/img/logo/vtulogo.png') }}"  width='100px' height='25px'  alt="" /></h3>
+              <button type="button" class="fa fa-close" style=' display: inline-block;
+              padding: 5px 7px;
+              font-size: 16px;
+              font-weight: bold;
+              text-align: center;
+              text-decoration: none;
+              border:0px solid white;
+              border-radius: 3px;             
+              cursor: pointer;' data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
             </div>
             <div class="offcanvas-body ms-lg-auto d-flex flex-column h-100">
               <ul class="navbar-nav">
 
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Business Account</a>
+                  <a class="nav-link" href="#" data-bs-toggle="dropdown">Our Products <i class='fa fa-angle-down'></i></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Our Products</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item">Airtime</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Data Subscription</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Cable(Tv) Subscription</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Electricity Subscription</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Exams Result Checkers</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Bulk SMS</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Main Features</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="about.html">Automated Purchase</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Transaction Redo</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Bulk Purchases</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Schedule For Later Purchase</a>
-                        </li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Add Up Beneficiaries</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">User Management</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="shop.html">Manage User Purchase
-                            Transactions</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="shop.html">Manage User Payment
-                            Transactions</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="shop2.html">Track Customer's Preference</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Price Management</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="contact.html">Set Your Own Price</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="contact3.html">Review Prices</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Theme Management</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="contact.html">Select Theme That Suite Your
-                            Brand</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="contact3.html">Customize Your Theme</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="contact2.html">Build Your Team From
-                            Scratch</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Strategized Marketing</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="career.html">Email Marketing</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="career-job.html">Social Media Marketing</a>
-                        </li>
-                      </ul>
-                    </li>
+                 
+                    <li class="dropdown-item"><a href='/data'>Affordable Dataplans</a></li>
+                    <li class="dropdown-item"><a href='/airtime'>Airtime Top Up</a></li>
+                    <li class="dropdown-item"><a href='/cable'>Cable Subscription</a></li>
+                    <li class="dropdown-item"><a href='/electricity'>Pay Light Bills</a></li>
+                    <li class="dropdown-item"><a href='/examination'>Exam Result Checkers</a></li>
+                    <li class="dropdown-item"><a href='/bulksms'>Bulk SMS</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Personal Account.</a>
-                  <div class="dropdown-menu dropdown-lg">
-                    <div class="dropdown-lg-content">
-                      <div>
-                        <h6 class="dropdown-header">Free Subdomains</h6>
-                        <ul class="list-unstyled">
-                          <li><a class="dropdown-item" href="projects.html">Fully Customized</a></li>
-                          <li><a class="dropdown-item" href="projects2.html">Represent Your Brand</a></li>
-                      </div>
-                      <!-- /.column -->
-                      <div>
-                        <h6 class="dropdown-header">Paid Domain</h6>
-                        <ul class="list-unstyled">
-                          <li><a class="dropdown-item" href="single-project.html">Search For Available Domain Names</a>
-                          </li>
-                          <li><a class="dropdown-item" href="single-project2.html">Get Prices For Selected Domain
-                              Names</a></li>
-                          <li><a class="dropdown-item" href="single-project3.html">Choose Domain name</a></li>
-                          <li><a class="dropdown-item" href="single-project3.html">Make it Live in just six(6) Hours</a>
-                          </li>
-                        </ul>
-                      </div>
-                      <!-- /.column -->
-                    </div>
-                    <!-- /auto-column -->
-                  </div>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Login</a>
+                  <a class="nav-link" href="#" data-bs-toggle="dropdown">Our Features <i class='fa fa-angle-down'></i></a>
                   <ul class="dropdown-menu">
-                    <li class="nav-item"><a class="dropdown-item" href="blog.html">Personal Account Login
-                        plans</a></li>
-                    <li class="nav-item"><a class="dropdown-item" href="blog2.html">Business Account Login
+                 
+                    <li class="dropdown-item">Transaction Redo</li>
+                    <li class="dropdown-item">Save Beneficiary</li>
+                    <li class="dropdown-item">Bulk/Group Purchase</li>
+                    <li class="dropdown-item">Schedule Purchase</li>
+                    <li class="dropdown-item">Offline Purchase</li>
+                    <li class="dropdown-item">Self Service</li>
+                  </ul>
+                </li>
+              
+                <li class="nav-item dropdown">
+                  <a class="nav-link" href="#" data-bs-toggle="dropdown">Login <i class='fa fa-angle-down'></i></a>
+                  <ul class="dropdown-menu">
+                    <li class="nav-item"><a class="dropdown-item" href="/login">Login
+                        </a></li>
+                    <li class="nav-item"><a class="dropdown-item" href="/register">Register
                       </a></li>
 
 
@@ -340,8 +282,16 @@
       <div class="offcanvas offcanvas-end text-inverse" id="offcanvas-info" data-bs-scroll="true">
         <div class="offcanvas-header">
           <h3 class="text-white fs-30 mb-0">VTUBIZ</h3>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-            aria-label="Close"></button>
+          <button type="button" class="fa fa-close" style=' display: inline-block;
+              padding: 5px 7px;
+              font-size: 16px;
+              font-weight: bold;
+              text-align: center;
+              text-decoration: none;
+              border:0px solid white;
+              border-radius: 3px;             
+              cursor: pointer;' data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body pb-6">
           <div class="widget mb-8">
@@ -369,12 +319,10 @@
           <!-- /.widget -->
           <div class="widget">
             <h4 class="widget-title text-white mb-3">Follow Us</h4>
-            <nav class="nav social social-white">
+            <nav class="nav social">
               <a href="#"><i class="fa fa-twitter"></i></a>
-              <a href="#"><i class="fa fa-facebook-f"></i></a>
-              <a href="#"><i class="fa fa-dribbble"></i></a>
+              <a href="#"><i class="fa fa-facebook"></i></a>             
               <a href="#"><i class="fa fa-instagram"></i></a>
-              <a href="#"><i class="fa fa-youtube"></i></a>
             </nav>
             <!-- /.social -->
           </div>

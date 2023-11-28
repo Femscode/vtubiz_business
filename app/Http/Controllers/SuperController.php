@@ -175,16 +175,35 @@ class SuperController extends Controller
             }
         }
     }
-    public function duplicate_transactions() {
+    public function duplicate_transactions()
+    {
         $data['user'] = $user =  Auth::user();
         if ($user->email !== 'fasanyafemi@gmail.com') {
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: ".env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $response_json = json_decode($response, true);
+        $data['easy_balance'] = $response_json['balance'];
         $data['duplicate_transactions'] = DuplicateTransaction::latest()->get();
 
         return view('super.duplicate_transactions', $data);
-
     }
     public function upgrade_user($id)
     {
@@ -198,7 +217,7 @@ class SuperController extends Controller
                 $real_data = Data::where('user_id', 0)->get();
                 if ($user->upgrade == 1) {
                     //update the user's data prices
-                 
+
 
                     foreach ($datas as $data) {
                         // Get the corresponding $real_data with the same plan_id
@@ -217,7 +236,7 @@ class SuperController extends Controller
                     return redirect()->back()->with('message', "User Degraded Successfully!");
                 } else {
                     //update the user's data prices
-                 
+
                     foreach ($datas as $data) {
                         // Get the corresponding $real_data with the same plan_id
                         $matchingRealData = $real_data->first(function ($realData) use ($data) {

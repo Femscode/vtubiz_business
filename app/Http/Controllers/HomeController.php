@@ -261,14 +261,13 @@ class HomeController extends Controller
             'amount' => 'required'
         ]);
         $user = Auth::user();
-        $user_pin = $request->first . $request->second . $request->third . $request->fourth;
-
-        $hashed_pin = hash('sha256', $user_pin);
+      
+        $hashed_pin = hash('sha256', $request->pin);
         if ($user->pin !== $hashed_pin) {
             $response = [
                 'success' => false,
-                'message' => 'Incorrect Pin',
-
+                'message' => 'Incorrect Pin!',
+                'auto_refund_status' => 'Nil'
             ];
 
             return response()->json($response);
@@ -287,7 +286,7 @@ class HomeController extends Controller
 
         $reference = 'fund_withdraw_' . Str::random(7);
         $details = "Withdraw of NGN " . $request->amount . " to " . $request->account_no. ' ('. $request->account_name.') Bank Name:' .$request->bank_name;
-        $tranx =  $this->create_transaction('Funds Withdraw', $reference, $details, 'debit', $request->amount, $user->id, 2);
+        $tranx =  $this->create_transaction('Funds Withdraw', $reference, $details, 'debit', $request->amount, $user->id, 1);
         $data = array('username' => $user->name, 'tranx_id' => $tranx->id,  'amount' => $request->amount);
         // dd($data);
         $amount = $request->amount;
@@ -301,7 +300,7 @@ class HomeController extends Controller
         $response = [
             'success' => true,
             'status' => true,
-            'message' => 'Withdraw on pending',
+            'message' => 'Withdraw on pending, check your transaction table!',
 
         ];
 
