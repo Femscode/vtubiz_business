@@ -273,7 +273,6 @@ class SubscriptionController extends Controller
         // dd($check);
         //purchase the data
         //just to replace env
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
         $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $phone_number, $request->network, $request->plan);
 
         $curl = curl_init();
@@ -293,7 +292,6 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                // "AuthorizationToken: " . $env, //replace this with your authorization_token
                 "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -367,7 +365,6 @@ class SubscriptionController extends Controller
         }
 
         //purchase the data
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
         $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice);
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
@@ -389,7 +386,7 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -461,7 +458,6 @@ class SubscriptionController extends Controller
                     return false;
                 }
 
-                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
                 $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $tranx->phone_number, $tranx->network, $tranx->plan_id);
 
                 $curl = curl_init();
@@ -481,7 +477,7 @@ class SubscriptionController extends Controller
                         'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . $env, //replace this with your authorization_token
+                        "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                         "cache-control: no-cache"
                     ),
                 ));
@@ -515,9 +511,8 @@ class SubscriptionController extends Controller
                     return false;
                 }
 
-                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
                 $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
-                  
+
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -536,7 +531,7 @@ class SubscriptionController extends Controller
                         'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . $env, //replace this with your authorization_token
+                        "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                         "cache-control: no-cache"
                     ),
                 ));
@@ -741,7 +736,6 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
             //purchase the data
-            $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
             $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
             $curl = curl_init();
@@ -762,7 +756,7 @@ class SubscriptionController extends Controller
                     'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . $env, //replace this with your authorization_token
+                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
             ));
@@ -838,7 +832,6 @@ class SubscriptionController extends Controller
             }
 
             //purchase the data
-            $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
             $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $phone_number, $request->network, $request->plan);
 
             $curl = curl_init();
@@ -858,7 +851,7 @@ class SubscriptionController extends Controller
                     'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . $env, //replace this with your authorization_token
+                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
             ));
@@ -899,7 +892,6 @@ class SubscriptionController extends Controller
             }
             $amount = $cable->admin_price;
             $real_amount = $cable->real_price;
-           
         }
         $hashed_pin = hash('sha256', $request->pin);
         if ($user->pin !== $hashed_pin) {
@@ -925,7 +917,7 @@ class SubscriptionController extends Controller
         // dd($amount, $request->all());
         //check duplicate
 
-        $details =  "Cable Subscription : Plan Name " . $cable->plan_name . " Decoder No:  " . $request->decoder_number. " Amount :NGN" . $amount;
+        $details =  "Cable Subscription : Plan Name " . $cable->plan_name . " Decoder No:  " . $request->decoder_number . " Amount :NGN" . $amount;
         $client_reference =  'cable_subscription_' . Str::random(7);
         $check = $this->check_duplicate('check', $user->id, $amount, "Cable Subscription", $details, $client_reference);
 
@@ -940,7 +932,7 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
 
-   
+
         //make the subscription
 
         $curl = curl_init();
@@ -1033,7 +1025,7 @@ class SubscriptionController extends Controller
 
         //check duplicate
 
-        $details =  "Electricity Subscription, Meter No:  " . $request->meter_number. " Amount :NGN" . $amount;
+        $details =  "Electricity Subscription, Meter No:  " . $request->meter_number . " Amount :NGN" . $amount;
         $client_reference =  'electricity_subscription_' . Str::random(7);
         $check = $this->check_duplicate('check', $user->id, $amount, "Electricity Subscription", $details, $client_reference);
 
@@ -1319,7 +1311,6 @@ class SubscriptionController extends Controller
         }
 
         //purchase the airtime
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
         $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $request->network, $request->amount);
 
         $curl = curl_init();
@@ -1340,7 +1331,7 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -1389,8 +1380,7 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         //purchase the airtime
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 2, $real_airtimeprice,$phone, $network,$amount);
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 2, $real_airtimeprice, $phone, $network, $amount);
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
         $transaction->save();
@@ -1412,8 +1402,8 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . $env, //replace this with your authorization_token
-                // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                // "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -1755,8 +1745,7 @@ class SubscriptionController extends Controller
     public function fetch_decoder_details(Request $request)
     {
         // dd($request->all(),'decoder_details');
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-           
+       
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/verifytv.php",
@@ -1821,8 +1810,7 @@ class SubscriptionController extends Controller
     {
         // dd($request->all());
         $this->validate($request, ['reference' => 'required']);
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-
+       
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/query_transaction.php",
@@ -1837,7 +1825,7 @@ class SubscriptionController extends Controller
                 'reference' => $request->reference, //You can also enter your client_reference here only for data and airtime transactions.
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -1878,8 +1866,7 @@ class SubscriptionController extends Controller
     public function admin_check_verify_purchase(Request $request)
     {
         $this->validate($request, ['reference' => 'required']);
-        $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/query_transaction.php",
@@ -1894,7 +1881,7 @@ class SubscriptionController extends Controller
                 'reference' => $request->reference, //You can also enter your client_reference here only for data and airtime transactions.
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));

@@ -341,11 +341,11 @@ class BulkSMSController extends Controller
             return response()->json($response);
         }
 
-        $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
-        $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
+        // $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
+        // $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
 
-        // $username = env('SMS_USERNAME');
-        // $password = env('SMS_PASSWORD');
+        $username = env('SMS_USERNAME');
+        $password = env('SMS_PASSWORD');
 
 
         $sender = $rq->sender_name;
@@ -454,12 +454,12 @@ class BulkSMSController extends Controller
     public function sendSMS($sender, $recipient, $message, $amount, $message_type)
     {
         // dd($rq->all());
-        $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
-        $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
+        // $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
+        // $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
 
 
-        // $username = env('SMS_USERNAME');
-        // $password = env('SMS_PASSWORD');
+        $username = env('SMS_USERNAME');
+        $password = env('SMS_PASSWORD');
 
 
         // THE API URL with parameters
@@ -497,7 +497,7 @@ class BulkSMSController extends Controller
                 $title = "Failed Bulk SMS";
                 $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
                 //save the record for non successfully sent SMS due to error from the API
-                $this->create_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type);
+                $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 0, $statusCode, null, $message_type);
                 $response = [
                     'success' => false,
                     'message' => 'Unable to send SMS, Try again later!',
@@ -512,7 +512,7 @@ class BulkSMSController extends Controller
             $title = "Failed Bulk SMS";
             $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
             // Save the record for non successully sent SMS due to an internal error from the application.
-            $this->create_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type);
+            $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 0, $statusCode, null, $message_type);
 
             $response = [
                 'success' => false,
