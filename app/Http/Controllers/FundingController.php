@@ -33,9 +33,8 @@ class FundingController extends Controller
             return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
         }
     }
-    public function checkout(Request $request)
+    public function checkout(Request $request, $subdomain = null)
     {
-
         $this->validate($request, [
             'type' => 'required',
             'amount' => 'required',
@@ -59,12 +58,12 @@ class FundingController extends Controller
             $first_name = $str_name[0];
             $last_name = end($str_name);
             // return view('dashboard.direct_transfer',$data);  
-            $env = User::where('email', 'fasanyafemi@gmail.com')->first()->remember_token;
+            // $env = User::where('email', 'fasanyafemi@gmail.com')->first()->remember_token;
             $trx_ref = Str::random(7);
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $env, // Replace with your actual secret key
-                // 'Authorization' => 'Bearer '.env('FLW_SECRET_KEY'), // Replace with your actual secret key
+                // 'Authorization' => 'Bearer ' . $env, // Replace with your actual secret key
+                'Authorization' => 'Bearer '.env('FLW_SECRET_KEY'), // Replace with your actual secret key
             ])
                 ->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
                     'email' => $user->email,
@@ -119,14 +118,14 @@ class FundingController extends Controller
             $first_name = $str_name[0];
             $last_name = end($str_name);
             // return view('dashboard.direct_transfer',$data);
-            $env = User::where('email', 'fasanyafemi@gmail.com')->first()->remember_token;
+            // $env = User::where('email', 'fasanyafemi@gmail.com')->first()->remember_token;
 
 
             $trx_ref = Str::random(7);
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $env, // Replace with your actual secret key
-                // 'Authorization' => 'Bearer '.env('FLW_SECRET_KEY'), // Replace with your actual secret key
+                // 'Authorization' => 'Bearer ' . $env, // Replace with your actual secret key
+                'Authorization' => 'Bearer '.env('FLW_SECRET_KEY'), // Replace with your actual secret key
             ])
                 ->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
                     'email' => $user->email,
