@@ -456,7 +456,7 @@
                     <!--end::Svg Icon-->
                   </span>
                   <h4>Tv(Cable) Subscriptions </h4>
-                  <p class="mb-2">Streamline Your Entertainment with our Cable Subscription Plans without.
+                  <p class="mb-2">Streamline your entertainment with our cable subscription plans.
 
                   </p>
                 </div>
@@ -489,7 +489,7 @@
                     <!--end::Svg Icon-->
                   </span>
                   <h4>Electricity Token</h4>
-                  <p class="mb-2">Light Up Your Building with Effortless Bill Payments.
+                  <p class="mb-2">Light Up your building with effortless bill payments.
 
                   </p>
                 </div>
@@ -514,7 +514,7 @@
                   </span>
                   <h4>Exam Result Checkers</h4>
                   <p class="mb-2">
-                    Easily Access Your Exam Results at a giveaway prices.
+                    Easily access your exam results at a giveaway prices.
                   </p>
                 </div>
                 <!--/.card-body -->
@@ -542,8 +542,8 @@
                   </span>
                   <h4>Bulk SMS</h4>
                   <p class="mb-2">
-                    Bulk SMS
-                    Reach Your Audience Seamlessly with our Bulk SMS packages.
+                   
+                    Reach your audience seamlessly with our Bulk SMS packages.
                   </p>
                 </div>
                 <!--/.card-body -->

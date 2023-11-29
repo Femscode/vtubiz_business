@@ -354,7 +354,7 @@
                             </h3>
                             <a href='{{ $company->facebook }}' class='btn btn-sm btn-primary'>Facebook</a>
                             <a href='{{ $company->twitter }}' class='btn btn-sm btn-info'>Twitter</a>
-                            <a href='{{ $company->instagram }}' class='btn btn-sm btn-warning'>Instagram</a>
+                            <a href='https://www.instagram.com/vtubiz/' class='btn btn-sm btn-warning'>Instagram</a>
                             {{-- <a href='btn btn-sm'>Facebook</a> --}}
                           
                                

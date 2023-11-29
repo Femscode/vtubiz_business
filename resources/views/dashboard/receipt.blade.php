@@ -3,16 +3,16 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>Fastpay | Receipt</title>
+    <title>VTUBIZ | RECEIPT</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Payment Portal For CT_Taste" />
+    <meta name="description" content="Top Up, Pay Bills, Stay Connected!" />
     <meta name="keywords" content="Quick pay with CT_Taste" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="CT_Taste" />
-    <meta property="og:url" content="https://cttaste.com" />
-    <meta property="og:site_name" content="CT_Taste" />
+    <meta property="og:title" content="VTUBIZ" />
+    <meta property="og:url" content="https://vtubiz.com" />
+    <meta property="og:site_name" content="VTUBIZ" />
     <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
 
 
@@ -137,7 +137,7 @@
                                                     </div>
                                                     <h1
                                                         class="display-3 font-weight-boldest text-white order-1 order-md-2">
-                                                        RECEIPT</h1>
+                                                        VTUBIZ RECEIPT</h1>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,7 +348,7 @@
     </div>
 
 
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/js/scripts.bundle.js"></script>
     <!--end::Global Javascript Bundle-->
