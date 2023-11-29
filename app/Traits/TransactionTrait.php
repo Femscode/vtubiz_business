@@ -212,8 +212,7 @@ trait TransactionTrait
             $tranx->plan_id = $plan_id;
             $tranx->save();
             return $tranx->id;
-        } 
-        elseif ($title == 'Airtime Purchase') {
+        } elseif ($title == 'Airtime Purchase') {
             $company = User::where('id', $r_user->company_id)->first();
             $tranx->discounted_amount = $real_dataprice;
             $tranx->phone_number = $phone_number;
@@ -221,9 +220,7 @@ trait TransactionTrait
             $tranx->real_amount = $plan_id;
             $tranx->save();
             return $tranx->id;
-         
-        }
-        elseif ($title == 'Manual Funding') {
+        } elseif ($title == 'Manual Funding') {
 
             $r_user->balance += $amount;
 
@@ -310,7 +307,7 @@ trait TransactionTrait
             }
 
             return $tranx->id;
-        }  elseif ($title == 'Cable Subscription') {
+        } elseif ($title == 'Cable Subscription') {
 
             $company = User::where('id', $r_user->company_id)->first();
             if ($status == 1) {
@@ -555,8 +552,7 @@ trait TransactionTrait
                     return false;
                 }
 
-                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
-                $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice,$tranx->phone_number,$tranx->network,$tranx->plan_id);
+                $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $tranx->phone_number, $tranx->network, $tranx->plan_id);
 
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
@@ -575,14 +571,14 @@ trait TransactionTrait
                         'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . $env, //replace this with your authorization_token
+                        "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                         "cache-control: no-cache"
                     ),
                 ));
                 $schedule->status = 1;
                 $schedule->save();
                 $tranx->delete();
-                $response = curl_exec($curl);              
+                $response = curl_exec($curl);
                 curl_close($curl);
                 return true;
             } elseif ($schedule->title == 'Airtime Purchase') {
@@ -609,9 +605,8 @@ trait TransactionTrait
                     return false;
                 }
 
-                $env = User::where('email', 'fasanyafemi@gmail.com')->first()->font_family;
                 $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
-             
+
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -630,16 +625,16 @@ trait TransactionTrait
                         'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . $env, //replace this with your authorization_token
+                        "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                         "cache-control: no-cache"
                     ),
                 ));
                 $response = curl_exec($curl);
-             
+
                 $schedule->status = 1;
                 $schedule->save();
                 $tranx->delete;
-              
+
                 curl_close($curl);
                 return true;
             } else {
@@ -652,6 +647,4 @@ trait TransactionTrait
             }
         }
     }
-    
-  
 }
