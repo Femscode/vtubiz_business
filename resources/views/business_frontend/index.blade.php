@@ -8,7 +8,8 @@
   <meta name="keywords" content="Build your own professional VTU website for free">
   <meta name="author" content="elemis">
   <title>VTUBIZ | HOME </title>
-  <link rel="shortcut icon" href="frontpage/assets/img/favicon.png">
+  <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
+
   <link rel="stylesheet" href="frontpage/assets/css/plugins.css">
   <link rel="stylesheet" href="frontpage/assets/css/style.css">
   <link rel="stylesheet" href="frontpage/assets/css/colors/yellow.css">

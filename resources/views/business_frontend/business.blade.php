@@ -8,7 +8,7 @@
   <meta name="keywords" content="Take control...">
   <meta name="author" content="elemis">
   <title>VTUBIZ | HOME </title>
-  <link rel="shortcut icon" href="frontpage/assets/img/favicon.png">
+  <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
   <link rel="stylesheet" href="frontpage/assets/css/plugins.css">
   <link rel="stylesheet" href="frontpage/assets/css/style.css">
   <link rel="stylesheet" href="frontpage/assets/css/colors/yellow.css">

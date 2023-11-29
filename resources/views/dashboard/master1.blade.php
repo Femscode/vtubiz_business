@@ -15,6 +15,7 @@
     <meta property="og:site_name" content="VTUBIZ" />
     <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
 
+
     @laravelPWA
     <!--begin::Fonts(mandatory for all pages)-->
 
