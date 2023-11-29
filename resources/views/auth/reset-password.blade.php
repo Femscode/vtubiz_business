@@ -87,9 +87,16 @@
                             <h1 class="text-dark mb-3">Set New Password</h1>
                             <!--end::Title-->
                             <!--begin::Link-->
-                            <x-auth-validation-errors class="alert alert-danger" :errors="$errors" />
-                            <x-auth-session-status class="mb-4 alert alert-info" :status="session('status')" />
-
+                            @if($errors->any())
+                            <div class="alert alert-danger">
+                                <p><strong>Opps Something went wrong</strong></p>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
                             <!-- Password Reset Token -->
                             <input type="hidden" name="token" value="{{ $request->route('token') }}">
                 
