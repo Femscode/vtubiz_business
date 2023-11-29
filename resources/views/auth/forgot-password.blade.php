@@ -141,17 +141,18 @@
                                                 email address</div>
                                                 @else
                                                 <div class='alert alert-info'>A mail will be sent to your mailbox after you input your email below!</div>
+                                                <div class='alert alert-danger'>Please do not click the Reset button more than one time, input your email, click the button once and proceed to your gmail.</div>
                                             @endif
 
                                             @endif
 
-                                            <div class="text-gray-400 fw-bold fs-20">
+                                            {{-- <div class="text-gray-400 fw-bold fs-20">
                                                 {{ __('Forgot your password? No problem. Just let us know your email
                                                 address and we will
                                                 email you a password reset link that will allow you to choose a new
                                                 one.') }}
 
-                                            </div>
+                                            </div> --}}
 
 
                                             <div id="email-field" class="field-wrapper input">

@@ -904,6 +904,7 @@
   <script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="assets/js/plugins.js"></script>
   <script src="frontpage/assets/js/theme.js"></script>
+  <script src='/assets/js/professionallocker.js'></script>
 
 </body>
 
