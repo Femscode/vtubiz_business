@@ -98,13 +98,13 @@
                   <a href="mailto:support@vtubiz.com" class="link-inverse"><span
                       class="__cf_email__">support@vtubiz.com</span></a>
                   <br /> (234) 905 8744 473 <br />
-                  <nav class="nav social social-white mt-4">
+                  {{-- <nav class="nav social social-white mt-4">
                     <a href="#"><i class="fa fa-twitter"></i></a>
                     <a href="#"><i class="fa fa-facebook-f"></i></a>
                     <a href="#"><i class="fa fa-dribbble"></i></a>
                     <a href="#"><i class="fa fa-instagram"></i></a>
                     <a href="#"><i class="fa fa-youtube"></i></a>
-                  </nav>
+                  </nav> --}}
                   <!-- /.social -->
                 </div>
               </div>
@@ -320,11 +320,11 @@
           <!-- /.widget -->
           <div class="widget">
             <h4 class="widget-title text-white mb-3">Follow Us</h4>
-            <nav class="nav social">
+            {{-- <nav class="nav social">
               <a href="#"><i class="fa fa-twitter"></i></a>
               <a href="#"><i class="fa fa-facebook"></i></a>             
               <a href="#"><i class="fa fa-instagram"></i></a>
-            </nav>
+            </nav> --}}
             <!-- /.social -->
           </div>
           <!-- /.widget -->
@@ -993,13 +993,14 @@
             <p class="mb-4">©
               <?php echo Date('Y');?> VTUBIZ. <br class="d-none d-lg-block" />All rights reserved.
             </p>
-            <nav class="nav social social-white">
+            <a class='btn btn-secondary' href='https://www.instagram.com/vtubiz/'>Follow us on Instagram</a>
+            {{-- <nav class="nav social social-white">
               <a href="#"><i class="fa fa-twitter"></i></a>
               <a href="#"><i class="fa fa-facebook-f"></i></a>
               <a href="#"><i class="fa fa-dribbble"></i></a>
               <a href="#"><i class="fa fa-instagram"></i></a>
               <a href="#"><i class="fa fa-youtube"></i></a>
-            </nav>
+            </nav> --}}
             <!-- /.social -->
           </div>
           <!-- /.widget -->
