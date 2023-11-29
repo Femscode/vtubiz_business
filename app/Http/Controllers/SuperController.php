@@ -23,6 +23,8 @@ class SuperController extends Controller
             ->orWhere('title', 'Airtime Purchase')
             ->orWhere('title', 'Cable Subscription')
             ->orWhere('title', 'Electricity Payment')
+            ->orWhere('title', 'Bulk SMS')
+            ->orWhere('title', 'Examination Result Payment')
             ->latest()->get();
 
         return view('super.index', $data);
