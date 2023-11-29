@@ -154,7 +154,7 @@ class SubscriptionController extends Controller
                 return redirect()->back()->with('message', 'Duplicate confirmed successfully!');
                 return true;
             } else {
-                if ($user->email == 'fasanyafemi@gmail.com') {
+                if (Auth::user()->email == 'fasanyafemi@gmail.com') {
                     $duplicate->delete();
                     return redirect()->back()->with('message', 'Duplicate deleted successfully!');
                 } else {
