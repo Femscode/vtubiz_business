@@ -83,14 +83,15 @@ class BusinessController extends Controller
     public function dashboard()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer') {
-            return redirect('/my-dashboard');
-        }
-        
-
         if ($user->pin == null) {
             return view('dashboard.setpin', $data);
         }
+        // if($user->user_type == 'customer') {
+            return redirect('/my-dashboard');
+        // }
+        
+
+      
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
 
         if ($notification && $notification->title !== null) {
