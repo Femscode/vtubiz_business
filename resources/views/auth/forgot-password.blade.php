@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>Fastpay | CT_Taste</title>
+    <title>VTUBIZ | Reset Password</title>
     <meta charset="utf-8" />
     <meta name="description" content="Payment Portal For CT_Taste" />
     <meta name="keywords" content="Quick pay with CT_Taste" />
@@ -92,20 +92,23 @@
             <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
                 <!--begin::Aside-->
                 <div class="d-flex flex-center flex-lg-start flex-column">
-                    <!--begin::Logo-->
-                    <a href="/index.html" class="mb-7">
-                        <img alt="Logo" src="/assets/media/logos/ct_white.png" style='width:150px;height:40px' />
-                    </a>
-                    <!--end::Logo-->
-
-                    <!--begin::Title-->
-                    <h2 class="text-white fw-normal m-0">
-                        Pay for food, pay for utilities bill
-                    </h2>
-                    <!--end::Title-->
+                  <!--begin::Logo-->
+                  <a href="/" class="mb-7">
+                    <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}"
+                      width='140px' height='35px' alt="">
+        
+                    {{-- <img alt="Logo" src="/assets/media/logos/ct_white.png" style='width:150px;height:40px' /> --}}
+                  </a>
+                  <!--end::Logo-->
+        
+                  <!--begin::Title-->
+                  <h2 class="text-white fw-normal m-0">
+                    Reset Your Password
+                  </h2>
+                  <!--end::Title-->
                 </div>
                 <!--begin::Aside-->
-            </div>
+              </div>
             <!--begin::Aside-->
 
             <!--begin::Body-->

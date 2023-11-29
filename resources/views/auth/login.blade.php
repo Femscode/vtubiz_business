@@ -103,7 +103,7 @@
 
           <!--begin::Title-->
           <h2 class="text-white fw-normal m-0">
-            Sign In into your account!
+            Sign In Into Your Account!
           </h2>
           <!--end::Title-->
         </div>

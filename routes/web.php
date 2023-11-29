@@ -89,9 +89,7 @@ Route::middleware(['auth'])->group(function () {
    
     // Route::view('/','coming_soon');
     // Route::any('/notify', [App\Http\Controllers\SubscriptionController::class, 'notify'])->name('notify');
-    Route::get('/forgot-password', function () {
-        return view('auth.forgot-password');
-    })->middleware('guest')->name('password.request');
+   
     Route::any('addfee', function () {
         $datas = Cable::all();
         foreach ($datas as $data) {
