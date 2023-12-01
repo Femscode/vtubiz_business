@@ -22,7 +22,9 @@
 										
 										   </div>
 										
-									   <div style="border-bottom: 1px solid #eeeeee; margin: 15px 0"></div>
+									   <div style="border-bottom: 1px solid #eeeeee; margin: 15px 0">
+									<a style='color:red' href='https://vtubiz.com/reset-pin-with-token'>Click To Reset Pin</a>
+										</div>
 									
 										
 									</div>
