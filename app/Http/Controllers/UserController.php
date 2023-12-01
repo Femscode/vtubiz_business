@@ -124,7 +124,7 @@ class UserController extends Controller
             $user->pin =  hash('sha256', $request->new_pin);
             $user->save();
             session()->remove('resetpin');
-            return redirect()->route('dashboard')->with('message', 'Pin updated successfully');
+            return redirect('/dashboard')->with('message', 'Pin updated successfully');
         } else {
             return redirect()->back()->with('error', 'Incorrect pin/ unmatched pin');
         }
