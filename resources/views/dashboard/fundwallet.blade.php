@@ -34,6 +34,7 @@
 
                                         <input required name='amount' type="number" min='100' id='u_amount' class="form-control"
                                             placeholder="Amount" aria-label="Amount">
+                                            <span class='text-danger' id='show_charge'></span>
 
 
                                      
@@ -89,12 +90,29 @@
 @section('script')
 <script>
     $(document).ready(function() {
-       
-
         @if (session('message'))
         Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
+       @endif
+  
+    $("#u_amount").on('input', function() {
+        price = $("#u_amount").val()
+       
+        if (price <= 200) {
+            charges = 10;
+            price -= charges;
+        } else if (price < 1000) {
+            charges = 30;
+            price -= charges;
+        } else if (price < 5000) {
+            charges = 50;
+            price -= charges;
+        } else {
+            charges = 100;
+            price -= charges;
+        }
+        $("#show_charge").text("Charges : NGN"+charges)
+    })
     })
 
 </script>
-@endsection
+@endsection 
