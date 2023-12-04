@@ -541,16 +541,16 @@ trait TransactionTrait
                 $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
                 $client_reference =  'buy_data_' . Str::random(7);
 
-                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
+                // $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
-                if ($check[0] == true) {
-                    $tranx->status = 0;
-                    $tranx->save();
-                    $schedule->status = 2;
-                    $schedule->save();
+                // if ($check[0] == true) {
+                //     $tranx->status = 0;
+                //     $tranx->save();
+                //     $schedule->status = 2;
+                //     $schedule->save();
 
-                    return false;
-                }
+                //     return false;
+                // }
 
                 $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $tranx->phone_number, $tranx->network, $tranx->plan_id);
 
@@ -595,15 +595,15 @@ trait TransactionTrait
                 }
                 $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
                 $client_reference =  'buy_airtime_' . Str::random(7);
-                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
+                // $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
 
-                if ($check[0] == true) {
-                    $tranx->status = 0;
-                    $tranx->save();
-                    $schedule->status = 2;
-                    $schedule->save();
-                    return false;
-                }
+                // if ($check[0] == true) {
+                //     $tranx->status = 0;
+                //     $tranx->save();
+                //     $schedule->status = 2;
+                //     $schedule->save();
+                //     return false;
+                // }
 
                 $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
