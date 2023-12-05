@@ -344,11 +344,11 @@ class BusinessController extends Controller
     public function theme_preview($id)
     {
         $data['theme'] = $theme = Theme::where('uuid', $id)->first();
-        $data['user'] = Auth::user();
-        $data['mtn'] = Data::where('network', 1)->orderBy('data_price')->take(20)->get();
-        $data['glo'] = Data::where('network', 2)->orderBy('data_price')->take(20)->get();
-        $data['airtel'] = Data::where('network', 3)->orderBy('data_price')->take(20)->get();
-        $data['nmobile'] = Data::where('network', 4)->orderBy('data_price')->take(20)->get();
+        $data['user'] = $user =Auth::user();
+        $data['mtn'] = Data::where('network', 1)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['glo'] = Data::where('network', 2)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['airtel'] = Data::where('network', 3)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['nmobile'] = Data::where('network', 4)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
         $view = "business_backend.theme" . $theme->id;
         return view($view, $data);
     }

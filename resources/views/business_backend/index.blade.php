@@ -133,7 +133,7 @@
                                         <p style='color:#001f3f'>Admin Balance</p>
                                     </div>
                                     <div class='col-md-6'>
-                                        <a href='/transactions' style='background:#001f3f !important' class='btn btn-sm btn-info border-0'>Fund Wallet</a>
+                                        <a href='/fundwallet' style='background:#001f3f !important' class='btn btn-sm btn-info border-0'>Fund Wallet</a>
                                         <a href='/withdraw' style='background:#fb9129 !important' class='btn btn-sm btn-success border-0'>Withdraw Funds</a>
                                     </div>
                                 </div>
