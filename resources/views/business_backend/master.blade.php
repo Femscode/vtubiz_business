@@ -390,7 +390,7 @@
                         </li>
                        
                         <li>
-                            <a href="/checkreviews" class="">
+                            <a href="#" class="">
                                 <i class="bx bx-shocked"></i>
                                 <span key="t-layouts">Customer's Review</span>
                             </a>
@@ -539,7 +539,7 @@
     {{-- <script src="{{ asset('api_user/assets/js/pages/modal.init.js')}}"></script> --}}
     <script src="{{ asset('api_user/assets/js/app.js')}}"></script>
 
-    <script src='/assets/js/professionallocker.js'></script>
+    {{-- <script src='/assets/js/professionallocker.js'></script> --}}
     <script src="{{ asset('api_user/assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{ asset('api_user/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{ asset('api_user/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>

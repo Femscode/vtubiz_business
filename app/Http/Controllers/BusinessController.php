@@ -115,8 +115,8 @@ class BusinessController extends Controller
     {
         $domain = $request->domain;
         // dd($domain, $request->all());
-        $apiKey = User::where('email','fasanyafemi@gmail.com')->first()->image_1;
-        $apiSecret = User::where('email','fasanyafemi@gmail.com')->first()->image_2;
+        $apiKey = env("GO_DADDY_PUBLIC_KEY");
+        $apiSecret = env("GO_DADDY_SECRET_KEY");
       
 
         $response = Http::withHeaders([
@@ -131,8 +131,8 @@ class BusinessController extends Controller
     {
         $domain = $request->domain;
         // dd($domain, $request->all());
-        $apiKey = User::where('email','fasanyafemi@gmail.com')->first()->image_1;
-        $apiSecret = User::where('email','fasanyafemi@gmail.com')->first()->image_2;
+        $apiKey = env("GO_DADDY_PUBLIC_KEY");
+        $apiSecret = env("GO_DADDY_SECRET_KEY");
         
 
         $response = Http::withHeaders([
@@ -621,7 +621,7 @@ class BusinessController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Data Price Updated Successfully!');
+        return redirect()->back()->with('success', 'Airtime Price Updated Successfully!');
     }
     public function save_admin_electricity(Request $request)
     {
@@ -744,6 +744,7 @@ class BusinessController extends Controller
 
     public function sendBulkEmail(Request $request)
     {
+      
         $this->validate($request, ['subject' => 'required', 'message' => 'required']);
         // dd($request->all());
         //check if the user is blocked
@@ -780,7 +781,7 @@ class BusinessController extends Controller
 
             Mail::send('mail.bulkemail', $data, function ($message) use ($subject, $user_email) {
                 $message->to($user_email)->subject($subject);
-                $message->from('info@connectinskillz.com', 'ConnectinSkillz');
+                $message->from('info@vtubiz.com', 'VTUBIZ');
             });
         }
     }

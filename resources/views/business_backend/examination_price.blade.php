@@ -10,79 +10,66 @@
 
     <div class="row">
 
-        <div class="col-lg-12">
-
-            <div class="row mb-3">
-                <div class="col-xl-4 col-sm-6">
-                    <div class="mt-2">
-                        <h5>Examinations Prices</h5>
-                    </div>
-                </div>
-              
-            </div>
-
-            <!-- end row -->
-
-        </div>
-    </div>
-
-    <div class="row">
-
         <!--begin::Content-->
         <div class="col-md-12">
             <!--begin::Card-->
             <div class="card card-custom">
-                <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                    <div class="card-title">
-                        <h3 class="card-label">Examinations Prices
-                        </h3>
-                    </div>
+                <form method='post' action='{{ route("save_admin_exam") }}'>@csrf
+                    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                        <div class="card-title">
+                            <div class="d-flex justify-content-between align-items-center">
 
-                </div>
-                <div class="card-body">
-                    <form method='post' action='{{ route("save_admin_exam") }}' >@csrf
+                                <h3 class="card-label">Examinations Prices
+                                </h3>
+                                <button type="submit" class="btn btn-primary"
+                                    id="kt_account_profile_details_submit">Save Changes</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
                         <tbody>
 
-                    <table class="datatable table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Exam Type</th>
-                               
-                                <th scope="col">Actual Price </th>
-                                <th scope="col">Admin Price</th>
+                            <table class="datatable table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Exam Type</th>
 
-                            </tr>
-                        </thead>
-                      
+                                        <th scope="col">Actual Price </th>
+                                        <th scope="col">Admin Price</th>
+
+                                    </tr>
+                                </thead>
+
                                 @foreach($examinations as $key => $exam)
 
                                 <tr>
 
-                                 
+
                                     <td class='d-flex'>
-                                        <input type='hidden' name='id[]' value='{{ $exam->id }}'/>
-                                      
-                                        <input name='exam_type[]' id='exam_type'
-                                            class='form-control' value="{{ $exam->exam_type }}" /></td>
-                                    <td><input readonly disabled 
-                                             class='form-control'
+                                        <input type='hidden' name='id[]' value='{{ $exam->id }}' />
+
+                                        <input name='exam_type[]' id='exam_type' class='form-control'
+                                            value="{{ $exam->exam_type }}" />
+                                    </td>
+                                    <td><input readonly disabled class='form-control'
                                             value="{{ $exam->actual_amount }}" /></td>
                                     <td><input name='exam_price[]'
-                                           class='form-control @if($exam->real_amount > $exam->actual_amount) text-success @else text-danger @endif'
+                                            class='form-control @if($exam->real_amount > $exam->actual_amount) text-success @else text-danger @endif'
                                             value="{{ $exam->real_amount }}" /></td>
 
 
                                 </tr>
                                 @endforeach
 
-                            </tbody>
-                            
-                    </table>
-                    <!--end: Datatable-->
-                </div>
-                <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">Update</button>
-                        </form>
-               
+                        </tbody>
+
+                        </table>
+                        <!--end: Datatable-->
+                    </div>
+                </form>
+
 
             </div>
             <!--end::Card-->

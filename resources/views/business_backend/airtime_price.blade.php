@@ -8,23 +8,6 @@
 
 
 
-    <div class="row">
-
-        <div class="col-lg-12">
-
-            <div class="row mb-3">
-                <div class="col-xl-4 col-sm-6">
-                    <div class="mt-2">
-                        <h5>Airtime Prices</h5>
-                    </div>
-                </div>
-              
-            </div>
-
-            <!-- end row -->
-
-        </div>
-    </div>
 
     <div class="row">
 
@@ -32,15 +15,19 @@
         <div class="col-md-12">
             <!--begin::Card-->
             <div class="card card-custom">
+                <form method='post' action='{{ route("save_admin_airtime") }}' >@csrf
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Data Prices
+                        <div class="d-flex justify-content-between align-items-center">
+                        
+                        <h3 class="card-label">Airtime Prices
                         </h3>
+                        <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">Save Changes</button>
+                        </div>
                     </div>
 
                 </div>
                 <div class="card-body">
-                    <form method='post' action='{{ route("save_admin_airtime") }}' >@csrf
                         <tbody>
 
                     <table class="datatable table table-striped">
@@ -92,7 +79,6 @@
                     </table>
                     <!--end: Datatable-->
                 </div>
-                <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">Update</button>
                         </form>
                
 

@@ -191,10 +191,9 @@
                 </div>
             </div>
 
-            <div class="card">
+            {{-- <div class="card">
                 <div class="card-body">
-                    {{-- <h4 class="card-title mb-4">Social Source</h4> --}}
-                    <div class="text-center">
+                   <div class="text-center">
 
                         <p class="font-16 text-muted mb-2"></p>
                         <h5><a href="javascript: void(0);" class="text-dark">Quick Links
@@ -220,7 +219,7 @@
                             </div>
                             <div class="d-flex">
                                 <div class="flex-shrink-0 ">
-                                    <a href='checkreviews' style='color:#001f3f' class="font-size-14">Design & Theme <i
+                                    <a href='/theme' style='color:#001f3f' class="font-size-14">Design & Theme <i
                                             class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
                                     </a>
                                 </div>
@@ -286,7 +285,7 @@
                     </ul>
 
                 </div>
-            </div>
+            </div> --}}
 
 
         </div>

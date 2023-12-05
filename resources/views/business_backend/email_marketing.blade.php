@@ -1,5 +1,9 @@
 @extends('business_backend.master')
 @section('header')
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Include Quill script -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 @endsection
 @section('content')
 
@@ -32,7 +36,7 @@
                     <h4 class="card-title mb-4">Send Bulk Emails</h4>
                     <div class='alert alert-danger'>You will be able to send emails to only your customers, carrying your logo and brand name.<br>PLEASE NOTE THAT YOU CAN ONLY SEND ONCE IN A DAY.</div>
                     <div>
-                        <form method='post' action='{{ route("send_bulk_email") }}'
+                        <form id='submitForm' method='post' action='{{ route("send_bulk_email") }}'
                             enctype='multipart/form-data'>
                             @csrf
 
@@ -44,8 +48,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="heading" class="form-label">Message</label>
-                                <textarea type="text" id='message' class="form-control" name="message" value=""
-                                    placeholder="Enter Message"></textarea>
+                                <div type="text" id='message' class="form-control" name="message" value=""
+                                    placeholder="Enter Message"></div>
 
                             </div>
 
@@ -137,6 +141,26 @@
         @endif
                     })
 </script>
+<script>
+    var quill = new Quill('#message', {
+      theme: 'snow' // or 'bubble' for a bubble theme
+    });
+
+    document.getElementById('submitForm').addEventListener('submit', function () {
+        // Get the HTML content from the Quill editor
+        var quillContent = quill.root.innerHTML;
+
+        // Create a hidden input field dynamically
+        var hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'message'; // Change 'quillContent' to your desired form field name
+        hiddenInput.value = quillContent;
+
+        // Append the hidden input to the form
+        this.appendChild(hiddenInput);
+    });
+  </script>
+  
 
 @endsection
 

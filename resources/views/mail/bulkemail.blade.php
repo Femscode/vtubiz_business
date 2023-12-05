@@ -25,7 +25,7 @@
                                 <strong>{{ $my_subject }}</strong>
                             </div>
                             <div style="padding-bottom: 30px">
-                              {{ $my_message }}
+                              {!! $my_message !!}
                                 <br><br>
 
                             </div>

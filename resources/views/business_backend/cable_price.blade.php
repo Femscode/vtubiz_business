@@ -6,82 +6,67 @@
 
 <div class="container-fluid">
 
-
-
-    <div class="row">
-
-        <div class="col-lg-12">
-
-            <div class="row mb-3">
-                <div class="col-xl-4 col-sm-6">
-                    <div class="mt-2">
-                        <h5>Data Prices</h5>
-                    </div>
-                </div>
-              
-            </div>
-
-            <!-- end row -->
-
-        </div>
-    </div>
-
     <div class="row">
 
         <!--begin::Content-->
         <div class="col-md-12">
             <!--begin::Card-->
             <div class="card card-custom">
-                <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                    <div class="card-title">
-                        <h3 class="card-label">Cable Prices
-                        </h3>
-                    </div>
+                <form method='post' action='{{ route("save_admin_cable") }}'>@csrf
+                    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                        <div class="card-title">
+                            <div class="d-flex justify-content-between align-items-center">
 
-                </div>
-                <div class="card-body">
-                    <form method='post' action='{{ route("save_admin_cable") }}' >@csrf
+                                <h3 class="card-label">Cable Prices
+                                </h3>
+                                <button type="submit" class="btn btn-primary"
+                                    id="kt_account_profile_details_submit">Save Changes</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
                         <tbody>
 
-                    <table class="datatable table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Network & Plan</th>
-                               
-                                <th scope="col">Actual Price </th>
-                                <th scope="col">Admin Price</th>
+                            <table class="datatable table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Network & Plan</th>
 
-                            </tr>
-                        </thead>
-                      
+                                        <th scope="col">Actual Price </th>
+                                        <th scope="col">Admin Price</th>
+
+                                    </tr>
+                                </thead>
+
                                 @foreach($cables as $key => $cable)
 
                                 <tr>
 
-                                 
+
                                     <td class='d-flex'>
-                                        <input type='hidden' name='id[]' value='{{ $cable->id }}'/>
-                                        <input name='plan_name[]'
-                                            class='form-control' value="{{ $cable->plan_name }}" /></td>
-                                    <td><input readonly disabled name='cable_price[]'
-                                          class='form-control'
+                                        <input type='hidden' name='id[]' value='{{ $cable->id }}' />
+                                        <input name='plan_name[]' class='form-control'
+                                            value="{{ $cable->plan_name }}" />
+                                    </td>
+                                    <td><input readonly disabled name='cable_price[]' class='form-control'
                                             value="{{ $cable->real_price }}" /></td>
                                     <td><input name='admin_price[]'
-                                           class='form-control @if($cable->admin_price > $cable->real_price) text-success @else text-danger @endif'
+                                            class='form-control @if($cable->admin_price > $cable->real_price) text-success @else text-danger @endif'
                                             value="{{ $cable->admin_price }}" /></td>
 
 
                                 </tr>
                                 @endforeach
 
-                            </tbody>
-                            
-                    </table>
-                    <!--end: Datatable-->
-                </div>
-                <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">Update</button>
-                        </form>
-               
+                        </tbody>
+
+                        </table>
+                        <!--end: Datatable-->
+                    </div>
+                </form>
+
 
             </div>
             <!--end::Card-->
