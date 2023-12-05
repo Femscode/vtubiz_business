@@ -97,7 +97,7 @@
     $("#u_amount").on('input', function() {
         price = $("#u_amount").val()
        
-        if (price <= 200) {
+        if (price <= 500) {
             charges = 10;
             price -= charges;
         } else if (price < 1000) {
