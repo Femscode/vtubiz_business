@@ -325,7 +325,7 @@
 
 
                 <!--begin::Engage widget 1-->
-                {{-- @if($user->user_type == 'customer')
+                @if($user->user_type == 'customer')
                 <div class="card card-custom bgi-no-repeat gutter-b"
                     style="height: 200px; background-color: #663259; background-position: calc(100% + 0.5rem) 100%; background-size: 100% auto; background-image: url(https://preview.keenthemes.com/metronic/theme/html/demo2/dist/assets/media/svg/patterns/taieri.svg)">
                     <!--begin::Body-->
@@ -342,7 +342,7 @@
                     </div>
                     <!--end::Body-->
                 </div>
-                @endif --}}
+                @endif
                 <div class="card card-custom bgi-no-repeat bgi-size-cover gutter-b card-stretch"
                     style="height:200px; margin-top:20px; background-image: url(../theme/html/demo2/dist/assets/media/stock-600x600/img-16.jpg)">
                     <!--begin::Body-->
