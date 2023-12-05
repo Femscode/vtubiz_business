@@ -44,7 +44,7 @@
         <header id="page-topbar">
             <div class="navbar-header">
                 <div class="d-flex">
-                    <!-- LOGO -->
+                    {{-- <!-- LOGO -->
                     <div class="navbar-brand-box">
                         <a href="/" class="logo logo-dark">
                             <span class="logo-sm">
@@ -63,7 +63,7 @@
                                 <img src="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" height="30">
                             </span>
                         </a>
-                    </div>
+                    </div> --}}
 
                     <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect"
                         id="vertical-menu-btn">
