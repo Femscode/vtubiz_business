@@ -1696,7 +1696,7 @@ class SubscriptionController extends Controller
         $user = Auth::user();
         // dd($user);
 
-        $data = Data::where('network', $network)->where('user_id', $user->company_id)->orderBy('admin_price', 'ASC')->get();
+        $data = Data::where('network', $network)->where('user_id', $user->company_id)->where('status',1)->orderBy('admin_price', 'ASC')->get();
         // dd($data);
 
         return $data;

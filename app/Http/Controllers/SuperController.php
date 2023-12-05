@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Cable;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,9 +38,47 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
-        $data['datas'] = Data::where('user_id', 0)->latest()->orderBy('data_price')->get();
+        $data['datas'] = Data::where('user_id', 0)->latest()->orderBy('network')->get();
 
         return view('super.data_price', $data);
+    }
+    public function plan_status()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'super';
+        $data['mtn_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',1)->first();
+        $data['mtn_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',1)->first();
+        $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',1)->first();
+        $data['mtn_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',1)->first();
+       
+        $data['glo_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',2)->first();
+      
+        $data['glo_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',2)->first();
+        $data['glo_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',2)->first();
+        $data['glo_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',2)->first();
+       
+        $data['airtel_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',3)->first();
+        $data['airtel_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',3)->first();
+        $data['airtel_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',3)->first();
+        $data['airtel_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',3)->first();
+       
+        $data['nmobile_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',4)->first();
+        $data['nmobile_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',4)->first();
+        $data['nmobile_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',4)->first();
+        $data['nmobile_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',4)->first();
+           
+    
+        return view('super.plan_status', $data);
+    }
+    public function update_plan_status($network_id,$type) {
+        // dd($network_id, $type);
+        $datas = Data::where('network',$network_id)->where('type',$type)->update([
+            'status' => DB::raw('NOT status')
+        ]);
+        return redirect()->back()->with('message','Status Updated Successfully');
     }
     public function update_data(Request $request)
     {

@@ -706,7 +706,7 @@
                         class="number">01</span></span>
                   </div>
                   <div>
-                    <h4 class="mb-1">Register Your Brand/Business</h4>
+                    <h4 class="mb-1">Register Your Brand/Business and upgrade to a reseller account</h4>
                     {{-- <p class="mb-0">You exclusively manage your user's purchases and payment transactions with
                       ease.</p> --}}
                   </div>

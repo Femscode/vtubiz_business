@@ -25,6 +25,35 @@ Route::any('/test_debit/{client_reference}/{reference}', [App\Http\Controllers\F
 Route::any('/run_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_debit'])->name('run_debit');
 Route::any('/run_normal/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_normal'])->name('run_normal');
         
+Route::get('run_data_type', function() {
+   
+    $datas = Data::where('type',null)->update([
+        'type' => 'cg'
+    ]);
+    
+  
+    $datas = Data::where('plan_name','like','%SME%')->get();
+    foreach($datas as $data) {
+        $data->type = 'SME';
+        $data->save();
+    }
+    $datas = Data::where('plan_name','like','%direct%')->get();
+    foreach($datas as $data) {
+        $data->type = 'direct';
+        $data->save();
+    }
+    $datas = Data::where('plan_name','like','%cg_lite%')->get();
+    foreach($datas as $data) {
+        $data->type = 'cg_lite';
+        $data->save();
+    }
+    $data->save();
+    return "Data type updaated";
+   
+    // $foods = Food::where('name', 'like', '%' . $request->food . '%')->pluck('user_id');
+       
+
+});
 
 Route::any('format_data', function () {
     Data::where('user_id', '!=', 0)->delete();
@@ -382,6 +411,8 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/user_management', [App\Http\Controllers\SuperController::class, 'user_management'])->name('user_management');
         Route::any('/user_transaction/{id}', [App\Http\Controllers\SuperController::class, 'user_transaction'])->name('user_transaction');
         Route::any('/data_price', [App\Http\Controllers\SuperController::class, 'data_price'])->name('data_price');
+        Route::any('/plan_status', [App\Http\Controllers\SuperController::class, 'plan_status'])->name('plan_status');
+        Route::any('/plan_status/{network_id}/{type}', [App\Http\Controllers\SuperController::class, 'update_plan_status'])->name('update_plan_status');
         Route::any('/update_data', [App\Http\Controllers\SuperController::class, 'update_data'])->name('update_data');
         Route::any('/cable_price', [App\Http\Controllers\SuperController::class, 'cable_price'])->name('cable_price');
         Route::any('/update_cable', [App\Http\Controllers\SuperController::class, 'update_cable'])->name('update_cable');
