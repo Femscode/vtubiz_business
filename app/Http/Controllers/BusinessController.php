@@ -86,9 +86,9 @@ class BusinessController extends Controller
         if ($user->pin == null) {
             return view('dashboard.setpin', $data);
         }
-        // if($user->user_type == 'customer') {
+        if($user->user_type == 'customer') {
             return redirect('/my-dashboard');
-        // }
+        }
         
 
       
