@@ -687,6 +687,79 @@
       </div>
       <!-- /.container -->
     </section>
+
+    <section id='free_vtu' class="wrapper bg-gradient-reverse-primary angled upper-start lower-start">
+      <div class="container py-14 pt-md-17 pb-md-15">
+        <div class="row gx-md-8 gx-xl-12 gy-10 mb-14 mb-md-18 align-items-center">
+          <div class="col-lg-6">
+            <h2 class="fs-16 text-uppercase text-muted mb-3">Be In Power</h2>
+            <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for FREE😊.</h3>
+            <p>Start selling all products like we do at your own price with our ready-made, easily customizable website for free.</p>
+            <a href="/business" class="btn btn-primary rounded-pill mb-0">Get Started</a>
+          </div>
+          <div class="col-lg-6 order-lg-2">
+            <div class="card shadow-lg me-lg-6">
+              <div class="card-body p-6">
+                <div class="d-flex flex-row">
+                  <div>
+                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
+                        class="number">01</span></span>
+                  </div>
+                  <div>
+                    <h4 class="mb-1">Register Your Brand/Business</h4>
+                    {{-- <p class="mb-0">You exclusively manage your user's purchases and payment transactions with
+                      ease.</p> --}}
+                  </div>
+                </div>
+              </div>
+              <!--/.card-body -->
+            </div>
+            <!--/.card -->
+            <div class="card shadow-lg ms-lg-13 mt-6">
+              <div class="card-body p-6">
+                <div class="d-flex flex-row">
+                  <div>
+                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
+                        class="number">02</span></span>
+                  </div>
+                  <div>
+                    <h4 class="mb-1">Choose Your Preferred Theme and Customize To Your Taste.</h4>
+                    {{-- <p class="mb-0">Fund your wallet to allow your customer's make purchases and withdraw your
+                      profit at
+                      any given time.</p> --}}
+                  </div>
+                </div>
+              </div>
+              <!--/.card-body -->
+            </div>
+            <!--/.card -->
+            <div class="card shadow-lg mx-lg-6 mt-6">
+              <div class="card-body p-6">
+                <div class="d-flex flex-row">
+                  <div>
+                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
+                        class="number">03</span></span>
+                  </div>
+                  <div>
+                    <h4 class="mb-1">Set Prices For All Products</h4>
+                    {{-- <p class="mb-0">Notify your customers about your brand in a unique and customized way.</p> --}}
+                  </div>
+                </div>
+              </div>
+              <!--/.card-body -->
+            </div>
+            <!--/.card -->
+          </div>
+          <!--/column -->
+
+          <!--/column -->
+        </div>
+        <!--/.row -->
+
+        <!--/.row -->
+      </div>
+      <!-- /.container -->
+    </section>
     <!-- /section -->
     {{-- <section class="wrapper bg-light">
       <div class="container">

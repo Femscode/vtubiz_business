@@ -391,7 +391,7 @@
                             </div>
                         </div>
                         <div class="position-relative mb-3">
-                            <iframe src="http://127.0.0.1:8050/theme_preview/{{ $id }}" width="800" height="600" frameborder="0" class="img-thumbnail"></iframe>
+                            <iframe src="http://{{ $user->brand_name }}.vtubiz.com" width="800" height="600" frameborder="0" class="img-thumbnail"></iframe>
                            
                         </div>
                         <div class="col-5 align-self-end">
@@ -411,7 +411,7 @@
                                     <h6>Your Website Link:
                                         <div class="input-group">
                                             <input name='link-to-copy' type="text" class="form-control"
-                                                value="https://cttaste.com/{{ $user->slug }}">
+                                                value="http://{{ $user->brand_name }}.vtubiz.com/">
                                             <div class="input-group-append">
                                                 <button name='copy-link' style='background:#ebab21'
                                                     class="btn btn-primary" type="button"><i

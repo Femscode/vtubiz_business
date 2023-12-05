@@ -76,7 +76,7 @@
                                     <span class='btn-sm btn btn-danger'>Failed</span>
                                     @endif
                                 </td>
-                                <td><a class='btn btn-success'>Verify</td>
+                                <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
                             </tr>
 
 
@@ -99,7 +99,7 @@
                                     <span class='btn-sm btn btn-danger'>Failed</span>
                                     @endif
                                 </td>
-                                <td><a class='btn btn-success'>Verify</td>
+                                <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
                             </tr>
                             @endif
 
