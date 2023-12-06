@@ -44,7 +44,7 @@ class FundingController extends Controller
         $data['amount'] = $amount = $request->amount;
         $data['active'] = 'fundwallet';
         if ($request->type == 'card') {
-            $env = User::where('email', 'fasanyafemi@gmail.com')->first()->twitter;
+            $env = env('FLW_SECRET_KEY');
 
             $data['public_key'] = $env;
             $data['callback_url'] = 'https://vtubiz.com/payment/callback';
@@ -107,7 +107,7 @@ class FundingController extends Controller
         $data['amount'] = $amount = $request->amount;
         $data['active'] = 'fundwallet';
         if ($request->type == 'card') {
-            $env = User::where('email', 'fasanyafemi@gmail.com')->first()->twitter;
+            $env = env('FLW_SECRET_KEY');
 
             $data['public_key'] = $env;
             // $data['public_key'] = env('FLW_PUBLIC_KEY');
