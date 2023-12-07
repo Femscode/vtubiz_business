@@ -68,8 +68,8 @@
                             <button class="btn btn-warning px-6 " type="button" id="dropdownMenuButton1"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="me-1">
-                                    <img class="rounded-circle header-profile-user"
-                                        src="{{ asset('brand_images/'.$user->logo) }}" style='width:50px;height:50px' />
+                                    {{-- <img class="rounded-circle header-profile-user"
+                                        src="{{ asset('brand_images/'.$user->logo) }}" style='width:50px;height:50px' /> --}}
                                 </span> {{ $user->brand_name }}
                             </button>
 
@@ -641,8 +641,9 @@
                 <div class="col-12 col-md-12 col-lg-8">
                     <div class="row g-4">
                         <span class="me-1">
-                            <img class="rounded-circle header-profile-user"
-                                src="{{ asset('brand_images/'.$user->logo) }}" style='width:50px;height:50px' />
+                            <h2>{{ $user->brand_name }}</h2>
+                            {{-- <img class="rounded-circle header-profile-user"
+                                src="{{ asset('brand_images/'.$user->logo) }}" style='width:50px;height:50px' /> --}}
                         </span>
                         <div class="col-6 col-sm-6 col-md-3">
                             <h6 class="mb-4">Get to know us</h6>

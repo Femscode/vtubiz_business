@@ -26,7 +26,7 @@ class SuperController extends Controller
             ->orWhere('title', 'Electricity Payment')
             ->orWhere('title', 'Bulk SMS')
             ->orWhere('title', 'Examination Result Payment')
-            ->latest()->get();
+            ->latest()->take(100)->get();
 
         return view('super.index', $data);
     }
@@ -128,7 +128,7 @@ class SuperController extends Controller
             ->orWhere('title', 'Fund Transfer')
             ->orWhere('title', 'Payment Received')
             ->orWhere('title', 'Funds Withdraw')
-            ->latest()->get();
+            ->latest()->take(100)->get();
         return view('super.payment_transactions', $data);
     }
     public function all_withdrawals()
