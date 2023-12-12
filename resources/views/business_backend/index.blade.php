@@ -103,7 +103,7 @@
 
                 Please note that for your website to go live <span style='color:#ebab21'>(SSL Secured)</span>, enjoy 5% data discounts, and other amazing features you have to upgrade your account
                  by clicking on the upgrade button below.<br>
-                <a href='https://wa.me/2349058744473?text=Hi%20Admin,%20%0a--�--%0aI%20just%20finish%20setting%20up%20my%20account%20on%20VTUBIZ,%20you%20can%20check%20out%20my%20account%20profile({{$user->name}})%20for%20proper%20verification%20and%20approval.'
+                <a href='https://wa.me/2349058744473?text=Hi%20Admin,%20%0a--�--%0aI%20just%20finish%20creating%20a%20business%20account%20on%20VTUBIZ,%20you%20can%20check%20out%20my%20new%20website(https://{{$user->brand_name}}.vtubiz.com)%20for%20proper%20verification%20and%20approval.'
                     class='btn btn-danger border-0'>Upgrade</a>
 
             </div>
