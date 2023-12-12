@@ -258,10 +258,12 @@ class SuperController extends Controller
                 $real_data = Data::where('user_id', 0)->get();
                 if ($user->upgrade == 1) {
                     //update the user's data prices
+                    $user->company_id = 5;
+                    $user->save();
 
 
                     foreach ($datas as $data) {
-                        // Get the corresponding $real_data with the same plan_id
+                        // Get the corresponding $real_data with the same plan_id 
                         $matchingRealData = $real_data->first(function ($realData) use ($data) {
                             return $realData->plan_id === $data->plan_id;
                         });
@@ -277,6 +279,8 @@ class SuperController extends Controller
                     return redirect()->back()->with('message', "User Degraded Successfully!");
                 } else {
                     //update the user's data prices
+                    $user->company_id = $user->id;
+                    $user->save();
 
                     foreach ($datas as $data) {
                         // Get the corresponding $real_data with the same plan_id
