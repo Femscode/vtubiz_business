@@ -63,7 +63,7 @@ class FundingController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 // 'Authorization' => 'Bearer ' . $env, // Replace with your actual secret key
-                'Authorization' => 'Bearer '.env('FLW_SECRET_KEY'), // Replace with your actual secret key
+                'Authorization' => 'Bearer ' . env('FLW_SECRET_KEY'), // Replace with your actual secret key
             ])
                 ->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
                     'email' => $user->email,
@@ -125,7 +125,7 @@ class FundingController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 // 'Authorization' => 'Bearer ' . $env, // Replace with your actual secret key
-                'Authorization' => 'Bearer '.env('FLW_SECRET_KEY'), // Replace with your actual secret key
+                'Authorization' => 'Bearer ' . env('FLW_SECRET_KEY'), // Replace with your actual secret key
             ])
                 ->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
                     'email' => $user->email,
@@ -199,9 +199,7 @@ class FundingController extends Controller
     }
     public function easywebhook(Request $request)
     {
-        file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
         $jsonData = $request->getContent();
-        file_put_contents(__DIR__ . '/easy_json_data.json', $jsonData, FILE_APPEND);
         $data = json_decode($jsonData, true);
         $client_reference = $data['client_reference'];
         $reference = $data['reference'];
@@ -210,15 +208,17 @@ class FundingController extends Controller
         if ($status == 'success' || $status == 'successful') {
 
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
-            file_put_contents(__DIR__ . '/easy_check_url.json', $url);
+            // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
         } else {
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         }
+        file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+       
         return response()->json("OK", 200);
     }
-   
+
     public function run_debit($client_reference, $reference)
     {
         $tranx = Transaction::where('reference', $client_reference)
