@@ -14,7 +14,7 @@
         <div class="card mb-xl-10">
             <div class="card-header flex-wrap border-0 pt-6 pb-0">
                 <div class="card-title">
-                    <h2 class="fw-bolder">Pending Transactions
+                    <h2 class="fw-bolder">Purchase Transactions
                     </h2>
                 </div>
 
@@ -25,34 +25,89 @@
 
 
                     <div style='overflow-x:auto;max-width: 100%'>
-                        <table style='width:100%' class="datatable table table-striped">
+                        <table style='width:100%' class="datatable table table-responsive mb-0 fixed-solution">
                             <thead>
                                 <tr>
-                                  
+                                    <th scope="col">Customer</th>
+
+                                    <th scope="col">Title </th>
+                                    <th scope="col">Amount </th>
                                     <th scope="col">Details</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Date & Time</th>
-                                  
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Before/After</th>
+                                    <th scope="col">Status</th>
+                                    <th>Actions</th>
+
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach($transactions as $key => $tranx)
 
-                                <tr>
+                            @foreach($transactions as $key => $tranx)
+                            @if($tranx->status == 2)
+                            <tr class='alert alert-warning'>
+                                <td>{{ $tranx->user->name }}<br>
+                                    <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
+                                        $tranx->user->phone }}</a>
+                                </td>
+                                <td>{{ $tranx->title }}</td>
+                                <td>₦{{ number_format($tranx->amount) }}</td>
 
-                                    <td>{{ $tranx->details }}</td>
-                                    <td>₦{{ number_format($tranx->amount) }}</td>
-                                    <td>{{ Date('d-m-Y | h:i',strtotime($tranx->created_at))}} | {{ Date("h:i", strtotime($tranx->created_at)) }}</td>
-                                   
-                                    <td>
-                                        <a href='admin_delete_duplicate/confirm/{{ $tranx->id }}' onclick="return confirm('Confirm the success of this transaction?')" class='btn btn-success btn-sm'>Confirm Tranx</a>
-                                        <a href='https://wa.me/2349058744473'  class='btn btn-info btn-sm'>Complain Tranx</a>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                <td>{{ $tranx->description }}</td>
+                                <td>Pending Schedule Purchase</td>
+                                <td><a class='btn btn-warning btn-sm'>Pending</a></td>
+                                <td> <a href='/verify_purchase/{{ $tranx->reference }}'
+                                        class='btn btn-success'>Verify</a></td>
 
-                            </tbody>
+                            </tr>
+                            @elseif($tranx->status == 0)
+
+                            <tr class='alert alert-danger'>
+                                <td>{{ $tranx->user->name }}<br>
+                                    <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
+                                        $tranx->user->phone }}</a>
+                                </td>
+                                <td>{{ $tranx->title }}</td>
+                                <td>₦{{ number_format($tranx->amount,2) }}</td>
+                                <td>{{ $tranx->description }}</td>
+                                <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
+                                    number_format($tranx->admin_after) }}</td>
+                                <td>
+                                    @if($tranx->status == 1)
+                                    <span class='btn-sm btn btn-success'>Success</span>
+                                    @else
+                                    <span class='btn-sm btn btn-danger'>Failed</span>
+                                    @endif
+                                </td>
+                                <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
+                            </tr>
+
+
+
+                            @else
+                            <tr class='alert alert-success'>
+                                <td>{{ $tranx->user->name }}<br>
+                                    <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
+                                        $tranx->user->phone }}</a>
+                                </td>
+                                <td>{{ $tranx->title }}</td>
+                                <td>₦{{ number_format($tranx->amount,2) }}</td>
+                                <td>{{ $tranx->description }}</td>
+                                <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
+                                    number_format($tranx->admin_after) }}</td>
+                                <td>
+                                    @if($tranx->status == 1)
+                                    <span class='btn-sm btn btn-success'>Success</span>
+                                    @else
+                                    <span class='btn-sm btn btn-danger'>Failed</span>
+                                    @endif
+                                </td>
+                                <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
+                            </tr>
+                            @endif
+
+
+                            @endforeach
+
+
+
                         </table>
                     </div>
 

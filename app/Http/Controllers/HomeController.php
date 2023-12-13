@@ -392,9 +392,13 @@ class HomeController extends Controller
     {
         $data['user'] = $user = Auth::user();
         $data['active'] = 'transaction';
+        
         $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->get();
 
+        if($user->type == 'admin') {
+            return view('business_backend.mytransactions', $data);
 
+        }
         return view('dashboard.transactions', $data);
     }
     public function bulksms_transactions()
