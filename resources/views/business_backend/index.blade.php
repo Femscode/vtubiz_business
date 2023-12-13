@@ -409,7 +409,7 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <a href='/users' class="text-muted fw-medium">Total Customers</a>
-                                    <h4 class="mb-0">{{ count($users) - 1 }}</h4>
+                                    <h4 class="mb-0">{{ count($users) }}</h4>
                                 </div>
 
                                 <div class="flex-shrink-0 align-self-center">
@@ -429,7 +429,7 @@
                             <div class="d-flex">
                                 <div  class="flex-grow-1">
                                     <a href='#' class="text-muted fw-medium">Total Customer's Balance</a>
-                                    <h4 class="mb-0">NGN{{ number_format($total_user_balance - $user->balance,2) }}</h4>
+                                    <h4 class="mb-0">NGN{{ number_format($total_user_balance,2) }}</h4>
                                 </div>
 
                                 <div class="flex-shrink-0 align-self-center">

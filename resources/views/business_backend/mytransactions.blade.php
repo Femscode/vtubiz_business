@@ -14,7 +14,7 @@
         <div class="card mb-xl-10">
             <div class="card-header flex-wrap border-0 pt-6 pb-0">
                 <div class="card-title">
-                    <h2 class="fw-bolder">Purchase Transactions
+                    <h2 class="fw-bolder">My Transactions
                     </h2>
                 </div>
 
