@@ -308,7 +308,7 @@
                         <li>
                             <a href="/mytheme" class="">
                                 <i class="bx bx-store-alt"></i>
-                                <span key="t-layouts">Theme</span>
+                                <span key="t-layouts">Customize Website Theme</span>
                             </a>
 
                         </li>
