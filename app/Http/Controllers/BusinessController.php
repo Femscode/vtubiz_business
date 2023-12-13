@@ -99,7 +99,9 @@ class BusinessController extends Controller
             $data['notification'] = $notification;
         }
         $data['transactions'] = Transaction::where('company_id', $user->id)->latest()->get();
-        $data['users'] = User::where('company_id', $user->id)->whereNotIn('id', [$user->id])->get();
+        $data['users'] = User::where('company_id', $user->id)->where(function ($query) use ($user) {
+            $query->where('id', '!=', $user->id);
+        })->get();
         $data['total_user_balance'] =  User::where('company_id', $user->id)->whereNotIn('id', [$user->id])->sum('balance');
         $currentDate = Carbon::today();
 
