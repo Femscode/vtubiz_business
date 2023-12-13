@@ -16,7 +16,7 @@
                 <div class="card card-custom">
                     <div class="card-header flex-wrap border-0 pt-6 pb-0">
                         <div class="card-title">
-                            <h3 class="card-label">All Users
+                            <h3 class="card-label">All Users({{ number_format($allusers) }})
                             </h3>
                         </div>
                      
@@ -43,7 +43,8 @@
 
                                 <tr>
 
-                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->name }}<br>{{ $user->email }}<br>{{ $user->brand_name ?? "null" }}</td>
+                                  
                                     <td>{{ $user->phone }}</td>
                                     <td>₦{{ number_format($user->balance) }}</td>
                                     <td>₦{{ number_format($user->total_spent) }}</td>
