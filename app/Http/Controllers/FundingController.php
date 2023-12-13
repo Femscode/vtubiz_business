@@ -199,6 +199,8 @@ class FundingController extends Controller
     }
     public function easywebhook(Request $request)
     {
+        file_put_contents(__DIR__ . '/easywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+       
         $jsonData = $request->getContent();
         $data = json_decode($jsonData, true);
         $client_reference = $data['client_reference'];
@@ -214,7 +216,6 @@ class FundingController extends Controller
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         }
-        file_put_contents(__DIR__ . '/easywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
        
         return response()->json("OK", 200);
     }
