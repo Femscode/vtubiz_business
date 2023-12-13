@@ -214,7 +214,7 @@ class FundingController extends Controller
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         }
-        file_put_contents(__DIR__ . '/easywebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+        file_put_contents(__DIR__ . '/easywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
        
         return response()->json("OK", 200);
     }
@@ -238,8 +238,8 @@ class FundingController extends Controller
         $tranx->admin_after = $company->balance;
         $tranx->redo = 1;
         $tranx->save();
-        // $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
-        // $duplicate->delete();
+        $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
+        $duplicate->delete();
     }
     public function run_normal($client_reference, $reference)
     {
@@ -247,8 +247,8 @@ class FundingController extends Controller
         $tranx->reference = $reference;
         $tranx->status = 0;
         $tranx->save();
-        // $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
-        // $duplicate->delete();
+        $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
+        $duplicate->delete();
     }
     public function webhook_payment(Request $request)
     {

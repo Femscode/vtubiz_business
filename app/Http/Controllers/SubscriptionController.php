@@ -258,18 +258,18 @@ class SubscriptionController extends Controller
         }
         $details = $network . "Data Purchase of " . $data->plan_name . " on " . $request->phone_number;
         $client_reference =  'buy_data_' . Str::random(7);
-        // $check = $this->check_duplicate('check', $user->id, $data_price, "Data Purchase", $details, $client_reference);
+        $check = $this->check_duplicate('check', $user->id, $data_price, "Data Purchase", $details, $client_reference);
 
-        // if ($check[0] == true) {
-        //     $response = [
-        //         'type' => 'duplicate',
-        //         'success' => false,
-        //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-        //         'auto_refund_status' => 'Nil'
-        //     ];
+        if ($check[0] == true) {
+            $response = [
+                'type' => 'duplicate',
+                'success' => false,
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'auto_refund_status' => 'Nil'
+            ];
 
-        //     return response()->json($response);
-        // }
+            return response()->json($response);
+        }
         // dd($check);
         //purchase the data
         //just to replace env
@@ -351,18 +351,18 @@ class SubscriptionController extends Controller
         $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
         $client_reference =  'buy_data_' . Str::random(7);
 
-        // $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
+        $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
-        // if ($check[0] == true) {
-        //     $response = [
-        //         'type' => 'duplicate',
-        //         'success' => false,
-        //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-        //         'auto_refund_status' => 'Nil'
-        //     ];
+        if ($check[0] == true) {
+            $response = [
+                'type' => 'duplicate',
+                'success' => false,
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'auto_refund_status' => 'Nil'
+            ];
 
-        //     return response()->json($response);
-        // }
+            return response()->json($response);
+        }
 
         //purchase the data
         $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice);
@@ -447,16 +447,16 @@ class SubscriptionController extends Controller
                 $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
                 $client_reference =  'buy_data_' . Str::random(7);
 
-                // $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
+                $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
-                // if ($check[0] == true) {
-                //     $tranx->status = 0;
-                //     $tranx->save();
-                //     $schedule->status = 2;
-                //     $schedule->save();
+                if ($check[0] == true) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->status = 2;
+                    $schedule->save();
 
-                //     return false;
-                // }
+                    return false;
+                }
 
                 $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $tranx->phone_number, $tranx->network, $tranx->plan_id);
 
@@ -501,15 +501,15 @@ class SubscriptionController extends Controller
                 }
                 $details =  "Airtime Purchase of " . $tranx->amount . " on " . $tranx->phone_number;
                 $client_reference =  'buy_airtime_' . Str::random(7);
-                // $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
+                $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
 
-                // if ($check[0] == true) {
-                //     $tranx->status = 0;
-                //     $tranx->save();
-                //     $schedule->status = 2;
-                //     $schedule->save();
-                //     return false;
-                // }
+                if ($check[0] == true) {
+                    $tranx->status = 0;
+                    $tranx->save();
+                    $schedule->status = 2;
+                    $schedule->save();
+                    return false;
+                }
 
                 $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 1, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
@@ -723,18 +723,18 @@ class SubscriptionController extends Controller
             $details =  "Airtime Purchase of NGN" . $tranx->real_amount . " on " . $tranx->phone_number;
             $client_reference =  'buy_airtime_' . Str::random(7);
 
-            // $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
+            $check = $this->check_duplicate('check', $user->id, $tranx->amount, "Airtime Purchase", $details, $client_reference);
 
-            // if ($check[0] == true) {
-            //     $response = [
-            //         'type' => 'duplicate',
-            //         'success' => false,
-            //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-            //         'auto_refund_status' => 'Nil'
-            //     ];
+            if ($check[0] == true) {
+                $response = [
+                    'type' => 'duplicate',
+                    'success' => false,
+                    'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                    'auto_refund_status' => 'Nil'
+                ];
 
-            //     return response()->json($response);
-            // }
+                return response()->json($response);
+            }
             //purchase the data
             $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
@@ -818,18 +818,18 @@ class SubscriptionController extends Controller
             $details = $network . " Data Purchase of " . $data->plan_name . " on " . $tranx->phone_number;
             $client_reference =  'buy_data_' . Str::random(7);
 
-            // $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
+            $check = $this->check_duplicate('check', $user->id, $data->data_price, "Data Purchase", $details, $client_reference);
 
-            // if ($check[0] == true) {
-            //     $response = [
-            //         'type' => 'duplicate',
-            //         'success' => false,
-            //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-            //         'auto_refund_status' => 'Nil'
-            //     ];
+            if ($check[0] == true) {
+                $response = [
+                    'type' => 'duplicate',
+                    'success' => false,
+                    'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                    'auto_refund_status' => 'Nil'
+                ];
 
-            //     return response()->json($response);
-            // }
+                return response()->json($response);
+            }
 
             //purchase the data
             $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $phone_number, $request->network, $request->plan);
@@ -1297,18 +1297,18 @@ class SubscriptionController extends Controller
         $details =  "Airtime Purchase of " . $request->amount . " on " . $request->phone_number;
         $client_reference =  'buy_airtime_' . Str::random(7);
 
-        // $check = $this->check_duplicate('check', $user->id, $request->amount, "Airtime Purchase", $details, $client_reference);
+        $check = $this->check_duplicate('check', $user->id, $request->amount, "Airtime Purchase", $details, $client_reference);
 
-        // if ($check[0] == true) {
-        //     $response = [
-        //         'type' => 'duplicate',
-        //         'success' => false,
-        //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-        //         'auto_refund_status' => 'Nil'
-        //     ];
+        if ($check[0] == true) {
+            $response = [
+                'type' => 'duplicate',
+                'success' => false,
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'auto_refund_status' => 'Nil'
+            ];
 
-        //     return response()->json($response);
-        // }
+            return response()->json($response);
+        }
 
         //purchase the airtime
         $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $request->network, $request->amount);
@@ -1367,18 +1367,18 @@ class SubscriptionController extends Controller
 
         $details =  "Airtime Purchase of " . $amount . " on " . $phone;
         $client_reference =  'buy_airtime_' . Str::random(7);
-        // $check = $this->check_duplicate('check', $user->id, $amount, "Airtime Purchase", $details, $client_reference);
+        $check = $this->check_duplicate('check', $user->id, $amount, "Airtime Purchase", $details, $client_reference);
 
-        // if ($check[0] == true) {
-        //     $response = [
-        //         'type' => 'duplicate',
-        //         'success' => false,
-        //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-        //         'auto_refund_status' => 'Nil'
-        //     ];
+        if ($check[0] == true) {
+            $response = [
+                'type' => 'duplicate',
+                'success' => false,
+                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'auto_refund_status' => 'Nil'
+            ];
 
-        //     return response()->json($response);
-        // }
+            return response()->json($response);
+        }
         //purchase the airtime
         $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 2, $real_airtimeprice, $phone, $network, $amount);
         $transaction = Transaction::find($trans_id);
