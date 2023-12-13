@@ -390,6 +390,17 @@ class BusinessController extends Controller
         return view('dashboard.pending_transactions', $data);
         
     }
+    public function mytransactions()
+    {
+        $data['user'] = $user = Auth::user();
+        $data['active'] = 'transactions';
+        $data['transactions'] = $transactions =  Transaction::where('user_id', $user->id)->latest()->get();
+        if($user->user_type == 'admin') {
+            return view('business_backend.mytransactions', $data);
+        }
+        return view('dashboard.transactions', $data);
+        
+    }
     public function bulksms_transactions()
     {
         $data['user'] = $user = Auth::user();

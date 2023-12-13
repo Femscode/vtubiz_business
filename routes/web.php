@@ -305,6 +305,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payment_transactions', [BusinessController::class, 'payment_transactions'])->name('payment_transactions');
     Route::get('purchase_transactions', [BusinessController::class, 'purchase_transactions'])->name('purchase_transactions');
     Route::get('pending_transactions', [BusinessController::class, 'pending_transactions'])->name('pending_transactions');
+    Route::get('mytransactions', [BusinessController::class, 'mytransactions'])->name('mytransactions');
     Route::get('bulksms_transactions', [BusinessController::class, 'bulksms_transactions'])->name('bulksms_transactions');
 
 

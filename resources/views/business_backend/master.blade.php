@@ -273,6 +273,7 @@
                             <ul class="sub-menu mm-collapse" aria-expanded="false">
                                 <li><a href="/payment_transactions" key="t-inbox">Payment Transactions</a></li>
                                 <li><a href="/purchase_transactions" key="t-read-email">Purchase Transactions</a></li>
+                                <li><a href="/mytransactions" key="t-read-email">My Transactions</a></li>
                                 <li><a href="/pending_transactions" key="t-read-email">My Pending Transactions</a></li>
                                 <li><a href="/bulksms_transactions" key="t-read-email">BulkSMS Transactions</a></li>
                              

@@ -30,11 +30,15 @@
     <!-- Navbar top-->
     <nav class="navbar navbar-expand-lg navbar-top  bg-white">
         <div class="container"><a class="navbar-brand" href="">
+            @if($user->logo !== null)
+            <img class="rounded-circle header-profile-user"
+            src="https://vtubiz.com/public/brand_images/{{ $user->logo}}" style='width:50px;height:50px' />
+           @else
             <h2>{{ $user->brand_name }}</h2>
-            {{-- <img class="rounded-circle header-profile-user"
-            src="{{ asset('brand_images/'.$user->logo) }}" style='width:50px;height:50px' /> --}}
+            @endif
                </a><a class="navbar-toggle order-4 popup-inline"
                 href="#navbar-mobile-style-1"><span></span><span></span><span></span></a>
+                
             <ul class="nav navbar-nav order-2 ms-auto nav-no-opacity">
                 <li class="nav-item "><a class="nav-link" href="#"><span>Home</span></a></li>
                 <li class="nav-item "><a class="nav-link" href="#about_us"><span>About Us</span></a></li>
@@ -53,7 +57,7 @@
     <div class="navbar navbar-mobile navbar-mobile-style-1 bg-white mfp-hide" id="navbar-mobile-style-1">
         <div class="navbar-wrapper">
             <div class="navbar-head"><a class="navbar-brand d-block d-md-none" href="">
-            {{ $user->brand_name }}       
+            <h2>{{ $user->brand_name }}</h2>      
             </a><a class="navbar-toggle popup-modal-dismiss"
                     href="#"><span></span><span></span><span></span></a></div>
             <div class="navbar-body">
@@ -335,13 +339,12 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <div class="position-absolute end-0 top-0 mt-n80" data-img-height
+                                        <div class="position-absolute end-0 top-0 mt-n80" data-img-height
                                 style="--img-height: 100%; width: 230px;"><img class="rounded-4" loading="lazy"
                                     src="{{ asset('theme4/assets/img/about-us-4-900x990.jpg')}}" alt=""></div>
                             <div class="me-100" data-img-height style="--img-height: 70%;" data-show="{{ $user->brand_name }}"><a
                                     class="image-link" href="theme4/assets/img/about-us-3-900x630.jpg"><img
-                                        class="rounded-4" loading="lazy" src="{{ asset('theme4/assets/img/about-us-3-900x630.jpg"
-                                      ')}}  alt=""></a></div>
+                                        class="rounded-4" loading="lazy" src="{{asset('theme4/assets/img/about-us-3-900x630.jpg')}}"  alt=""></a></div>
                         </div>
                     </div>
                 </div>
@@ -662,7 +665,12 @@
         <div class="container">
             <div class="row gy-50">
                 <div class="col-12 col-lg-3"><a class="d-block mb-30" href="#">
-                    <h2>{{ $user->brand_name }}</h2>
+                    @if($user->logo !== null)
+            <img class="rounded-circle header-profile-user"
+            src="https://vtubiz.com/public/brand_images/{{ $user->logo}}" style='width:50px;height:50px' />
+           @else
+            <h2 class='text-white'>{{ $user->brand_name }}</h2>
+            @endif
                     {{-- <img class="rounded-circle header-profile-user"
                     src="{{ asset('brand_images/'.$user->logo) }}" style='width:50px;height:50px' /> --}}
                     
