@@ -75,9 +75,19 @@ class SuperController extends Controller
     }
     public function update_plan_status($network_id,$type) {
         // dd($network_id, $type);
-        $datas = Data::where('network',$network_id)->where('type',$type)->update([
-            'status' => DB::raw('NOT status')
-        ]);
+        if( Data::where('network',$network_id)->where('type',$type)->first()->status == 0) {
+            $datas = Data::where('network',$network_id)->where('type',$type)->update([
+                'status' => 1
+            ]);
+        } else {
+            $datas = Data::where('network',$network_id)->where('type',$type)->update([
+                'status' => 0
+            ]);
+
+        }
+        // $datas = Data::where('network',$network_id)->where('type',$type)->update([
+        //     'status' => DB::raw('NOT status')
+        // ]);
         return redirect()->back()->with('message','Status Updated Successfully');
     }
     public function update_data(Request $request)
