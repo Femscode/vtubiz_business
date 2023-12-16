@@ -99,6 +99,7 @@ class SuperController extends Controller
             $data->actual_price = $request->actual_price;
             $data->data_price = $request->data_price;
             $data->account_price = $request->account_price;
+            $data->admin_price = $request->account_price;
             $data->save();
         }
 
