@@ -702,7 +702,7 @@ trait TransactionTrait
 
             array_push($purchase_status, $response);
         }
-        
+       
         $response = [
             'success' => true,
             'message' => 'Purchase Successful! Check group transaction table to confirm. ',
@@ -747,7 +747,11 @@ trait TransactionTrait
         $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
         $client_reference =  'sgw_buy_data_' . Str::random(5);
 
-
+        $recipient = GiveawaySchedule::where('giveaway_id',$group_id)->first();
+        if($recipient !== null) {
+            $recipient->reference = $client_reference;
+            $recipient->save();
+        }
 
         //purchase the data
 
@@ -801,6 +805,11 @@ trait TransactionTrait
 
         $details =  "Airtime Purchase of " . $amount . " on " . $phone;
         $client_reference =  'sgw_buy_airtime_' . Str::random(7);
+        $recipient = GiveawaySchedule::where('giveaway_id',$group_id)->first();
+        if($recipient !== null) {
+            $recipient->reference = $client_reference;
+            $recipient->save();
+        }
        
         //purchase the airtime
         $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, 5, 2, $real_airtimeprice, $phone, $network, $amount);
