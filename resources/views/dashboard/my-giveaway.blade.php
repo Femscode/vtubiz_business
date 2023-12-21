@@ -7,95 +7,106 @@
 <div class="container-fluid">
 
 
-  <!-- end page title -->
+    <!-- end page title -->
 
-  <div class="row">
+    <div class="row">
 
 
-    <div class="card mb-xl-10">
-      <div class="card-header flex-wrap border-0 pt-6 pb-0">
-        <div class="card-title">
-          <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">My Giveaways</h4>
-            <div>
-              <a href='/create-giveaway' class="btn btn-success">Create Giveaway</a>
-              <a onclick="window.history.back()" class="btn btn-secondary">Back</a>
+        <div class="card mb-xl-12">
+            <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                
+                <div class="card-title">
+                    <div class="page-title-box align-items-center justify-content-between">
+                        
+                            <div class='col'>
+                                <h4 class="mb-sm-0 font-size-18">My Giveaways</h4>
+                            </div>
+                            <div class='col text-end'>
+                                <a href='/create-giveaway' class="btn-sm btn btn-success">Create Giveaway</a>
+                                <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
+                            </div>
+                       
+
+                    </div>
+
+                </div>
+              
+                <!-- end card body -->
             </div>
-          </div>
+            <div class="card-body">
 
+                <div style='overflow-x:auto;max-width: 100%'>
+                    <table class='datatable table table-responsivetable m-0'>
+                        <thead>
+                            <tr>
+                                <th>Actions</th>
+                                <th>Giveaway Details</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($giveaway as $group)
+                            <tr>
+                                <td>
+                                    @if($group->type == 'question_data' || $group->type == 'question_airtime' ||
+                                    $group->type ==
+                                    'question_cash')
+                                    <a href='/add_question/{{ $group->slug }}' class='btn btn-sm btn-primary'>Add
+                                        Questions</a>
+                                    @endif
+                                    {{-- <a href='https://vtubiz.com/{{ $group->slug }}'
+                                        class='btn btn-sm btn-primary'>Copy Link</a> --}}
+
+                                    <a href='/giveaway_participant/{{ $group->slug }}'
+                                        data-total_amount="{{ number_format($group->estimated_amount) }}"
+                                        class='btn btn-sm btn-info'>View
+                                        Details</a>
+                                    <a onclick="return confirm('Are you sure you want to delete this group?')"
+                                        href='/delete_giveaway/{{ $group->slug }}' class='btn btn-sm btn-danger'>Delete
+                                        Giveaway</a>
+
+                                </td>
+
+                                <td>
+                                    <b>{{ $group->name }} (NGN{{ number_format($group->estimated_amount) }})</b><br>
+                                    @if($group->type == "question_data" || $group->type=='question_airtime' ||
+                                    $group->type ==
+                                    'question_cash')
+
+
+                                    <h5>Giveaway Live Link : </h5>
+                                    @if(count($group->all_questions->all()) == 0)
+
+                                    <span class='text-danger'>Kindly add questions to display the giveaway live
+                                        link!</span><br>
+                                    @else
+                                    <h4> <b>https://vtubiz.com/{{ $group->slug }}</b></h4>
+                                    @endif
+                                    @else
+                                    <h4> <b>https://vtubiz.com/{{ $group->slug }}</b></h4>
+
+                                    @endif
+
+                                </td>
+
+
+                            </tr>
+                            @endforeach
+                        </tbody>
+
+
+                    </table>
+                </div>
+            </div>
         </div>
-
-      </div>
-      <div class="card-body">
-
-        <div style='overflow-x:auto;max-width: 100%'>
-          <table class='datatable table table-responsivetable m-0'>
-            <thead>
-              <tr>
-                <th>Actions</th>
-                <th>Giveaway Details</th>              
-               
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($giveaway as $group)
-              <tr>
-                <td>
-                  @if($group->type == 'question_data' || $group->type == 'question_airtime' || $group->type ==
-                  'question_cash')
-                  <a href='/add_question/{{ $group->slug }}' class='btn sm btn-primary'>Add Questions</a>
-                  @endif
-                  {{-- <a href='https://vtubiz.com/{{ $group->slug }}' class='btn sm btn-primary'>Copy Link</a> --}}
-
-                  <a href='/giveaway_participant/{{ $group->slug }}'
-                    data-total_amount="{{ number_format($group->estimated_amount) }}" class='btn sm btn-info'>View
-                    Details</a>
-                  <a onclick="return confirm('Are you sure you want to delete this group?')"
-                    href='/delete_giveaway/{{ $group->slug }}' class='btn sm btn-danger'>Delete Giveaway</a>
-
-                </td>
-              
-                <td>
-                  <b>{{ $group->name }} (NGN{{ number_format($group->estimated_amount) }})</b><br>
-                  @if($group->type == "question_data" || $group->type=='question_airtime' || $group->type ==
-                  'question_cash')
-                
-                 
-                  <h5>Giveaway Live Link : </h5>
-                  @if(count($group->all_questions->all()) == 0)
-                  
-                  <span class='text-danger'>Kindly add questions to display the giveaway live link!</span><br>
-                  @else
-                  <h4> <b>https://vtubiz.com/{{ $group->slug }}</b></h4>
-                  @endif
-                  @else 
-                  <h4> <b>https://vtubiz.com/{{ $group->slug }}</b></h4>
-
-                  @endif
-                
-                </td>
-              
-             
-              </tr>
-              @endforeach
-            </tbody>
+        <!-- end row -->
 
 
-          </table>
-        </div>
-      </div>
-      <!-- end card body -->
+        <!-- end row -->
     </div>
-
-  </div>
-  <!-- end row -->
-
-
-  <!-- end row -->
-</div>
-@section('script')
-<script>
-  $(document).ready(function() {
+    @section('script')
+    <script>
+        $(document).ready(function() {
     var oTable = $('.datatable').DataTable({
             ordering: false,
             searching: true
@@ -231,8 +242,8 @@
            
         @endif
                     })
-</script>
+    </script>
 
-@endsection
+    @endsection
 
-@endsection
+    @endsection

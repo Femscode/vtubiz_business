@@ -285,7 +285,7 @@ $(document).ready( function() {
     autostart   : false,
     onComplete  : function () {  
         swal('info','Test Successfully Completed','info')
-        window.location.href = `http://127.0.0.1:8000/viewresult/${$("#userId").val()}/${$("#testId").val()}`;
+        window.location.href = `https://vtubiz.com/viewresult/${$("#userId").val()}/${$("#testId").val()}`;
 
     }
 });

@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col text-end">
                                   
-                                    <a href='/my-giveaway' class="btn btn-secondary">Back</a>
+                                    <a href='/my-giveaway' class="btn-sm btn btn-secondary">Back</a>
                                 </div>
                             </div>
 

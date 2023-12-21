@@ -752,7 +752,7 @@ trait TransactionTrait
 
         //purchase the data
 
-        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $group_id, 2, $real_dataprice);
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, 5, 2, $real_dataprice);
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
         $transaction->save();
@@ -786,27 +786,17 @@ trait TransactionTrait
 
     public function handle_buy_airtime($phone, $network, $amount, $discounted_amount, $group_id = null)
     {
-        $user = Auth::user();
-        $company = User::where('id', $user->company_id)->first();
         $phone_number = $phone;
         if (strlen($phone) == 10) {
             $phone_number = "0" . $phone;
         }
 
         // dd($request->all());
-        $actual_price = Airtime::where('network', $network)->where('user_id', $user->company_id)->first()->airtime_price;
+        $actual_price = Airtime::where('network', $network)->where('user_id', 0)->first()->airtime_price;
         $real_airtimeprice = $amount - ($actual_price / 100) * $amount;
         // dd($real_airtimeprice, $actual_price);
 
-        if ($user->balance < $discounted_amount) {
-            $response = [
-                'success' => false,
-                'message' => 'Insufficient Balance for airtime you want to get!',
-                'auto_refund_status' => 'Nil'
-            ];
-
-            return response()->json($response);
-        }
+       
 
         //check duplicate
 
@@ -814,7 +804,7 @@ trait TransactionTrait
         $client_reference =  'sgw_buy_airtime_' . Str::random(7);
        
         //purchase the airtime
-        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 2, $real_airtimeprice, $phone, $network, $amount);
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, 5, 2, $real_airtimeprice, $phone, $network, $amount);
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
         $transaction->save();
