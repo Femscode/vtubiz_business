@@ -15,6 +15,7 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
+                <div class='alert alert-warning'>Tis the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways featuring data, airtime, and cash prizes in a very exciting way.</div>
                 <div class="row mb-5 mb-xl-8 g-5 g-xl-8">
 
                     <!--begin::Col-->
@@ -22,27 +23,16 @@
                         <!--begin::Card-->
                         <div class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/transfer" style='border-top:5px solid #640f11;'
+                            <a href="/my-giveaway" style='border-top:5px solid #640f11;'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo8/dist/../src/media/svg/icons/Shopping/Credit-card.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24" />
-                                            <rect fill="#000000" opacity="0.3" x="2" y="5" width="20" height="14"
-                                                rx="2" />
-                                            <rect fill="#000000" x="2" y="8" width="20" height="3" />
-                                            <rect fill="#000000" opacity="0.3" x="16" y="14" width="4" height="2"
-                                                rx="1" />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
+                                   
+                                   <i class='fa fa-gift' style='font-size:30px'></i>
                                 </span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
-                                    Make Transfer </span>
+                                    Create Giveaway </span>
                             </a>
                             <!--end::Link-->
                         </div>

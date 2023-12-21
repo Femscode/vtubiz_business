@@ -81,7 +81,7 @@
                                                                     data-bs-parent="#accordionExample" style="">
                                                                     <div class="accordion-body">
                                                                         <div class="text-muted">
-                                                                            Raffle draw giveaway give each of your giveawaay participant a random number, and pick winners randomly.
+                                                                            Raffle draw giveaway give each of your giveaway participant a random number, and pick winners randomly.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -103,9 +103,9 @@
                                                                     <div class="accordion-body">
                                                                         <div class="text-muted">
                                                                            <ol>
-                                                                            <li>Fill all the neccessary fields below appropriately</li>
-                                                                            <li>A live link will be generated after clicking on the create button</li>
-                                                                            <li>Share this link on your social media pages for your loved onces to participate.</li>
+                                                                            <li>Fill all the neccessary fields below appropriately.</li>
+                                                                            <li>A live link will be generated after clicking on the create button.</li>
+                                                                            <li>Share this link on your social media pages for your loved ones to participate.</li>
                                                                             
                                                                            </ol>
 
@@ -130,7 +130,7 @@
                                                                     <div class="accordion-body">
                                                                         <div class="text-muted">
                                                                             <ul>
-                                                                                <li>No single individuals can participate in the giveaway more than once</li>
+                                                                                <li>No single individuals can participate in the giveaway more than once.</li>
                                                                                 <li>The giveaway automatically close once the maximum number of participant specified by you is reached.</li>
                                                                                 <li>You get to manage your giveaway participants by clicking on the <b>View Giveaway Details</b> button after you create the giveaway.</li>
                                                                             </ul>
@@ -156,7 +156,7 @@
                                             <label class='fw-bolder'>Giveaway Name</label>
                                             <input required name="raffle_name" id='raffle_name'
                                                 class="form-control form-control-lg form-control-solid" type="text"
-                                                placeholder="Give your giveaway a befitting name" />
+                                                placeholder="Enter a befitting name" />
 
                                         </div>
                                     </div>
@@ -166,7 +166,7 @@
                                             <label class='fw-bolder'>Participant No.</label>
                                             <input required name="raffle_part_no" id='raffle_part_no'
                                                 class="form-control form-control-lg form-control-solid" type="number"
-                                                placeholder="Input Maximum Number Of Participant" />
+                                                placeholder="Max. No. Of Participant" />
 
                                         </div>
                                     </div>

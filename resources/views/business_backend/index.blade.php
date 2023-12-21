@@ -97,8 +97,7 @@
           
 
 
-            @if($user->upgrade == 0)
-            {{-- <div style='background:hsl(210, 90%, 95%) !important;color:#001f3f' class="alert alert-danger border-0" role="alert"> --}}
+            {{-- @if($user->upgrade == 0)
             <div class="alert alert-danger border-0" role="alert">
 
                 Please note that for your website to go live <span style='color:#ebab21'>(SSL Secured)</span>, enjoy 5% data discounts, and other amazing features you have to upgrade your account
@@ -114,7 +113,9 @@
 
             </div>
 
-            @endif
+            @endif --}}
+            <div class='alert alert-warning'>Tis the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways featuring data, airtime, and cash prizes in a very exciting way. Click <a href='/my-giveaway'>here</a> to create.</div>
+               
 
         </div>
     </div>
