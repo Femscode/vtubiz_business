@@ -667,14 +667,14 @@ trait TransactionTrait
         $purchase_status = [];
         foreach ($recipients as $reci) {
             if ($reci->type == 'data') {
-                $response = $this->handle_buy_data($reci->phone, $reci->network, $reci->plan_id, $reci->giveaway_id);
+                $response = $this->handle_buy_data($reci->phone, $reci->network, $reci->plan_id, $reci->giveaway_id, $reci->participant_id);
                 // if($response['success'] === "true") {
                 //     $reci->status = 1;
                 //     $reci->save();
                 // }
                
             } elseif ($reci->type == 'airtime') {
-                $response = $this->handle_buy_airtime($reci->phone, $reci->network, $reci->amount, $reci->amount, $reci->giveaway_id);
+                $response = $this->handle_buy_airtime($reci->phone, $reci->network, $reci->amount, $reci->amount, $reci->giveaway_id, $reci->participant_id);
                 // if($response['success'] === "true") {
                 //     $reci->status = 1;
                 //     $reci->save();
@@ -714,7 +714,7 @@ trait TransactionTrait
         // return [$purchase_status,true];
     }
 
-    private function handle_buy_data($phone, $network, $plan_id, $group_id = null)
+    private function handle_buy_data($phone, $network, $plan_id, $group_id = null, $part_id = null)
     {
 
         $phone_number = $phone;
@@ -747,7 +747,7 @@ trait TransactionTrait
         $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
         $client_reference =  'sgw_buy_data_' . Str::random(5);
 
-        $recipient = GiveawaySchedule::where('giveaway_id',$group_id)->first();
+        $recipient = GiveawaySchedule::where('participant_id',$part_id)->first();
         if($recipient !== null) {
             $recipient->reference = $client_reference;
             $recipient->save();
@@ -787,7 +787,7 @@ trait TransactionTrait
         return $response_json;
     }
 
-    public function handle_buy_airtime($phone, $network, $amount, $discounted_amount, $group_id = null)
+    public function handle_buy_airtime($phone, $network, $amount, $discounted_amount, $group_id = null,$part_id = null)
     {
         $phone_number = $phone;
         if (strlen($phone) == 10) {
@@ -805,7 +805,7 @@ trait TransactionTrait
 
         $details =  "Airtime Purchase of " . $amount . " on " . $phone;
         $client_reference =  'sgw_buy_airtime_' . Str::random(7);
-        $recipient = GiveawaySchedule::where('giveaway_id',$group_id)->first();
+        $recipient = GiveawaySchedule::where('participant_id',$part_id)->first();
         if($recipient !== null) {
             $recipient->reference = $client_reference;
             $recipient->save();
