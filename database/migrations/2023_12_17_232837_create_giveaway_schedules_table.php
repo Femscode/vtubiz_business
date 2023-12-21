@@ -15,6 +15,7 @@ class CreateGiveawaySchedulesTable extends Migration
     {
         Schema::create('giveaway_schedules', function (Blueprint $table) {
             $table->id();
+            $table->string('reference')->nullable();    
             $table->integer('user_id')->nullable();    
             $table->string('uid')->nullable();
             $table->integer('giveaway_id');

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\GiveawaySchedule;
 use App\Traits\TransactionTrait;
 use Illuminate\Support\Facades\DB;
 use App\Models\DuplicateTransaction;
@@ -200,7 +201,7 @@ class FundingController extends Controller
     public function easywebhook(Request $request)
     {
         file_put_contents(__DIR__ . '/easywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
-       
+
         $jsonData = $request->getContent();
         $data = json_decode($jsonData, true);
         $client_reference = $data['client_reference'];
@@ -208,15 +209,41 @@ class FundingController extends Controller
         $status =  $data['status'];
 
         if ($status == 'success' || $status == 'successful') {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 1;
+                $tranx->save();
+
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                $giveaway->reference = $reference;
+                $giveaway->status = 1;
+                $giveaway > save();
+            }
 
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
             // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
         } else {
+            $tranx = Transaction::where('reference', $client_reference)
+                ->orderByDesc('created_at')
+                ->first();
+            $tranx->reference = $reference;
+            $tranx->status = 0;
+            $tranx->save();
+
+            $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                ->first();
+            $giveaway->reference = $reference;
+            $giveaway->status = 0;
+            $giveaway > save();
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         }
-       
+
         return response()->json("OK", 200);
     }
 

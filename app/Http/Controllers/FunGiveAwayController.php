@@ -84,7 +84,10 @@ class FunGiveAwayController extends Controller
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
         $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->latest()->get();
-
+        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+            return response()->view('dashboard.create-giveaway', $data);
+        
+        }
 
         return response()->view('business_backend.create-giveaway', $data);
     }
@@ -280,6 +283,11 @@ class FunGiveAwayController extends Controller
 
         $data['giveaway'] = GiveAway::where('user_id', $user->id)
             ->latest()->get();
+            if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+                $data['active'] = 'giveaway';
+                return response()->view('dashboard.my-giveaway', $data);
+            
+            }
         return view('business_backend.my-giveaway', $data);
     }
     public function giveawayHome($slug)
@@ -394,6 +402,7 @@ class FunGiveAwayController extends Controller
     public function createGiveawaySchedule(Request $request)
     {
         $giveaway = GiveAway::find($request->giveaway_id);
+       
         
         $data = Data::where('plan_id', $request->plan_id)->first();
 
@@ -450,7 +459,7 @@ class FunGiveAwayController extends Controller
                 'amount' => $giveaway->airtime_price,
             ]);
         } else {
-            $giveaway = GiveawaySchedule::create([
+            GiveawaySchedule::create([
                 'giveaway_id' => $request->giveaway_id,
                 'name' => $request->name,
                 'participant_id' => $request->participant_id,
@@ -467,16 +476,41 @@ class FunGiveAwayController extends Controller
     {
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
         $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
-        $data['user'] = Auth::user();
+        $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+            $data['active'] = 'giveaway';
+            return response()->view('dashboard.giveaway_participants', $data);
+        
+        }
+        
         return view('business_backend.giveaway_participants', $data);
+    }
+    public function giveaway_transactions($slug)
+    {
+        $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
+        $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
+        $data['transactions'] = GiveawaySchedule::where('giveaway_id', $giveaway->id)->latest()->get();
+        $data['user'] = $user = Auth::user();
+        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+            $data['active'] = 'giveaway';
+            return response()->view('dashboard.giveaway_transactions', $data);
+        
+        }
+
+        return view('business_backend.giveaway_transactions', $data);
     }
     public function addQuestion($slug)
     {
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
-        $data['user'] = Auth::user();
+        $data['user'] = $user = Auth::user();
         $data['questions'] = Question::where('test_id', $giveaway->id)->get();
         $giveaway = GiveAway::where('slug', $slug)->first();
         $data['tests'] = GiveAway::with('my_questions')->where('id', $giveaway->id)->get();
+        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+            $data['active'] = 'giveaway';
+            return response()->view('dashboard.question', $data);
+        
+        }
         return view('business_backend.question', $data);
     }
     public function storequestion(Request $request)
@@ -569,7 +603,7 @@ class FunGiveAwayController extends Controller
         $user = Auth::user();
         $test = Giveaway::find($testId);
         // dd($userCorrectedAnswer,'corrent',$userWrongAnswer,'wrong',$totalQuestions,'all questions',$attemptQuestion,'attempted questions');
-
+       
         return view('business_backend.viewresult', compact('user', 'participant', 'giveaway', 'results', 'totalQuestions', 'attemptQuestion', 'userCorrectedAnswer', 'userWrongAnswer', 'percentage', 'Test', 'test'));
     }
 
@@ -640,5 +674,8 @@ class FunGiveAwayController extends Controller
         } else {
             return redirect()->back()->with('message', 'Permission Denied!');
         }
+    }
+    public function run_schedule_giveaway() {
+        $this->run_data_giveaway();
     }
 }

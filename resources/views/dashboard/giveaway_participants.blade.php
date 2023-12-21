@@ -1,4 +1,4 @@
-@extends('business_backend.master')
+@extends('dashboard.master1')
 @section('header')
 @endsection
 @section('content')

@@ -663,14 +663,25 @@ trait TransactionTrait
         // dd($request->all());
 
         $recipients = GiveawaySchedule::where('status', 0)->get();
+        // dd($recipients);
         $purchase_status = [];
         foreach ($recipients as $reci) {
             if ($reci->type == 'data') {
                 $response = $this->handle_buy_data($reci->phone, $reci->network, $reci->plan_id, $reci->giveaway_id);
+                // if($response['success'] === "true") {
+                //     $reci->status = 1;
+                //     $reci->save();
+                // }
+               
             } elseif ($reci->type == 'airtime') {
-                $response = $this->handle_buy_airtime($reci->phone, $reci->network, $reci->amount, $reci->amoount, $reci->giveaway_id);
+                $response = $this->handle_buy_airtime($reci->phone, $reci->network, $reci->amount, $reci->amount, $reci->giveaway_id);
+                // if($response['success'] === "true") {
+                //     $reci->status = 1;
+                //     $reci->save();
+                // }
             } else {
-               return true;
+                
+                return true;
             }
             // dd($reci, $response);
             if (is_object($response) && method_exists($response, 'getData')) {
@@ -735,7 +746,7 @@ trait TransactionTrait
             $network_mi = "9Mobile";
         }
         $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
-        $client_reference =  'buy_data_' . Str::random(7);
+        $client_reference =  'sgw_buy_data_' . Str::random(5);
 
 
 
@@ -745,6 +756,7 @@ trait TransactionTrait
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
         $transaction->save();
+      
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
@@ -768,6 +780,70 @@ trait TransactionTrait
         ));
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
+        curl_close($curl);
+        return $response_json;
+    }
+
+    public function handle_buy_airtime($phone, $network, $amount, $discounted_amount, $group_id = null)
+    {
+        $user = Auth::user();
+        $company = User::where('id', $user->company_id)->first();
+        $phone_number = $phone;
+        if (strlen($phone) == 10) {
+            $phone_number = "0" . $phone;
+        }
+
+        // dd($request->all());
+        $actual_price = Airtime::where('network', $network)->where('user_id', $user->company_id)->first()->airtime_price;
+        $real_airtimeprice = $amount - ($actual_price / 100) * $amount;
+        // dd($real_airtimeprice, $actual_price);
+
+        if ($user->balance < $discounted_amount) {
+            $response = [
+                'success' => false,
+                'message' => 'Insufficient Balance for airtime you want to get!',
+                'auto_refund_status' => 'Nil'
+            ];
+
+            return response()->json($response);
+        }
+
+        //check duplicate
+
+        $details =  "Airtime Purchase of " . $amount . " on " . $phone;
+        $client_reference =  'sgw_buy_airtime_' . Str::random(7);
+       
+        //purchase the airtime
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $discounted_amount, $user->id, 2, $real_airtimeprice, $phone, $network, $amount);
+        $transaction = Transaction::find($trans_id);
+        $transaction->group_id = $group_id;
+        $transaction->save();
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => array(
+                'network' => $network,
+                'mobileno' => $phone_number,
+                'amount' => $amount,
+                'airtime_type' => 001,
+                'client_reference' => $client_reference, //update this on your script to receive webhook notifications
+            ),
+            CURLOPT_HTTPHEADER => array(
+                // "AuthorizationToken: " . $env, //replace this with your authorization_token
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        $response_json = json_decode($response, true);
+
         curl_close($curl);
         return $response_json;
     }

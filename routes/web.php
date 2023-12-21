@@ -13,6 +13,7 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+Route::get('/run_schedule_giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'run_schedule_giveaway'])->name('run_schedule_giveaway');
 Route::get('/claim_giveaway/{giveaway_id}/{user_id}/{rand_no?}', [App\Http\Controllers\FunGiveAwayController::class, 'claim_price'])->name('claim_price');
 Route::post('/saveGiveAwayContacts', [App\Http\Controllers\FunGiveAwayController::class, 'saveGiveAwayContacts'])->name('saveGiveAwayContacts');
 Route::post('/createGiveawaySchedule', [App\Http\Controllers\FunGiveAwayController::class, 'createGiveawaySchedule'])->name('createGiveawaySchedule');
@@ -339,6 +340,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/create-giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'fun_giveaway_data'])->name('fun_giveaway_data');
     Route::get('/my-giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'my_giveaway'])->name('my_giveaway');
     Route::get('/giveaway_participant/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'giveaway_participants'])->name('giveaway_participants');
+    Route::get('/giveaway_transactions/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'giveaway_transactions'])->name('giveaway_transactions');
     Route::get('/add_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'addQuestion'])->name('addQuestion');
     Route::get('/delete_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_question'])->name('delete_question');
     Route::get('/delete_giveaway/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_giveaway'])->name('delete_giveaway');

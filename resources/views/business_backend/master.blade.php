@@ -245,6 +245,13 @@
                         </li>
 
                         <li>
+                            <a href="/my-giveaway" class="">
+                                <i class="bx bx-gift"></i>
+                                <span key="t-layouts">Giveaway</span>
+                            </a>
+
+                        </li>
+                        <li>
                             <a href="/profile" class="">
                                 <i class="bx bx-user-circle"></i>
                                 <span key="t-layouts">Profile</span>
