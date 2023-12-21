@@ -13,6 +13,17 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+Route::get('/claim_giveaway/{giveaway_id}/{user_id}/{rand_no?}', [App\Http\Controllers\FunGiveAwayController::class, 'claim_price'])->name('claim_price');
+Route::post('/saveGiveAwayContacts', [App\Http\Controllers\FunGiveAwayController::class, 'saveGiveAwayContacts'])->name('saveGiveAwayContacts');
+Route::post('/createGiveawaySchedule', [App\Http\Controllers\FunGiveAwayController::class, 'createGiveawaySchedule'])->name('createGiveawaySchedule');
+Route::any('/submittest', [App\Http\Controllers\FunGiveAwayController::class, 'submittest'])->name('submittest');
+Route::any('/finishtest', [App\Http\Controllers\FunGiveAwayController::class, 'finishtest'])->name('finishtest');
+Route::get('/result/user/{userId}/quiz/{quizId}', [App\Http\Controllers\FunGiveAwayController::class, 'viewResult'])->middleware('auth');
+Route::any('/checkuserresult/{userid}/{testid}', [App\Http\Controllers\FunGiveAwayController::class, 'checkuserresult'])->name('checkuserresult');
+Route::any('/viewresult/{userid}/{testid}', [App\Http\Controllers\FunGiveAwayController::class, 'checkuserresult'])->name('checkuserresult');
+Route::any('confirm_account_details', [App\Http\Controllers\FunGiveAwayController::class, 'confirm_account_details'])->name('confirm_account_details');
+
+
 Route::get('/asset-location', function () {
     $publicPath = public_path();
 
@@ -24,34 +35,34 @@ Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionControlle
 Route::any('/test_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'test_debit'])->name('test_debit');
 Route::any('/run_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_debit'])->name('run_debit');
 Route::any('/run_normal/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'run_normal'])->name('run_normal');
-        
-Route::get('run_data_type', function() {
-   
-    $datas = Data::where('type',null)->update([
+
+Route::get('run_data_type', function () {
+
+    $datas = Data::where('type', null)->update([
         'type' => 'cg'
     ]);
-    
-  
-    $datas = Data::where('plan_name','like','%SME%')->get();
-    foreach($datas as $data) {
+
+
+    $datas = Data::where('plan_name', 'like', '%SME%')->get();
+    foreach ($datas as $data) {
         $data->type = 'SME';
         $data->save();
     }
-    $datas = Data::where('plan_name','like','%direct%')->get();
-    foreach($datas as $data) {
+    $datas = Data::where('plan_name', 'like', '%direct%')->get();
+    foreach ($datas as $data) {
         $data->type = 'direct';
         $data->save();
     }
-    $datas = Data::where('plan_name','like','%cg_lite%')->get();
-    foreach($datas as $data) {
+    $datas = Data::where('plan_name', 'like', '%cg_lite%')->get();
+    foreach ($datas as $data) {
         $data->type = 'cg_lite';
         $data->save();
     }
     $data->save();
     return "Data type updaated";
-   
+
     // $foods = Food::where('name', 'like', '%' . $request->food . '%')->pluck('user_id');
-       
+
 
 });
 
@@ -67,7 +78,7 @@ Route::any('format_data', function () {
         // Take the part before the "-"
         $newString = trim($parts[0]);
         $theme->plan_name = $newString;
-         $theme->save();
+        $theme->save();
     }
 });
 Route::any('update_account_data', function () {
@@ -89,10 +100,10 @@ Route::any('update_cable_price', function () {
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 // Auth::routes();
 Route::any('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
-    
+
 
 Route::any('/upgrade/{id}', [BusinessController::class, 'upgrade'])->name('upgrade');
 Route::any('/saveBeneficiary', [BusinessController::class, 'saveBeneficiary'])->name('saveBeneficiary');
@@ -115,10 +126,10 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Route::get('/', [BusinessController::class, 'landing'])->name('index');
-   
+
     // Route::view('/','coming_soon');
     // Route::any('/notify', [App\Http\Controllers\SubscriptionController::class, 'notify'])->name('notify');
-   
+
     Route::any('addfee', function () {
         $datas = Cable::all();
         foreach ($datas as $data) {
@@ -250,10 +261,10 @@ Route::middleware(['auth'])->group(function () {
 
         return back()->with('status', 'verification-link-sent');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-   
+
 
     //the business domain start
-    
+
     Route::get('home', [BusinessController::class, 'dashboard'])->name('admin_home')->name('dashboard');
     Route::get('dashboard', [BusinessController::class, 'dashboard'])->name('admin_dashboard');
     Route::get('customized_domain', [BusinessController::class, 'customized_domain'])->name('customized_domain');
@@ -322,6 +333,20 @@ Route::middleware(['auth'])->group(function () {
         return 'domain';
     });
     // Define your routes here
+
+    //Fun GiveAway
+
+    Route::get('/create-giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'fun_giveaway_data'])->name('fun_giveaway_data');
+    Route::get('/my-giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'my_giveaway'])->name('my_giveaway');
+    Route::get('/giveaway_participant/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'giveaway_participants'])->name('giveaway_participants');
+    Route::get('/add_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'addQuestion'])->name('addQuestion');
+    Route::get('/delete_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_question'])->name('delete_question');
+    Route::get('/delete_giveaway/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_giveaway'])->name('delete_giveaway');
+    Route::post('/createDataGiveaway', [App\Http\Controllers\FunGiveAwayController::class, 'createDataGiveaway'])->name('createDataGiveaway');
+    Route::post('/storequestion', [App\Http\Controllers\FunGiveAwayController::class, 'storequestion'])->name('storequestion');
+
+
+    //End Fun Giveaway
 
     Route::post('/redo_transaction', [App\Http\Controllers\SubscriptionController::class, 'redo_transaction']);
     Route::get('/data', [App\Http\Controllers\SubscriptionController::class, 'admin_data'])->name('data');
@@ -405,6 +430,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         // Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
         Route::any('/superadmin', [App\Http\Controllers\SuperController::class, 'index'])->name('superadmin');
+        Route::any('/schedule_accounts', [App\Http\Controllers\SuperController::class, 'schedule_accounts'])->name('schedule_accounts');
         Route::any('/all_payment_transactions', [App\Http\Controllers\SuperController::class, 'payment_transactions'])->name('all_payment_transactions');
         Route::any('/all_withdrawals', [App\Http\Controllers\SuperController::class, 'all_withdrawals'])->name('all_withdrawals');
         Route::any('/approve_withdraw/{id}', [App\Http\Controllers\SuperController::class, 'approve_withdraw'])->name('approve_withdraw');
@@ -423,6 +449,7 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/admin_delete_duplicate/{type}/{id}', [App\Http\Controllers\SubscriptionController::class, 'admin_delete_duplicate'])->name('admin_delete_duplicate');
     });
 });
+Route::get('/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'giveawayHome'])->name('giveawayHome');
 
 //business domain end
 //the subdomains

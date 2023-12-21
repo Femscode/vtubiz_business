@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('com:send')->everyFiveMinutes();
         $schedule->command('command:run_schedule_purchase')->everyFiveMinutes();
+        $schedule->command('command:giveaway_schedule')->everyFiveMinutes();
     }
 
     /**

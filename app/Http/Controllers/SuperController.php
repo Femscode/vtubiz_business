@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Cable;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\ScheduleAccount;
 use Illuminate\Support\Facades\DB;
 use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,11 @@ class SuperController extends Controller
         $data['datas'] = Data::where('user_id', 0)->latest()->orderBy('network')->get();
 
         return view('super.data_price', $data);
+    }
+
+    public function schedule_accounts() {
+        $schedules = ScheduleAccount::get();
+        dd($schedules);
     }
     public function plan_status()
     {

@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Airtime;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
+use App\Models\ScheduleAccount;
+use App\Models\GiveawaySchedule;
 use App\Models\SchedulePurchase;
 use App\Models\DuplicateTransaction;
 use Illuminate\Support\Facades\Auth;
@@ -210,6 +212,14 @@ trait TransactionTrait
             $tranx->phone_number = $phone_number;
             $tranx->network = $network;
             $tranx->plan_id = $plan_id;
+            $tranx->save();
+            return $tranx->id;
+        } elseif ($title == 'Giveaway') {
+            $r_user->balance -= $amount;
+            $r_user->total_spent += $amount;
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+            $tranx->admin_after = $company->balance;
             $tranx->save();
             return $tranx->id;
         } elseif ($title == 'Airtime Purchase') {
@@ -646,5 +656,119 @@ trait TransactionTrait
                 return false;
             }
         }
+    }
+
+    public function run_data_giveaway()
+    {
+        // dd($request->all());
+
+        $recipients = GiveawaySchedule::where('status', 0)->get();
+        $purchase_status = [];
+        foreach ($recipients as $reci) {
+            if ($reci->type == 'data') {
+                $response = $this->handle_buy_data($reci->phone, $reci->network, $reci->plan_id, $reci->giveaway_id);
+            } elseif ($reci->type == 'airtime') {
+                $response = $this->handle_buy_airtime($reci->phone, $reci->network, $reci->amount, $reci->amoount, $reci->giveaway_id);
+            } else {
+               return true;
+            }
+            // dd($reci, $response);
+            if (is_object($response) && method_exists($response, 'getData')) {
+                $responseData = $response->getData();
+
+                if (is_object($responseData) && property_exists($responseData, 'success') && $responseData->success === false) {
+                    if (!is_object($response) || !property_exists($responseData, 'type') || $responseData->type === 'duplicate') {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Please kindly clear your pending transactions before proceeding',
+                            'auto_refund_status' => 'Nil',
+                            'data' => $purchase_status,
+                        ];
+                        return response()->json($response);
+                    }
+                }
+            }
+
+            array_push($purchase_status, $response);
+        }
+        $recipients->status = 1;
+        $recipients->save();
+        $response = [
+            'success' => true,
+            'message' => 'Purchase Successful! Check group transaction table to confirm. ',
+            'auto_refund_status' => 'Nil',
+            'data' => $purchase_status,
+        ];
+
+        return response()->json($response);
+        // return [$purchase_status,true];
+    }
+
+    private function handle_buy_data($phone, $network, $plan_id, $group_id = null)
+    {
+
+        $phone_number = $phone;
+        if (strlen($phone) == 10) {
+            $phone_number = "0" . $phone;
+        }
+
+        $data = Data::where('user_id', 0)->where('plan_id', $plan_id)->where('network', $network)->first();
+        $data_price =  $data->admin_price;
+        $real_dataprice = $data->data_price;
+        if ($data == null) {
+            $response = [
+                'success' => false,
+                'message' => 'Invalid Plan!',
+                'auto_refund_status' => 'Nil'
+            ];
+
+            return response()->json($response);
+        }
+        //check balance
+        if ($data->network == 1) {
+            $network_mi = 'MTN';
+        } elseif ($data->network == 2) {
+            $network_mi = 'GLO';
+        } elseif ($data->network == 3) {
+            $network_mi = "Airtel";
+        } else {
+            $network_mi = "9Mobile";
+        }
+        $details = $network_mi . " Data Purchase of " . $data->plan_name . " on " . $phone;
+        $client_reference =  'buy_data_' . Str::random(7);
+
+
+
+        //purchase the data
+
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $group_id, 2, $real_dataprice);
+        $transaction = Transaction::find($trans_id);
+        $transaction->group_id = $group_id;
+        $transaction->save();
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => array(
+                'network' => $network,
+                'mobileno' => $phone_number,
+                'dataplan' => $plan_id,
+                'client_reference' => $client_reference, //update this on your script to receive webhook notifications
+            ),
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        $response_json = json_decode($response, true);
+        curl_close($curl);
+        return $response_json;
     }
 }
