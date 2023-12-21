@@ -221,7 +221,7 @@ class FundingController extends Controller
                     ->first();
                 $giveaway->reference = $reference;
                 $giveaway->status = 1;
-                $giveaway > save();
+                $giveaway-> save();
             }
 
             $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
@@ -239,7 +239,7 @@ class FundingController extends Controller
                 ->first();
             $giveaway->reference = $reference;
             $giveaway->status = 0;
-            $giveaway > save();
+            $giveaway -> save();
             $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
             $response = Http::get($url);
         }
