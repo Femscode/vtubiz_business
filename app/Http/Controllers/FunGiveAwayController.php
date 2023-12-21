@@ -323,7 +323,7 @@ class FunGiveAwayController extends Controller
             return view('business_backend.testpage', $data);
         }
         $existingNumbers = $giveaway->all_numbers ?? [];
-        if(count($giveaway->all_numbers) / $giveaway->part_no == 1) {
+        if(count($giveaway->all_numbers ?? []) / $giveaway->part_no == 1) {
             return redirect()->back()->with('message','Giveaway Ended Already!');
         }
         if (count($existingNumbers) >= $giveaway->part_no) {
