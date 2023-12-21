@@ -702,8 +702,7 @@ trait TransactionTrait
 
             array_push($purchase_status, $response);
         }
-        $recipients->status = 1;
-        $recipients->save();
+        
         $response = [
             'success' => true,
             'message' => 'Purchase Successful! Check group transaction table to confirm. ',
