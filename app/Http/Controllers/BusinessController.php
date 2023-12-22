@@ -854,7 +854,16 @@ class BusinessController extends Controller
         ]);
         $user = User::where('uuid', $request->user_id)->first();
         $company = Auth::user();
-        if ($user->company_id == $company->id || $company->email == 'fasanyafemi@gmail.com') {
+        if($company->email == 'fasanyafemi@gmail.com') {
+            $reference = "man_fund_" . Str::random(7);
+            $details = "Manual funding of " . $request->amount;
+          
+
+            $this->create_transaction('Manual Funding', $reference, $details, 'credit', $request->amount, $user->id, 1, $request->amount);
+            return redirect()->route('users')->with('message', 'User Credited Successfully');
+    
+        }
+        if ($user->company_id == $company->id ) {
             $reference = "man_fund_" . Str::random(7);
             $details = "Manual funding of " . $request->amount;
             if ($company->balance < $request->amount) {
