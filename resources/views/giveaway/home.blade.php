@@ -5,8 +5,8 @@
 <head>
 	<title>{{ $giveaway->name }}</title>
 	<meta charset="utf-8" />
-	<meta name="description" content="Let's Bite Back!" />
-	<meta name="keywords" content="Let's Bite Back!" />
+	<meta name="description" content="Fun Giveaway By VTUBIZ" />
+	<meta name="keywords" content="Fun Giveaway By VTUBIZ" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="shortcut icon" href="https://cttaste.com/assets/img/fav_01.png">
 
