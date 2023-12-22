@@ -197,7 +197,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-6 col-sm-12">
                     <h1>{{ $giveaway->name }}</h1>
-                    <h4>You have been giving some questions by <span style='color:red'>{{ $giveaway->user->name }}</span>, answer the questions correctly to claim the giveaway.</h4>
+                    <h4>You have been giving some questions to answer for <span style='color:red'>{{ $giveaway->name }}</span>, answer the questions correctly to claim the giveaway.</h4>
                   
                 </div>
                 <div class="col-lg-12 col-md-6 col-sm-12">                

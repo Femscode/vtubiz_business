@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-	<title>VTUBIZ | GIVEAWAY</title>
+	<title>{{ $giveaway->name }}</title>
 	<meta charset="utf-8" />
 	<meta name="description" content="Let's Bite Back!" />
 	<meta name="keywords" content="Let's Bite Back!" />
