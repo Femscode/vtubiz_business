@@ -15,7 +15,9 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
-                <div class='alert alert-warning'>Tis the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways featuring data, airtime, and cash prizes in a very exciting way.</div>
+                <div style='font-size:17px; border-top:10px solid #856404;' class='alert alert-warning'>It's the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways of data, airtime, and cash prizes in a very exciting way</div>
+
+                {{-- <div class='alert alert-warning'>It's the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways of data, airtime, and cash prizes in a very exciting way.</div> --}}
                 <div class="row mb-5 mb-xl-8 g-5 g-xl-8">
 
                     <!--begin::Col-->

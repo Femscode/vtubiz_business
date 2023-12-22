@@ -9,15 +9,18 @@
 
 
 
-    <div class="row">
+    <div class="row mt-4">
 
         <div class="card mb-xl-10" style="border-left:5px solid #001f3f;background-color: hsl(210, 90%, 95%)">
             <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                <div class="card-title">
+                
                     <h2 class="fw-bolder">{{ $giveaway->name }} Details <span style='color:red'>(NGN{{
                             $giveaway->estimated_amount }})</span>
                     </h2>
-                </div>
+                    <div>
+                        <a href='/giveaway_participant/{{ $giveaway->slug }}' class='btn btn-secondary'>Back</a>
+                    </div>
+             
 
             </div>
         </div>

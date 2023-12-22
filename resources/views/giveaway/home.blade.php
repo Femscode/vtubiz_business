@@ -134,9 +134,9 @@
 											<div class="mt-2">
                                                 <input type='hidden' name='user_id' value='{{ $userId }}'/>
                                                 <input type='hidden' name='giveaway_id' value='{{ $giveaway->id }}'/>
-												<input class='m-2 form-control shadow-none'
+												<input required class='m-2 form-control shadow-none'
 													type="text" name='name' placeholder="Enter name">
-												<input class='m-2 form-control shadow-none' id='search_changeschool'
+												<input required class='m-2 form-control shadow-none' id='search_changeschool'
 													type="number" name='phone' placeholder="09000000000">
 												<div class="m-2 input-group-append">
 													<button type='submit'

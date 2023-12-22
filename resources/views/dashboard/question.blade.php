@@ -92,14 +92,9 @@
 
 
         <div class="card mb-xl-10">
+            
             <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                <div class="card-title">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        @foreach($tests as $test)
-
-
-
-                        <h3 style='color:black'>{{$test->name}} Questions</h3>
+                <h3 style='color:black'>{{$tests[0]->name}} Questions</h3>
 
                         <div>
                             <a href="#" class="btn btn-success mb-0" data-bs-toggle="modal"
@@ -107,35 +102,28 @@
             
                             <a href="/my-giveaway" class="btn btn-secondary">Back</a>
                         </div>
-                    </div>
-
-                </div>
-
+                  
             </div>
             <div class="card-body">
                 <div class="card-body py-3">
                     <!--begin::Table container-->
-                    <div class="table-responsive">
-                        <!--begin::Table-->
-
-
-                    </div>
+                  
+                    @foreach($tests as $test)
                     @foreach($test->questions as $ques)
 
                     <div class="col-xl-12">
                         <!--begin::List Widget 6-->
                         <div class="card card-xl-stretch mb-5 mb-xl-8">
                             <!--begin::Header-->
-                            <div class="card-header border-0 flex-wrap">
-                                <div class="card-title">
-                                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <div class="card-header flex-wrap border-0 flex-wrap">
+                              
                                         <h4 class="mb-sm-0 font-size-18">{{$ques->question}}</h4>
                                         <div>
                                             <a onclick='return confirm("Are you sure you want to delete this question?")' class='btn btn-danger btn-sm'
-                                                href='/delete_question/{{ $ques->id }}'>Remove</a>
+                                                href='/delete_question/{{ $ques->id }}'><i class='fa fa-trash'></i></a>
                                         </div>
-                                    </div>
-                                </div>
+                                  
+                              
 
                             </div>
                             <!--end::Header-->

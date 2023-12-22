@@ -553,6 +553,8 @@
     <script src="{{ asset('api_user/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
     <script src="{{ asset('api_user/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
+
 
     {{-- <script src="{{ asset('api_user/assets/js/pages/datatables.init.js')}}"></script> --}}
 

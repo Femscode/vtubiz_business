@@ -661,8 +661,10 @@ trait TransactionTrait
     public function run_data_giveaway()
     {
         // dd($request->all());
-
-        $recipients = GiveawaySchedule::where('status', 0)->get();
+        $tenMinutesAgo = Carbon::now()->subMinutes(10);
+        $recipients = GiveawaySchedule::where('status', 0)
+        ->where('created_at', '>=', $tenMinutesAgo)
+        ->get();
         // dd($recipients);
         $purchase_status = [];
         foreach ($recipients as $reci) {

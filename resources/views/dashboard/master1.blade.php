@@ -904,7 +904,7 @@
     <script src="{{ asset('assets/js/custom/utilities/modals/create-app.js')}}"></script>
     <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js')}}"></script>
     <!--end::Custom Javascript-->
-    <script src='/assets/js/professionallocker.js'></script>
+    {{-- <script src='/assets/js/professionallocker.js'></script> --}}
     <!--end::Javascript-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css" />
 

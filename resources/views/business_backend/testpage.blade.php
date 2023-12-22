@@ -68,7 +68,7 @@
     p {
         font-size: 20px;
         text-align: center;
-        width: 50%;
+        /* width: 50%; */
         margin: 1em auto 0;
         color: #1cbfd0;
         font-family: 'Grandstander', cursive;
@@ -212,7 +212,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Duration: {{$time}} Minutes</h2>
+                            <h2 class='text-white'>Duration: {{$time}} Minutes</h2>
                             <input type='hidden' value='{{$time}}' id='time'>
                           
                         </div>
