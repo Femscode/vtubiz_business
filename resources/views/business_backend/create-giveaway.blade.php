@@ -196,9 +196,9 @@
                                                 <option data-price="180" value="500MB">500MB</option>
                                                 <option data-price='290' value="1GB">1GB</option>
                                                 <option data-price='590' value="2GB">2GB</option>
-                                                <option data-price='820' value="3GB">3GB</option>
-                                                <option data-price='1500' value="5GB">5GB</option>
-                                                <option data-price='2800' value="10GB">10GB</option>
+                                                <option data-price='850' value="3GB">3GB</option>
+                                                <option data-price='1550' value="5GB">5GB</option>
+                                                <option data-price='2900' value="10GB">10GB</option>
                                             </select>
                                         </div>
                                         <div id='airtime_plan' style='display:none' class="col-md-6 mt-2">
@@ -369,9 +369,9 @@
                                                 <option data-price="180" value="500MB">500MB</option>
                                                 <option data-price='290' value="1GB">1GB</option>
                                                 <option data-price='590' value="2GB">2GB</option>
-                                                <option data-price='820' value="3GB">3GB</option>
-                                                <option data-price='1500' value="5GB">5GB</option>
-                                                <option data-price='2800' value="10GB">10GB</option>
+                                                <option data-price='850' value="3GB">3GB</option>
+                                                <option data-price='1550' value="5GB">5GB</option>
+                                                <option data-price='2900' value="10GB">10GB</option>
                                             </select>
                                         </div>
                                         <div id='q_airtime_plan' style='display:none' class="col-md-6 mt-2">
