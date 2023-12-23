@@ -118,6 +118,7 @@ class FunGiveAwayController extends Controller
 
         //check balance
         if ($request->giveaway_type == "Data") {
+            $data = Data::where('user_id',0)->where
             $amount = $request->no_winner * $request->winner_real_price;
         } else {
             if ($request->giveaway_type == 'Airtime') {

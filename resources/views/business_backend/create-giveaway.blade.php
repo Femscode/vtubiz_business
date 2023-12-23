@@ -609,7 +609,7 @@
            fd.append("part_no", $("#q_no_of_winners").val());
            fd.append("no_winner", $("#q_no_of_winners").val());
            fd.append("winner_price", $("#q_winner_price").val());
-           fd.append("winner_real_price",$("#raffle_winner_price").find('option:selected').data('price'));
+           fd.append("winner_real_price",$("#q_winner_price").find('option:selected').data('price'));
            fd.append("amount", $("#q_amount").val());
            fd.append('type','question');
            fd.append('giveaway_type',$("#qtype").val());
