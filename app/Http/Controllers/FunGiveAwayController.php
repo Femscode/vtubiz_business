@@ -152,7 +152,7 @@ class FunGiveAwayController extends Controller
             }
         }
 
-        // dd($amount,$request->all());
+        dd($amount,$request->all());
 
         if ($user->balance < $amount || $amount <= 100) {
             $response = [
