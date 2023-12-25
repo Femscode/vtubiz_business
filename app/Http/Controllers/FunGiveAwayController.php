@@ -479,43 +479,56 @@ class FunGiveAwayController extends Controller
     public function giveaway_participants($slug)
     {
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
-        $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
         $data['user'] = $user = Auth::user();
+        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') { 
+        $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
         if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
             $data['active'] = 'giveaway';
             return response()->view('dashboard.giveaway_participants', $data);
         
         }
         
-        return view('business_backend.giveaway_participants', $data);
+        return view('business_backend.giveaway_participants', $data); } else {
+            return redirect()->back()->with('message',"Access Denied");
+        }
     }
     public function giveaway_transactions($slug)
     {
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
+        $data['user'] = $user = $user = Auth::user();
+
+        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
         $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
         $data['transactions'] = GiveawaySchedule::where('giveaway_id', $giveaway->id)->latest()->get();
-        $data['user'] = $user = Auth::user();
         if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
             $data['active'] = 'giveaway';
             return response()->view('dashboard.giveaway_transactions', $data);
         
         }
 
-        return view('business_backend.giveaway_transactions', $data);
+        return view('business_backend.giveaway_transactions', $data); } else {
+            return redirect()->back()->with('messsage','Access Denied');
+        }
     }
     public function addQuestion($slug)
     {
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
         $data['user'] = $user = Auth::user();
-        $data['questions'] = Question::where('test_id', $giveaway->id)->get();
-        $giveaway = GiveAway::where('slug', $slug)->first();
-        $data['tests'] = GiveAway::with('my_questions')->where('id', $giveaway->id)->get();
-        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
-            $data['active'] = 'giveaway';
-            return response()->view('dashboard.question', $data);
-        
+        // dd($user, $giveaway);
+        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
+            $data['questions'] = Question::where('test_id', $giveaway->id)->get();
+            $giveaway = GiveAway::where('slug', $slug)->first();
+            $data['tests'] = GiveAway::with('my_questions')->where('id', $giveaway->id)->get();
+            if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+                $data['active'] = 'giveaway';
+                return response()->view('dashboard.question', $data);
+            
+            }
+            return view('business_backend.question', $data);
+        } else {
+            return redirect()->back()->with('message','Access Denied');
         }
-        return view('business_backend.question', $data);
+      
     }
     public function storequestion(Request $request)
     {
@@ -654,15 +667,19 @@ class FunGiveAwayController extends Controller
 
     public function delete_question($id)
     {
-        $user = Auth::user();
+        $user = $user =  Auth::user();
         $question = Question::find($id);
         $giveaway = GiveAway::find($question->give_away_id);
+        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
 
         if ($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
             $answers = Answer::where('question_id', $question->id)->delete();
             $question->delete();
             return redirect()->back()->with('message', 'Question Deleted Successfully!');
         } else {
+            return redirect()->back()->with('message', 'Access Denied!');
+        } } else {
+            
             return redirect()->back()->with('message', 'Access Denied!');
         }
     }

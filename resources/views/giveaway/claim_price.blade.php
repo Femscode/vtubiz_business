@@ -574,9 +574,24 @@
              .then((response) => {
                console.log(response, "the res");
                if(response.data == true) {
-                   Swal.fire('Giveaway Claimed',"Giveaway to be received in 2Min to 5Min time.",'success');
+                Swal.fire('Giveaway Claimed', 'Giveaway to be received in 2-5 minutes.', 'success')
+      .then((result) => {
+        // Check if the user clicked the "OK" button
+        if (result.isConfirmed) {
+          // Redirect the user to the desired URL
+          window.location.href = 'https://vtubiz.com';
+        }
+      });
                 } else {
                     Swal.fire('Giveaway Claimed By Winner Already',"",'info');
+                    Swal.fire('Giveaway Claimed By Winner Already', '', 'info')
+      .then((result) => {
+        // Check if the user clicked the "OK" button
+        if (result.isConfirmed) {
+          // Redirect the user to the desired URL
+          window.location.href = 'https://vtubiz.com';
+        }
+      });
                 }
              })
 

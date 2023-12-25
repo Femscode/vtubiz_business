@@ -51,8 +51,15 @@
                         @if($tranx->status == 1)
                         <tr class='alert alert-success'>
 
-                            <td>{{ $tranx->name }}(Paid)</td>
-                            <td>{{ $tranx->phone }}</td>
+                            <td>{{ $tranx->name }}(Credited)</td>
+                            <td> 
+                                @if($tranx->type == 'cash')
+                                {{ $tranx->account_no }}, {{ $tranx->bank_name }}, {{ $tranx->account_name }}
+                                @else 
+                                {{ $tranx->phone }}
+                                @endif 
+                            </td>
+                           
                            
                             <td><a class='btn btn-success' href='https://wa.me/234{{ $tranx->phone }}'>Message</a>
                             </td>
@@ -62,7 +69,12 @@
                         <tr>
 
                             <td>{{ $tranx->name }}</td>
-                            <td>{{ $tranx->phone }}</td>
+                            <td> @if($tranx->type == 'cash')
+                                {{ $tranx->account_no }}, {{ $tranx->bank_name }}, {{ $tranx->account_name }}
+                                @else 
+                                {{ $tranx->phone }}
+                                @endif 
+                             </td>
                            
                             <td><a class='btn btn-success' href='https://wa.me/234{{ $tranx->phone }}'>Message</a>
                             </td>

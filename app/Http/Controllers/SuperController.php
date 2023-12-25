@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
+use App\Models\GiveAway;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\ScheduleAccount;
@@ -47,6 +48,19 @@ class SuperController extends Controller
     public function schedule_accounts() {
         $schedules = ScheduleAccount::get();
         dd($schedules);
+    }
+    public function admin_giveaway() {
+        $data['user'] = $user = Auth::user();
+        if($user->email == 'fasanyafemi@gmail.com') {
+            $data['giveaways'] = GiveAway::latest()->get();
+            $data['active'] = 'giveaway';
+           
+            return view('super.giveaway',$data);
+
+        }
+        else {
+            return redirect()->back()->with('message','Access Denied');
+        }
     }
     public function plan_status()
     {

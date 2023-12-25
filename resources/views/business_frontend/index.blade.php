@@ -20,6 +20,9 @@
   <link rel="preload" href="frontpage/assets/css/fonts/thicccboi.css" as="style" onload="this.rel='stylesheet'"> --}}
   {{--
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap">
 
 </head>
 
@@ -338,16 +341,22 @@
       <div class="container pt-10 pt-md-14 pb-8 text-center">
         <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
           <div class="col-lg-7">
-            <figure><img class="w-auto"
+            {{-- <figure><img class="w-auto"
                 src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
+                alt="headin" /></figure> --}}
+            <figure>
+              <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Merry Christmas & Happy New Year In Advance</h2>
+              <img class="w-auto"
+                src="{{ asset('assets/img/xmas.png') }}"
+                srcset="{{ asset('assets/img/xmas.png') }}"
                 alt="headin" /></figure>
           </div>
           <!-- /column -->
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-5 text-center text-lg-start">
             <h1 class="display-1 mb-5 mx-md-n5 mx-lg-0">Top Up, <span style='color:#fb9129'>Pay Bills, <br></span> Stay
               Connected.</h1>
-            {{-- <p class="lead fs-lg mb-7">Explore a world of convenience.</p> --}}
+            <p class="lead fs-lg mb-7">It's the festive period, make use of our fun giveaway feature to share happiness in an exciting way!</p>
             <span><a href='/login' class="btn btn-primary border-0 me-2">Login</a></span>
             <span><a href='/register' style='background-color:#001f3f' class="btn btn-primary border-0  me-2">Create
                 Account</a></span><br>
@@ -1151,7 +1160,7 @@
   <script data-cfasync="false" src="frontpage/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="frontpage/assets/js/plugins.js"></script>
   <script src="frontpage/assets/js/theme.js"></script>
-  <script src='/assets/js/professionallocker.js'></script>
+  {{-- <script src='/assets/js/professionallocker.js'></script> --}}
 
 </body>
 
