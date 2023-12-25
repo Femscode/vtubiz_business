@@ -341,16 +341,24 @@
       <div class="container pt-10 pt-md-14 pb-8 text-center">
         <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
           <div class="col-lg-7">
-            {{-- <figure><img class="w-auto"
+            {{-- <figure>
+              <img class="w-auto"
                 src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
-                alt="headin" /></figure> --}}
+                alt="headin" />
+              </figure> --}}
             <figure>
               <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Merry Christmas & Happy New Year In Advance</h2>
-              <img class="w-auto"
+              {{-- <img class="w-auto"
                 src="{{ asset('assets/img/xmas.png') }}"
                 srcset="{{ asset('assets/img/xmas.png') }}"
-                alt="headin" /></figure>
+                alt="headin" /> --}}
+                <img class="w-auto"
+                src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
+                srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
+                alt="headin" />
+              
+              </figure>
           </div>
           <!-- /column -->
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-5 text-center text-lg-start">
