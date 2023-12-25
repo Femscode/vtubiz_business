@@ -386,10 +386,10 @@ class FunGiveAwayController extends Controller
 
         $data['rand_no'] = $rand_no;
         $data['won'] = 1;
-        $data['mtn'] = $mtn = Data::where('user_id', 0)->where('network', 1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
-        $data['glo'] = $glo = Data::where('user_id', 0)->where('network', 2)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
-        $data['airtel'] = $airtel = Data::where('user_id', 0)->where('network', 3)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
-        $data['n_mobile'] = $n_mobile = Data::where('user_id', 0)->where('network', 4)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['mtn'] = $mtn = Data::where('user_id', 0)->where('network', 1)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['glo'] = $glo = Data::where('user_id', 0)->where('network', 2)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['airtel'] = $airtel = Data::where('user_id', 0)->where('network', 3)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['n_mobile'] = $n_mobile = Data::where('user_id', 0)->where('network', 4)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
         //    dd($mtn, $airtel, $glo, $n_mobile);
         if ($giveaway->type == 'question_data' || $giveaway->type == 'question_airtime' || $giveaway->type == 'question_cash') {
             if ($giveaway->max_winners > 0) {
