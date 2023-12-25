@@ -348,8 +348,8 @@
             <figure>
               <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Merry Christmas & Happy New Year In Advance</h2>
               <img class="w-auto"
-                src="{{ asset('assets/img/xmas.jpg') }}"
-                srcset="{{ asset('assets/img/xmas.jpg') }}"
+                src="{{ asset('assets/img/xmas.png') }}"
+                srcset="{{ asset('assets/img/xmas.png') }}"
                 alt="headin" /></figure>
           </div>
           <!-- /column -->
