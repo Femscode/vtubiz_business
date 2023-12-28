@@ -59,7 +59,9 @@
                                     
                                     </td>
                                     <td>
-                                        <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
+                                        <a href='/fund_wallet/{{ $tranx->user->uuid ?? "" }}' class='btn btn-warning btn-sm'>Fund Wallet</a>
+                                        <a href='https://wa.me/{{ substr($tranx->user->phone ?? "09058744473", 1) }}' class='btn btn-success btn-sm'>Message</a>
+                                        <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-info btn-sm'>Print</a>
                                     </td>
                                 </tr>
                                 @endforeach
