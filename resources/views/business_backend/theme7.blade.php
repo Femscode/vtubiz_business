@@ -10,8 +10,9 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
+    {{--
     <link href="{{ asset('phuz_asset/assets/img/favicon.png')}}" rel="icon">
-    <link href="{{ asset('phuz_asset/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+    <link href="{{ asset('phuz_asset/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon"> --}}
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,22 +49,26 @@
         <div class="container-fluid d-flex align-items-center justify-content-between">
 
             <a href="index.html" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
-                <!-- Uncomment the line below if you also wish to use an image logo -->
-                <!-- <img src="{{ asset('phuz_asset/assets/img/logo.png')}}" alt=""> -->
+
+                @if($user->logo !== null)
+                <img class="rounded-circle header-profile-user"
+                    src="https://vtubiz.com/public/brand_images/{{ $user->logo}}" style='width:50px;height:50px' />
+                @else
                 <h1>{{ $user->brand_name }}<span>.</span></h1>
+                @endif
             </a>
 
             <nav id="navbar" class="navbar">
                 <ul>
 
-                  
+
 
                     <li><a class="nav-link scrollto" href="#">Home</a></li>
                     <li><a class="nav-link scrollto" href="#about">About Us</a></li>
                     <li><a class="nav-link scrollto" href="#services">Services</a></li>
                     <li><a class="nav-link scrollto" href="#pricing">Our Pricing</a></li>
                     <li><a href="blog.html">Features</a></li>
-                   
+
                     <li><a class="nav-link scrollto" href="#contact">Contact Us</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle d-none"></i>
@@ -77,7 +82,13 @@
     <section id="hero-animated" class="hero-animated d-flex align-items-center">
         <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative"
             data-aos="zoom-out">
+            @if($user->image_1 !== null )
+            <img src="{{ asset('website_images/'.$user->image_1) }}" alt="" style='border-radius:15px'
+                class="img-fluid w-100">
+            @else
             <img src="{{ asset('phuz_asset/assets/img/hero-carousel/hero-carousel-3.svg')}}" class="img-fluid animated">
+            @endif
+
             <h2>Welcome to <span>{{ $user->brand_name }}</span></h2>
             <p>{{ $user->heading_1 ?? "Top-Up, Pay Bills, Stay Connected"}}.</p>
             <div class="d-flex">
@@ -331,13 +342,21 @@
                     <div
                         class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
                         <h3>About <em>Us</em>.</h3>
-                        <p> {{ $user->about_us  ?? " We                                provide a comprehensive platform for all your data, airtime, electricity, and cable                                subscription needs. Our mission is to empower your digital lifestyle through                                affordability, automation, and lightning-fast transactions."}}.</p>
+                        <p> {{ $user->about_us ?? " We provide a comprehensive platform for all your data, airtime,
+                            electricity, and cable subscription needs. Our mission is to empower your digital lifestyle
+                            through affordability, automation, and lightning-fast transactions."}}.</p>
                         <a class="cta-btn align-self-start" href="/register">Get Started</a>
                     </div>
 
                     <div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center">
                         <div class="img">
+                            @if($user->image_2 !== null )
+                            <img src="{{ asset('website_images/'.$user->image_2) }}" alt="" style='border-radius:15px'
+                                class="img-fluid w-100">
+                            @else
                             <img src="{{ asset('phuz_asset/assets/img/cta.jpg')}}" alt="" class="img-fluid">
+                            @endif
+
                         </div>
                     </div>
 
@@ -352,13 +371,14 @@
 
                 <div class="row g-0">
                     <div class="col-lg-6 video-play position-relative">
-                        <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox play-btn"></a>
+                        <a href="#" class="glightbox play-btn"></a>
                     </div>
                     <div class="col-lg-6">
                         <div class="content d-flex flex-column justify-content-center h-100">
-                            <h3>{{ $user->heading_2 ?? "                               Top Up Airtime, Data, Cable Subscriptions, and More, All at Your Convenience." }}</h3>
+                            <h3>{{ $user->heading_2 ?? " Top Up Airtime, Data, Cable Subscriptions, and More, All at
+                                Your Convenience." }}</h3>
                             <p class="fst-italic">
-                               {{ $user->sub_heading_2 ?? "Simplify Your Digital Transactions" }}
+                                {{ $user->sub_heading_2 ?? "Simplify Your Digital Transactions" }}
                             </p>
                             {{-- <ul>
                                 <li><i class="bi bi-check-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo
@@ -433,7 +453,7 @@
                     <div class="tab-pane active show" id="tab-1">
                         <div class="row gy-4">
                             <div class="col-lg-8 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="100">
-                              
+
                                 <p>
                                     Payment and Purchases fully Automated.
                                 </p>
@@ -448,27 +468,28 @@
                     <div class="tab-pane" id="tab-2">
                         <div class="row gy-4">
                             <div class="col-lg-8 order-2 order-lg-1">
-                              
+
                                 <p>
-                                    Experience hassle-free transaction retries with our one-click Transaction Redo feature.
+                                    Experience hassle-free transaction retries with our one-click Transaction Redo
+                                    feature.
                                 </p>
-                              
+
                             </div>
                             <div class="col-lg-4 order-1 order-lg-2 text-center">
                                 <img src="{{ asset('phuz_asset/assets/img/features-6.svg')}}" alt="" class="img-fluid">
                             </div>
-                           
+
                         </div>
                     </div><!-- End Tab Content 2 -->
 
                     <div class="tab-pane" id="tab-3">
                         <div class="row gy-4">
                             <div class="col-lg-8 order-2 order-lg-1">
-                               
+
                                 <p>
                                     Simplify bulk purchases with our streamlined process.
                                 </p>
-                               
+
                             </div>
                             <div class="col-lg-4 order-1 order-lg-2 text-center">
                                 <img src="{{ asset('phuz_asset/assets/img/features-3.svg')}}" alt="" class="img-fluid">
@@ -479,11 +500,12 @@
                     <div class="tab-pane" id="tab-4">
                         <div class="row gy-4">
                             <div class="col-lg-8 order-2 order-lg-1">
-                               
+
                                 <p>
-                                    Simplify future purchases by saving contacts, decoder numbers, and meter numbers with our 'Add Up Beneficiaries' feature.
+                                    Simplify future purchases by saving contacts, decoder numbers, and meter numbers
+                                    with our 'Add Up Beneficiaries' feature.
                                 </p>
-                              
+
                             </div>
                             <div class="col-lg-4 order-1 order-lg-2 text-center">
                                 <img src="{{ asset('phuz_asset/assets/img/features-4.svg')}}" alt="" class="img-fluid">
@@ -494,11 +516,11 @@
                     <div class="tab-pane" id="tab-5">
                         <div class="row gy-4">
                             <div class="col-lg-8 order-2 order-lg-1">
-                               
+
                                 <p>
                                     Plan your purchases ahead with our 'Schedule for Later Purchase' feature.
                                 </p>
-                               
+
                             </div>
                             <div class="col-lg-4 order-1 order-lg-2 text-center">
                                 <img src="{{ asset('phuz_asset/assets/img/features-5.svg')}}" alt="" class="img-fluid">
@@ -513,7 +535,7 @@
                                 <p>
                                     Count on our 24/7 support system for assistance anytime you need it.
                                 </p>
-                               
+
                             </div>
                             <div class="col-lg-4 order-1 order-lg-2 text-center">
                                 <img src="{{ asset('phuz_asset/assets/img/features-6.svg')}}" alt="" class="img-fluid">
@@ -655,7 +677,7 @@
         </section><!-- End Services Section --> --}}
 
         <!-- ======= Testimonials Section ======= -->
-        <section id="testimonials" class="testimonials">
+        {{-- <section id="testimonials" class="testimonials">
             <div class="container" data-aos="fade-up">
 
                 <div class="testimonials-slider swiper">
@@ -771,7 +793,8 @@
                 </div>
 
             </div>
-        </section><!-- End Testimonials Section -->
+        </section> --}}
+
 
         <!-- ======= Pricing Section ======= -->
         <section id="pricing" class="pricing">
@@ -806,7 +829,7 @@
                                     </tbody>
                                 </table>
                                 <div class="table_btn"> <a href="/buydata"
-                                        class="btn btn-warning mx-auto d-block">Purchase Now</a>
+                                        class="btn btn-dark mx-auto d-block">Purchase Now</a>
                                 </div>
                             </div>
                         </div>
@@ -837,7 +860,7 @@
                                     </tbody>
                                 </table>
                                 <div class="table_btn"> <a href="/buydata"
-                                        class="btn btn-warning mx-auto d-block">Purchase Now</a>
+                                        class="btn btn-dark mx-auto d-block">Purchase Now</a>
                                 </div>
                             </div>
                         </div>
@@ -868,7 +891,7 @@
                                     </tbody>
                                 </table>
                                 <div class="table_btn"> <a href="/buydata"
-                                        class="btn btn-warning mx-auto d-block">Purchase Now</a>
+                                        class="btn btn-dark mx-auto d-block">Purchase Now</a>
                                 </div>
                             </div>
                         </div>
@@ -899,7 +922,7 @@
 
                                     </tbody>
                                 </table>
-                                <div class="table_btn"> <a href="/buydata" class="btn btn-warning mx-auto d-block"><i
+                                <div class="table_btn"> <a href="/buydata" class="btn btn-dark mx-auto d-block"><i
                                             class="bi bi-cart"></i>Purchase Now</a></div>
                             </div>
                         </div>
@@ -1035,7 +1058,8 @@
 
                 <div class="section-header">
                     <h2>Contact Us</h2>
-                    {{-- <p>Ea vitae aspernatur deserunt voluptatem impedit deserunt magnam occaecati dssumenda quas ut ad
+                    {{-- <p>Ea vitae aspernatur deserunt voluptatem impedit deserunt magnam occaecati dssumenda quas ut
+                        ad
                         dolores adipisci aliquam.</p> --}}
                 </div>
 
@@ -1062,7 +1086,7 @@
                                 <i class="bi bi-geo-alt flex-shrink-0"></i>
                                 <div>
                                     <h4>Location:</h4>
-                                    <p>Abeokuta, Ogun State</p>
+                                    <p>Lagos State</p>
                                 </div>
                             </div><!-- End Info Item -->
 
@@ -1132,8 +1156,8 @@
                         <div class="footer-info">
                             <h3>{{ $user->brand_name }}</h3>
                             <p>
-                               Abeokuta <br>
-                                Ogun State<br><br>
+                                Lagos State
+                                <br><br>
                                 <strong>Phone:</strong> +234 {{ $user->phone }}<br>
                                 <strong>Email:</strong> {{ $user->email }}<br>
                             </p>
