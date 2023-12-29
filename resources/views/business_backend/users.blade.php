@@ -10,31 +10,13 @@
 
     <div class="row">
 
-        <div class="col-lg-12">
-
-            <div class="row mb-3">
-                <div class="col-xl-4 col-sm-6">
-                    <div class="mt-2">
-                        <h5>User Management</h5>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- end row -->
-
-        </div>
-    </div>
-
-    <div class="row">
-
         <!--begin::Content-->
         <div class="col-md-12">
             <!--begin::Card-->
             <div class="card card-custom">
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Data Prices
+                        <h3 class="card-label">User Management
                         </h3>
                     </div>
 

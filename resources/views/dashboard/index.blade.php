@@ -341,12 +341,13 @@
                     <div class="card-body d-flex flex-column align-items-start justify-content-start">
                         <div class="p-1 flex-grow-1">
                             <h3 class="text-white font-weight-bolder line-height-lg mb-5">
-                                Kindly follow our 
-                                <br>social media pages 
+                                Join our Whatsapp Community 
+                                <br>to get first hand update about our services.
                             </h3>
-                            <a href='{{ $company->facebook }}' class='btn btn-sm btn-primary'>Facebook</a>
+                            <p>Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.</p>
+                            {{-- <a href='{{ $company->facebook }}' class='btn btn-sm btn-primary'>Facebook</a>
                             <a href='{{ $company->twitter }}' class='btn btn-sm btn-info'>Twitter</a>
-                            <a href='https://www.instagram.com/vtubiz/' class='btn btn-sm btn-warning'>Instagram</a>
+                            <a href='https://www.instagram.com/vtubiz/' class='btn btn-sm btn-warning'>Instagram</a> --}}
                             {{-- <a href='btn btn-sm'>Facebook</a> --}}
                           
                                
