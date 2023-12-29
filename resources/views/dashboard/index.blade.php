@@ -344,7 +344,7 @@
                                 Join our Whatsapp Community 
                                 <br>to get first hand update about our services.
                             </h3>
-                            <p>Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.</p>
+                            <p class='text-white'>Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.</p>
                             {{-- <a href='{{ $company->facebook }}' class='btn btn-sm btn-primary'>Facebook</a>
                             <a href='{{ $company->twitter }}' class='btn btn-sm btn-info'>Twitter</a>
                             <a href='https://www.instagram.com/vtubiz/' class='btn btn-sm btn-warning'>Instagram</a> --}}

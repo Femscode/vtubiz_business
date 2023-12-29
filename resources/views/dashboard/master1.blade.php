@@ -786,6 +786,11 @@
                                             {{-- <a class='btn btn-success btn-sm' href='/withdraw'>Withdraw Funds</a>
                                             --}}
                                         </div>
+
+                                        
+                                        <p class='text-white'>Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join our Whatsapp Community 
+                                            to get first hand update about our services.</p>
+                                       
                                         <!--end::Description-->
                                     </h1>
 
