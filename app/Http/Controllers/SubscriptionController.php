@@ -273,7 +273,7 @@ class SubscriptionController extends Controller
         // dd($check);
         //purchase the data
         //just to replace env
-        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $phone_number, $request->network, $request->plan);
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 3, $real_dataprice, $phone_number, $request->network, $request->plan);
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -365,7 +365,7 @@ class SubscriptionController extends Controller
         }
 
         //purchase the data
-        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice);
+        $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 3, $real_dataprice);
         $transaction = Transaction::find($trans_id);
         $transaction->group_id = $group_id;
         $transaction->save();
@@ -736,7 +736,7 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
             //purchase the data
-            $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
+            $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 3, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -832,7 +832,7 @@ class SubscriptionController extends Controller
             }
 
             //purchase the data
-            $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 2, $real_dataprice, $phone_number, $request->network, $request->plan);
+            $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 3, $real_dataprice, $phone_number, $request->network, $request->plan);
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -1311,7 +1311,7 @@ class SubscriptionController extends Controller
         }
 
         //purchase the airtime
-        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 2, $real_airtimeprice, $phone_number, $request->network, $request->amount);
+        $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 3, $real_airtimeprice, $phone_number, $request->network, $request->amount);
 
         $curl = curl_init();
         curl_setopt_array($curl, array(

@@ -57,8 +57,27 @@
                                         class='btn btn-success'>Verify</a></td>
 
                             </tr>
+                            @elseif($tranx->status == 3)
+                             
+                            <tr class='alert alert-warning'>
+                                <td>{{ $tranx->user->name }}<br>
+                                    <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
+                                        $tranx->user->phone }}</a>
+                                </td>
+                                <td>{{ $tranx->title }}</td>
+                                <td>₦{{ number_format($tranx->amount,2) }}</td>
+                                <td>{{ $tranx->description }}</td>
+                                <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
+                                    number_format($tranx->admin_after) }}</td>
+                                <td>
+                                  
+                                    <span class='btn-sm btn btn-warning'>Pending</span>
+                                   
+                                </td>
+                                <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
+                            </tr>
                             @elseif($tranx->status == 0)
-
+                            
                             <tr class='alert alert-danger'>
                                 <td>{{ $tranx->user->name }}<br>
                                     <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{

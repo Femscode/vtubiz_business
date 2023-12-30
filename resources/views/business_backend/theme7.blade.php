@@ -93,7 +93,7 @@
             <p>{{ $user->heading_1 ?? "Top-Up, Pay Bills, Stay Connected"}}.</p>
             <div class="d-flex">
                 <a href="/register" class="btn-get-started scrollto">Get Started</a>
-                <a href="/login" class="glightbox btn-watch-video d-flex align-items-center"><span>Login</span></a>
+                <a href="/login" class="btn-watch-video d-flex align-items-center"><span>Login</span></a>
             </div>
         </div>
     </section>
