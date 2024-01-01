@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col text-end">
                                   
-                                    <a href='/my-giveaway' class="btn-sm btn btn-secondary">Back</a>
+                                    <a href='/my-giveaway' class="btn btn-secondary">Back</a>
                                 </div>
                             </div>
 
@@ -41,13 +41,13 @@
                                 <h4 class='fw-bolder text-center'>Create New Giveaway</h4>
 
                                 <div class="btn-group btn-group-example mb-3 col-md-12" role="group">
-                                    <button id='raffle_btn' type="button" class="btn btn-outline-secondary col-md-3"
-                                        style='background-color:#d4edda;color:#155724;border-color:#d4edda'>
+                                    <button id='raffle_btn' type="button" style='background:grey;color:#fff' class="btn btn-rounded btn-outline-secondary col-md-3"
+                                        style=''>
                                         Raffle Draw
                                     </button>
                                     <button id='q_and_a_button' type="button"
-                                    style='background-color:#fff;color:#155724;border-color:#d4edda'                                        
-                                        class="btn btn-outline-secondary col-md-3">
+                                                                        
+                                        class="btn btn-rounded btn-outline-secondary col-md-3">
                                         Questions & Answers
                                     </button>
                                 </div>
@@ -57,9 +57,9 @@
                                     <div class="form-group row m-2">
 
                                         <div class="card-body">
-                                            <h4 class="card-title mb-0">Quick Guide</h4>
+                                            <h4 class="card-title mb-0">New to creating raffle draw giveaways? Click<a style='color:red;cursor:pointer' id='raffle_quick_quide_btn'> here</a> for a Quick Guide</h4>
 
-                                            <div class="row">
+                                            <div style='display:none' class="row" id='raffle_quick_quide'>
                                                 <div class="col-xl-12">
                                                     <div class="mt-4">
 
@@ -105,7 +105,7 @@
                                                                            <ol>
                                                                             <li>Fill all the neccessary fields below appropriately.</li>
                                                                             <li>A live link will be generated after clicking on the create button.</li>
-                                                                            <li>Share this link on your social media pages for your loved ones to participate.</li>
+                                                                            <li>Share the link for your audience to participate.</li>
                                                                             
                                                                            </ol>
 
@@ -156,7 +156,7 @@
                                             <label class='fw-bolder'>Giveaway Name</label>
                                             <input required name="raffle_name" id='raffle_name'
                                                 class="form-control form-control-lg form-control-solid" type="text"
-                                                placeholder="Enter a befitting name" />
+                                                placeholder="Enter a be-fitting name" />
 
                                         </div>
                                     </div>
@@ -166,7 +166,7 @@
                                             <label class='fw-bolder'>Participant No.</label>
                                             <input required name="raffle_part_no" id='raffle_part_no'
                                                 class="form-control form-control-lg form-control-solid" type="number"
-                                                placeholder="Max No. Of Participant" />
+                                                placeholder="Max. No. Of Participant" />
 
                                         </div>
                                     </div>
@@ -232,9 +232,9 @@
                                     <div class="form-group row m-2">
 
                                         <div class="card-body">
-                                            <h4 class="card-title mb-0">Quick Guide</h4>
+                                            <h4 class="card-title mb-0">New to creating Q & A giveaways? Click <a id='q_quick_quide_btn' style='color:red;cursor:pointer'>here </a> for a Quick Guide.</h4>
 
-                                            <div class="row">
+                                            <div class="row" id='q_quick_quide' style='display:none'>
                                                 <div class="col-xl-12">
                                                     <div class="mt-4">
 
@@ -329,7 +329,7 @@
                                             <label class='fw-bolder'>Giveaway Name</label>
                                             <input required name="q_name" id='q_name'
                                                 class="form-control form-control-lg form-control-solid" type="text"
-                                                placeholder="Give your giveaway a befitting name" />
+                                                placeholder="Enter a be-fitting name" />
 
                                         </div>
                                     </div>
@@ -339,7 +339,7 @@
                                             <label class='fw-bolder'>No. Of Lucky Winners</label>
                                             <input required name="q_no_of_winners" id='q_no_of_winners'
                                                 class="form-control form-control-lg form-control-solid" type="number"
-                                                placeholder="Input the max number of the very first amount of people to get your questions corrected" />
+                                                placeholder="Max. No. of People that can get your questions correctly" />
 
                                         </div>
                                     </div>
@@ -349,7 +349,7 @@
                                             <label class='fw-bolder'>Time(In Min)</label>
                                             <input required name="q_time" id='q_time'
                                                 class="form-control form-control-lg form-control-solid" type="number"
-                                                placeholder="Input the duration you're giving each participant to finish answering your questions" />
+                                                placeholder="Quiz duration" />
 
                                         </div>
                                     </div>
@@ -421,6 +421,26 @@
 
 <script>
     $(document).ready(function() {
+        $("#raffle_quick_quide_btn").click(function() {
+            if ($("#raffle_quick_quide").is(":visible")) {
+                // If the element is currently visible, hide it
+                $("#raffle_quick_quide").hide();
+            } else {
+                // If the element is currently hidden, show it
+                $("#raffle_quick_quide").show();
+            }
+        });
+        $("#q_quick_quide_btn").click(function() {
+            if ($("#q_quick_quide").is(":visible")) {
+                // If the element is currently visible, hide it
+                $("#q_quick_quide").hide();
+            } else {
+                // If the element is currently hidden, show it
+                $("#q_quick_quide").show();
+            }
+        });
+
+       
      $("#raffle_form").on('submit', async function(e) {
        e.preventDefault();      
        var amount = $("#raffle_amount").val()           
@@ -609,7 +629,7 @@
            fd.append("part_no", $("#q_no_of_winners").val());
            fd.append("no_winner", $("#q_no_of_winners").val());
            fd.append("winner_price", $("#q_winner_price").val());
-           fd.append("winner_real_price",$("#raffle_winner_price").find('option:selected').data('price'));
+           fd.append("winner_real_price",$("#q_winner_price").find('option:selected').data('price'));
            fd.append("amount", $("#q_amount").val());
            fd.append('type','question');
            fd.append('giveaway_type',$("#qtype").val());
@@ -664,16 +684,16 @@
          $("#raffle_btn").on('click', function() {
             $("#raffle").show()
             $("#q_and_a").hide()
-            $("#raffle_btn").css('background','#d4edda')
-            $("#raffle_btn").css('color','#155724')
+            $("#raffle_btn").css('background','grey')
+            $("#raffle_btn").css('color','#fff')
             $("#q_and_a_button").css('background','white')
             $("#q_and_a_button").css('color','black')
         })
         $("#q_and_a_button").on('click', function() {
             $("#raffle").hide()
             $("#q_and_a").show()
-            $("#q_and_a_button").css('background','#d4edda')
-            $("#q_and_a_button").css('color','#155724')
+            $("#q_and_a_button").css('background','grey')
+            $("#q_and_a_button").css('color','#fff')
             $("#raffle_btn").css('background','white')
             $("#raffle_btn").css('color','black')
         })
@@ -777,6 +797,7 @@
         @if (session('message'))
         Swal.fire('Success!',"{{ session('message') }}",'success');
         @endif
+
 
      });
       
