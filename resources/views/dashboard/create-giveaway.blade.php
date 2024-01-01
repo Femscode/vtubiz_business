@@ -57,7 +57,7 @@
                                     <div class="form-group row m-2">
 
                                         <div class="card-body">
-                                            <h4 class="card-title mb-0">New to creating raffle draw giveaways? Click<a style='color:red;cursor:pointer' id='raffle_quick_quide_btn'> here</a> for a Quick Guide</h4>
+                                            <p class="card-title mb-0">New to creating raffle draw giveaways? Click<a style='color:red;cursor:pointer' id='raffle_quick_quide_btn'> here</a> for a Quick Guide</p>
 
                                             <div style='display:none' class="row" id='raffle_quick_quide'>
                                                 <div class="col-xl-12">
