@@ -114,7 +114,13 @@
             </div>
 
             @endif --}}
-            <div class='alert alert-warning'>Tis the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways featuring data, airtime, and cash prizes in a very exciting way. Click <a href='/my-giveaway'>here</a> to create.</div>
+            <div class='alert alert-warning'>
+                Join our Whatsapp Community 
+                to get first hand update about our services.
+
+            Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.
+           
+            </div>
                
 
         </div>
