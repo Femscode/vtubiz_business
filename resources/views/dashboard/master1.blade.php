@@ -735,7 +735,11 @@
 
                                     <h1 style=" 'Lato', sans-serif;"
                                         class="page-heading d-flex text-white fw-bold fs-2 flex-column justify-content-center my-0 mb-2">
+                                        @if($user->created_at->isToday())
+                                        Thanks for joining us, {{ $user->name }}.<br>
+                                        @else
                                         Welcome back, {{ $user->name }}.
+                                        @endif
                                         <!--begin::Description-->
                                         <div class="card-title d-flex flex-column mt-4">
                                             <!--begin::Info-->

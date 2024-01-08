@@ -97,17 +97,17 @@
     $("#u_amount").on('input', function() {
         price = $("#u_amount").val()
        
-        if (price <= 500) {
+        if (price <= 1000) {
             charges = 10;
             price -= charges;
-        } else if (price < 1000) {
+        } else if (price < 3000) {
             charges = 30;
             price -= charges;
-        } else if (price < 5000) {
-            charges = 50;
-            price -= charges;
+        // } else if (price < 5000) {
+        //     charges = 50;
+        //     price -= charges;
         } else {
-            charges = 100;
+            charges = 50;
             price -= charges;
         }
         $("#show_charge").text("Charges : NGN"+charges)
