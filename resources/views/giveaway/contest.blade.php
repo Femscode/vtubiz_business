@@ -262,7 +262,7 @@
                                            <br>
                                            @if($won == 1)
                                             <div class="badge badge-light-dark p-4">Congratulations, You Won.<br> Today is indeed your lucky day!</div><br>
-                                            <a href='/claim_giveaway/{{ $giveaway->id }}/{{ $participant->user_id }}/{{ $rand_no }}' class='btn btn-success'>Claim Your Giveaway Price</a>
+                                            <a href='/claim_giveaway/{{ $giveaway->id }}/{{ $participant->user_id }}/{{ $rand_no }}' class='btn btn-success'>Click Here To Claim Your Giveaway Price</a>
                                             @else 
                                             <div class="badge badge-light-dark p-4">Opps, You didn't win the giveaway, so sorry about that!</div><br>
                                             <label class="form-label" style='color:#ebab21'>Giveaway Status</label><br>

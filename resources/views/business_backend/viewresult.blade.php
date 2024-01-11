@@ -212,6 +212,28 @@
                                         <p>Percentage:<a> {{number_format($percentage)}} %</a></p>
 
                                     </blockquote>
+
+                                    <blockquote style='background:#000;color:#1cbfd0' class="blockquote">
+
+                                        @if($percentage == 100)
+                                        <div style='background:#d4edda; color:#155724' class="alert alert-success p-4">
+                                            Congratulations, You Won.<br>You answered all the questions correctly!</div>
+                                        <br>
+                                        <a href='/claim_giveaway/{{ $giveaway->id }}/{{ $participant->user_id }}/{{ $participant->phone }}'
+                                            class='btn btn-success mx-auto'>Click here to claim your giveaway price</a>
+                                        @else
+                                        <div style='background:#f8d7da; color:#721c24' class="alert alert-danger p-4">
+                                            Opps, You missed one of the questions. You didn't win the giveaway.</div>
+                                        <br>
+                                        <div style='background:#d4edda; color:#155724' class='alert alert-info'>
+                                            <p style='color:#155724'>Do you know that you can as well create your own giveaway?</p>
+                                            <p style='color:#155724'>Click <a style='color:red' href='https://vtubiz.com/register'>here</a> to register and
+                                                create yours.</p>
+                                        </div>
+                                        @endif
+                                    </blockquote>
+
+                                    
                                     @foreach($results as $key=>$result)
                                     <blockquote style='background:#000;color:#1cbfd0' class="blockquote">
                                         <h5>{{$result->question->question}}</h5>
@@ -251,25 +273,7 @@
                                         @endif
                                     </blockquote>
                                     @endforeach
-                                    <blockquote style='background:#000;color:#1cbfd0' class="blockquote">
-
-                                        @if($percentage == 100)
-                                        <div style='background:#d4edda; color:#155724' class="alert alert-success p-4">
-                                            Congratulations, You Won.<br>You answered all the questions correctly!</div>
-                                        <br>
-                                        <a href='/claim_giveaway/{{ $giveaway->id }}/{{ $participant->user_id }}/{{ $participant->phone }}'
-                                            class='btn btn-success mx-auto'>Click here to claim your giveaway price</a>
-                                        @else
-                                        <div style='background:#f8d7da; color:#721c24' class="alert alert-danger p-4">
-                                            Opps, You missed one of the questions. You didn't win the giveaway.</div>
-                                        <br>
-                                        <div style='background:#d4edda; color:#155724' class='alert alert-info'>
-                                            <p style='color:#155724'>Do you know that you can as well create your own giveaway?</p>
-                                            <p style='color:#155724'>Click <a style='color:red' href='https://vtubiz.com/register'>here</a> to register and
-                                                create yours.</p>
-                                        </div>
-                                        @endif
-                                    </blockquote>
+                            
 
                                 </div>
                             </div>
