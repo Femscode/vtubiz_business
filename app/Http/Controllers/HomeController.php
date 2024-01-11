@@ -263,6 +263,7 @@ class HomeController extends Controller
         $user = Auth::user();
       
         $hashed_pin = hash('sha256', $request->pin);
+        // dd($hashed_pin, $user->pin);
         if ($user->pin !== $hashed_pin) {
             $response = [
                 'success' => false,

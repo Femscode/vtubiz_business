@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
@@ -45,21 +46,21 @@ class SuperController extends Controller
         return view('super.data_price', $data);
     }
 
-    public function schedule_accounts() {
+    public function schedule_accounts()
+    {
         $schedules = ScheduleAccount::get();
         dd($schedules);
     }
-    public function admin_giveaway() {
+    public function admin_giveaway()
+    {
         $data['user'] = $user = Auth::user();
-        if($user->email == 'fasanyafemi@gmail.com') {
+        if ($user->email == 'fasanyafemi@gmail.com') {
             $data['giveaways'] = GiveAway::latest()->get();
             $data['active'] = 'giveaway';
-           
-            return view('super.giveaway',$data);
 
-        }
-        else {
-            return redirect()->back()->with('message','Access Denied');
+            return view('super.giveaway', $data);
+        } else {
+            return redirect()->back()->with('message', 'Access Denied');
         }
     }
     public function plan_status()
@@ -69,46 +70,46 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
-        $data['mtn_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',1)->first();
-        $data['mtn_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',1)->first();
-        $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',1)->first();
-        $data['mtn_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',1)->first();
-       
-        $data['glo_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',2)->first();
-      
-        $data['glo_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',2)->first();
-        $data['glo_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',2)->first();
-        $data['glo_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',2)->first();
-       
-        $data['airtel_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',3)->first();
-        $data['airtel_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',3)->first();
-        $data['airtel_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',3)->first();
-        $data['airtel_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',3)->first();
-       
-        $data['nmobile_sme'] = Data::where('user_id', 0)->where('type','SME')->where('network',4)->first();
-        $data['nmobile_cg'] = Data::where('user_id', 0)->where('type','cg')->where('network',4)->first();
-        $data['nmobile_cg_lite'] = Data::where('user_id', 0)->where('type','cg_lite')->where('network',4)->first();
-        $data['nmobile_direct'] = Data::where('user_id', 0)->where('type','direct')->where('network',4)->first();
-           
-    
+        $data['mtn_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 1)->first();
+        $data['mtn_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 1)->first();
+        $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
+        $data['mtn_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 1)->first();
+
+        $data['glo_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 2)->first();
+
+        $data['glo_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 2)->first();
+        $data['glo_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 2)->first();
+        $data['glo_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 2)->first();
+
+        $data['airtel_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 3)->first();
+        $data['airtel_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 3)->first();
+        $data['airtel_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 3)->first();
+        $data['airtel_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 3)->first();
+
+        $data['nmobile_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 4)->first();
+        $data['nmobile_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 4)->first();
+        $data['nmobile_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 4)->first();
+        $data['nmobile_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 4)->first();
+
+
         return view('super.plan_status', $data);
     }
-    public function update_plan_status($network_id,$type) {
+    public function update_plan_status($network_id, $type)
+    {
         // dd($network_id, $type);
-        if( Data::where('network',$network_id)->where('type',$type)->first()->status == 0) {
-            $datas = Data::where('network',$network_id)->where('type',$type)->update([
+        if (Data::where('network', $network_id)->where('type', $type)->first()->status == 0) {
+            $datas = Data::where('network', $network_id)->where('type', $type)->update([
                 'status' => 1
             ]);
         } else {
-            $datas = Data::where('network',$network_id)->where('type',$type)->update([
+            $datas = Data::where('network', $network_id)->where('type', $type)->update([
                 'status' => 0
             ]);
-
         }
         // $datas = Data::where('network',$network_id)->where('type',$type)->update([
         //     'status' => DB::raw('NOT status')
         // ]);
-        return redirect()->back()->with('message','Status Updated Successfully');
+        return redirect()->back()->with('message', 'Status Updated Successfully');
     }
     public function update_data(Request $request)
     {
@@ -267,7 +268,7 @@ class SuperController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: ".env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
+                "AuthorizationToken: " . env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
@@ -278,6 +279,51 @@ class SuperController extends Controller
         $data['duplicate_transactions'] = DuplicateTransaction::latest()->get();
 
         return view('super.duplicate_transactions', $data);
+    }
+    public function contact_gain()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'super';
+
+        return view('super.contact_gain', $data);
+    }
+    public function downloadCSV(Request $request)
+    {
+        // dd($request->all());
+        // $users = User::where('created_at', '>', $request->from)->where('created_at', '<', $request->to)->get(['name', 'phone']);
+        $users = User::where('created_at', '>', $request->from)
+            ->where('created_at', '<', $request->to)
+            ->select([
+                DB::raw("CONCAT('$request->prefix ', name) as name"),
+                'phone'
+            ])
+            ->get();
+        
+            $filename = Carbon::now()->format('d-m-Y').'_users_data.csv';
+           
+            // Set the content type and headers for file download
+            header('Content-Type: text/csv');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            
+            // Open a file handle for PHP's output stream
+            $handle = fopen('php://output', 'w');
+            
+            // Insert the header
+            fputcsv($handle, ['Name', 'Phone']);
+            
+            // Insert the user data
+            foreach ($users as $user) {
+                fputcsv($handle, [$user->name, $user->phone]);
+            }
+            
+            // Close the file handle
+            fclose($handle);
+            exit;
+
+       
     }
     public function upgrade_user($id)
     {

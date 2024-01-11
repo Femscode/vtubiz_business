@@ -33,8 +33,8 @@
                                     <th scope="col">Balance</th>
                                     <th scope="col">Spent</th>
                                     <th scope="col">Account Details</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Status</th>
+                                    {{-- <th scope="col">Type</th> --}}
+                                    <th scope="col">Date Joined</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -43,18 +43,15 @@
 
                                 <tr>
 
-                                    <td>{{ $user->name }}<br>{{ $user->email }}<br>{{ $user->brand_name ?? "null" }}</td>
+                                    <td>{{ $user->name }}<br>{{ $user->email }}<br>{{ $user->brand->brand_name ?? "null" }}</td>
                                   
                                     <td>{{ $user->phone }}</td>
                                     <td>₦{{ number_format($user->balance) }}</td>
                                     <td>₦{{ number_format($user->total_spent) }}</td>
                                     <td>{{ $user->account_no }},{{ $user->bank_name }}</td>
-                                    <td>{{ $user->type }}</td>
-                                    <td>@if($user->email_verified_at !== null)
-                                        <span class='badge badge-light-success'>Verified</span>
-                                        @else
-                                        <span class='badge badge-light-danger'>Not verified</span>
-                                        @endif
+                                    {{-- <td>{{ $user->type }}</td> --}}
+                                    <td>
+                                      {{ Date('d-m-y',strtotime($user->created_at)) }}
                                     
                                     </td>
                                     <td class='d-flex'>

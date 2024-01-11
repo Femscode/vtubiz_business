@@ -12,7 +12,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">Duplicate Transactions, <span class='alert alert-success'>Endpoint Balance : NGN{{ number_format($easy_balance,2) }}</span></h4>
+                        <h4 class="card-title mb-4">Duplicate Transactions, <span class='alert alert-success'>Balance : NGN{{ number_format($easy_balance,2) }}</span></h4>
                         <table class="datatable table table-striped">
                             <thead>
                                 <tr>

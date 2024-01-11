@@ -33,6 +33,12 @@ class User extends Authenticatable
     return $this->belongsTo(Category::class);
   }
 
+  public function brand() {
+    return $this->belongsTo(User::class, 'company_id', 'id');
+  }
+
+  
+
     /**
      * The attributes that should be hidden for arrays.
      *

@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Customer</th>
+                                    <th scope="col">Reference</th>
 
                                     <th scope="col">Title </th>
                                     <th scope="col">Amount </th>
@@ -47,6 +48,7 @@
                                     <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
                                         $tranx->user->phone }}</a>
                                 </td>
+                                <td>{{ $tranx->reference }}</td>
                                 <td>{{ $tranx->title }}</td>
                                 <td>₦{{ number_format($tranx->amount) }}</td>
 
@@ -64,6 +66,7 @@
                                     <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
                                         $tranx->user->phone }}</a>
                                 </td>
+                                <td>{{ $tranx->reference }}</td>
                                 <td>{{ $tranx->title }}</td>
                                 <td>₦{{ number_format($tranx->amount,2) }}</td>
                                 <td>{{ $tranx->description }}</td>
@@ -87,6 +90,7 @@
                                     <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
                                         $tranx->user->phone }}</a>
                                 </td>
+                                <td>{{ $tranx->reference }}</td>
                                 <td>{{ $tranx->title }}</td>
                                 <td>₦{{ number_format($tranx->amount,2) }}</td>
                                 <td>{{ $tranx->description }}</td>
