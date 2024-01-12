@@ -90,14 +90,15 @@
                             $tranx->user->phone }}</a>
                     </td>
                     <td>{{ $tranx->reference }}</td>
-                    <td>{{ $tranx->title }}</td>
-                    <td>₦{{ number_format($tranx->amount,2) }}</td>
                     <td>{{ $tranx->description }}</td>
-                    <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
-                        number_format($tranx->admin_after) }}</td>
+                    <td>₦{{ number_format($tranx->amount,2) }}</td>
+                    <td>>₦{{ number_format($tranx->before) }} </td>
+                    <td>₦{{
+                        number_format($tranx->after) }}</td>
+                        <td>{{ $tranx->type }}</td>
                     <td>
                       
-                        <span class='btn-sm btn btn-warning'>Pending</span>
+                        <span class='btn-sm btn btn-warning'>Pending / Failed</span>
                        
                     </td>
                     <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
