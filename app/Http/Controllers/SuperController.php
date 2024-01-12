@@ -114,7 +114,10 @@ class SuperController extends Controller
     public function update_data(Request $request)
     {
         // dd($request->all());
-        $datas = Data::where('plan_id', $request->plan_id)->get();
+      
+        $datas = Data::where('plan_id', $request->plan_id)
+            ->where('user_id', '!=', 888)
+            ->get();
         foreach ($datas as $data) {
             $data->plan_name = $request->plan_name;
             $data->actual_price = $request->actual_price;
@@ -139,7 +142,9 @@ class SuperController extends Controller
     }
     public function update_cable(Request $request)
     {
-        $cables = Cable::where('plan_id', $request->plan_id)->get();
+        $cables = Cable::where('plan_id', $request->plan_id)
+        ->where('user_id', '!=', 888)
+        ->get();
         foreach ($cables as $cable) {
             $cable->plan_name = $request->plan_name;
             $cable->actual_price = $request->actual_price;
@@ -301,29 +306,27 @@ class SuperController extends Controller
                 'phone'
             ])
             ->get();
-        
-            $filename = Carbon::now()->format('d-m-Y').'_users_data.csv';
-           
-            // Set the content type and headers for file download
-            header('Content-Type: text/csv');
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            
-            // Open a file handle for PHP's output stream
-            $handle = fopen('php://output', 'w');
-            
-            // Insert the header
-            fputcsv($handle, ['Name', 'Phone']);
-            
-            // Insert the user data
-            foreach ($users as $user) {
-                fputcsv($handle, [$user->name, $user->phone]);
-            }
-            
-            // Close the file handle
-            fclose($handle);
-            exit;
 
-       
+        $filename = Carbon::now()->format('d-m-Y') . '_users_data.csv';
+
+        // Set the content type and headers for file download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        // Open a file handle for PHP's output stream
+        $handle = fopen('php://output', 'w');
+
+        // Insert the header
+        fputcsv($handle, ['Name', 'Phone']);
+
+        // Insert the user data
+        foreach ($users as $user) {
+            fputcsv($handle, [$user->name, $user->phone]);
+        }
+
+        // Close the file handle
+        fclose($handle);
+        exit;
     }
     public function upgrade_user($id)
     {
