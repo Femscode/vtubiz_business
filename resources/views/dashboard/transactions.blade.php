@@ -89,6 +89,7 @@
                         <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
                             $tranx->user->phone }}</a>
                     </td>
+                    <td>{{ $tranx->reference }}</td>
                     <td>{{ $tranx->title }}</td>
                     <td>₦{{ number_format($tranx->amount,2) }}</td>
                     <td>{{ $tranx->description }}</td>
