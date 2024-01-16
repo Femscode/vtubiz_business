@@ -102,7 +102,7 @@ if (result.isConfirmed) {
        processData: false,
        success: function(data) {
           console.log(data)
-          location.href = 'http://fastpay.cttaste.com/reset-pin-with-token';
+          location.href = 'https://vtubiz.com/reset-pin-with-token';
        },
        error: function(data) {
            console.log(data)
