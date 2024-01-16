@@ -114,7 +114,7 @@ class SuperController extends Controller
     public function update_data(Request $request)
     {
         // dd($request->all());
-      
+
         $datas = Data::where('plan_id', $request->plan_id)
             ->where('user_id', '!=', 888)
             ->get();
@@ -143,8 +143,8 @@ class SuperController extends Controller
     public function update_cable(Request $request)
     {
         $cables = Cable::where('plan_id', $request->plan_id)
-        ->where('user_id', '!=', 888)
-        ->get();
+            ->where('user_id', '!=', 888)
+            ->get();
         foreach ($cables as $cable) {
             $cable->plan_name = $request->plan_name;
             $cable->actual_price = $request->actual_price;
@@ -299,13 +299,31 @@ class SuperController extends Controller
     {
         // dd($request->all());
         // $users = User::where('created_at', '>', $request->from)->where('created_at', '<', $request->to)->get(['name', 'phone']);
+
         $users = User::where('created_at', '>', $request->from)
             ->where('created_at', '<', $request->to)
+            ->where(function ($query) use ($request) {
+                $query->where('company_id', 5)
+                    ->orWhere('company_id', '=', DB::raw('id'));
+            })
             ->select([
                 DB::raw("CONCAT('$request->prefix ', name) as name"),
-                'phone'
+                'phone',
             ])
             ->get();
+
+           
+
+
+        // $users = User::where('created_at', '>', $request->from)
+        //     ->where('created_at', '<', $request->to)
+        //     ->where('company_id', 5)
+        //     ->where('company_id', '!=', 'id')
+        //     ->select([
+        //         DB::raw("CONCAT('$request->prefix ', name) as name"),
+        //         'phone'
+        //     ])
+        //     ->get();
 
         $filename = Carbon::now()->format('d-m-Y') . '_users_data.csv';
 

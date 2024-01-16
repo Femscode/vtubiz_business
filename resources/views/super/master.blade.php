@@ -210,6 +210,13 @@
                                     <!--end:Menu link-->
 
                                 </a>
+                                <a href='/notifications'
+                                    class="menu-item  @if($active == 'withdrawal') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Notifications
+                                        </span></span>
+                                    <!--end:Menu link-->
+
+                                </a>
                                 <a href='/duplicate_transactions'
                                     class="menu-item  @if($active == 'withdrawal') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Duplicate Transactions

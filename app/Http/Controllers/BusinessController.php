@@ -805,10 +805,23 @@ class BusinessController extends Controller
         //     // 'description' => 'required',
         //     'notf_id' => 'required'
         // ]);
-        $notification = Notification::find($request->notf_id);
-        $notification->title = $request->title;
-        $notification->description = $request->description;
-        $notification->save();
+        $user = Auth::user();
+        if($user->email == 'fasanyafemi@gmail.com') {
+            $notification = Notification::find($request->notf_id);
+            $notifications = Notification::where('type',$notification->type)->get();
+            foreach($notifications as $notification) {
+                $notification->title = $request->title;
+                $notification->description = $request->description;
+                $notification->save();
+            }           
+        }
+        else {
+            $notification = Notification::find($request->notf_id);
+            $notification->title = $request->title;
+            $notification->description = $request->description;
+            $notification->save();
+        }
+       
         return redirect()->back()->with('success', 'Notification updated successfully!');
     }
     public function change_password()

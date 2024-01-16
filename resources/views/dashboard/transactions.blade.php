@@ -27,9 +27,9 @@
           </div>
           <div class="card-body">
             <div class='col-md-6'>
-            <input type="text" class="form-control" placeholder="Search..." id="searchTable">
+              <input type="text" class="form-control" placeholder="Search..." id="searchTable">
             </div>
-                           
+
 
             <table class="datatable table">
               <thead>
@@ -73,35 +73,35 @@
                   <td>Pending Schedule Purchase</td>
                   <td>
                     <span class='badge badge-light-warning'>Pending</span>
-                
+
 
                   </td>
                   <td>
                     <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
-                    
+
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
                 </tr>
                 @elseif($tranx->status == 3)
-                             
+
                 <tr class='alert alert-warning'>
-                    <td>{{ $tranx->user->name }}<br>
-                        <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
-                            $tranx->user->phone }}</a>
-                    </td>
-                    <td>{{ $tranx->reference }}</td>
-                    <td>{{ $tranx->description }}</td>
-                    <td>₦{{ number_format($tranx->amount,2) }}</td>
-                    <td>>₦{{ number_format($tranx->before) }} </td>
-                    <td>₦{{
-                        number_format($tranx->after) }}</td>
-                        <td>{{ $tranx->type }}</td>
-                    <td>
-                      
-                        <span class='btn-sm btn btn-warning'>Pending / Failed</span>
-                       
-                    </td>
-                    <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
+                  <td>{{ $tranx->user->name }}<br>
+                    <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
+                      $tranx->user->phone }}</a>
+                  </td>
+                  <td>{{ $tranx->reference }}</td>
+                  <td>{{ $tranx->description }}</td>
+                  <td>₦{{ number_format($tranx->amount,2) }}</td>
+                  <td>>₦{{ number_format($tranx->before) }} </td>
+                  <td>₦{{
+                    number_format($tranx->after) }}</td>
+                  <td>{{ $tranx->type }}</td>
+                  <td>
+
+                    <span class='btn-sm btn btn-warning'>Pending / Failed</span>
+
+                  </td>
+                  <td><a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
                 </tr>
                 @elseif($tranx->status == 1)
                 <tr class='bg bg-light-success'>
@@ -134,11 +134,11 @@
                   </td>
                   <td>
                     <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
-                    
+
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
                   </td>
                 </tr>
-                @else 
+                @else
                 <tr class='bg bg-light-danger'>
 
 
