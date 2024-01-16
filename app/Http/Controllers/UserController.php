@@ -161,6 +161,7 @@ class UserController extends Controller
     public function resetPinWithToken()
     {
         $data['user'] = Auth::user();
+        $data['active'] = 'changepin';
         return view('dashboard.resetpintoken', $data);
     }
 }
