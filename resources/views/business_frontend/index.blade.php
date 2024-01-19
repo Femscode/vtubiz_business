@@ -348,7 +348,7 @@
                 alt="headin" />
               </figure> --}}
             <figure>
-              <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Smart Champ, Welcome to 2024!</h2>
+              {{-- <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Smart Champ, Welcome to 2024!</h2> --}}
               {{-- <img class="w-auto"
                 src="{{ asset('assets/img/xmas.png') }}"
                 srcset="{{ asset('assets/img/xmas.png') }}"
