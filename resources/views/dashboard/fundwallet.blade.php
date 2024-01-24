@@ -3,7 +3,8 @@
 @section('header')
 <style>
     .credit-card {
- background: linear-gradient(to right, #ff6b6b, #6078ea);
+        
+ background: linear-gradient(to right, #fb9129, #155724);
  border-radius: 10px;
  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
  overflow: hidden;

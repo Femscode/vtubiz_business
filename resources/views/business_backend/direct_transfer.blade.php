@@ -3,7 +3,8 @@
 @section('header')
 <style>
     .credit-card {
- background: linear-gradient(to right, #ff6b6b, #6078ea);
+        
+ background: linear-gradient(to right, #fb9129, #155724);
  border-radius: 10px;
  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
  overflow: hidden;
@@ -68,7 +69,7 @@
 
                         </div>
                         <div class="credit-card justify-content-center">
-                        <div style=' background: linear-gradient(to right, #ff6b6b, #6078ea);' class="card card-dashed bg-light-secondary flex-row flex-stack flex-wrap p-6 m-2">
+                        <div class="card card-dashed bg-light-secondary flex-row flex-stack flex-wrap p-6 m-2">
                             <!--begin::Info-->
                             <div class="d-flex flex-column p-2 m-2">
                                 <!--begin::Owner-->
