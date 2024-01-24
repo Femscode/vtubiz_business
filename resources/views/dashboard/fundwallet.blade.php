@@ -46,7 +46,7 @@
                         @if($user->account_no !== null)
 
                         <div class="credit-card justify-content-center">
-                            <div style=' background: linear-gradient(to right, #ff6b6b, #6078ea);'class="card card-dashed bg-gradient-primary flex-row flex-stack flex-wrap p-6 text-black m-2">
+                            <div class="card card-dashed bg-gradient-primary flex-row flex-stack flex-wrap p-6 text-black m-2">
                                 <!--begin::Info-->
                                 <h4>Transfer to your virtual account</h4>
                                 <div class="d-flex flex-column p-2 m-2">
