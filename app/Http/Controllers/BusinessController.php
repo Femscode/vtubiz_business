@@ -260,7 +260,7 @@ class BusinessController extends Controller
             $data['notification'] = $notification;
         }
 
-
+       
         return view('business_backend.fundwallet', $data);
     }
 

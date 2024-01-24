@@ -414,7 +414,7 @@
             console.log(fd)
             $.ajax({
                 type: 'POST',
-                url: "{{route('admin_make_transfer')}}",
+                url: "{{route('admin_make_withdraw')}}",
                 data: fd,
                 cache: false,
                 contentType: false,

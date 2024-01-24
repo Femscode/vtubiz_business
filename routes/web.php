@@ -7,6 +7,7 @@ use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BulkSMSController;
+use App\Http\Controllers\FundingController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\LoginWithGoogleController;
@@ -312,6 +313,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/domain_suggestion', [BusinessController::class, 'domain_suggestion'])->name('domain_suggestion');
 
     Route::get('fundwallet', [BusinessController::class, 'fundwallet'])->name('fundwallet');
+    Route::post('generatePermanentAccount', [FundingController::class, 'generatePermanentAccount'])->name('generatePermanentAccount');
     Route::post('/checkout', [App\Http\Controllers\FundingController::class, 'admin_checkout'])->name('admin_checkout');
 
     Route::get('payment_transactions', [BusinessController::class, 'payment_transactions'])->name('payment_transactions');
@@ -422,6 +424,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('withdraw', [BusinessController::class, 'withdraw'])->name('admin_withdraw');
     Route::any('confirm_account', [HomeController::class, 'confirm_account'])->name('admin_confirm_account');
     Route::any('make_transfer', [HomeController::class, 'make_transfer'])->name('admin_make_transfer');
+    Route::any('make_withdraw', [HomeController::class, 'make_withdraw'])->name('admin_make_withdraw');
     Route::post('/pay', [App\Http\Controllers\FundingController::class, 'redirectToGateway'])->name('admin_pay');
     Route::get('/payment/callback', [App\Http\Controllers\FundingController::class, 'handleGatewayCallback']);
     Route::get('/reserve_account', [App\Http\Controllers\FundingController::class, 'reserve_account']);

@@ -1,6 +1,22 @@
 @extends('business_backend.master')
 
 @section('header')
+<style>
+    .credit-card {
+ background: linear-gradient(to right, #ff6b6b, #6078ea);
+ border-radius: 10px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+ overflow: hidden;
+ width: 300px;
+ margin: 20px;
+ color: black;
+}
+
+.card {
+ border: none;
+ color:black;
+}
+</style>
 @endsection
 
 @section('content')
@@ -45,15 +61,16 @@
                                     <!--end::Svg Icon-->
                                 </span>
                             </div> --}}
-                            <div class="alert-text fw-semibold fs-6">
+                            <div class="alert-text fw-semibold fs-6 text-center">
                                 <h4>Make an instant transfer to the account details below.</h4>
                                 Please note that this is a virtual temporary account, and will expire in <span class='text-danger'><b>30Mins</b></span> time.</div>
 
 
                         </div>
-                        <div class="card card-dashed bg-light-secondary flex-row flex-stack flex-wrap p-6">
+                        <div class="credit-card justify-content-center">
+                        <div style=' background: linear-gradient(to right, #ff6b6b, #6078ea);' class="card card-dashed bg-light-secondary flex-row flex-stack flex-wrap p-6 m-2">
                             <!--begin::Info-->
-                            <div class="d-flex flex-column py-2">
+                            <div class="d-flex flex-column p-2 m-2">
                                 <!--begin::Owner-->
                                
                                 <!--end::Owner-->
@@ -76,7 +93,7 @@
                                               Amount :</div>
                                               <div class="fs-4 fw-bold"><strong>NGN{{ number_format($amount) ?? "No account generated
                                                   yet!" }}</strong></div>
-                                                  <span class='text-danger'>Please only make a transfer of the exact amount above!</span>
+                                                  <span class='text-danger'>Please only transfer the exact amount displayed above!</span>
                                     </div>
                                     <!--end::Details-->
                                 </div>
@@ -86,6 +103,7 @@
 
 
 
+                        </div>
                         </div>
 
                     </div>

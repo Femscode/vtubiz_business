@@ -197,6 +197,7 @@ class HomeController extends Controller
     public function fundwallet()
     {
 
+      
         $data['user'] = $user = Auth::user();
         $data['active'] = 'fundwallet';
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Payment Notification')->first();
@@ -204,8 +205,9 @@ class HomeController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
-
+       
         return view('dashboard.fundwallet', $data);
+
     }
     public function withdraw()
     {
@@ -307,6 +309,67 @@ class HomeController extends Controller
         //     $message->from('support@vtubiz.com', 'VTUBIZ');
         // });
         return true;
+
+        $response = [
+            'success' => true,
+            'status' => true,
+            'message' => 'Withdraw on pending',
+
+        ];
+
+        return response()->json($response);
+    }
+    public function make_withdraw(Request $request)
+    {
+     
+        $this->validate($request, [
+            'amount' => 'required'
+        ]);
+        $user = Auth::user();
+        
+        $user_pin = $request->first.$request->second.$request->third.$request->fourth;
+        // dd($user_pin);
+
+        $hashed_pin = hash('sha256', $user_pin);
+        if ($user->pin !== $hashed_pin) {
+            // return "Incorrect pin";
+            $response = [
+                'success' => false,
+                'message' => 'Incorrect Pin',
+
+            ];
+
+            return response()->json($response);
+        }
+
+        if ($user->balance < $request->amount) {
+            return "Insufficient Balance";
+            $response = [
+                'success' => false,
+                'message' => 'Insufficient Balance',
+
+            ];
+
+            return response()->json($response);
+        }
+
+
+        $reference = 'fund_withdraw_' . Str::random(7);
+        $recipient = User::where('phone',$request->account_id)->first();
+        
+        $details = "Withdraw of NGN " . $request->amount . " to " . $request->account_no. ' ('. $request->bank_name.')'.' Account Name: '.$request->account_name;
+        
+        $tranx =  $this->create_transaction('Funds Withdraw', $reference, $details, 'debit', $request->amount, $user->id, 2);
+        
+        // $data = array('username' => $user->name, 'tranx_id' => $tranx->id,  'amount' => $request->amount);
+        // dd($data);
+        // $amount = $request->amount;
+
+        // Mail::send('mail.withdraw_request', $data, function ($message) use($amount){
+        //     $message->to('fasanyafemi@gmail.com')->subject("Withdrawal request of NGN". $amount);
+        //     $message->from('support@vtubiz.com', 'VTUBIZ');
+        // });
+        // return true;
 
         $response = [
             'success' => true,
