@@ -53,7 +53,9 @@
                                 <td>₦{{ number_format($tranx->amount) }}</td>
 
                                 <td>{{ $tranx->description }}</td>
-                                <td>Pending Schedule Purchase</td>
+                                <td>₦{{ number_format($tranx->before) }} / ₦{{
+                                    number_format($tranx->after) }}</td>
+                                {{-- <td>Pending Schedule Purchase</td> --}}
                                 <td><a class='btn btn-warning btn-sm'>Pending</a></td>
                                 <td> <a href='/verify_purchase/{{ $tranx->reference }}'
                                         class='btn btn-success'>Verify</a></td>
@@ -94,8 +96,8 @@
                                 <td>{{ $tranx->title }}</td>
                                 <td>₦{{ number_format($tranx->amount,2) }}</td>
                                 <td>{{ $tranx->description }}</td>
-                                <td>₦{{ number_format($tranx->admin_before) }} / ₦{{
-                                    number_format($tranx->admin_after) }}</td>
+                                <td>₦{{ number_format($tranx->before) }} / ₦{{
+                                    number_format($tranx->after) }}</td>
                                 <td>
                                     @if($tranx->status == 1)
                                     <span class='btn-sm btn btn-success'>Success</span>
