@@ -18,7 +18,7 @@
                     <div class='alert alert-primary'>
                         <p>You can now buy data in bulk, create custom recipient groups (like staff or
                             family),
-                            and purchase data for every group member at once with a single click? Click <a
+                            and purchase data for every group member at once with a single click. Click <a
                                 style='color:red' href='/data_group'>here to try it out!</a></p>
                     </div>
                 </div>
