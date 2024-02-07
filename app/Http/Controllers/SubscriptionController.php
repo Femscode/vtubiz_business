@@ -342,7 +342,6 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_color'EASY_ACCESS_AUTH'));
-        dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
         if ($data->network == 1) {
             $network_mi = 'MTN';
         } elseif ($data->network == 2) {
@@ -435,7 +434,6 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_color'EASY_ACCESS_AUTH'));
-        dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
         if ($data->network == 1) {
             $network_mi = 'MTN';
         } elseif ($data->network == 2) {
