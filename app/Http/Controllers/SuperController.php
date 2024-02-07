@@ -258,6 +258,7 @@ class SuperController extends Controller
     public function duplicate_transactions()
     {
         $data['user'] = $user =  Auth::user();
+        dd($user);
         if ($user->email !== 'fasanyafemi@gmail.com') {
             return redirect()->route('dashboard');
         }
