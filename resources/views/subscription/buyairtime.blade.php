@@ -16,7 +16,7 @@
             <div class='col-md-12'>
                 <div class='card '>
                     <div class='alert alert-primary'>
-                        <p style='font-weight:100'>You can now buy airtime in bulk, create custom recipient groups (like staff or
+                        <p style='font-weight:100;font-size:17px;'>You can now buy airtime in bulk, create custom recipient groups (like staff or
                             family), and purchase airtime for every group member at once with a single click. Click <a
                                 style='color:red' href='/airtime_group'>here to try it out!</a></p>
                     </div>
