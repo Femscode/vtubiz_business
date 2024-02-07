@@ -159,7 +159,7 @@
           .post("/recharge_group", fd)
           .then((response) => {
             console.log(response, 'the res')
-            if (response.data.success == "true") {
+            if (response.data.success == "true" || response.data.success == true) {
               Swal.fire({
                 icon: "success",
                 title: "Purchase successful! Check group transaction table to confirm.",
