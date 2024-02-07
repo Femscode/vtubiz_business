@@ -263,7 +263,7 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
-        dd(env("EASY_ACCESS_AUTH"));
+       
         
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -276,8 +276,7 @@ class SuperController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " .User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
-                // "AuthorizationToken: " . env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
+                "AuthorizationToken: " . env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
