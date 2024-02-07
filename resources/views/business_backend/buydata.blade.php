@@ -6,14 +6,22 @@
 
 <div class="d-flex flex-column flex-column-fluid">
     <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
+    <div id="kt_app_content" class="app-content  flex-column-fluid ">
         <!--begin::Profile Account Information-->
         <div id='app' class="row">
             <!--begin::Aside-->
-          
+
             <!--end::Aside-->
             <!--begin::Content-->
-         <buydata-component :user='{{ $user  }}' :company='{{ $company }}' :beneficiaries='{{ $beneficiaries }}' ></buydata-component>
+            <div class='card col-md-12'>
+                <div class='alert alert-info'>
+                    <p>Do you know that you can buy data in bulk, create custom recipient groups (like staff or family),
+                        and purchase data for every group member at once with a single click? Click <a style='color:red'
+                            href='/data_group'>here to try it out!</a></p>
+                </div>
+            </div>
+            <buydata-component :user='{{ $user  }}' :company='{{ $company }}' :beneficiaries='{{ $beneficiaries }}'>
+            </buydata-component>
             <!--end::Content-->
         </div>
         <!--end::Profile Account Information-->
