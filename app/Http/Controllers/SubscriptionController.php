@@ -245,7 +245,7 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
         // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_color'EASY_ACCESS_AUTH'));
-        dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
+        
 
         //check duplicate
         if ($data->network == 1) {
