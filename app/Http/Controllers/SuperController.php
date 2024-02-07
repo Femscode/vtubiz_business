@@ -263,6 +263,7 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
+        dd($data, env("EASY_ACCESS_AUTH"));
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
@@ -282,7 +283,7 @@ class SuperController extends Controller
         curl_close($curl);
         $response_json = json_decode($response, true);
         $data['easy_balance'] = $response_json['balance'];
-        dd($data);
+      
         $data['duplicate_transactions'] = DuplicateTransaction::latest()->get();
 
         return view('super.duplicate_transactions', $data);
