@@ -263,7 +263,7 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
-        dd($data, env("EASY_ACCESS_AUTH"));
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
