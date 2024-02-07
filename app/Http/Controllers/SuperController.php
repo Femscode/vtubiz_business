@@ -263,6 +263,7 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
+        dd(User::where('email','fasanyafemi@gmail.com')->first()->brand_name, User::where('email','fasanyafemi@gmail.com')->first());
         
         $curl = curl_init();
         curl_setopt_array($curl, array(
