@@ -263,6 +263,7 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
+        dd(env("EASY_ACCESS_AUTH"));
         
         $curl = curl_init();
         curl_setopt_array($curl, array(

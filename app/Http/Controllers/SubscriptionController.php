@@ -301,7 +301,7 @@ class SubscriptionController extends Controller
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
         // return [$responseUser::where('email','fasanyafemi@gmail.com')->first()->brand_colorH')];
-        return [$response_json,env('EASY_ACCESS_AUTH')];
+       
 
 
         curl_close($curl);
