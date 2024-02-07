@@ -316,7 +316,7 @@
                         <li>
                             <a href="/mytheme" class="">
                                 <i class="bx bx-store-alt"></i>
-                                <span key="t-layouts">Customize Website Theme</span>
+                                <span key="t-layouts">Edit My Website</span>
                             </a>
 
                         </li>

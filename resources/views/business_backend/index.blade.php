@@ -453,6 +453,8 @@
             </div>
             <!-- end row -->
 
+            {{-- 
+                Today's transaction is here
             <div class="card">
                 <div class="card-body">
                     <div class='row'>
@@ -471,8 +473,6 @@
                                     <th>Transaction Details</th>
                                     <th>Date</th>
                                     <th>Before/After Balance</th>
-
-                                    {{-- <th class="min-w-120px">Price</th> --}}
 
                                     <th class="text-end">Actions</th>
                                 </tr>
@@ -513,6 +513,252 @@
                         </table>
                     </div>
                     <!-- end table-responsive -->
+                </div>
+            </div> --}}
+
+            <div class="card">
+                <div class="card-body">
+                    {{-- <h4 class="card-title mb-4">Social Source</h4> --}}
+                    <div class="text-center">
+
+                        <p class="font-16 text-muted"></p>
+                        <h5><a href="javascript: void(0);" class="text-dark">Quick Links
+                            </a></h5>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-6'>
+                            <ul class="verti-timeline list-unstyled">
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 ">
+                                            <a href='/data' class="font-size-14">Buy Data <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 ">
+                                            <a href='/airtime' class="font-size-14">Buy Airtime <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/cable' class="font-size-14">Cable Subscription
+                                                <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/electricity' class="font-size-14">Pay Light Bills
+                                                <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/examination' class="font-size-14">Exam Result Checkers
+                                                <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/bulksms' class="font-size-14">Bulk SMS
+                                                <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a onclick='return confirmDowngrade()' href="/upgrade/{{ $user->id }}" class="font-size-14">Downgrade Account
+                                                <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+
+                              
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/my-giveaway' class="font-size-14">Fun Giveaways
+                                                <span class="badge rounded-pill bg-danger m-2">new</span> <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class='col-md-6'>
+                            <ul class="verti-timeline list-unstyled">
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/fundwallet' class="font-size-14">Fund Wallet <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 ">
+                                            <a href='/profile' class="font-size-14">Profile <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 ">
+                                            <a href='/mytheme' class="font-size-14">Edit My Website <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 ">
+                                            <a href='mytransactions' class="font-size-14">My Transactions <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+
+
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/purchase_transactions' class="font-size-14">User Purchase Transactions <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/payment_transactions' class="font-size-14">User Payment Transactions <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/bulksms_transactions' class="font-size-14">Bulk SMS Transactions <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="event-list">
+                                    <div class="event-timeline-dot">
+                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <a href='/users' class="font-size-14">User Management<span
+                                                    class="badge rounded-pill bg-danger m-2">New</span> <i
+                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class='alert alert-info'>
+                            <p>You can find other admin functionalities by clicking on the navbar located at the left corner of this page.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
