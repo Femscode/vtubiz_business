@@ -22,9 +22,8 @@
                             <h4 class="mb-sm-0 font-size-18">{{ $group->name }} <span class='text-danger'>(NGN{{
                                     number_format($recipients->sum('amount')) }})</span></h4>
                             <div>
-                                <a class='btn btn-secondary' href='/airtime_group'>←Back</a>
-                                <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Create
-                                    Airtime Recipient</a>
+                                <a class='btn btn-secondary' href='/airtime_group'>←Initiate Purchase</a>
+                                <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Add Recipient</a>
                             </div>
                         </div>
 

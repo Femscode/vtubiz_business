@@ -49,7 +49,7 @@
                 <div class="card-title">
                     <h2 class="fw-bolder">Airtime Group
                     </h2>
-                    <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Create Group</a>
+                    <a class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Group</a>
                       
                 </div>
 

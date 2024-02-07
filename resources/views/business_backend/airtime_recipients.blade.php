@@ -68,8 +68,8 @@
                         <h2 class="fw-bolder"> {{ $group->name }} <span class='text-danger'>(NGN{{ number_format($recipients->sum('amount')) }})</span>
                         </h2>
                         <div>
-                        <a class='btn btn-secondary' href='/airtime_group'>←Back</a>
-                        <a class='btn btn-primary' data-bs-toggle="modal" data-bs-target="#exampleModal">Create Airtime Recipient</a>
+                        <a class='btn btn-secondary' href='/airtime_group'>←Initiate Purchase</a>
+                        <a class='btn btn-primary' data-bs-toggle="modal" data-bs-target="#exampleModal">Add Recipient</a>
                         </div>
                     </div>
 

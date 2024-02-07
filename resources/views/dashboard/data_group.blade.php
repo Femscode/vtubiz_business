@@ -21,7 +21,7 @@
                 <div class='col-xl-12'>
                     <div class="p-2 m-2 page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">Data Group</h4>
-                        <a class='btn btn-success text-end' data-bs-toggle="modal" data-bs-target="#exampleModal">Create Group</a>
+                        <a class='btn btn-success text-end' data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Group</a>
                     </div>
         
         
