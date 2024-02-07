@@ -244,7 +244,7 @@ class SubscriptionController extends Controller
 
             return response()->json($response);
         }
-        // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_name'EASY_ACCESS_AUTH'));
+        // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_color'EASY_ACCESS_AUTH'));
         dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
 
         //check duplicate
@@ -293,14 +293,14 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
         $response = curl_exec($curl);
         $response_json = json_decode($response, true);
-        // return [$responseUser::where('email','fasanyafemi@gmail.com')->first()->brand_nameH')];
+        // return [$responseUser::where('email','fasanyafemi@gmail.com')->first()->brand_colorH')];
         return [$response_json,env('EASY_ACCESS_AUTH')];
 
 
@@ -341,7 +341,7 @@ class SubscriptionController extends Controller
 
             return response()->json($response);
         }
-        // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_name'EASY_ACCESS_AUTH'));
+        // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_color'EASY_ACCESS_AUTH'));
         dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
         if ($data->network == 1) {
             $network_mi = 'MTN';
@@ -390,7 +390,7 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -434,7 +434,7 @@ class SubscriptionController extends Controller
 
             return response()->json($response);
         }
-        // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_name'EASY_ACCESS_AUTH'));
+        // dd($request->all(),$data_price, $real_datapUser::where('email','fasanyafemi@gmail.com')->first()->brand_color'EASY_ACCESS_AUTH'));
         dd($request->all(),$data_price, $real_dataprice, env('EASY_ACCESS_AUTH'));
         if ($data->network == 1) {
             $network_mi = 'MTN';
@@ -471,7 +471,7 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -563,7 +563,7 @@ class SubscriptionController extends Controller
                         'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                        "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                         // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                         "cache-control: no-cache"
                     ),
@@ -618,7 +618,7 @@ class SubscriptionController extends Controller
                         'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                     ),
                     CURLOPT_HTTPHEADER => array(
-                        "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                        "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                         // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                         "cache-control: no-cache"
                     ),
@@ -844,7 +844,7 @@ class SubscriptionController extends Controller
                     'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                     // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
@@ -940,7 +940,7 @@ class SubscriptionController extends Controller
                     'client_reference' => $client_reference, //update this on your script to receive webhook notifications
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                     // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
@@ -1041,7 +1041,7 @@ class SubscriptionController extends Controller
                 'package' => $request->plan,
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -1150,7 +1150,7 @@ class SubscriptionController extends Controller
                 'amount' => $discounted_amount,
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -1252,7 +1252,7 @@ class SubscriptionController extends Controller
                     'no_of_pins' => $request->no_of_pins,
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                     // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
@@ -1275,7 +1275,7 @@ class SubscriptionController extends Controller
                     'no_of_pins' => $request->no_of_pins,
                 ),
                 CURLOPT_HTTPHEADER => array(
-                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                    "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                     // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                     "cache-control: no-cache"
                 ),
@@ -1425,7 +1425,7 @@ class SubscriptionController extends Controller
                 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -1498,7 +1498,7 @@ class SubscriptionController extends Controller
             ),
             CURLOPT_HTTPHEADER => array(
                 // "AuthorizationToken: " . $env, //replace this with your authorization_token
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -1562,7 +1562,7 @@ class SubscriptionController extends Controller
             ),
             CURLOPT_HTTPHEADER => array(
                 // "AuthorizationToken: " . $env, //replace this with your authorization_token
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -1892,7 +1892,7 @@ class SubscriptionController extends Controller
                 'amount' => 1000,
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -1924,7 +1924,7 @@ class SubscriptionController extends Controller
                 // 'iucno' => '7032054653',
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 // "AuthorizationToken: " . $env, //replace this with your authorization_token
                 "cache-control: no-cache"
@@ -1987,7 +1987,7 @@ class SubscriptionController extends Controller
                 'reference' => $request->reference, //You can also enter your client_reference here only for data and airtime transactions.
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
@@ -2044,7 +2044,7 @@ class SubscriptionController extends Controller
                 'reference' => $request->reference, //You can also enter your client_reference here only for data and airtime transactions.
             ),
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_name, //replace this with your authorization_token
+                "AuthorizationToken: " . User::where('email','fasanyafemi@gmail.com')->first()->brand_color, //replace this with your authorization_token
                 // "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
