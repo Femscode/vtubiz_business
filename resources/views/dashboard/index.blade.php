@@ -15,7 +15,7 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
-                <div style='font-size:17px; border-top:10px solid #856404;' class='alert alert-warning'>
+                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
                   
                         Join our Whatsapp Community 
                         to get first hand update about our services.
