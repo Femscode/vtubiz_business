@@ -13,7 +13,7 @@
           
             <!--end::Aside-->
             <!--begin::Content-->
-            <div class='col-md-12'>
+            {{-- <div class='col-md-12'>
                 <div class='card '>
                     <div class='alert alert-primary'>
                         <p style='font-weight:100;font-size:17px;'>You can now buy data in bulk, create custom recipient groups (like staff or
@@ -22,7 +22,7 @@
                                 style='color:red' href='/data_group'>here to try it out!</a></p>
                     </div>
                 </div>
-            </div>
+            </div> --}}
          <buydata-component :user='{{ $user  }}' :company='{{ $company }}' :beneficiaries='{{ $beneficiaries }}'></buydata-component>
             <!--end::Content-->
         </div>
