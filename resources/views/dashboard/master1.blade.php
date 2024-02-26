@@ -676,7 +676,7 @@
             <div class="app-wrapper  flex-column flex-row-fluid " id="kt_app_wrapper">
 
                 <!--begin::Toolbar-->
-                <div style='background:url({{ asset('/assets/media/auth/bg3.jpg') }});background-size:cover;width:100%'>
+                <div style='background:url({{ asset('/assets/media/auth/bg3.jpg') }});background-size:cover;width:100%' class="app-toolbar  py-6 ">
                     {{-- <div style='background:url({{ asset('assets/img/bg7.jpg')}});background-size:cover' id="kt_app_toolbar" class="app-toolbar  py-6 "> --}}
 
                     <!--begin::Toolbar container-->
