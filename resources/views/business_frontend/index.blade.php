@@ -358,7 +358,7 @@
                 src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 alt="headin" /> --}}
-                <img class="w-auto"
+                <img class="w-auto" style='border-radius:20px'
                 src="{{ asset('assets/img/Work_7.jpg') }}"
                 srcset="{{ asset('assets/img/Work_7.jpg') }}"
                 alt="headin" />
