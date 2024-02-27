@@ -932,7 +932,7 @@
 Swal.fire({
       title: '',
       html: `
-        <img src="{{ asset('assets/img/not.jpg') }}" style="width: 70%; max-height: 100px; object-fit: cover; border-radius: 10px;">
+        <img src="{{ asset('assets/img/not.jpg') }}" style="width: 70%; max-height: 80px; object-fit: cover; border-radius: 10px;">
         <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $notification->title }}</h2>
         <p style="text-align: center;font-size: 14px; color: #888;">{{ $notification->description }}</p>
       `,
