@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap">
+  {{-- <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@400&display=swap" rel="stylesheet"> --}}
 
 </head>
 
@@ -353,9 +354,13 @@
                 src="{{ asset('assets/img/xmas.png') }}"
                 srcset="{{ asset('assets/img/xmas.png') }}"
                 alt="headin" /> --}}
-                <img class="w-auto"
+                {{-- <img class="w-auto"
                 src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
+                alt="headin" /> --}}
+                <img class="w-auto"
+                src="{{ asset('assets/img/Work_7.jpg') }}"
+                srcset="{{ asset('assets/img/Work_7.jpg') }}"
                 alt="headin" />
               
               </figure>
@@ -364,7 +369,8 @@
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-5 text-center text-lg-start">
             <h1 class="display-1 mb-5 mx-md-n5 mx-lg-0">Top Up, <span style='color:#fb9129'>Pay Bills, <br></span> Stay
               Connected.</h1>
-            <p class="lead fs-lg mb-7">It's the festive period, make use of our fun giveaway feature to share happiness in an exciting way!</p>
+            {{-- <p class="lead fs-lg mb-7" style="font-family: 'Grandstander', cursive;">Save more with VTUBIZ!</p> --}}
+            {{-- <p class="lead fs-lg mb-7">It's the festive period, make use of our fun giveaway feature to share happiness in an exciting way!</p> --}}
             <span><a href='/login' class="btn btn-primary border-0 me-2">Login</a></span>
             <span><a href='/register' style='background-color:#001f3f' class="btn btn-primary border-0  me-2">Create
                 Account</a></span><br>

@@ -79,6 +79,10 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
+        $dod = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+        if ($dod && $dod->title !== null) {
+            $data['dod'] = $dod;
+        }
 
         return response()->view('subscription.buydata', $data);
     }
@@ -95,6 +99,10 @@ class SubscriptionController extends Controller
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Data Notification')->first();
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
+        }
+        $dod = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+        if ($dod && $dod->title !== null) {
+            $data['dod'] = $dod;
         }
 
         return view('business_backend.buydata', $data);

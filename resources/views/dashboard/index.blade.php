@@ -30,7 +30,7 @@
                     <!--begin::Col-->
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/my-giveaway" style='border-top:5px solid #640f11;'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -52,7 +52,7 @@
                     <!--begin::Col-->
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/transactions"  style='border-left:5px solid #ebab21 ';
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/data"  style='border-left:5px solid #FF4500 ';
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -102,7 +102,7 @@
                     </div>
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/airtime"  style='border-bottom:5px solid brown'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/cable"  style='border-bottom:5px solid #8A2BE2 '
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -163,7 +163,7 @@
                     </div>
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/electricity"  style='border-top:5px solid #00BFFF'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -221,7 +221,7 @@
                     <!--end::Col-->
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/examination"  style='border-top:5px solid #2E8B57'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -245,7 +245,7 @@
                     <!--begin::Col-->
                     <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card custom-box shadow-lg">
                             <!--begin::Link-->
                             <a href="/bulksms"  style='border-bottom:5px solid #CC99FF  '
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">

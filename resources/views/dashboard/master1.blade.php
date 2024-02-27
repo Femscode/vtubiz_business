@@ -816,7 +816,7 @@
 
 
                 <!--begin::Wrapper container-->
-                <div class="app-container  container-xxl ">
+                <div style='background:url({{ asset('/assets/img/wbg1.jpg') }});background-size:cover;'  class="app-container  container-xxl ">
 
                     <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
 
@@ -928,11 +928,49 @@
         @endif
         @if(isset($notification))
 
-Swal.fire(
-        '{{ $notification->title }}',
-        '{{ $notification->description }}',
-        'info'
-)
+        
+Swal.fire({
+      title: '',
+      html: `
+        <img src="{{ asset('assets/img/not.jpg') }}" style="width: 50%; max-height: 70px; object-fit: cover; border-radius: 10px;">
+        <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $notification->title }}</h2>
+        <p style="text-align: center;font-size: 14px; color: #888;">{{ $notification->description }}</p>
+      `,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'custom-sweetalert',
+        content: 'custom-sweetalert-content',
+        closeButton: 'custom-sweetalert-close'
+      }
+    });
+
+// Swal.fire(
+//         '{{ $notification->title }}',
+//         '{{ $notification->description }}',
+//         'info'
+// )
+@endif
+
+@if(isset($dod))
+
+Swal.fire({
+      title: '',
+      html: `
+        <img src="{{ asset('assets/img/discount.jpg') }}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px;">
+        <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $dod->title }}</h2>
+        <p style="text-align: center;font-size: 24px; color: #888;"><b>{{ $dod->description }}</b></p>
+      `,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'custom-sweetalert',
+        content: 'custom-sweetalert-content',
+        closeButton: 'custom-sweetalert-close'
+      }
+    });
+
+
 @endif
 
 @if (session('message'))
