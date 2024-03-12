@@ -105,9 +105,7 @@
                                         <div class="fs-6 fw-semibold text-gray-600">
                                             Acct. No :</div>
                                         <div class="fs-4 fw-bold">
-                                            <strong id='acctNo'>{{ $account_no ?? "No account generated
-                                                yet!" }}
-                                            </strong>
+                                            <strong id='acctNo'>{{$account_no ?? "No account generated yet!" }}</strong>
                                           
                                             <a style='cursor:pointer' id='copyAcct'>
                                                 <i class='bi-clipboard m-2'>

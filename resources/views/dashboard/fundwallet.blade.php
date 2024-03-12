@@ -122,7 +122,7 @@
                                             <input required type='radio' name='type' value='transfer' />
                                             <label class="form-check-label" for="Pay with bank transfer">
                                                 Automatic Bank Transfer
-                                            </label>
+                                            </label><br>
                                             <input required type='radio' name='type' value='card' />
                                             <label class="form-check-label" for="Pay with card">
                                                 Pay With Credit Card
