@@ -180,10 +180,13 @@ class SubscriptionController extends Controller
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
 
-        $phone_number = $request->phone_number;
-        if (strlen($request->phone_number) == 10) {
-            $phone_number = "0" . $request->phone_number;
+       
+        $phone_number = str_replace(' ', '', $request->phone_number);
+        if (strlen($phone_number) == 10) {
+            $phone_number = "0" . $phone_number;
         }
+       
+
         $hashed_pin = hash('sha256', $request->pin);
         if ($user->pin !== $hashed_pin) {
             $response = [
@@ -206,7 +209,7 @@ class SubscriptionController extends Controller
                 $reference,
                 $details,
                 $user->id,
-                $request->phone_number,
+                $phone_number,
                 $request->network,
                 $request->plan,
                 $data_price,
@@ -217,7 +220,7 @@ class SubscriptionController extends Controller
                 $reference,
                 $details,
                 $user->id,
-                $request->phone_number,
+                $phone_number,
                 $request->network,
                 $request->plan,
                 $data_price,
@@ -321,8 +324,9 @@ class SubscriptionController extends Controller
         $company = User::where('id', $user->company_id)->first();
 
         $phone_number = $phone;
-        if (strlen($phone) == 10) {
-            $phone_number = "0" . $phone;
+        $phone_number = str_replace(' ', '', $phone_number);
+        if (strlen($phone_number) == 10) {
+            $phone_number = "0" . $phone_number;
         }
 
         $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
@@ -412,8 +416,10 @@ class SubscriptionController extends Controller
         $company = User::where('id', $user->company_id)->first();
 
         $phone_number = $phone;
-        if (strlen($phone) == 10) {
-            $phone_number = "0" . $phone;
+        $phone_number = str_replace(' ', '', $phone_number);
+        
+        if (strlen($phone_number) == 10) {
+            $phone_number = "0" . $phone_number;
         }
 
         $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
@@ -1319,9 +1325,10 @@ class SubscriptionController extends Controller
         // dd($request->all());
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
-        $phone_number = $request->phone_number;
-        if (strlen($request->phone_number) == 10) {
-            $phone_number = "0" . $request->phone_number;
+      
+        $phone_number = str_replace(' ', '', $request->phone_number);
+        if (strlen($phone_number) == 10) {
+            $phone_number = "0" . $phone_number;
         }
         $hashed_pin = hash('sha256', $request->pin);
         if ($user->pin !== $hashed_pin) {
@@ -1342,7 +1349,7 @@ class SubscriptionController extends Controller
                 $reference,
                 $details,
                 $user->id,
-                $request->phone_number,
+                $phone_number,
                 $request->network,
                 $request->discounted_amount,
                 $request->amount,
@@ -1353,7 +1360,7 @@ class SubscriptionController extends Controller
                 $reference,
                 $details,
                 $user->id,
-                $request->phone_number,
+                $phone_number,
                 $request->network,
                 $request->discounted_amount,
                 $request->amount,
@@ -1432,8 +1439,9 @@ class SubscriptionController extends Controller
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
         $phone_number = $phone;
-        if (strlen($phone) == 10) {
-            $phone_number = "0" . $phone;
+        $phone_number = str_replace(' ', '', $phone_number);
+        if (strlen($phone_number) == 10) {
+            $phone_number = "0" . $phone_number;
         }
 
         // dd($request->all());
