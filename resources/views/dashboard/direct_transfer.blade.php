@@ -19,7 +19,32 @@
  
  color:black;
 }
+
+.countdown-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 50px auto;
+    border-radius: 50%;
+    border: 8px solid #ccc;
+}
+
+.countdown-timer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.countdown-timer h2 {
+    margin: 0;
+    font-size: 24px;
+}
 </style>
+
+
 @endsection
 
 @section('content')
@@ -35,7 +60,7 @@
             <!--begin::Content-->
             <div class="col-md-12">
                 <!--begin::Card-->
-                <div class="card card-custom">
+                <div style='border:1px dashed #3c763d;background-color:#fff;'class="card card-custom">
                     <!--begin::Header-->
                
                     <!--end::Header-->
@@ -43,30 +68,20 @@
 
                     <div class="card-body">
                         <!--begin::Heading-->
-                    
-                     
-                        <div class="text-center my-8">
-                            <span class=" text-gray-500 fw-bold fs-4">-- BANK TRANSFER --</span>
-                        </div>
-                        <div class="alert bg-light-success alert-custom alert-light-success fade show mb-2" role="alert">
-                            {{-- <div class="alert-icon">
-                                <span class="svg-icon svg-icon-3x svg-icon-info">
-                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/icons/Code/Info-circle.svg-->
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"></circle>
-                                            <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1"></rect>
-                                            <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1"></rect>
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
-                            </div> --}}
-                            <div class="alert-text fw-semibold fs-6">
-                                <h4>Make an instant transfer to the account details below.</h4>
-                                Please note that this is a virtual temporary account, and will expire in <span class='text-danger'><b>30Mins</b></span> time.</div>
+
+
+                       
+                        <div class="alert bg-light-success alert-custom alert-light-success fade show mb-2"
+                            role="alert">
+                          
+                            <input type='hidden' id='expire' value='30'/>
+                            <H3>Bank Transfer Guildline</H3>
+                            <ul>
+                                <li>Transfer only the exact amount stated below.</li>
+                                <li>Take note that account details below is a temporary account, and it expires in  <span class='text-danger'><b><span id='min'>30</span>Mins <span id='secs'>0</span>Secs</b></span> time.</li>
+                                <li>Take note of the account name during transfer, it must begin with VTUBIZ.</li>
+                            </ul>
+                          
 
 
                         </div>
@@ -74,31 +89,40 @@
                             <!--begin::Info-->
                             <div class="d-flex flex-column p-2 m-2">
                                 <!--begin::Owner-->
-                               
+
                                 <!--end::Owner-->
 
                                 <!--begin::Wrapper-->
                                 <div class="d-flex align-items-center">
                                     <!--begin::Icon-->
-                               
-                                   
+
+
 
                                     <!--end::Icon-->
 
                                     <!--begin::Details-->
                                     <div>
                                         <div class="fs-6 fw-semibold text-gray-600">
-                                        Acct. No :</div>
-                                        <div class="fs-4 fw-bold"><strong>{{ $account_no ?? "No account generated
-                                            yet!" }}</strong></div>
-                                            <div class="fs-6 fw-semibold text-gray-600">Bank Name :</div>
-                                        <div class="fs-6 fw-bold"><strong>{{ $bank_name ?? "No
-                                            account generated yet!" }}</strong></div>
-                                            <div class="fs-6 fw-semibold text-gray-600">
-                                              Amount :</div>
-                                              <div class="fs-4 fw-bold"><strong>NGN{{ number_format($amount) ?? "No account generated
-                                                  yet!" }}</strong></div>
-                                                  <span class='text-danger'>Please only make a transfer of the exact amount above!</span>
+                                            Acct. No :</div>
+                                        <div class="fs-4 fw-bold">
+                                            <strong id='acctNo'>{{ $account_no ?? "No account generated
+                                                yet!" }}
+                                            </strong>
+                                          
+                                            <a style='cursor:pointer' id='copyAcct'>
+                                                <i class='bi-clipboard m-2'>
+                                                </i>
+                                            </a>
+                                        </div>
+                                        <div class="fs-6 fw-semibold text-gray-600">Bank Name :</div>
+                                        <div class="fs-4 fw-bold"><strong>{{ $bank_name ?? "No
+                                                account generated yet!" }}</strong></div>
+                                        <div class="fs-6 fw-semibold text-gray-600">
+                                            Amount :</div>
+                                        <div class="fs-4 fw-bold"><strong>NGN{{ number_format($amount) ?? "No account
+                                                generated
+                                                yet!" }}</strong></div>
+                                        <span class='text-danger'>Please transfer only the exact amount above!</span>
                                     </div>
                                     <!--end::Details-->
                                 </div>
@@ -157,7 +181,55 @@
         
         // alert($("#u_amount").val() * 100)
     })
-    })
+    $('#copyAcct').click(function() {
+      // Select the input field content
+      var tempTextarea = $('<textarea>');
+            
+            // Set its value to the content of acctNo
+            tempTextarea.val($('#acctNo').text());
+            
+            // Append it to the body and select its content
+            $('body').append(tempTextarea);
+            tempTextarea.select();
+            
+            // Copy the selected text to the clipboard
+            document.execCommand('copy');
+            
+            // Remove the temporary textarea
+            tempTextarea.remove();
 
+      // You can add a visual feedback if needed, for example, change the icon color or show a tooltip
+     
+      $("#copyAcct").text('Copied')
+
+      // Optionally, revert the icon color after a short delay
+      setTimeout(function() {
+        $('#copyAcct').html('<i class="bi-clipboard"></i>'); // Revert to the original color (empty string removes inline style)
+      }, 1000); // Adjust the delay as needed
+    });
+        var minutes = $("#expire").val();
+        var seconds = 0;
+
+        // Update countdown every second
+        var countdownInterval = setInterval(function () {
+            // Update seconds
+            seconds--;
+            if (seconds < 0) {
+                seconds = 59;
+                // Update minutes when seconds reach 0
+                minutes--;
+                if (minutes < 0) {
+                    // Countdown finished, clear interval
+                    clearInterval(countdownInterval);
+                    // You can add any additional actions here when the countdown reaches 0
+                }
+                // Update minutes element
+                $('#min').text(minutes);
+            }
+
+            // Update seconds element
+            $('#secs').text(seconds);
+        }, 1000); // Update every second
+    })
 </script>
 @endsection
