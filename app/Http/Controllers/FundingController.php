@@ -343,7 +343,7 @@ class FundingController extends Controller
             ->orderByDesc('created_at')
             ->first();
         $tranx->reference = $reference;
-        $tranx->description = $message;
+        // $tranx->description = $message;
         $user = User::find($tranx->user_id);
         $user->balance -= $tranx->amount;
         $user->total_spent += $tranx->amount;
