@@ -249,6 +249,7 @@ class FundingController extends Controller
         $reference = $data['reference'];
         $status =  $data['status'];
         $message = $data['message'];
+        $message = preg_replace('/[\/\\\\]/', '-', $message);
 
         if ($status == 'success' || $status == 'successful') {
             if (substr($client_reference, 0, 3) == 'sgw') {
@@ -342,7 +343,7 @@ class FundingController extends Controller
             ->orderByDesc('created_at')
             ->first();
         $tranx->reference = $reference;
-        // $tranx->description = $message;
+        $tranx->description = $message;
         $user = User::find($tranx->user_id);
         $user->balance -= $tranx->amount;
         $user->total_spent += $tranx->amount;
