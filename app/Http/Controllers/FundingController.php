@@ -35,7 +35,8 @@ class FundingController extends Controller
         }
     }
 
-    public function generatePermanentAccount(Request $request) {
+    public function generatePermanentAccount(Request $request)
+    {
         // dd($request->all(),env('FLW_SECRET_KEY'));
         $user = Auth::user();
         $str_name = explode(" ", $user->name);
@@ -54,7 +55,7 @@ class FundingController extends Controller
                 'is_permanent' => true,
                 'bvn' => $request->bvn,
                 'tx_ref' => $trx_ref,
-                'phonenumber' => $user->phone,               
+                'phonenumber' => $user->phone,
                 'firstname' => $first_name,
                 'lastname' => $last_name,
                 'narration' => 'VTUBIZ/' . $first_name . '-' . $last_name,
@@ -66,13 +67,13 @@ class FundingController extends Controller
 
         // You can also convert the JSON response to an array or object if needed:
         $responseData = $response->json(); // Converts JSON response to an array
-        
-      
+
+
         $user->bank_name = $responseData['data']['bank_name'];
         $user->account_no = $responseData['data']['account_number'];
-        $user->account_name = 'VTUBIZ/' . $first_name . '-' . $last_name ;
+        $user->account_name = 'VTUBIZ/' . $first_name . '-' . $last_name;
         $user->save();
-        return redirect('/fundwallet')->with('message','Permanent Account Created Successfully!');
+        return redirect('/fundwallet')->with('message', 'Permanent Account Created Successfully!');
     }
     public function checkout(Request $request, $subdomain = null)
     {
@@ -240,13 +241,14 @@ class FundingController extends Controller
     }
     public function easywebhook(Request $request)
     {
-        file_put_contents(__DIR__ . '/easywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+        file_put_contents(__DIR__ . '/neweasywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
 
         $jsonData = $request->getContent();
         $data = json_decode($jsonData, true);
         $client_reference = $data['client_reference'];
         $reference = $data['reference'];
         $status =  $data['status'];
+        $message = $data['message'];
 
         if ($status == 'success' || $status == 'successful') {
             if (substr($client_reference, 0, 3) == 'sgw') {
@@ -264,10 +266,56 @@ class FundingController extends Controller
                 $giveaway->save();
             }
 
-            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference;
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
             // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
-        } else {
+        } 
+        elseif ($status == 'pending') {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 2;
+                $tranx->save();
+
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                $giveaway->reference = $reference;
+                $giveaway->status = 1;
+                $giveaway->save();
+            }
+
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            // file_put_contents(__DIR__ . '/easy_success.json', $url);
+            $response = Http::get($url);
+        } 
+        elseif ($status == 'failed') {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 0;
+                $tranx->save();
+
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                if ($giveaway) {
+
+                    $giveaway->reference = $reference;
+                    $giveaway->status = 0;
+                    $giveaway->save();
+                }
+            }
+
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $response = Http::get($url);
+        } 
+       
+        
+        else {
+            if (substr($client_reference, 0, 3) == 'sgw') {
             $tranx = Transaction::where('reference', $client_reference)
                 ->orderByDesc('created_at')
                 ->first();
@@ -280,19 +328,21 @@ class FundingController extends Controller
             $giveaway->reference = $reference;
             $giveaway->status = 0;
             $giveaway->save();
-            $url = 'https://vtubiz.com/run_normal/' . $client_reference . '/' . $reference;
+            }
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
             $response = Http::get($url);
         }
 
         return response()->json("OK", 200);
     }
 
-    public function run_debit($client_reference, $reference)
+    public function run_debit($client_reference, $reference,$message)
     {
         $tranx = Transaction::where('reference', $client_reference)
             ->orderByDesc('created_at')
             ->first();
         $tranx->reference = $reference;
+        $tranx->description = $message;
         $user = User::find($tranx->user_id);
         $user->balance -= $tranx->amount;
         $user->total_spent += $tranx->amount;
@@ -309,10 +359,14 @@ class FundingController extends Controller
         $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
         $duplicate->delete();
     }
-    public function run_normal($client_reference, $reference)
+    public function run_failed($client_reference, $reference,$message)
     {
-        $tranx = Transaction::where('reference', $client_reference)->latest()->first();
+
+        $tranx = Transaction::where('reference', $client_reference)
+            ->orderByDesc('created_at')
+            ->first();
         $tranx->reference = $reference;
+        $tranx->description = $message;
         $tranx->status = 0;
         $tranx->save();
         $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
@@ -332,9 +386,9 @@ class FundingController extends Controller
         } elseif ($amountpaid < 3000) {
             $charges = 30;
             $amountpaid -= $charges;
-        // } elseif ($amountpaid < 5000) {
-        //     $charges = 50;
-        //     $amountpaid -= $charges;
+            // } elseif ($amountpaid < 5000) {
+            //     $charges = 50;
+            //     $amountpaid -= $charges;
         } else {
             $charges = 50;
             $amountpaid -= $charges;
