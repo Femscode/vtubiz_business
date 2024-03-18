@@ -307,7 +307,7 @@ class SuperController extends Controller
         $users = User::where('created_at', '>', $request->from)
             ->where('created_at', '<', $request->to)
             ->where(function ($query) use ($request) {
-                $query->where('company_id', 5)
+                $query->where('company_id','!=', 888)
                     ->orWhere('company_id', '=', DB::raw('id'));
             })
             ->select([
