@@ -36,6 +36,7 @@
                                     <th scope="col">Details</th>
                                     <th scope="col">Before/After</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Date</th>
                                     <th>Actions</th>
 
                                 </tr>
@@ -57,6 +58,8 @@
                                     number_format($tranx->after) }}</td>
                                 {{-- <td>Pending Schedule Purchase</td> --}}
                                 <td><a class='btn btn-warning btn-sm'>Pending</a></td>
+                                <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
+                 
                                 <td> <a href='/verify_purchase/{{ $tranx->reference }}'
                                         class='btn btn-success'>Verify</a></td>
 
@@ -81,6 +84,8 @@
                                     <span class='btn-sm btn btn-danger'>Failed</span>
                                     @endif
                                 </td>
+                                <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
+                 
                                 <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
                             </tr>
 
@@ -105,6 +110,8 @@
                                     <span class='btn-sm btn btn-danger'>Failed</span>
                                     @endif
                                 </td>
+                                <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
+                 
                                 <td><a  href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
                             </tr>
                             @endif

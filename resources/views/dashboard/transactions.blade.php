@@ -43,6 +43,7 @@
                   <th scope="col">Later Balance</th>
                   <th scope="col">Type</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Date</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -76,6 +77,7 @@
 
 
                   </td>
+                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
                   <td>
                     <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
 
@@ -101,6 +103,8 @@
                     <span class='btn-sm btn btn-warning'>Pending / Failed</span>
 
                   </td>
+                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
+                 
                   <td><a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
                 </tr>
                 @elseif($tranx->status == 1)
@@ -132,6 +136,8 @@
                     @endif
 
                   </td>
+                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
+                 
                   <td>
                     <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
 
@@ -167,6 +173,8 @@
                     @endif
 
                   </td>
+                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
+                 
                   <td>
                     <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
                     <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
