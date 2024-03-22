@@ -102,7 +102,7 @@
                                             </td>
                     
                                             <td>
-                                                NGN{{ number_format($user->spent,2) }}
+                                                NGN{{ number_format($user->earnings,2) }}
                                             </td>
                                             <td>
                                                 <a class='btn btn-warning btn-sm'  href='https://wa.me/234/{{ substr($user->phone,0,1) }}'>Message</a>
