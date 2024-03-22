@@ -350,7 +350,7 @@ class FundingController extends Controller
 
         $earning_amount = 0.05 * $tranx->amount;
         $user->earnings += $earning_amount;
-        
+           file_put_contents(__DIR__ . '/earning.json', $earning_amount);
         $user->save();
         $company = User::where('id', $user->company_id)->first();
         $profit = $tranx->amount - floatval($tranx->real_amount);
