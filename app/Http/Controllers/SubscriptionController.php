@@ -286,7 +286,7 @@ class SubscriptionController extends Controller
         //purchase the data
         //just to replace env
         $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 3, $real_dataprice, $phone_number, $request->network, $request->plan);
-
+      
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",

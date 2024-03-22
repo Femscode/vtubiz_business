@@ -17,10 +17,9 @@
                 <!--begin::Misc Widget 1-->
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
                   
-                        Join our Whatsapp Community 
-                        to get first hand update about our services.
+                        Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by users you refer!
 
-                    Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.
+                    Click <a href='/my-referral'>here</a> to join.
                   
                 </div>
 
@@ -32,16 +31,19 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/my-giveaway" style='border-top:5px solid #640f11;'
+                            <a href="/my-referral" style='border-top:5px solid #640f11;'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                                <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                   
-                                   <i class='fa fa-gift' style='font-size:30px'></i>
-                                </span>
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24"/>
+                                        <path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                        <path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero"/>
+                                    </g>
+                                </svg>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
-                                    Create Giveaway </span>
+                                    Referral Program </span>
                             </a>
                             <!--end::Link-->
                         </div>
@@ -267,50 +269,51 @@
                         <!--end::Card-->
                     </div>
               
-                    {{-- <div class="col-6">
+                 
+
+                    <div class="col-6">
                         <!--begin::Card-->
-                        <div class="card card-stretch custom-box shadow-lg">
+                        <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/transactions"  style='border-left:5px solid #FF4081     '
+                            <a href="/my-giveaway" style='border-top:5px solid #640f11;'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
-                                <!--begin::Svg Icon | path: icons/duotune/abstract/abs025.svg-->
+                                <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo8/dist/../src/media/svg/icons/Communication/Clipboard-list.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24" />
-                                            <path
-                                                d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z"
-                                                fill="#000000" opacity="0.3" />
-                                            <path
-                                                d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z"
-                                                fill="#000000" />
-                                            <rect fill="#000000" opacity="0.3" x="10" y="9" width="7" height="2"
-                                                rx="1" />
-                                            <rect fill="#000000" opacity="0.3" x="7" y="9" width="2" height="2"
-                                                rx="1" />
-                                            <rect fill="#000000" opacity="0.3" x="7" y="13" width="2" height="2"
-                                                rx="1" />
-                                            <rect fill="#000000" opacity="0.3" x="10" y="13" width="7" height="2"
-                                                rx="1" />
-                                            <rect fill="#000000" opacity="0.3" x="7" y="17" width="2" height="2"
-                                                rx="1" />
-                                            <rect fill="#000000" opacity="0.3" x="10" y="17" width="7" height="2"
-                                                rx="1" />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
+                                   
+                                   <i class='fa fa-gift' style='font-size:30px'></i>
                                 </span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
-                                    My Transactions </span>
+                                    Create Giveaway </span>
                             </a>
                             <!--end::Link-->
                         </div>
                         <!--end::Card-->
-                    </div> --}}
+                    </div>
                     <!--end::Col-->
+
+                    <div class="col-6">
+                        <!--begin::Card-->
+                        <div class="card card-stretch custom-box shadow-lg">
+                            <!--begin::Link-->
+                            <a href="/profile"  style='border-left:5px solid #FF4081     '
+                                class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
+                                <!--begin::Svg Icon | path: icons/duotune/abstract/abs025.svg-->
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24"/>
+                                        <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                        <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" id="Mask-Copy" fill="#000000" fill-rule="nonzero"/>
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                                <span class="fs-4 fw-normal">
+                                    My Profile </span>
+                            </a>
+                            <!--end::Link-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
 
                 </div>
 
@@ -407,20 +410,29 @@
 @section('script')
 <script>
      function confirmUpgrade() {
-    Swal.fire({
-      title: 'You are about to upgrade your account to a business account?',
-    //   text: 'This action cannot be undone!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, upgrade!'
-    }).then((result) => {
-      if (result.isConfirmed) {
+        Swal.fire({
+    title: 'What does a business account entails?',
+    html: `
+        <ul>
+            <li>A free website</li>
+            <li>Discount in all data plan prices</li>
+            <li>Customizing your own data prices.</li>
+            <li>Email marketing</li>
+        </ul>
+        <p style='color:red'>Please note: Upgrading to a business account incurs a charge of NGN3,500.</p>
+    `,
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, upgrade!'
+}).then((result) => {
+    if (result.isConfirmed) {
         // User clicked "Yes, upgrade!" button, navigate to the upgrade page
         window.location.href = "/upgrade/{{ $user->id }}";
-      }
-    });
+    }
+});
+
 
     // Prevent the default anchor tag behavior (navigation) until confirmation
     return false;

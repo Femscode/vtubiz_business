@@ -347,6 +347,10 @@ class FundingController extends Controller
         $user = User::find($tranx->user_id);
         $user->balance -= $tranx->amount;
         $user->total_spent += $tranx->amount;
+
+        $earning_amount = 0.05 * $tranx->amount;
+        $user->earnings += $earning_amount;
+        
         $user->save();
         $company = User::where('id', $user->company_id)->first();
         $profit = $tranx->amount - floatval($tranx->real_amount);

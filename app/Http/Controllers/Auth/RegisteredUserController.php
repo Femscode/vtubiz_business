@@ -30,7 +30,9 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        $data['referralId'] = isset($_GET['referral_code']) ? $_GET['referral_code'] : '';
+    
+    return view('auth.register',$data);
     }
 
     /**
@@ -43,6 +45,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+      
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required'],
@@ -64,6 +67,7 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'brand_name' => $brand_name,
+            'referred_by' => $data['referred_by'] ?? "VTUBIZ",
             'email' => $data['email'],
             'phone' => $data['phone'],
             'uuid' => $uid,

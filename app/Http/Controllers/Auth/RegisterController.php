@@ -83,6 +83,7 @@ class RegisterController extends Controller
             $user = User::create([
                 'name' => $data['name'],               
                 'company_id' => $data['company_id'],
+                'referred_by' => $data['referred_by'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'uuid' => $uid,
@@ -94,6 +95,7 @@ class RegisterController extends Controller
             $user = User::create([
                 'name' => $data['name'],
                 'brand_name' => $brand_name,             
+                'referred_by' =>  $data['referred_by'],             
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'uuid' => $uid,

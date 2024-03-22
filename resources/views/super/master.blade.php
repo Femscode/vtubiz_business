@@ -136,6 +136,16 @@
             my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0
         " id="kt_app_header_menu" data-kt-menu="true">
                                 <!--begin:Menu item-->
+                                <a href='/alltransactions'
+                                    class="menu-item @if($active == 'dashboard') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
+                                    <!--begin:Menu link--><span class="menu-link"><span
+                                            class="menu-title">All Transactions</span><span
+                                            class="menu-arrow d-lg-none"></span></span>
+                                    <!--end:Menu link-->
+                                    <!--begin:Menu sub-->
+
+                                    <!--end:Menu sub-->
+                                </a>
                                 <a href='/superadmin'
                                     class="menu-item @if($active == 'dashboard') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span

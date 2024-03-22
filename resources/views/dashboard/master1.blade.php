@@ -151,7 +151,7 @@
         " id="kt_app_header_menu" data-kt-menu="true">
                                 <!--begin:Menu item-->
                                 <a href='/dashboard'
-                                    class="menu-item @if($active == 'dashboard') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
+                                    class="menu-item @if($active == 'dashboard') here show menu-here-bg @endif  me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span
                                             class="menu-title">Dashboard</span><span
                                             class="menu-arrow d-lg-none"></span></span>
@@ -333,6 +333,14 @@
 
                                     </div>
                                     <!--end:Menu sub-->
+                                </div>
+                                <div class="menu-item">
+                                    <!--begin:Menu link--><a class="menu-link" href="/my-giveaway"
+                                        data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                        data-bs-placement="right" data-kt-initialized="1"><span
+                                            class="menu-title">Create Giveaways
+                                        </span></a>
+
                                 </div>
                                 <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                     data-kt-menu-placement="bottom-start"
@@ -755,25 +763,19 @@
                                                 <!--end::Amount-->
 
                                                 <!--begin::Badge-->
-                                                <span
-                                                    onclick='Swal.fire("Almost There!","Perform more transactions to unlock your bonus.","info")'
-                                                    class="badge badge-light-success fs-base">
+                                                <a href='/my-referral' class="badge badge-light-success fs-base">
                                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-                                                    <span class="svg-icon svg-icon-5 svg-icon-success ms-n1"><svg
-                                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <rect opacity="0.5" x="13" y="6" width="13" height="2"
-                                                                rx="1" transform="rotate(90 13 6)" fill="currentColor">
-                                                            </rect>
-                                                            <path
-                                                                d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-                                                                fill="currentColor"></path>
-                                                        </svg>
-                                                    </span>
-                                                    Bonus:
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect id="bound" x="0" y="0" width="24" height="24"/>
+                                                            <rect id="Rectangle-2" fill="#000000" opacity="0.3" x="2" y="4" width="20" height="5" rx="1"/>
+                                                            <path d="M5,7 L8,7 L8,21 L7,21 C5.8954305,21 5,20.1045695 5,19 L5,7 Z M19,7 L19,19 C19,20.1045695 18.1045695,21 17,21 L11,21 L11,7 L19,7 Z" id="Combined-Shape" fill="#000000"/>
+                                                        </g>
+                                                    </svg>
+                                                    Referral Earnings:
                                                     <!--end::Svg Icon-->
-                                                    ₦{{ number_format($user->bonus,2) }}
-                                                </span>
+                                                    ₦{{ number_format($earnings) }}
+                                                </a>
                                                 <!--end::Badge-->
                                             </div>
                                             <!--end::Info-->

@@ -3,23 +3,23 @@
 <div class="d-flex flex-column flex-column-fluid">
 
 
-    <div class="flex-row-fluid ml-lg-8">
+    <div id="kt_app_content" class="app-content  flex-column-fluid ">
         <!--begin::Card-->
         <div class="card card-custom">
             <!--begin::Header-->
             <form class="form" method='post' action='{{ route("updateprofile") }}' enctype="multipart/form-data">@csrf
-            <div class="card-header py-3">
-                <div class="card-title align-items-start flex-column">
-                    <h3 class="card-label font-weight-bolder text-dark">Profile Overview</h3>
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">Profile Overview</h3>
+                    </div>
+                    <div class="card-toolbar">
+                        <button type="submit" class="btn btn-success mr-2">Save Changes</button>
+                        <button type="reset" class="btn btn-secondary">Cancel</button>
+                    </div>
                 </div>
-                <div class="card-toolbar">
-                    <button type="submit" class="btn btn-success mr-2">Save Changes</button>
-                    <button type="reset" class="btn btn-secondary">Cancel</button>
-                </div>
-            </div>
-            <!--end::Header-->
-            <!--begin::Form-->
-          
+                <!--end::Header-->
+                <!--begin::Form-->
+
                 <div class="card-body">
                     <!--begin::Heading-->
                     <div class="row">
@@ -33,7 +33,8 @@
                         <label class="col-xl-3 col-lg-3 col-form-label">Name</label>
                         <div class="col-lg-9 col-xl-6">
                             <div class="">
-                                <input name='name' class="form-control form-control-lg form-control-solid" type="text" value="{{ $user->name }}" />
+                                <input name='name' class="form-control form-control-lg form-control-solid" type="text"
+                                    value="{{ $user->name }}" />
                             </div>
                         </div>
                     </div>
@@ -47,7 +48,9 @@
                                         <i class="la la-at"></i>
                                     </span>
                                 </div>
-                                <input readonly disabled type="text" class="form-control form-control-lg form-control-solid" value="{{ $user->email }}" placeholder="Email" />
+                                <input readonly disabled type="text"
+                                    class="form-control form-control-lg form-control-solid" value="{{ $user->email }}"
+                                    placeholder="Email" />
                             </div>
                         </div>
                     </div>
@@ -60,19 +63,20 @@
                                         <i class="fa fa-phone"></i>
                                     </span>
                                 </div>
-                                <input type="text" name='phone' class="form-control form-control-lg form-control-solid" value="{{ $user->phone ?? "" }}" placeholder="Phone Number" />
+                                <input type="text" name='phone' class="form-control form-control-lg form-control-solid"
+                                    value="{{ $user->phone ?? "" }}" placeholder="Phone Number" />
                             </div>
-                           
+
                         </div>
                     </div>
                     <!--begin::Form Group-->
                     <div class="form-group row mb-4">
                         <label class="col-xl-3 col-lg-3 col-form-label">Profile Picture</label>
                         <div class="col-lg-9 col-xl-6">
-                          <input type='file' class='form-control' name='image'/>
+                            <input type='file' class='form-control' name='image' />
                         </div>
                     </div>
-    
+
                     <div class="form-group row mb-4">
                         <label class="col-xl-3 col-lg-3 col-form-label">BVN</label>
                         <div class="col-lg-9 col-xl-6">
@@ -82,26 +86,28 @@
                                         <i class="fa fa-bank"></i>
                                     </span>
                                 </div>
-                                <input disabled type="number" name='bvn' readonly class="form-control form-control-lg form-control-solid" value="{{ $user->bvn ?? "" }}" placeholder="Bank Verification Number" />
-                            </div>   
+                                <input disabled type="number" name='bvn' readonly
+                                    class="form-control form-control-lg form-control-solid"
+                                    value="{{ $user->bvn ?? "" }}" placeholder="Bank Verification Number" />
+                            </div>
                         </div>
                     </div>
                     <!--begin::Form Group-->
-                  
+
                     <!--begin::Form Group-->
                     {{-- <div class="form-group row mb-4 align-items-center">
                         <label class="col-xl-3 col-lg-3 col-form-label">Communication</label>
                         <div class="col-lg-9 col-xl-6">
                             <div class="checkbox-inline">
                                 <label class="checkbox">
-                                <input type="checkbox" checked="checked" />
-                                <span></span>Email</label>
+                                    <input type="checkbox" checked="checked" />
+                                    <span></span>Email</label>
                                 <label class="checkbox">
-                                <input type="checkbox" checked="checked" />
-                                <span></span>SMS</label>
+                                    <input type="checkbox" checked="checked" />
+                                    <span></span>SMS</label>
                                 <label class="checkbox">
-                                <input type="checkbox" />
-                                <span></span>Phone</label>
+                                    <input type="checkbox" />
+                                    <span></span>Phone</label>
                             </div>
                         </div>
                     </div> --}}
@@ -118,24 +124,40 @@
                     <div class="form-group row mb-4">
                         <label class="col-xl-3 col-lg-3 col-form-label">Available Balance</label>
                         <div class="col-lg-9 col-xl-6">
-                            <button type="button" class="btn btn-light-success font-weight-bold btn-sm">NGN {{ number_format($user->balance) }}</button>
-                            <p class="form-text text-muted pt-2">Recent Transactions. 
-                            <a href="/transactions" class="font-weight-bold">View transactions</a>.</p>
+                            <button type="button" class="btn btn-light-success font-weight-bold btn-sm">NGN {{
+                                number_format($user->balance) }}</button>
+                            <p class="form-text text-muted pt-2">My Transactions.
+                                <a href="/transactions" class="font-weight-bold">View transactions→</a>
+                            </p>
+                            <p class="form-text text-muted pt-2">Pending Transactions.
+                                <a href="/pending_transactions" class="font-weight-bold">View pending transactions→ </a>
+                            </p>
                         </div>
+                       
                     </div>
                     <!--begin::Form Group-->
                     <div class="form-group row mb-4">
                         <label class="col-xl-3 col-lg-3 col-form-label">Total Money Spent</label>
                         <div class="col-lg-9 col-xl-6">
-                            <button type="button" class="btn btn-light-primary font-weight-bold btn-sm">NGN {{ number_format($user->total_spent) }}</button>
-                           
-                         </div>
+                            <button type="button" class="btn btn-light-primary font-weight-bold btn-sm">NGN {{
+                                number_format($user->total_spent) }}</button>
+
+                        </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-xl-3 col-lg-3 col-form-label"></label>
                         <div class="col-lg-9 col-xl-6">
-                             <button type="button" class="btn btn-light-danger font-weight-bold btn-sm">Deactivate account</button>
-                             <button type="button" class="btn btn-danger font-weight-bold btn-sm">Delete account</button>
+                            <a href="/change-pin" class="btn btn-secondary font-weight-bold btn-sm">Change Pin</a>
+                            <a href="/change-password" class="btn btn-primary font-weight-bold btn-sm">Change
+                                Password</a>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                        <div class="col-lg-9 col-xl-6">
+                            <button type="button" class="btn btn-light-danger font-weight-bold btn-sm">Deactivate
+                                account</button>
+                            <button type="button" class="btn btn-danger font-weight-bold btn-sm">Delete account</button>
                         </div>
                     </div>
                 </div>
@@ -145,7 +167,7 @@
         <!--end::Card-->
     </div>
 </div>
-@endsection  
+@endsection
 @section('script')
 <script>
     $(document).ready(function() {

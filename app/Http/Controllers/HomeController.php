@@ -107,7 +107,7 @@ class HomeController extends Controller
 
     public function index()
     {
-       
+
         return redirect('/dashboard');
     }
 
@@ -131,34 +131,35 @@ class HomeController extends Controller
     }
     public function dashboard()
     {
-      
+
         $data['user'] = $user = Auth::user();
         $data['company'] = User::where('id', $user->company_id)->first();
+
+        $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
 
         // dd($user);
         $data['active'] = 'dashboard';
         if ($user->block == 1) {
-           
+
             return response()->view('dashboard.unverified', $data);
         }
         // dd('here',$user);
         if ($user->pin == null) {
             return response()->view('dashboard.setpin', $data);
-        } else {          
-           
-                // $data['banks'] = Bank::all();
-                $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+        } else {
 
-                if ($notification && $notification->title !== null) {
-                    $data['notification'] = $notification;
-                }
+            // $data['banks'] = Bank::all();
+            $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+
+            if ($notification && $notification->title !== null) {
+                $data['notification'] = $notification;
+            }
             //    dd($data);
-                return response()->view('dashboard.index', $data);
-            
+            return response()->view('dashboard.index', $data);
         }
     }
 
-    
+
     public function delete_order(Request $request)
     {
         $session = MySession::find($request->id);
@@ -170,6 +171,31 @@ class HomeController extends Controller
         $data['user'] = Auth::user();
         $data['active'] = 'profile';
         return view('dashboard.profile', $data);
+    }
+    public function referral()
+    {
+        $data['user'] = $user = Auth::user();
+        $data['active'] = 'profile';
+        $data['users'] = User::where('referred_by', $user->brand_name)->latest()->get();
+        $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
+        return view('dashboard.referral', $data);
+    }
+
+    public function remitearning()
+    {
+        $user = Auth::user();
+        $earnings = User::where('referred_by', $user->brand_name)->sum('earnings');
+        if ($earnings == 0) {
+            return redirect()->back()->with('error', 'You do not have any amount to remit!');
+        }
+        // dd($earnings);
+
+        $client_reference = "RefEarn_" . Str::random(5);
+        $details = "Referral Earning (NGN" . $earnings . ") added to balance";
+        $trans_id = $this->create_transaction('Remit Earning', $client_reference, $details, 'credit', $earnings, $user->id, 1);
+
+        $data['users'] = User::where('referred_by', $user->brand_name)->update(['earnings' => 0]);
+        return redirect()->back()->with('message', 'Referral Earnings remitted successfully!');
     }
     public function process_order(Request $request)
     {
@@ -197,7 +223,7 @@ class HomeController extends Controller
     public function fundwallet()
     {
 
-      
+
         $data['user'] = $user = Auth::user();
         $data['active'] = 'fundwallet';
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Payment Notification')->first();
@@ -205,9 +231,8 @@ class HomeController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
-       
-        return view('dashboard.fundwallet', $data);
 
+        return view('dashboard.fundwallet', $data);
     }
     public function withdraw()
     {
@@ -259,7 +284,7 @@ class HomeController extends Controller
     }
     public function make_transfer(Request $request)
     {
-     
+
         $this->validate($request, [
             'amount' => 'required'
         ]);
@@ -291,14 +316,14 @@ class HomeController extends Controller
 
 
         $reference = 'fund_transfer_' . Str::random(7);
-        $recipient = User::where('phone',$request->account_id)->first();
-        
-        $details = "Fund Transfer of NGN " . $request->amount . " to " . $recipient->name. ' ('. $recipient->phone.')';
-        
+        $recipient = User::where('phone', $request->account_id)->first();
+
+        $details = "Fund Transfer of NGN " . $request->amount . " to " . $recipient->name . ' (' . $recipient->phone . ')';
+
         $tranx =  $this->create_transaction('Fund Transfer', $reference, $details, 'debit', $request->amount, $user->id, 2);
-        
+
         $reference = 'payment_received_' . Str::random(7);
-        $details = "Payment of NGN " . $request->amount . " received from " . $user->name. ' ('. $user->phone.')';
+        $details = "Payment of NGN " . $request->amount . " received from " . $user->name . ' (' . $user->phone . ')';
         $tranx =  $this->create_transaction('Payment Received', $reference, $details, 'debit', $request->amount, $recipient->id, 2);
         // $data = array('username' => $user->name, 'tranx_id' => $tranx->id,  'amount' => $request->amount);
         // dd($data);
@@ -321,13 +346,13 @@ class HomeController extends Controller
     }
     public function make_withdraw(Request $request)
     {
-     
+
         $this->validate($request, [
             'amount' => 'required'
         ]);
         $user = Auth::user();
-        
-        $user_pin = $request->first.$request->second.$request->third.$request->fourth;
+
+        $user_pin = $request->first . $request->second . $request->third . $request->fourth;
         // dd($user_pin);
 
         $hashed_pin = hash('sha256', $user_pin);
@@ -355,12 +380,12 @@ class HomeController extends Controller
 
 
         $reference = 'fund_withdraw_' . Str::random(7);
-        $recipient = User::where('phone',$request->account_id)->first();
-        
-        $details = "Withdraw of NGN " . $request->amount . " to " . $request->account_no. ' ('. $request->bank_name.')'.' Account Name: '.$request->account_name;
-        
+        $recipient = User::where('phone', $request->account_id)->first();
+
+        $details = "Withdraw of NGN " . $request->amount . " to " . $request->account_no . ' (' . $request->bank_name . ')' . ' Account Name: ' . $request->account_name;
+
         $tranx =  $this->create_transaction('Funds Withdraw', $reference, $details, 'debit', $request->amount, $user->id, 2);
-        
+
         // $data = array('username' => $user->name, 'tranx_id' => $tranx->id,  'amount' => $request->amount);
         // dd($data);
         // $amount = $request->amount;
@@ -466,12 +491,11 @@ class HomeController extends Controller
     {
         $data['user'] = $user = Auth::user();
         $data['active'] = 'transaction';
-        
+
         $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->get();
 
-        if($user->type == 'admin') {
+        if ($user->type == 'admin') {
             return view('business_backend.mytransactions', $data);
-
         }
         return view('dashboard.transactions', $data);
     }
@@ -480,7 +504,7 @@ class HomeController extends Controller
         $data['user'] = $user = Auth::user();
         $data['active'] = 'transaction';
         $data['transactions'] = BulkSMSTransaction::where('user_id', $user->id)->latest()->get();
-     
+
         return view('dashboard.bulksms_transactions', $data);
     }
     public function updateprofile(Request $request)

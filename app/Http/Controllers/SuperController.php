@@ -33,6 +33,17 @@ class SuperController extends Controller
 
         return view('super.index', $data);
     }
+    public function alltransactions()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'super';
+        $data['transactions'] = Transaction::latest()->take(150)->get();
+
+        return view('super.index', $data);
+    }
 
     public function data_price()
     {

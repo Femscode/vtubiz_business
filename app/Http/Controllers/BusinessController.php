@@ -42,8 +42,18 @@ class BusinessController extends Controller
         $user = User::find($id);
         // dd($user);
         if ($user->user_type == 'customer') {
+           
+            if($user->balance < 3500) {
+
+                return redirect('/dashboard')->with('message', 'Insufficient balance for upgrading account!');
+            }
+           
             $user->user_type = 'admin';
             $user->save();
+            $client_reference = "Upgrade_".Str::random(5);
+            $details = "Account Upgrade ~ Amount:NGN3,500 ";
+            $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'credit', 3500, $user->id, 1);
+    
             return redirect('/dashboard')->with('message', 'Account Upgraded Successfully!');
         } else {
             $user->user_type = 'customer';

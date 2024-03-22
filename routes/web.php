@@ -3,6 +3,7 @@
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
+use Illuminate\Support\Str;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -100,6 +101,20 @@ Route::any('update_cable_price', function () {
         $theme->save();
     }
 });
+Route::any('update_brand', function () {
+    $users = User::whereNull('brand_name')->get(); // Changed where condition to check for null values directly
+    foreach ($users as $user) {
+        $user->brand_name = Str::replace(" ", "", $user->name); // Changed Str_replace to Str::replace
+        $user->save();
+    }
+});
+Route::any('update_user', function () {
+    $users = User::get(); // Changed where condition to check for null values directly
+    foreach ($users as $user) {
+        $user->type ='customer'; // Changed Str_replace to Str::replace
+        $user->save();
+    }
+});
 
 
 require __DIR__ . '/auth.php';
@@ -160,6 +175,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('/updateprofile', [App\Http\Controllers\HomeController::class, 'updateprofile'])->name('updateprofile');
     Route::post('/setpin', [App\Http\Controllers\HomeController::class, 'setpin'])->name('setpin');
     Route::get('my-profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+    Route::get('my-referral', [App\Http\Controllers\HomeController::class, 'referral'])->name('referral');
+    Route::get('remitearning', [App\Http\Controllers\HomeController::class, 'remitearning'])->name('remitearning');
     Route::get('user-fundwallet', [App\Http\Controllers\HomeController::class, 'fundwallet'])->name('fundwallet');
 
 
@@ -434,6 +451,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::group(['middleware' => 'auth'], function () {
         // Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
+        Route::any('/alltransactions', [App\Http\Controllers\SuperController::class, 'alltransactions'])->name('alltransactions');
         Route::any('/superadmin', [App\Http\Controllers\SuperController::class, 'index'])->name('superadmin');
         Route::any('/schedule_accounts', [App\Http\Controllers\SuperController::class, 'schedule_accounts'])->name('schedule_accounts');
         Route::any('/admin_giveaway', [App\Http\Controllers\SuperController::class, 'admin_giveaway'])->name('admin_giveaway');

@@ -258,6 +258,24 @@ trait TransactionTrait
 
             $tranx->status = 1;
             $tranx->save();
+        } elseif ($title == 'Remit Earning') {
+
+            $r_user->balance += $amount;
+
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+
+            $tranx->status = 1;
+            $tranx->save();
+        } elseif ($title == 'Account Upgrade') {
+
+            $r_user->balance -= $amount;
+
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+
+            $tranx->status = 1;
+            $tranx->save();
         } elseif ($title == 'Account Funding') {
 
 
