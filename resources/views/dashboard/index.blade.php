@@ -17,7 +17,7 @@
                 <!--begin::Misc Widget 1-->
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
                   
-                        Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by users you refer!
+                        Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by every users you refer!
 
                     Click <a href='/my-referral'>here</a> to join.
                   
