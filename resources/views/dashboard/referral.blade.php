@@ -92,20 +92,20 @@
                                             </tr>
                                         </thead>
             
-                                        @foreach($users as $key => $user)
+                                        @foreach($users as $key => $ref)
             
                                         <tr>
             
             
                                             <td>
-                                                {{ $user->name }}<br><i> {{ $user->phone }}</i>
+                                                {{ $ref->name }}<br><i> {{ $ref->phone }}</i>
                                             </td>
                     
                                             <td>
-                                                NGN{{ number_format($user->earnings,2) }}
+                                                NGN{{ number_format($ref->earnings,2) }}
                                             </td>
                                             <td>
-                                                <a class='btn btn-warning btn-sm'  href='https://wa.me/234/{{ substr($user->phone,0,1) }}'>Message</a>
+                                                <a class='btn btn-warning btn-sm'  href='https://wa.me/234/{{ substr($ref->phone,0,1) }}'>Message</a>
                                               
                                                
                                             </td>
