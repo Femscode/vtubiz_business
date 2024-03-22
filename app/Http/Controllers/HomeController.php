@@ -195,7 +195,7 @@ class HomeController extends Controller
         $trans_id = $this->create_transaction('Remit Earning', $client_reference, $details, 'credit', $earnings, $user->id, 1);
 
         $data['users'] = User::where('referred_by', $user->brand_name)->update(['earnings' => 0]);
-        return redirect()->back()->with('message', 'Referral Earnings remitted successfully!');
+        return redirect()->route('dashboard')->with('message', 'Referral Earnings remitted successfully!');
     }
     public function process_order(Request $request)
     {

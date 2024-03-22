@@ -55,7 +55,7 @@
                                     <label class="col-xl-3 col-lg-3 col-form-label">Total Earnings:</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <button type="button" class="btn btn-light-success font-weight-bold btn-sm">NGN {{ number_format($earnings) }}</button>
-                                        <a href="/remitearning" class="btn btn-success font-weight-bold btn-sm">Remit Earnings</a>
+                                        <a onclick='return confirm("Are you sure you want to remit earnings?")' href="/remitearning" class="btn btn-success font-weight-bold btn-sm">Remit Earnings</a>
                                        
                                      </div>
                                 </div>
