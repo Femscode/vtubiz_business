@@ -35,6 +35,8 @@ class SubscriptionController extends Controller
     {
         $data['user'] = $user = Auth::user();
         $datas = Data::where('user_id', 0)->get();
+        $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
+
         $check_data = Data::where('user_id', $user->id)->first();
         // Data::where('user_id', $user->id)->delete();
         // dd($check_data,$datas[0]);
@@ -1575,6 +1577,8 @@ class SubscriptionController extends Controller
     public function airtime()
     {
         $data['user'] = $user = Auth::user();
+        $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
+
         $airtime = Airtime::where('user_id', $user->id)->first();
         if (!$airtime) {
             Airtime::create([

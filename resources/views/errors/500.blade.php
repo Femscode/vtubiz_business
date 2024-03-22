@@ -135,7 +135,7 @@ text-transform: uppercase;
             <iframe src="https://giphy.com/embed/8L0Pky6C83SzkzU55a" width="280" height="280" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p>          
 
             <h2>Internal Server Error.</h2>
-            <p>Uh-oh! Our vendors are cooking up something delicious, kindly try again later! </p>
+            <p>Service Unavailable, kindly try again later! </p>
             
            <a style='background:#ebab21' href="https://vtubiz.com">Go To Homepage</a>
 
