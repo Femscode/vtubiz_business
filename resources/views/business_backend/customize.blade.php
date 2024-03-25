@@ -341,25 +341,32 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="instagram" class="form-label">Instagram Link</label>
                                     <input type="text" class="form-control" name="instagram"
                                         value="{{ $user->instagram ?? '' }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="facebook" class="form-label">Facebook Link</label>
                                     <input type="text" class="form-control" name="facebook"
                                         value="{{ $user->facebook ?? '' }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="twitter" class="form-label">Twitter Link</label>
                                     <input type="text" class="form-control" name="twitter"
                                         value="{{ $user->twitter ?? '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="twitter" class="form-label">Whatsapp Channel</label>
+                                    <input type="text" class="form-control" name="whatsapp"
+                                        value="{{ $user->whatsapp ?? '' }}">
                                 </div>
                             </div>
                         </div>

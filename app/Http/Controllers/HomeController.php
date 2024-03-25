@@ -388,14 +388,14 @@ class HomeController extends Controller
 
         $tranx =  $this->create_transaction('Funds Withdraw', $reference, $details, 'debit', $request->amount, $user->id, 2);
 
-        // $data = array('username' => $user->name, 'tranx_id' => $tranx->id,  'amount' => $request->amount);
+        $data = array('username' => $user->name, 'tranx_id' => $tranx->id,  'amount' => $request->amount);
         // dd($data);
-        // $amount = $request->amount;
+        $amount = $request->amount;
 
-        // Mail::send('mail.withdraw_request', $data, function ($message) use($amount){
-        //     $message->to('fasanyafemi@gmail.com')->subject("Withdrawal request of NGN". $amount);
-        //     $message->from('support@vtubiz.com', 'VTUBIZ');
-        // });
+        Mail::send('mail.withdraw_request', $data, function ($message) use($amount){
+            $message->to('fasanyafemi@gmail.com')->subject("Withdrawal request of NGN". $amount);
+            $message->from('support@vtubiz.com', 'VTUBIZ');
+        });
         // return true;
 
         $response = [

@@ -232,6 +232,7 @@ class BusinessController extends Controller
             $user->instagram = $request->instagram;
             $user->facebook = $request->facebook;
             $user->twitter = $request->twitter;
+            $user->whatsapp = $request->whatsapp;
             if ($request->image_1 !== null) {
                 if ($user->image_1 !== null && file_exists(public_path('website_images') . '/' . $user->image_1)) {
                     unlink(public_path('website_images') . '/' . $user->image_1);
