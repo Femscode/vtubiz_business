@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>Fastpay | CT_Taste</title>
+    <title>VTUBIZ | CT_Taste</title>
     <meta charset="utf-8" />
     <meta name="description" content="{{ $payment_status ?? "Not Paid" }}" />
     <meta name="keywords" content="{{ $payment_time ?? "Null" }}" />

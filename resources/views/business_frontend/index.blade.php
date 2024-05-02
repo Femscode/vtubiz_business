@@ -83,6 +83,10 @@
                 </li>
               
                 <li class="nav-item dropdown">
+                  <a class="nav-link" href="/blogs">Our Blog</a>
+                
+                </li>
+                <li class="nav-item dropdown">
                   <a class="nav-link" href="#" data-bs-toggle="dropdown">Login <i class='fa fa-angle-down'></i></a>
                   <ul class="dropdown-menu">
                     <li class="nav-item"><a class="dropdown-item" href="/login">Login
@@ -1174,7 +1178,7 @@
   <script data-cfasync="false" src="frontpage/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="frontpage/assets/js/plugins.js"></script>
   <script src="frontpage/assets/js/theme.js"></script>
-  {{-- <script src='/assets/js/professionallocker.js'></script> --}}
+  <script src='/assets/js/professionallocker.js'></script>
 
 </body>
 

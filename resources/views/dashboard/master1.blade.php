@@ -3,10 +3,10 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>VTUBIZ | CT_Taste</title>
+    <title>VTUBIZ | Dashboard</title>
     <meta charset="utf-8" />
     <meta name="description" content="Top Up, Pay Bills, Stay Connected." />
-    <meta name="keywords" content="A Top Notch VTU Platform!" />
+    <meta name="keywords" content="Top Up, Pay Bills, Stay Connected." />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />

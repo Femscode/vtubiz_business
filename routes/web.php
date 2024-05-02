@@ -15,6 +15,9 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
+Route::get('/blogs', [BusinessController::class, 'blogs'])->name('blogs');
+Route::get('/blog/{id}', [BusinessController::class, 'blogdetails'])->name('blogdetails');
+Route::post('/saveComment', [BusinessController::class, 'saveComment'])->name('saveComment');
 Route::get('/run_schedule_giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'run_schedule_giveaway'])->name('run_schedule_giveaway');
 Route::get('/claim_giveaway/{giveaway_id}/{user_id}/{rand_no?}', [App\Http\Controllers\FunGiveAwayController::class, 'claim_price'])->name('claim_price');
 Route::post('/saveGiveAwayContacts', [App\Http\Controllers\FunGiveAwayController::class, 'saveGiveAwayContacts'])->name('saveGiveAwayContacts');
@@ -471,6 +474,14 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/upgrade_user/{id}', [App\Http\Controllers\SuperController::class, 'upgrade_user'])->name('upgrade_user');
         Route::any('/duplicate_transactions/', [App\Http\Controllers\SuperController::class, 'duplicate_transactions'])->name('duplicate_transactions');
         Route::any('/contact_gain/', [App\Http\Controllers\SuperController::class, 'contact_gain'])->name('contact_gain');
+        Route::any('/admin_blog/', [App\Http\Controllers\SuperController::class, 'admin_blog'])->name('admin_blog');
+        Route::any('/create_blog/', [App\Http\Controllers\SuperController::class, 'create_blog'])->name('create_blog');
+        Route::post('/saveblog', [App\Http\Controllers\SuperController::class, 'saveblog'])->name('saveblog');
+        Route::any('/editblog/{id}', [App\Http\Controllers\SuperController::class, 'editblog'])->name('editblog');
+        Route::post('/updateblog/', [App\Http\Controllers\SuperController::class, 'updateblog'])->name('updateblog');
+        Route::get('/changeblogstatus/{id}', [App\Http\Controllers\SuperController::class, 'changeblogstatus'])->name('changeblogstatus');
+        Route::any('/deleteblog/{id}', [App\Http\Controllers\SuperController::class, 'deleteblog'])->name('deleteblog');
+    
         Route::any('/downloadCSV/', [App\Http\Controllers\SuperController::class, 'downloadCSV'])->name('downloadCSV');
         Route::any('/admin_delete_duplicate/{type}/{id}', [App\Http\Controllers\SubscriptionController::class, 'admin_delete_duplicate'])->name('admin_delete_duplicate');
     });

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Blog;
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
 use App\Models\Theme;
 use App\Models\Airtime;
+use App\Models\Comment;
 use App\Models\BulkEmail;
 use App\Models\Beneficiary;
 use App\Models\Electricity;
@@ -35,7 +37,38 @@ class BusinessController extends Controller
     public function index()
     {
         return view('business_frontend.index');
-        return 'good';
+       
+    }
+    public function blogs()
+    {
+        $data['blogs'] = Blog::latest()->paginate(5);
+        $data['popular'] = Blog::orderBy('rank')->take(5)->get();
+        return view('business_frontend.blogs', $data);
+      
+    }
+    public function blogdetails($id)
+    {
+        $data['blog'] = $blog = Blog::where('uid',$id)->firstOrFail();
+        $data['related'] = Blog::where('category',$blog->category)->where('id', '!=', $blog->id)->get();
+        $data['comments'] = Comment::where('blog_id',$blog->uid)->get();
+      
+        return view('business_frontend.blogdetails', $data);
+      
+    }
+    public function saveComment(Request $request) {
+        // dd($request->all());
+        $this->validate($request, [
+            'blog_id' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'message' => 'required',
+        ]);
+
+        Comment::create($request->all());
+        return redirect()->back()->with('message', "Comment added successfully!");
+
+
     }
     public function upgrade($id)
     {

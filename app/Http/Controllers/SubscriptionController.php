@@ -1327,6 +1327,7 @@ class SubscriptionController extends Controller
         // dd($request->all());
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
+        // dd($request->all());
       
         $phone_number = str_replace(' ', '', $request->phone_number);
         if (strlen($phone_number) == 10) {
@@ -1394,22 +1395,61 @@ class SubscriptionController extends Controller
         $details =  "Airtime Purchase of " . $request->amount . " on " . $request->phone_number;
         $client_reference =  'buy_airtime_' . Str::random(7);
 
-        $check = $this->check_duplicate('check', $user->id, $request->amount, "Airtime Purchase", $details, $client_reference);
+        // $check = $this->check_duplicate('check', $user->id, $request->amount, "Airtime Purchase", $details, $client_reference);
 
-        if ($check[0] == true) {
-            $response = [
-                'type' => 'duplicate',
-                'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-                'auto_refund_status' => 'Nil'
-            ];
+        // if ($check[0] == true) {
+        //     $response = [
+        //         'type' => 'duplicate',
+        //         'success' => false,
+        //         'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+        //         'auto_refund_status' => 'Nil'
+        //     ];
 
-            return response()->json($response);
-        }
+        //     return response()->json($response);
+        // }
 
         //purchase the airtime
         $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $request->discounted_amount, $user->id, 3, $real_airtimeprice, $phone_number, $request->network, $request->amount);
 
+        //Start of smartrecharge
+        // if($request->network == 1){
+        //     $productcode = 'mtn_custom';
+        // }
+        // elseif($request->network == 2) {
+        //     $productcode = 'glo_custom';
+        // }
+        // elseif($request->network == 2) {
+        //     $productcode = 'airtel_custom';
+        // }
+        // else {
+        //     $productcode = '9mobile_custom';
+
+        // }
+        // $curl = curl_init();
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "https://smartrecharge.ng/api/v2/airtime",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "POST",
+        //     CURLOPT_POSTFIELDS => array(
+        //         'api_key' => "g@3.qv3AeFHBeJ",
+        //         'product_code' => $productcode,
+        //         'phone' => $phone_number,
+        //         'amount' => $request->amount,
+        //         'callback' => 'https://',
+        //         // 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
+        //     ),
+        //     // CURLOPT_HTTPHEADER => array(
+        //     //     "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+        //     //     "cache-control: no-cache"
+        //     // ),
+        // ));
+
+        //THis is for easy access
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/airtime.php",
@@ -1432,6 +1472,7 @@ class SubscriptionController extends Controller
                 "cache-control: no-cache"
             ),
         ));
+        //end of easyaccess
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;

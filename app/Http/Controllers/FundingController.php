@@ -336,6 +336,103 @@ class FundingController extends Controller
 
         return response()->json("OK", 200);
     }
+    public function smartwebhook(Request $request)
+    {
+        file_put_contents(__DIR__ . '/smartwebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+
+        $jsonData = $request->getContent();
+        $data = json_decode($jsonData, true);
+        $client_reference = $data['client_reference'];
+        $reference = $data['reference'];
+        $status =  $data['status'];
+        $message = $data['message'];
+        $message = preg_replace('/[\/\\\\]/', '-', $message);
+
+        if ($status == 'success' || $status == 'successful') {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 1;
+                $tranx->save();
+
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                $giveaway->reference = $reference;
+                $giveaway->status = 1;
+                $giveaway->save();
+            }
+
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            // file_put_contents(__DIR__ . '/easy_success.json', $url);
+            $response = Http::get($url);
+        } 
+        elseif ($status == 'pending') {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 2;
+                $tranx->save();
+
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                $giveaway->reference = $reference;
+                $giveaway->status = 1;
+                $giveaway->save();
+            }
+
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            // file_put_contents(__DIR__ . '/easy_success.json', $url);
+            $response = Http::get($url);
+        } 
+        elseif ($status == 'failed') {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 0;
+                $tranx->save();
+
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                if ($giveaway) {
+
+                    $giveaway->reference = $reference;
+                    $giveaway->status = 0;
+                    $giveaway->save();
+                }
+            }
+
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $response = Http::get($url);
+        } 
+       
+        
+        else {
+            if (substr($client_reference, 0, 3) == 'sgw') {
+            $tranx = Transaction::where('reference', $client_reference)
+                ->orderByDesc('created_at')
+                ->first();
+            $tranx->reference = $reference;
+            $tranx->status = 0;
+            $tranx->save();
+
+            $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                ->first();
+            $giveaway->reference = $reference;
+            $giveaway->status = 0;
+            $giveaway->save();
+            }
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $response = Http::get($url);
+        }
+
+        return response()->json("OK", 200);
+    }
 
     public function run_debit($client_reference, $reference,$message)
     {

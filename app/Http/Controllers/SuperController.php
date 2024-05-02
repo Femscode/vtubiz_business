@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Blog;
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
 use App\Models\GiveAway;
 use App\Models\Transaction;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ScheduleAccount;
 use Illuminate\Support\Facades\DB;
@@ -310,6 +312,117 @@ class SuperController extends Controller
 
         return view('super.contact_gain', $data);
     }
+    public function admin_blog()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'super';
+        $data['blogs'] = Blog::latest()->get();
+
+        return view('super.admin_blog', $data);
+    }
+    public function create_blog()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'super';
+
+        return view('super.create_blog', $data);
+    }
+
+    public function saveblog(Request $request)
+    {
+        // dd($request->all());
+        $this->validate($request, [
+            "title" => "required",
+            "description" => "required",
+            "category" => "required",
+            "image" => "required",
+
+        ]);
+
+        if ($request->image !== null) {
+            $image = $request->file('image');
+            $imageName = $image->hashName();
+            $image->move(public_path('blog_display_image'), $imageName);
+        }
+        $user = Auth::user();
+
+
+        $project = Blog::create([
+            'uid' => Str::random(7),
+            'title' => $request->title,
+            'description' => $request->description,
+            'category' => $request->category,           
+            'image' => $imageName,
+        ]);
+
+        return redirect()->back()->with('message', 'Blog created successfully!');
+    }
+
+    public function editblog($id)
+    {
+        $data['blog'] = Blog::find($id);
+        $data['user'] = Auth::user();
+        $data['active'] = 'blog';
+        return view('super.editblog', $data);
+    }
+
+    public function updateblog(Request $request)
+    {
+        $this->validate($request, [
+            "title" => "required",
+            "description" => "required",
+            "category" => "required",
+
+        ]);
+        $project = Blog::find($request->id);
+        // dd($request->all());
+
+
+        $user = Auth::user();
+        if ($request->image !== null) {
+            $previousImagePath = public_path('blog_display_image') . '/' . $project->image;
+            if (file_exists($previousImagePath)) {
+                unlink($previousImagePath);
+            }
+            $image = $request->file('image');
+            $imageName = $image->hashName();
+            $image->move(public_path('blog_display_image'), $imageName);
+            $project->image = $imageName;
+        }
+        $project->title = $request->title;
+        $project->description = $request->description;
+        $project->category = $request->category;       
+        $project->save();
+
+
+
+        return redirect()->back()->with('message', 'Blog updated successfully!');
+    }
+    public function changeblogstatus($id)
+    {
+        $blog = Blog::find($id);
+
+        $blog->status = !$blog->status;
+        $blog->save();
+        return redirect()->back()->with('message', 'Blog Status Updated Successfully!');
+    }
+    public function deleteblog($id)
+    {
+        $blog = Blog::find($id);
+        $previousImagePath = public_path('blog_display_image') . '/' . $blog->image;
+        if (file_exists($previousImagePath)) {
+            unlink($previousImagePath);
+        }
+        $blog->delete();
+        return redirect()->back()->with('message', 'Blog Deleted Successfully!');
+    }
+    
     public function downloadCSV(Request $request)
     {
         // dd($request->all());
