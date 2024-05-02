@@ -400,12 +400,15 @@
                           <div class="mb-0 mb-md-2">
                             <div class="dropdown share-dropdown btn-group">
                               <button class="btn btn-sm btn-red rounded-pill btn-icon btn-icon-start dropdown-toggle mb-0 me-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="uil uil-share-alt"></i> Share </button>
-                              <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#"><i class="uil uil-twitter"></i>Twitter</a>
-                                <a class="dropdown-item" href="#"><i class="uil uil-facebook-f"></i>Facebook</a>
-                                <a class="dropdown-item" href="#"><i class="uil uil-linkedin"></i>Linkedin</a>
+                                <i class="fa fa-share-alt"></i> Share </button>
+                             
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="https://twitter.com/intent/tweet?url=https://vtubiz.com/blog/{{ $blog->uid }}" target="_blank">Twitter</a>
+                                  <a class="dropdown-item" href="https://www.facebook.com/sharer/sharer.php?u=https://vtubiz.com/blog/{{ $blog->uid }}" target="_blank">Facebook</a>
+                                  <a class="dropdown-item" href="https://www.linkedin.com/shareArticle?url=https://vtubiz.com/blog/{{ $blog->uid }}" target="_blank">Linkedin</a>
+                                  <a class="dropdown-item" href="whatsapp://send?text=https://vtubiz.com/blog/{{ $blog->uid }}" target="_blank">Whatsapp</a>
                               </div>
+                              
                               <!--/.dropdown-menu -->
                             </div>
                             <!--/.share-dropdown -->
@@ -422,25 +425,25 @@
                     <div class="swiper-container blog grid-view mb-16" data-margin="30" data-dots="true" data-items-md="2" data-items-xs="1">
                       <div class="swiper">
                         <div class="swiper-wrapper">
-                        @foreach($related as $blog)
+                        @foreach($related as $rel)
                           <div class="swiper-slide">
                             <article>
-                              <figure class="overlay overlay-1 hover-scale rounded mb-5"><a href="/blog/{{ $blog->uid }}"> <img style='height:150px;width:250px' src="http://vtubiz.com/public/blog_display_image/{{ $blog->image }}" alt="" /></a>
+                              <figure class="overlay overlay-1 hover-scale rounded mb-5"><a href="/blog/{{ $rel->uid }}"> <img style='height:150px;width:250px' src="http://vtubiz.com/public/blog_display_image/{{ $rel->image }}" alt="" /></a>
                                 <figcaption>
                                   <h5 class="from-top mb-0">Read More</h5>
                                 </figcaption>
                               </figure>
                               <div class="post-header">
                                 <div class="post-category text-line">
-                                  <a href="/blog/{{ $blog->uid }}" class="hover" rel="category">{{ $blog->category }}</a>
+                                  <a href="/blog/{{ $rel->uid }}" class="hover" rel="category">{{ $rel->category }}</a>
                                 </div>
                                 <!-- /.post-category -->
-                                <h2 class="post-title h3 mt-1 mb-3"><a class="link-dark" href="/blog/{{ $blog->uid }}">{{ Str::limit($blog->title,30) }}</a></h2>
+                                <h2 class="post-title h3 mt-1 mb-3"><a class="link-dark" href="/blog/{{ $rel->uid }}">{{ Str::limit($rel->title,30) }}</a></h2>
                               </div>
                               <!-- /.post-header -->
                               <div class="post-footer">
                                 <ul class="post-meta mb-0">
-                                  <li class="post-date"><i class="fa fa-calendar-alt"></i><span>{{ date('jS F, Y', strtotime($blog->created_at)) }}</span></li>
+                                  <li class="post-date"><i class="fa fa-calendar-alt"></i><span>{{ date('jS F, Y', strtotime($rel->created_at)) }}</span></li>
                                   {{-- <li class="post-comments"><a href="#"><i class="uil uil-comment"></i>4</a></li> --}}
                                 </ul>
                                 <!-- /.post-meta -->
