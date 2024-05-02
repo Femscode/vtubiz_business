@@ -375,7 +375,7 @@
             <div class="col-lg-10 mx-auto">
               <div class="blog single mt-n17">
                 <div class="card">
-                  <figure class="card-img-top"><img src="{{ asset("blog_display_image/".$blog->image) }}" alt="" /></figure>
+                  <figure class="card-img-top"><img src="http://vtubiz.com/public/blog_display_image/{{ $blog->image }}" alt="" /></figure>
                   <div class="card-body">
                     <div class="classic-view">
                       <article class="post">
@@ -425,7 +425,7 @@
                         @foreach($related as $blog)
                           <div class="swiper-slide">
                             <article>
-                              <figure class="overlay overlay-1 hover-scale rounded mb-5"><a href="/blog/{{ $blog->uid }}"> <img style='height:150px;width:250px' src="{{ asset("blog_display_image/".$blog->image) }}" alt="" /></a>
+                              <figure class="overlay overlay-1 hover-scale rounded mb-5"><a href="/blog/{{ $blog->uid }}"> <img style='height:150px;width:250px' src="http://vtubiz.com/public/blog_display_image/{{ $blog->image }}" alt="" /></a>
                                 <figcaption>
                                   <h5 class="from-top mb-0">Read More</h5>
                                 </figcaption>

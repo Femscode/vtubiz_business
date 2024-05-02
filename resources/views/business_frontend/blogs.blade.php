@@ -367,7 +367,7 @@
                 @foreach($blogs as $blog)
                 <article class="post">
                   <div class="card">
-                    <figure class="card-img-top overlay overlay-1 hover-scale"><a href="/blog/{{ $blog->uid }}"><img src='{{ asset("blog_display_image/".$blog->image) }}' alt="" /></a>
+                    <figure class="card-img-top overlay overlay-1 hover-scale"><a href="/blog/{{ $blog->uid }}"><img src="http://vtubiz.com/public/blog_display_image/{{ $blog->image }}" alt="" /></a>
                       <figcaption>
                         <h5 class="from-top mb-0">Read More</h5>
                       </figcaption>
@@ -441,7 +441,7 @@
                 <ul class="image-list">
                     @foreach($popular as $pop)
                   <li>
-                    <figure class="rounded"><a href="/blog/{{ $pop->uid }}"><img src="{{ asset("blog_display_image/".$pop->image) }}" alt="" /></a></figure>
+                    <figure class="rounded"><a href="/blog/{{ $pop->uid }}"><img src="http://vtubiz.com/public/blog_display_image/{{ $pop->image }}" alt="" /></a></figure>
                     <div class="post-content">
                       <h6 class="mb-2"> <a class="link-dark" href="/blog/{{ $pop->uid }}">{{ $pop->title }}</a> </h6>
                       <ul class="post-meta">

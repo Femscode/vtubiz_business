@@ -37,7 +37,7 @@
                                 <tr>
 
                                     <td>
-                                        <img src='{{ asset("blog_display_image/".$blog->image) }}' height='100px' width='100px' />
+                                        <img src='http://vtubiz.com/public/blog_display_image/{{ $blog->image }}' height='100px' width='100px' />
                                     </td>
                                     <td><b>{{ $blog->title }} (@if($blog->status == 1)<a class=' text-success'>Active</a>@else<a class='text-secondary'>Not active</a> @endif)</b><br>{!! Str::limit($blog->description,200) !!}<br><a href='/viewmore/{{ $blog->uid }}'>View more</a></td>
                                     <td>

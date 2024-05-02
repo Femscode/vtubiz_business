@@ -95,7 +95,7 @@
                 <div class="form-group row mb-4">
                     <label class="col-xl-3 col-lg-3 col-form-label">Display Image</label>
                     <div class="col-lg-9 col-xl-6">
-                        <img src='{{ asset("blog_display_image/".$blog->image) }}' height='150px' width='150px' />
+                        <img src='http://vtubiz.com/public/blog_display_image/{{ $blog->image }}' height='150px' width='150px' />
                   
                         <input type='file' class='form-control' name='image'  accept="image/*" />
                     </div>
