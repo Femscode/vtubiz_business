@@ -41,7 +41,7 @@ class BusinessController extends Controller
     }
     public function blogs()
     {
-        $data['blogs'] = Blog::latest()->paginate(5);
+        $data['blogs'] = Blog::where('status',1)->latest()->paginate(10);
         $data['popular'] = Blog::orderBy('rank')->take(5)->get();
         return view('business_frontend.blogs', $data);
       
@@ -49,7 +49,7 @@ class BusinessController extends Controller
     public function blogdetails($id)
     {
         $data['blog'] = $blog = Blog::where('uid',$id)->firstOrFail();
-        $data['related'] = Blog::where('category',$blog->category)->where('id', '!=', $blog->id)->get();
+        $data['related'] = Blog::where('status',1)->where('category',$blog->category)->where('id', '!=', $blog->id)->get();
         $data['comments'] = Comment::where('blog_id',$blog->uid)->get();
       
         return view('business_frontend.blogdetails', $data);
