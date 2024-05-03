@@ -353,7 +353,7 @@
                 <!-- /.post-category -->
                 <h1 class="display-1 mb-4">{{ $blog->title }}</h1>
                 <ul class="post-meta mb-5">
-                  <li class="post-date"><i class="uil uil-calendar-alt"></i><span>{{ date('jS F, Y', strtotime($blog->created_at)) }}</span></li>
+                  <li class="post-date"><i class="fa fa-calendar-alt"></i><span>{{ date('jS F, Y', strtotime($blog->created_at)) }}</span></li>
                   <li class="post-author"><a href="#"><i class="uil uil-user"></i><span>By Admin</span></a></li>
                   {{-- <li class="post-comments"><a href="#"><i class="uil uil-comment"></i>3<span> Comments</span></a></li>
                   <li class="post-likes"><a href="#"><i class="uil uil-heart-alt"></i>3<span> Likes</span></a></li> --}}
@@ -381,9 +381,7 @@
                       <article class="post">
                         <div class="post-content mb-2">
                           <h2 class="h1 mb-4">{{ $blog->title }}</h2>
-                          <p>{!! $blog->description !!}.</p>
-                       
-                          <!-- /.row -->
+                          <p>{!! $blog->description !!}</p>
                           <blockquote class="fs-lg my-2">
                             <p>Sign up at <a href="https://vtubiz.com/">vtubiz.com</a> today, for <del>free</del> cheap subscriptions.</p>
                             <footer class="blockquote-footer"><a href='https://vtubiz.com'>VTUBIZ.COM</a></footer>
@@ -418,8 +416,6 @@
                       </article>
                       <!-- /.post -->
                     </div>
-                    <!-- /.classic-view -->
-                    <hr />
                     <hr />
                     <h3 class="mb-6">You Might Also Like</h3>
                     <div class="swiper-container blog grid-view mb-16" data-margin="30" data-dots="true" data-items-md="2" data-items-xs="1">
