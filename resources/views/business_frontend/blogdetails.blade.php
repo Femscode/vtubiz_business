@@ -7,7 +7,7 @@
   <meta name="description" content="{{ $blog->title }}">
   <meta name="keywords" content="{{ $blog->title }}">
   <meta name="author" content="elemis">
-  <title>VTUBIZ | HOME </title>
+  <title>VTUBIZ | BLOG </title>
   <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
 
   <link rel="stylesheet" href="{{ asset('frontpage/assets/css/plugins.css')}}">

@@ -7,7 +7,7 @@
   <meta name="description" content="Top Up, Pay Bills, Stay Connected!">
   <meta name="keywords" content="Build your own professional VTU website for free">
   <meta name="author" content="elemis">
-  <title>VTUBIZ | HOME </title>
+  <title>VTUBIZ | BLOGS </title>
   <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
 
   <link rel="stylesheet" href="frontpage/assets/css/plugins.css">
