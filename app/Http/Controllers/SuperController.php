@@ -516,7 +516,7 @@ class SuperController extends Controller
                             return $realData->plan_id === $data->plan_id;
                         });
                         if ($matchingRealData) {
-                            dd( $data->data_price, $matchingRealData->data_price);
+                            // dd( $data->data_price, $matchingRealData->data_price);
                             // Update the data_price of $data with the account_price of $matchingRealData
                             $data->data_price = $matchingRealData->data_price;
                             // $data->account_price = $matchingRealData->data_price;
