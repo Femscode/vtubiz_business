@@ -87,7 +87,21 @@ class BusinessController extends Controller
             $client_reference = "Upgrade_".Str::random(5);
             $details = "Account Upgrade ~ Amount:NGN3,500 ";
             $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'credit', 3500, $user->id, 1);
-    
+            $datas = Data::where('user_id', $user->company_id)->get();
+            $real_data = Data::where('user_id', 0)->get();
+            foreach ($datas as $data) {
+                // Get the corresponding $real_data with the same plan_id
+                $matchingRealData = $real_data->first(function ($realData) use ($data) {
+                    return $realData->plan_id === $data->plan_id;
+                });
+                if ($matchingRealData) {
+                    // Update the data_price of $data with the account_price of $matchingRealData
+                    $data->data_price = $matchingRealData->data_price;
+                    // $data->account_price = $matchingRealData->data_price;
+                    $data->admin_price = $matchingRealData->data_price;
+                    $data->save();
+                }
+            }
             return redirect('/dashboard')->with('message', 'Account Upgraded Successfully!');
         } else {
             $user->user_type = 'customer';

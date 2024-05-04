@@ -271,13 +271,13 @@ class SuperController extends Controller
     public function duplicate_transactions()
     {
         $data['user'] = $user =  Auth::user();
-       
+
         if ($user->email !== 'fasanyafemi@gmail.com') {
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
-       
-        
+
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
@@ -297,7 +297,7 @@ class SuperController extends Controller
         curl_close($curl);
         $response_json = json_decode($response, true);
         $data['easy_balance'] = $response_json['balance'];
-      
+
         $data['duplicate_transactions'] = DuplicateTransaction::latest()->get();
 
         return view('super.duplicate_transactions', $data);
@@ -357,7 +357,7 @@ class SuperController extends Controller
             'uid' => Str::random(7),
             'title' => $request->title,
             'description' => $request->description,
-            'category' => $request->category,           
+            'category' => $request->category,
             'image' => $imageName,
         ]);
 
@@ -397,7 +397,7 @@ class SuperController extends Controller
         }
         $project->title = $request->title;
         $project->description = $request->description;
-        $project->category = $request->category;       
+        $project->category = $request->category;
         $project->save();
 
 
@@ -422,7 +422,7 @@ class SuperController extends Controller
         $blog->delete();
         return redirect()->back()->with('message', 'Blog Deleted Successfully!');
     }
-    
+
     public function downloadCSV(Request $request)
     {
         // dd($request->all());
@@ -431,7 +431,7 @@ class SuperController extends Controller
         $users = User::where('created_at', '>', $request->from)
             ->where('created_at', '<', $request->to)
             ->where(function ($query) use ($request) {
-                $query->where('company_id','!=', 888)
+                $query->where('company_id', '!=', 888)
                     ->orWhere('company_id', '=', DB::raw('id'));
             })
             ->select([
@@ -440,7 +440,7 @@ class SuperController extends Controller
             ])
             ->get();
 
-           
+
 
 
         // $users = User::where('created_at', '>', $request->from)
@@ -518,6 +518,9 @@ class SuperController extends Controller
                         if ($matchingRealData) {
                             // Update the data_price of $data with the account_price of $matchingRealData
                             $data->data_price = $matchingRealData->data_price;
+                            // $data->account_price = $matchingRealData->data_price;
+                            $data->admin_price = $matchingRealData->data_price;
+
                             $data->save();
                         }
                     }

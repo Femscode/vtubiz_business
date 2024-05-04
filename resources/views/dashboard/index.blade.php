@@ -16,7 +16,7 @@
 
                 <!--begin::Misc Widget 1-->
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
-                  
+                        Let others pay for your data!
                         Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by every users you refer!
 
                     Click <a href='/my-referral'>here</a> to join.
@@ -56,7 +56,7 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/transactions"  style='border-left:5px solid #ebab21 ';
+                            <a href="/my-giveaway"  style='border-left:5px solid #ebab21 ';
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Clipboard-list.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -74,7 +74,7 @@
                                 </svg><!--end::Svg Icon--></span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
-                                    My Transactions </span>
+                                    Create Giveaway </span>
                             </a>
                             <!--end::Link-->
                         </div>
@@ -275,7 +275,7 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/my-giveaway" style='border-top:5px solid #640f11;'
+                            <a href="/transactions" style='border-top:5px solid #640f11;'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -284,7 +284,7 @@
                                 </span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
-                                    Create Giveaway </span>
+                                    My transactions </span>
                             </a>
                             <!--end::Link-->
                         </div>

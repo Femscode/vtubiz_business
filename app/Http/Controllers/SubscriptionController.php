@@ -1425,9 +1425,33 @@ class SubscriptionController extends Controller
         //     $productcode = '9mobile_custom';
 
         // }
-        // $curl = curl_init();
+        // if($request->network == 1) {
+        //     $network = 'MTN';
+        // } elseif($request->network == 2) {
+        //     $network = 'GLO';        
+        // } elseif($request->network == 3) {
+        //     $network = 'AIRTEL';
+        // } else {
+        //     $network = '9MOBILE';
+        // }
+
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'Bearer 27|qgW9RLvq97IAqnw0Q1yBK8U2TbNk2oONWybTc5JL',
+        //     'Content-Type' => 'application/json',
+        // ])->post('https://telneting.com/api/airtime/buy', [
+        //     'network' => $network,
+        //     'phone' => $phone_number,
+        //     'amount' => $request->amount,               
+        //     'reference' => $client_reference, //update this on your script to receive webhook notifications
+   
+        // ]);
+
+        // return $response;
+        
+      
+        //  $curl = curl_init();
         // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => "https://smartrecharge.ng/api/v2/airtime",
+        //     CURLOPT_URL => "https://sandbox.telneting.com/api/airtime/buy",
         //     CURLOPT_RETURNTRANSFER => true,
         //     CURLOPT_ENCODING => "",
         //     CURLOPT_MAXREDIRS => 10,
@@ -1436,19 +1460,19 @@ class SubscriptionController extends Controller
         //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         //     CURLOPT_CUSTOMREQUEST => "POST",
         //     CURLOPT_POSTFIELDS => array(
-        //         'api_key' => "g@3.qv3AeFHBeJ",
-        //         'product_code' => $productcode,
+        //         'network' => $network,
         //         'phone' => $phone_number,
-        //         'amount' => $request->amount,
-        //         'callback' => 'https://',
-        //         // 'client_reference' => $client_reference, //update this on your script to receive webhook notifications
+        //         'amount' => $request->amount,               
+        //         'reference' => $client_reference, //update this on your script to receive webhook notifications
         //     ),
-        //     // CURLOPT_HTTPHEADER => array(
-        //     //     "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
-        //     //     "cache-control: no-cache"
-        //     // ),
+        //     CURLOPT_HTTPHEADER => array(
+        //         "Authorization: Bearer qgW9RLvq97IAqnw0Q1yBK8U2TbNk2oONWybTc5JL", //replace this with your authorization_token
+        //         "cache-control: no-cache"
+        //     ),
         // ));
+       
 
+        // return $response;
         //THis is for easy access
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -1617,6 +1641,7 @@ class SubscriptionController extends Controller
     }
     public function airtime()
     {
+        return redirect()->back()->with('error', "Airtime purchase currently not available, we are currently working on restoring airtime purchase services!");
         $data['user'] = $user = Auth::user();
         $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
 
