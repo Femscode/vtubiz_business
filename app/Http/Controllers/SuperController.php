@@ -519,7 +519,7 @@ class SuperController extends Controller
                             // dd( $data->data_price, $matchingRealData->data_price);
                             // Update the data_price of $data with the account_price of $matchingRealData
                             $data->data_price = $matchingRealData->data_price;
-                            // $data->account_price = $matchingRealData->data_price;
+                            $data->account_price = $matchingRealData->data_price;
                             $data->admin_price = $matchingRealData->data_price;
 
                             $data->save();
