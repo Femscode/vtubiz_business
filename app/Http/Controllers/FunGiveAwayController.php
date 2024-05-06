@@ -84,9 +84,8 @@ class FunGiveAwayController extends Controller
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
         $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->latest()->get();
-        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
             return response()->view('dashboard.create-giveaway', $data);
-        
         }
 
         return response()->view('business_backend.create-giveaway', $data);
@@ -283,11 +282,10 @@ class FunGiveAwayController extends Controller
 
         $data['giveaway'] = GiveAway::where('user_id', $user->id)
             ->latest()->get();
-            if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
-                $data['active'] = 'giveaway';
-                return response()->view('dashboard.my-giveaway', $data);
-            
-            }
+        if ($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+            $data['active'] = 'giveaway';
+            return response()->view('dashboard.my-giveaway', $data);
+        }
         return view('business_backend.my-giveaway', $data);
     }
     public function giveawayHome($slug)
@@ -309,10 +307,12 @@ class FunGiveAwayController extends Controller
         if (session()->has('participate_' . $giveaway->slug)) {
             return redirect()->back()->with('message', 'You have already participated in this giveaway');
         }
+      
         $part = $data['participant'] = GiveAwayContacts::create([
             'giveaway_id' => $request->giveaway_id,
             'user_id' => $request->user_id,
             'name' => $request->name,
+            'email' => Auth::user()->email ?? "null",
             'phone' => $request->phone
         ]);
 
@@ -335,8 +335,8 @@ class FunGiveAwayController extends Controller
             return view('business_backend.testpage', $data);
         }
         $existingNumbers = $giveaway->all_numbers ?? [];
-        if(count($giveaway->all_numbers ?? []) / $giveaway->part_no == 1) {
-            return redirect()->back()->with('message','Giveaway Ended Already!');
+        if (count($giveaway->all_numbers ?? []) / $giveaway->part_no == 1) {
+            return redirect()->back()->with('message', 'Giveaway Ended Already!');
         }
         if (count($existingNumbers) >= $giveaway->part_no) {
             $data['rand_no'] =  "xxx";
@@ -367,6 +367,55 @@ class FunGiveAwayController extends Controller
             ->where('is_win', 1)->latest()->get();
         return view('giveaway.contest', $data);
     }
+    public function retryGiveaway($giveaway_id) {
+        $data['user'] = $user = Auth::user();
+        $data['giveaway'] = $giveaway = GiveAway::find($giveaway_id);
+        // dd($giveaway);
+        $client_reference = "Giveaway_".Str::random(5);
+        $details = "Regeneration of lucky number ~ Amount ₦30";
+        $existingNumbers = $giveaway->all_numbers ?? [];
+        if (count($giveaway->all_numbers ?? []) / $giveaway->part_no == 1) {
+            return redirect()->route('/dashboard')->with('message', 'Giveaway Ended Already!');
+        }
+        $trans_id = $this->create_transaction('Giveaway Retry', $client_reference, $details, 'debit', 30, $user->id, 1);
+
+        $part = $data['participant'] = GiveAwayContacts::where('giveaway_id' , $giveaway->id)->where('email',$user->email)->first();
+         if($part == null) {
+            session()->forget('participate_' . $giveaway->slug);
+            return redirect('/dashboard')->with('message', 'Re-enter the giveaway!');
+         }
+      
+        if (count($existingNumbers) >= $giveaway->part_no) {
+            $data['rand_no'] =  "xxx";
+            $data['won'] = 0;
+        } else {
+
+            do {
+                $randomNumber = mt_rand(1, $giveaway->part_no);
+            } while (in_array($randomNumber, $existingNumbers));
+
+            $existingNumbers[] = $randomNumber;
+            $data['rand_no'] =  $randomNumber;
+            $giveaway->update(['all_numbers' => $existingNumbers]);
+
+            if (in_array($randomNumber, $giveaway->lucky_numbers)) {
+                $part->is_win = 1;
+                $part->lucky_number = $randomNumber;
+                $part->save();
+                $data['won'] = 1;
+            } else {
+                $part->lucky_number = $randomNumber;
+                $part->save();
+                $data['won'] = 0;
+            }
+        }
+        session()->put('participate_' . $giveaway->slug, $giveaway->slug);
+        $data['lucky_winners'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)
+            ->where('is_win', 1)->latest()->get();
+
+        return view('giveaway.contest', $data);
+
+    }
     public function claim_price($giveaway_id, $user_id, $rand_no)
     {
         $giveaway = GiveAway::find($giveaway_id);
@@ -386,10 +435,10 @@ class FunGiveAwayController extends Controller
 
         $data['rand_no'] = $rand_no;
         $data['won'] = 1;
-        $data['mtn'] = $mtn = Data::where('user_id', 0)->where('network', 1)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
-        $data['glo'] = $glo = Data::where('user_id', 0)->where('network', 2)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
-        $data['airtel'] = $airtel = Data::where('user_id', 0)->where('network', 3)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
-        $data['n_mobile'] = $n_mobile = Data::where('user_id', 0)->where('network', 4)->where('status',1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['mtn'] = $mtn = Data::where('user_id', 0)->where('network', 1)->where('status', 1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['glo'] = $glo = Data::where('user_id', 0)->where('network', 2)->where('status', 1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['airtel'] = $airtel = Data::where('user_id', 0)->where('network', 3)->where('status', 1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
+        $data['n_mobile'] = $n_mobile = Data::where('user_id', 0)->where('network', 4)->where('status', 1)->where('plan_name', 'like', '%' . $giveaway->data_price . '%')->first();
         //    dd($mtn, $airtel, $glo, $n_mobile);
         if ($giveaway->type == 'question_data' || $giveaway->type == 'question_airtime' || $giveaway->type == 'question_cash') {
             if ($giveaway->max_winners > 0) {
@@ -406,8 +455,8 @@ class FunGiveAwayController extends Controller
     public function createGiveawaySchedule(Request $request)
     {
         $giveaway = GiveAway::find($request->giveaway_id);
-       
-        
+
+
         $data = Data::where('plan_id', $request->plan_id)->first();
 
         $giveaway = GiveAway::find($request->giveaway_id);
@@ -440,7 +489,7 @@ class FunGiveAwayController extends Controller
                 'plan_name' => $data->plan_name
             ]);
         } elseif ($giveaway->giveaway_type == 'cash') {
-           GiveawaySchedule::create([
+            GiveawaySchedule::create([
                 'giveaway_id' => $request->giveaway_id,
                 'name' => $request->name,
                 'participant_id' => $request->participant_id,
@@ -480,16 +529,16 @@ class FunGiveAwayController extends Controller
     {
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
         $data['user'] = $user = Auth::user();
-        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') { 
-        $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
-        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
-            $data['active'] = 'giveaway';
-            return response()->view('dashboard.giveaway_participants', $data);
-        
-        }
-        
-        return view('business_backend.giveaway_participants', $data); } else {
-            return redirect()->back()->with('message',"Access Denied");
+        if ($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
+            $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
+            if ($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+                $data['active'] = 'giveaway';
+                return response()->view('dashboard.giveaway_participants', $data);
+            }
+
+            return view('business_backend.giveaway_participants', $data);
+        } else {
+            return redirect()->back()->with('message', "Access Denied");
         }
     }
     public function giveaway_transactions($slug)
@@ -497,17 +546,17 @@ class FunGiveAwayController extends Controller
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
         $data['user'] = $user = $user = Auth::user();
 
-        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
-        $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
-        $data['transactions'] = GiveawaySchedule::where('giveaway_id', $giveaway->id)->latest()->get();
-        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
-            $data['active'] = 'giveaway';
-            return response()->view('dashboard.giveaway_transactions', $data);
-        
-        }
+        if ($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
+            $data['participants'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)->latest()->get();
+            $data['transactions'] = GiveawaySchedule::where('giveaway_id', $giveaway->id)->latest()->get();
+            if ($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+                $data['active'] = 'giveaway';
+                return response()->view('dashboard.giveaway_transactions', $data);
+            }
 
-        return view('business_backend.giveaway_transactions', $data); } else {
-            return redirect()->back()->with('messsage','Access Denied');
+            return view('business_backend.giveaway_transactions', $data);
+        } else {
+            return redirect()->back()->with('messsage', 'Access Denied');
         }
     }
     public function addQuestion($slug)
@@ -515,20 +564,18 @@ class FunGiveAwayController extends Controller
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
         $data['user'] = $user = Auth::user();
         // dd($user, $giveaway);
-        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
+        if ($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
             $data['questions'] = Question::where('test_id', $giveaway->id)->get();
             $giveaway = GiveAway::where('slug', $slug)->first();
             $data['tests'] = GiveAway::with('my_questions')->where('id', $giveaway->id)->get();
-            if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+            if ($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
                 $data['active'] = 'giveaway';
                 return response()->view('dashboard.question', $data);
-            
             }
             return view('business_backend.question', $data);
         } else {
-            return redirect()->back()->with('message','Access Denied');
+            return redirect()->back()->with('message', 'Access Denied');
         }
-      
     }
     public function storequestion(Request $request)
     {
@@ -613,14 +660,14 @@ class FunGiveAwayController extends Controller
         } else {
             $percentage = 0;
         }
-        if($percentage == 100) {
+        if ($percentage == 100) {
             $participant->is_win = 1;
             $participant->save();
         }
         $user = Auth::user();
         $test = Giveaway::find($testId);
         // dd($userCorrectedAnswer,'corrent',$userWrongAnswer,'wrong',$totalQuestions,'all questions',$attemptQuestion,'attempted questions');
-       
+
         return view('business_backend.viewresult', compact('user', 'participant', 'giveaway', 'results', 'totalQuestions', 'attemptQuestion', 'userCorrectedAnswer', 'userWrongAnswer', 'percentage', 'Test', 'test'));
     }
 
@@ -670,16 +717,17 @@ class FunGiveAwayController extends Controller
         $user = $user =  Auth::user();
         $question = Question::find($id);
         $giveaway = GiveAway::find($question->give_away_id);
-        if($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
-
         if ($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
-            $answers = Answer::where('question_id', $question->id)->delete();
-            $question->delete();
-            return redirect()->back()->with('message', 'Question Deleted Successfully!');
+
+            if ($user->id == $giveaway->user_id || $user->email == 'fasanyafemi@gmail.com') {
+                $answers = Answer::where('question_id', $question->id)->delete();
+                $question->delete();
+                return redirect()->back()->with('message', 'Question Deleted Successfully!');
+            } else {
+                return redirect()->back()->with('message', 'Access Denied!');
+            }
         } else {
-            return redirect()->back()->with('message', 'Access Denied!');
-        } } else {
-            
+
             return redirect()->back()->with('message', 'Access Denied!');
         }
     }
@@ -696,7 +744,8 @@ class FunGiveAwayController extends Controller
             return redirect()->back()->with('message', 'Permission Denied!');
         }
     }
-    public function run_schedule_giveaway() {
+    public function run_schedule_giveaway()
+    {
         $this->run_data_giveaway();
     }
 }

@@ -15,15 +15,21 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
+                @if($notification2)
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
+                   
+                  {!! $notification2->description !!}
+                  
+                </div>
+                @endif
+                {{-- <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
                         Let others pay for your data!
                         Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by every users you refer!
 
                     Click <a href='/my-referral'>here</a> to join.
                   
-                </div>
+                </div> --}}
 
-                {{-- <div class='alert alert-warning'>It's the season of joy! 🎉 Spread the festive cheer by hosting lively giveaways of data, airtime, and cash prizes in a very exciting way.</div> --}}
                 <div class="row mb-5 mb-xl-8 g-5 g-xl-8">
 
                     <!--begin::Col-->

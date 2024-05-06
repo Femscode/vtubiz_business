@@ -264,7 +264,10 @@
                                             <div class="badge badge-light-dark p-4">Congratulations, You Won.<br> Today is indeed your lucky day!</div><br>
                                             <a href='/claim_giveaway/{{ $giveaway->id }}/{{ $participant->user_id }}/{{ $rand_no }}' class='btn btn-success'>Click Here To Claim Your Giveaway Price</a>
                                             @else 
-                                            <div class="badge badge-light-dark p-4">Opps, You didn't win the giveaway, so sorry about that!</div><br>
+                                            <div class="badge badge-light-dark p-4">Opps, You didn't win the giveaway, so sorry about that!
+                                            <input type='hidden' id='giveawayId' value='{{ $giveaway->id }}'/>
+                                            <a id='retryGiveaway' class='btn btn-success btn-sm'>Retry</a>    
+                                            </div><br>
                                             <label class="form-label" style='color:#ebab21'>Giveaway Status</label><br>
                                             <p>Do you know that you can as well create your own giveaway?</p>
                                             <p>Click <a href='https://vtubiz.com/register'>here</a> to register and create yours.</p>
@@ -417,6 +420,7 @@
     <script>
        
         $(document).ready(function() {
+
             Swal.fire({
        
         html:
@@ -524,6 +528,39 @@ function removeConfetti(confettiContainer) {
 const confettiContainer = createConfetti();
 
 
+$("#retryGiveaway").click(function() {
+    const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: "btn btn-success",
+    cancelButton: "btn btn-danger"
+  },
+  buttonsStyling: false
+});
+swalWithBootstrapButtons.fire({
+  title: "Generate new lucky number to stand an extra chance to win?",
+  text: "This will cost you an extra charge of NGN30!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonText: "Yes, generate!",
+  cancelButtonText: "No, cancel!",
+  reverseButtons: true
+}).then((result) => {
+  if (result.isConfirmed) {
+    var giveawayId = $("#giveawayId").val();
+   window.location.href= '/retryGiveaway/'+giveawayId;
+  } else if (
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    swalWithBootstrapButtons.fire({
+      title: "Cancelled",
+      text: "Your imaginary file is safe :)",
+      icon: "error"
+    });
+  }
+});
+
+})
           })
     </script>
 </body>

@@ -86,7 +86,7 @@ class BusinessController extends Controller
             $user->save();
             $client_reference = "Upgrade_".Str::random(5);
             $details = "Account Upgrade ~ Amount:NGN3,500 ";
-            $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'credit', 3500, $user->id, 1);
+            $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'debit', 3500, $user->id, 1);
             $datas = Data::where('user_id', $user->company_id)->get();
             $real_data = Data::where('user_id', 0)->get();
             foreach ($datas as $data) {
@@ -151,10 +151,15 @@ class BusinessController extends Controller
         
 
       
+        // $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
-
+        
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
+        }
+        $notification2 = Notification::where('user_id', $user->company_id)->where('type', 'Homepage Notification')->first();
+        if ($notification2 && $notification2->title !== null) {
+            $data['notification2'] = $notification2;
         }
         $data['transactions'] = Transaction::where('company_id', $user->id)->latest()->get();
         $data['users'] = User::where('company_id', $user->id)->whereNotIn('id', [$user->id])->get();

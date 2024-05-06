@@ -114,13 +114,18 @@
             </div>
 
             @endif --}}
+            @if($notification2)
             <div class='alert alert-warning'>
+                {!! $notification2->description !!} 
+            </div>
+            @endif
+            {{-- <div class='alert alert-warning'>
                 Join our Whatsapp Community 
                 to get first hand update about our services.
 
             Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.
            
-            </div>
+            </div> --}}
                
 
         </div>

@@ -21,6 +21,7 @@ Route::post('/saveComment', [BusinessController::class, 'saveComment'])->name('s
 Route::get('/run_schedule_giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'run_schedule_giveaway'])->name('run_schedule_giveaway');
 Route::get('/claim_giveaway/{giveaway_id}/{user_id}/{rand_no?}', [App\Http\Controllers\FunGiveAwayController::class, 'claim_price'])->name('claim_price');
 Route::post('/saveGiveAwayContacts', [App\Http\Controllers\FunGiveAwayController::class, 'saveGiveAwayContacts'])->name('saveGiveAwayContacts');
+Route::any('/retryGiveaway/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'retryGiveaway'])->name('retryGiveaway')->middleware('auth');
 Route::post('/createGiveawaySchedule', [App\Http\Controllers\FunGiveAwayController::class, 'createGiveawaySchedule'])->name('createGiveawaySchedule');
 Route::any('/submittest', [App\Http\Controllers\FunGiveAwayController::class, 'submittest'])->name('submittest');
 Route::any('/finishtest', [App\Http\Controllers\FunGiveAwayController::class, 'finishtest'])->name('finishtest');
