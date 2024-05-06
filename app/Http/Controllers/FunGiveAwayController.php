@@ -382,13 +382,17 @@ class FunGiveAwayController extends Controller
     }
     public function retryGiveaway($giveaway_id) {
         $data['user'] = $user = Auth::user();
+        if($user->balance < 30) {
+
+            return redirect('/dashboard')->with('message', 'Insufficient balance for regeneration of a giveaway lucky number!');
+        }
         $data['giveaway'] = $giveaway = GiveAway::find($giveaway_id);
         // dd($giveaway);
         $client_reference = "Giveaway_".Str::random(5);
         $details = "Regeneration of lucky number ~ Amount ₦30";
         $existingNumbers = $giveaway->all_numbers ?? [];
         if (count($giveaway->all_numbers ?? []) / $giveaway->part_no == 1) {
-            return redirect()->route('/dashboard')->with('message', 'Giveaway Ended Already!');
+            return redirect('/dashboard')->with('message', 'Giveaway Ended Already!');
         }
         $trans_id = $this->create_transaction('Giveaway Retry', $client_reference, $details, 'debit', 30, $user->id, 1);
 
