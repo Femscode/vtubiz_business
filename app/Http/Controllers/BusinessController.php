@@ -157,7 +157,7 @@ class BusinessController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
-        $notification2 = Notification::where('user_id', $user->company_id)->where('type', 'Homepage Notification')->first();
+        $notification2 = Notification::where('user_id', 1)->where('type', 'Homepage Notification')->first();
         if ($notification2 && $notification2->title !== null) {
             $data['notification2'] = $notification2;
         }
