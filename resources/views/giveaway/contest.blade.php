@@ -215,7 +215,7 @@
         <!--begin::Page-->
 
         <div class="page d-flex flex-row flex-column-fluid">
-            <div style='padding-left:0px !important' class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+            <div style='padding-left:0px !important;background:#000'  class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Container-->
@@ -242,7 +242,7 @@
                                 </div>
                                 <!--end::Card header-->
                                 <!--begin::Card body-->
-                                <div class="card-body pt-0">
+                                <div class="card-body pt-0" id='all' style='display:none'>
                                     <div class="d-flex flex-column gap-10">
                                         <!--begin::Input group-->
                                         <div class="fv-row text-center">
@@ -258,13 +258,16 @@
                                             <input id='rand_no' value='{{ $rand_no }}' type='hidden'/>
                                             @endif
                                             <label class="form-label" style='color:#ebab21'>Your Lucky Number</label>
+                                            <div class="fw-bolder fs-3 text-center" ><span style="font-size:30px;font-family: 'Courier New', Courier, monospace;" id='counter2'>
+                                               [@foreach($giveaway->lucky_numbers as $win){{ $win }},@endforeach]</span></div>
+                                                <label class="form-label" style='color:#ebab21'>Lucky Winner's Numbers</label>
 
                                            <br>
                                            @if($won == 1)
                                             <div class="badge badge-light-dark p-4">Congratulations, You Won.<br> Today is indeed your lucky day!</div><br>
                                             <a href='/claim_giveaway/{{ $giveaway->id }}/{{ $participant->user_id }}/{{ $rand_no }}' class='btn btn-success'>Click Here To Claim Your Giveaway Price</a>
                                             @else 
-                                            <div class="badge badge-light-dark p-4">Opps, You didn't win the giveaway, so sorry about that!
+                                            <div class="badge badge-light-dark p-4">Opps, You didn't win the giveaway!
                                             <input type='hidden' id='giveawayId' value='{{ $giveaway->id }}'/>
                                            
                                             </div><br>
@@ -465,7 +468,9 @@
           }
           startCounter()
         }
-      });
+      }).then((result) => {
+            $("#all").show()
+       });
         function startCounter() {     
        
         var counterElement2 = document.getElementById('counter2');

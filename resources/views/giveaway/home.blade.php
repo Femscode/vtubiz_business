@@ -125,7 +125,7 @@
 							<span class="d-block text-start">
 								<!--<span class="fw-bolder d-block fs-3" style='color:#721c24'>NOTICE !!!</span>-->
 								<span class="fs-6" style='color:#856404'>
-									Input your name and phone number to continue
+									{{-- Input your name and phone number to continue --}}
 									<br>
 									<div class='col-md-12'>
 										<form action='/saveGiveAwayContacts' method='post'>@csrf
@@ -134,10 +134,17 @@
 											<div class="mt-2">
                                                 <input type='hidden' name='user_id' value='{{ $userId }}'/>
                                                 <input type='hidden' name='giveaway_id' value='{{ $giveaway->id }}'/>
+												@if(Auth::user() == null)
 												<input required class='m-2 form-control shadow-none'
 													type="text" name='name' placeholder="Enter name">
 												<input required class='m-2 form-control shadow-none' id='search_changeschool'
 													type="number" name='phone' placeholder="09000000000">
+												@endif
+													
+													<label style='text-align:center !important'> <b>Select a number between 1 and {{ $giveaway->part_no }}</b></label>
+													<br> Taken Numbers :  [@foreach($giveaway->all_numbers as $win){{ $win }},@endforeach]
+													<input min="1" max="{{ $giveaway->part_no }}" required class='m-2 form-control shadow-none' 
+													type="number" name='part_no' placeholder="Enter Your Lucky Number">
 												<div class="m-2 input-group-append">
 													<button type='submit'
 														style='border:0px solid #fff;background:#856404'

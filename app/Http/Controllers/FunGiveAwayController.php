@@ -300,9 +300,17 @@ class FunGiveAwayController extends Controller
         $this->validate($request, [
             'giveaway_id' => 'required',
             'user_id' => 'required',
-            'name' => 'required',
-            'phone' => 'required'
+            // 'name' => 'required',
+            'part_no' => 'required'
         ]);
+        if($request->has('name')) {
+           $name = $request->name;
+           $phone = $request->phone;
+        } else {
+            $name = Auth::user()->name;
+            $phone = Auth::user()->phone;
+        }
+
         $data['giveaway'] = $giveaway = GiveAway::find($request->giveaway_id);
         if (session()->has('participate_' . $giveaway->slug)) {
             return redirect()->back()->with('message', 'You have already participated in this giveaway');
@@ -311,9 +319,9 @@ class FunGiveAwayController extends Controller
         $part = $data['participant'] = GiveAwayContacts::create([
             'giveaway_id' => $request->giveaway_id,
             'user_id' => $request->user_id,
-            'name' => $request->name,
+            'name' => $name,
             'email' => Auth::user()->email ?? "null",
-            'phone' => $request->phone
+            'phone' => $phone
         ]);
 
         if ($giveaway->type == 'question_data' || $giveaway->type == 'question_airtime' ||  $giveaway->type == 'question_cash') {
@@ -338,13 +346,18 @@ class FunGiveAwayController extends Controller
         if (count($giveaway->all_numbers ?? []) / $giveaway->part_no == 1) {
             return redirect()->back()->with('message', 'Giveaway Ended Already!');
         }
+        if(in_array($request->part_no, $existingNumbers)) {
+            return redirect()->back()->with('message', 'Number already choosen, pick another number!');
+
+        }
         if (count($existingNumbers) >= $giveaway->part_no) {
             $data['rand_no'] =  "xxx";
             $data['won'] = 0;
         } else {
 
             do {
-                $randomNumber = mt_rand(1, $giveaway->part_no);
+                // $randomNumber = mt_rand(1, $giveaway->part_no);
+                $randomNumber = $request->part_no;
             } while (in_array($randomNumber, $existingNumbers));
 
             $existingNumbers[] = $randomNumber;
@@ -412,6 +425,7 @@ class FunGiveAwayController extends Controller
         session()->put('participate_' . $giveaway->slug, $giveaway->slug);
         $data['lucky_winners'] = GiveAwayContacts::where('giveaway_id', $giveaway->id)
             ->where('is_win', 1)->latest()->get();
+        $data['winnerNo'] = $giveaway->lucky_numbers;
 
         return view('giveaway.contest', $data);
 
