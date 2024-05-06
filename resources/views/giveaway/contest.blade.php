@@ -258,7 +258,7 @@
                                             <input id='rand_no' value='{{ $rand_no }}' type='hidden'/>
                                             @endif
                                             <label class="form-label" style='color:#ebab21'>Your Lucky Number</label>
-                                            <div class="fw-bolder fs-3 text-center" ><span style="font-size:30px;font-family: 'Courier New', Courier, monospace;" id='counter2'>
+                                            <div class="fw-bolder fs-3 text-center" ><span style="font-size:30px;color:green;font-family: 'Courier New', Courier, monospace;" id='counter2'>
                                                [@foreach($giveaway->lucky_numbers as $win){{ $win }},@endforeach]</span></div>
                                                 <label class="form-label" style='color:#ebab21'>Lucky Winner's Numbers</label>
 
