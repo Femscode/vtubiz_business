@@ -266,9 +266,10 @@
                                             @else 
                                             <div class="badge badge-light-dark p-4">Opps, You didn't win the giveaway, so sorry about that!
                                             <input type='hidden' id='giveawayId' value='{{ $giveaway->id }}'/>
-                                            <a id='retryGiveaway' class='btn btn-success btn-sm'>Retry</a>    
+                                           
                                             </div><br>
                                             <label class="form-label" style='color:#ebab21'>Giveaway Status</label><br>
+                                            <a id='retryGiveaway' class='btn btn-success btn-sm'>Retry</a>    
                                             <p>Do you know that you can as well create your own giveaway?</p>
                                             <p>Click <a href='https://vtubiz.com/register'>here</a> to register and create yours.</p>
                                             @endif
