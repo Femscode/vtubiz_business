@@ -142,7 +142,7 @@
 												@endif
 													
 													<label style='text-align:center !important'> <b>Select a number between 1 and {{ $giveaway->part_no }}</b></label>
-													<br> Taken Numbers :  @if($giveaway->all_numbers !== null)[@foreach($giveaway->all_numbers as $win){{ $win }},@endforeach @endif]
+													<br>@if($giveaway->all_numbers !== null) Taken Numbers :  [@foreach($giveaway->all_numbers as $win){{ $win }},@endforeach ]@endif
 													<input min="1" max="{{ $giveaway->part_no }}" required class='m-2 form-control shadow-none' 
 													type="number" name='part_no' placeholder="Enter Your Lucky Number">
 												<div class="m-2 input-group-append">
