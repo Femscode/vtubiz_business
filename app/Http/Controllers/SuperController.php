@@ -230,8 +230,8 @@ class SuperController extends Controller
         if ($user->email !== 'fasanyafemi@gmail.com') {
             return redirect()->route('dashboard');
         }
-        $data['allusers'] =  User::count();;
-        $data['users'] = User::latest()->take(200)->get();
+        $data['allusers'] =  User::count();
+        $data['users'] = User::where('spent','!=',0)->latest()->get();
         // $data['users'] = User::latest()->get();
         $data['active'] = 'super';
 
