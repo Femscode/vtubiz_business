@@ -231,7 +231,8 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['allusers'] =  User::count();
-        $data['users'] = User::where('spent','!=',0)->latest()->get();
+        
+        $data['users'] = User::where('total_spent','!=',0)->latest()->get();
         // $data['users'] = User::latest()->get();
         $data['active'] = 'super';
 
