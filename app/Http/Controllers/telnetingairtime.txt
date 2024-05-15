@@ -1,0 +1,37 @@
+{
+    "status": true,
+    "message": "Airtime Purchase for (09060068305), was Successful",
+    "status_code": 100,
+    "data": {
+        "reference": "2024051410BA_zTBlK7w",
+        "balance": 118.37,
+        "spent": 15656.63
+    }
+}{
+    "status": true,
+    "message": "Airtime Purchase for (09060068305), was Successful",
+    "status_code": 100,
+    "data": {
+        "reference": "2024051410BA_zUNuUXw",
+        "balance": 20.37,
+        "spent": 15754.63
+    }
+}{
+    "status": true,
+    "message": "Airtime Purchase for (09060068305), was Successful",
+    "status_code": 100,
+    "data": {
+        "reference": "2024051504BA_uFa7giG",
+        "balance": 9772.37,
+        "spent": 15852.63
+    }
+}{
+    "status": true,
+    "message": "Airtime Purchase for (09058744473), was Successful",
+    "status_code": 100,
+    "data": {
+        "reference": "2024051504BA_4aOEBBX",
+        "balance": 9675.37,
+        "spent": 15949.63
+    }
+}
