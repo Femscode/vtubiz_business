@@ -31,7 +31,7 @@
                 aria-controls="kt_account_profile_details">
                 <!--begin::Card title-->
                 <div class="card-title m-0">
-                    <h2 class="fw-bolder m-0">Fund Wallet</h2>
+                    <h2 class="fw-bolder m-0">Account Funding</h2>
                 </div>
                 <!--end::Card title-->
             </div>
@@ -42,7 +42,51 @@
             <!--begin::Form-->
 
             <div class="card-body">
+
+                
+                <div class="py-2">
+                    <form method="POST" action="{{ route('admin_checkout') }}" accept-charset="UTF-8"
+                        class="form-horizontal" role="form">@csrf
+                        <div class="row" style="margin-bottom:40px;">
+                            <div class="col-md-12 col-md-offset-2">
+
+                                <input required name='amount' type="number" min='100' id='u_amount' class="form-control"
+                                    placeholder="Amount" aria-label="Amount">
+
+
+
+
+                                <input type="hidden" name="metadata"
+                                    value="{{ json_encode($array = ['phone' => $user->phone,]) }}">
+                                <div>
+
+
+                                    <input required type='radio' name='type' value='transfer' />
+                                    <label class="form-check-label" for="Pay with bank transfer">
+                                        Automatic Bank Transfer
+                                    </label><br>
+                                    <input required type='radio' name='type' value='card' />
+                                    <label class="form-check-label" for="Pay with card">
+                                        Pay With Credit Card
+                                    </label>
+                                </div>
+
+                                <p class='mt-2 justify-content-center' style='display:flex;justify-content:center'>
+                                    <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
+                                        <i class="fa fa-plus-circle fa-lg"></i>
+                                        Fund Wallet
+                                    </button>
+                                </p>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
               
+                <hr>
+                <h4 class='text-center'>
+                --------------Or-----------------</h4>
+
                 @if($user->account_no !== null)
 
                 <div class="credit-card justify-content-center">
@@ -97,48 +141,8 @@
                 </div>
                 @endif
 
-                <hr>
-                <h4 class='text-center'>
-                --------------Or-----------------</h4>
+               
 
-                <div class="py-2">
-                    <form method="POST" action="{{ route('admin_checkout') }}" accept-charset="UTF-8"
-                        class="form-horizontal" role="form">@csrf
-                        <div class="row" style="margin-bottom:40px;">
-                            <div class="col-md-12 col-md-offset-2">
-
-                                <input required name='amount' type="number" min='100' id='u_amount' class="form-control"
-                                    placeholder="Amount" aria-label="Amount">
-
-
-
-
-                                <input type="hidden" name="metadata"
-                                    value="{{ json_encode($array = ['phone' => $user->phone,]) }}">
-                                <div>
-
-
-                                    <input required type='radio' name='type' value='transfer' />
-                                    <label class="form-check-label" for="Pay with bank transfer">
-                                        Automatic Bank Transfer
-                                    </label><br>
-                                    <input required type='radio' name='type' value='card' />
-                                    <label class="form-check-label" for="Pay with card">
-                                        Pay With Credit Card
-                                    </label>
-                                </div>
-
-                                <p class='mt-2 justify-content-center' style='display:flex;justify-content:center'>
-                                    <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
-                                        <i class="fa fa-plus-circle fa-lg"></i>
-                                        Fund Wallet
-                                    </button>
-                                </p>
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
 
             </div>
 

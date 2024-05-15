@@ -142,7 +142,10 @@
 												@endif
 													
 													<label style='text-align:center !important'> <b>Select a number between 1 and {{ $giveaway->part_no }}</b></label>
-													<br>@if($giveaway->all_numbers !== null) Taken Numbers :  [@foreach($giveaway->all_numbers as $win) {{ $win }}, @endforeach ]@endif
+													<br>@if($giveaway->all_numbers !== null)  @php
+													$numbers = $giveaway->all_numbers;
+													sort($numbers);
+												@endphp <b>Already Choosen Numbers :</b>  [@foreach($numbers as $win) {{ $win }}, @endforeach ]@endif
 													<input min="1" max="{{ $giveaway->part_no }}" required class='m-2 form-control shadow-none' 
 													type="number" name='part_no' placeholder="Enter Your Lucky Number">
 												<div class="m-2 input-group-append">
@@ -160,7 +163,7 @@
 							</span>
 						</label><br><br><br>
 						<h4 class="bold-place;"><span class="bold-place" style="font-family: 'Grandstander', cursive">
-							This giveaway have a maximum number of {{ $giveaway->part_no }} participant, join now to be amoung the {{ $giveaway->no_of_winners }} lucky winners.🎉🎉 </span></h4><br><br><br><br><br><br><br><br><br><br><br>
+							This giveaway have a maximum number of {{ $giveaway->part_no }} participant, join now to be among the {{ $giveaway->no_of_winners }} lucky winners.🎉🎉 </span></h4><br><br><br><br><br><br><br><br><br><br><br>
 					</div>
 					{{-- <img src='assets/img/frontal.avif' style='width:300px;height:200px' /> --}}
 

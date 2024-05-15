@@ -290,8 +290,11 @@ class FunGiveAwayController extends Controller
     }
     public function giveawayHome($slug)
     {
+       
         $data['giveaway'] = $giveaway = GiveAway::where('slug', $slug)->first();
+       
         $data['userId'] = Str::random(10);
+      
         return view('giveaway.home', $data);
     }
     public function saveGiveAwayContacts(Request $request)
@@ -316,13 +319,7 @@ class FunGiveAwayController extends Controller
             return redirect()->back()->with('message', 'You have already participated in this giveaway');
         }
       
-        $part = $data['participant'] = GiveAwayContacts::create([
-            'giveaway_id' => $request->giveaway_id,
-            'user_id' => $request->user_id,
-            'name' => $name,
-            'email' => Auth::user()->email ?? "null",
-            'phone' => $phone
-        ]);
+      
 
         if ($giveaway->type == 'question_data' || $giveaway->type == 'question_airtime' ||  $giveaway->type == 'question_cash') {
 
@@ -338,7 +335,13 @@ class FunGiveAwayController extends Controller
             if ($giveaway->max_winners == 0) {
                 return redirect()->back()->with('message', 'Giveaway ended already!');
             }
-
+            $part = $data['participant'] = GiveAwayContacts::create([
+                'giveaway_id' => $request->giveaway_id,
+                'user_id' => $request->user_id,
+                'name' => $name,
+                'email' => Auth::user()->email ?? "null",
+                'phone' => $phone
+            ]);
 
             return view('business_backend.testpage', $data);
         }
@@ -348,8 +351,14 @@ class FunGiveAwayController extends Controller
         }
         if(in_array($request->part_no, $existingNumbers)) {
             return redirect()->back()->with('message', 'Number already choosen, pick another number!');
-
         }
+        $part = $data['participant'] = GiveAwayContacts::create([
+            'giveaway_id' => $request->giveaway_id,
+            'user_id' => $request->user_id,
+            'name' => $name,
+            'email' => Auth::user()->email ?? "null",
+            'phone' => $phone
+        ]);
         if (count($existingNumbers) >= $giveaway->part_no) {
             $data['rand_no'] =  "xxx";
             $data['won'] = 0;
