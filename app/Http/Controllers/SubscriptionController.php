@@ -605,16 +605,15 @@ class SubscriptionController extends Controller
                     $schedule->status = 2;
                     $schedule->save();
                     return false;
-                }
-             
+                }           
 
 
 
-                if ($tranx->network == 1) {
+                if ($tranx->network == 1 || $tranx->network == 'MTN') {
                     $network = 'MTN';
-                } elseif ($tranx->network == 2) {
+                } elseif ($tranx->network == 2 || $tranx->network == 'GLO') {
                     $network = 'GLO';
-                } elseif ($tranx->network == 3) {
+                } elseif ($tranx->network == 3 || $tranx->network == 'AIRTEL') {
                     $network = 'AIRTEL';
                 } else {
                     $network = '9MOBILE';
