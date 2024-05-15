@@ -43,7 +43,7 @@
                             <span class=" text-gray-500 fw-bold fs-4">-- ACCOUNT FUNDING --</span>
                         </div>
 
-                        <div class="py-2">
+                        <div class="">
                             <form method="POST" action="{{ route('checkout',['subdomain']) }}" accept-charset="UTF-8"
                                 class="form-horizontal" role="form">@csrf
                                 <div class="row" style="margin-bottom:40px;">
@@ -87,9 +87,6 @@
                         <hr>
                         <h4 class='text-center'>
                         --------------Or-----------------</h4>
-                        
-
-                       
 
                         @if($user->account_no !== null)
 

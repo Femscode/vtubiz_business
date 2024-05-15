@@ -44,7 +44,7 @@
             <div class="card-body">
 
                 
-                <div class="py-2">
+                <div class="">
                     <form method="POST" action="{{ route('admin_checkout') }}" accept-charset="UTF-8"
                         class="form-horizontal" role="form">@csrf
                         <div class="row" style="margin-bottom:40px;">
