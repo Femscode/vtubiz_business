@@ -700,7 +700,7 @@ trait TransactionTrait
                     $details = "Failed Airitime Purchase, amount: " . $tranx->discounted_amount;
                     $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 0, $real_airtimeprice, $phone_number, $network, $tranx->amount);
                 }
-                // $this->check_duplicate("Delete", $user->id);
+                $this->check_duplicate("Delete", $user->id);
                 $response_json['success'] = 'true';
                 // return $response_json;
 
