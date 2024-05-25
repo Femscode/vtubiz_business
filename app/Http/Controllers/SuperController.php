@@ -504,7 +504,7 @@ class SuperController extends Controller
                         }
                     }
                     $user->upgrade = 0;
-                    $user->user_type == 'customer';
+                    $user->user_type = 'customer';
                    
                     $user->save();
                     return redirect()->back()->with('message', "User Degraded Successfully!");
@@ -529,7 +529,7 @@ class SuperController extends Controller
                         }
                     }
                     $user->upgrade = 1;
-                    $user->user_type == 'admin';
+                    $user->user_type = 'admin';
                     $user->save();
                     return redirect()->back()->with('message', "User Upgraded Successfully!");
                 }
