@@ -9,18 +9,22 @@
     <meta content="VTUBIZ|API-USER" name="description" />
     <meta content="VTUBIZ" name="author" />
     <!-- App favicon -->
+    @if($user && $user->logo !== null)
+    <link rel="icon" type="image/png" href="{{ asset('brand_images/'.$user->logo) }}"><!-- Fonts-->
+    @else
     <link rel="shortcut icon" href="https://cttaste.com/assets/images/fav_01.png">
+    @endif
 
     <!-- Bootstrap Css -->
-    <link href="https://cttaste.com/public/api_user/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet"
-    type="text/css" />
+    {{-- <link href="https://cttaste.com/public/api_user/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet"
+    type="text/css" /> --}}
     <link href="{{ asset('api_user/assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet"
     type="text/css" />
     <!-- Icons Css -->
     <link href="{{ asset('api_user/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
 
-    <link href="https://cttaste.com/public/api_user/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    {{-- <link href="https://cttaste.com/public/api_user/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" /> --}}
     <link href="{{ asset('api_user/assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
     <script src="{{asset('cdn/sweetalert.min.js')}}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{asset('cdn/jquery-3.6.0.js')}}" crossorigin="anonymous"></script>
