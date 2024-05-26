@@ -496,10 +496,12 @@ class SuperController extends Controller
                         $matchingRealData = $real_data->first(function ($realData) use ($data) {
                             return $realData->plan_id === $data->plan_id;
                         });
-
+                        // dd($matchingRealData);
                         if ($matchingRealData) {
                             // Update the data_price of $data with the account_price of $matchingRealData
-                            $data->data_price = $matchingRealData->account_price;
+                            $data->data_price = $matchingRealData->account_price;                          
+                            $data->account_price = $matchingRealData->account_price;
+                            $data->admin_price = $matchingRealData->account_price;
                             $data->save();
                         }
                     }
@@ -512,19 +514,20 @@ class SuperController extends Controller
                     //update the user's data prices
                     $user->company_id = $user->id;
                     $user->save();
-
+                   
                     foreach ($datas as $data) {
+                        
                         // Get the corresponding $real_data with the same plan_id
                         $matchingRealData = $real_data->first(function ($realData) use ($data) {
                             return $realData->plan_id === $data->plan_id;
                         });
+                       
                         if ($matchingRealData) {
                             // dd( $data->data_price, $matchingRealData->data_price);
                             // Update the data_price of $data with the account_price of $matchingRealData
                             $data->data_price = $matchingRealData->data_price;
                             $data->account_price = $matchingRealData->data_price;
                             $data->admin_price = $matchingRealData->data_price;
-
                             $data->save();
                         }
                     }
