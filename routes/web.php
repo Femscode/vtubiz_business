@@ -15,6 +15,38 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::any('runawoof', function() {
+    //the base
+    Data::create([
+        'user_id' => 0,
+        'network' => 1,
+        'plan_id' => 199,
+        'plan_name' => 'MTN 1GB (Awoof) 1day',
+        'actual_price' => 230,
+        'data_price' => 235,
+        'account_price' => 240,
+        'admin_price' => 240
+    ]);
+    Data::create([
+        'user_id' => 0,
+        'network' => 1,
+        'plan_id' => 200,
+        'plan_name' => 'MTN 3.5GB (Awoof) 2days',
+        'actual_price' => 540,
+        'data_price' => 590,
+        'account_price' => 650,
+        'admin_price' => 650
+    ]);
+    Data::create([
+        'user_id' => 0,
+        'network' => 1,
+        'plan_id' => 201,
+        'plan_name' => 'MTN 15GB (Awoof) 7days',
+        'actual_price' => 2070,
+        'data_price' => 2350,
+        'account_price' => 2400,
+        'admin_price' => 2400
+    ]);
+
     $users = User::where('upgrade',1)->get();
     foreach($users as $user) {
 
