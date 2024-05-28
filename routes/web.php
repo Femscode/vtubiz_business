@@ -15,7 +15,7 @@ use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::any('runawoof', function() {
-    //the base
+    
     Data::create([
         'user_id' => 0,
         'network' => 1,

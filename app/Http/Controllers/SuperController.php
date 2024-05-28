@@ -483,7 +483,8 @@ class SuperController extends Controller
             // dd($user);
 
             if ($user) {
-                $datas = Data::where('user_id', $user->company_id)->get();
+                $datas = Data::where('user_id', $user->id)->get();
+                // $datas = Data::where('user_id', $user->company_id)->get();
                 $real_data = Data::where('user_id', 0)->get();
                 if ($user->upgrade == 1) {
                     //update the user's data prices
