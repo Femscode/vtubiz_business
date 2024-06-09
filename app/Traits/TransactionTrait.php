@@ -258,6 +258,16 @@ trait TransactionTrait
 
             $tranx->status = 1;
             $tranx->save();
+        } elseif ($title == 'Manual Debit') {
+
+            $r_user->balance += $amount;
+
+
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+
+            $tranx->status = 1;
+            $tranx->save();
         } elseif ($title == 'Admin Fund User') {
 
             $r_user->balance -= $amount;

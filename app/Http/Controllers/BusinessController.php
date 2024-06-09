@@ -31,32 +31,30 @@ use Illuminate\Support\Facades\Redirect;
 
 class BusinessController extends Controller
 {
-   
+
     use TransactionTrait;
-  
+
     public function index()
     {
         return view('business_frontend.index');
-       
     }
     public function blogs()
     {
-        $data['blogs'] = Blog::where('status',1)->latest()->paginate(10);
+        $data['blogs'] = Blog::where('status', 1)->latest()->paginate(10);
         $data['popular'] = Blog::orderBy('rank')->take(5)->get();
         return view('business_frontend.blogs', $data);
-      
     }
     public function blogdetails($id)
     {
-        $data['blog'] = $blog = Blog::where('uid',$id)->firstOrFail();
-        $data['related'] = Blog::where('status',1)->where('category',$blog->category)->where('id', '!=', $blog->id)->get();
-        $data['comments'] = Comment::where('blog_id',$id)->get();
-        
-      
+        $data['blog'] = $blog = Blog::where('uid', $id)->firstOrFail();
+        $data['related'] = Blog::where('status', 1)->where('category', $blog->category)->where('id', '!=', $blog->id)->get();
+        $data['comments'] = Comment::where('blog_id', $id)->get();
+
+
         return view('business_frontend.blogdetails', $data);
-      
     }
-    public function saveComment(Request $request) {
+    public function saveComment(Request $request)
+    {
         // dd($request->all());
         $this->validate($request, [
             'blog_id' => 'required',
@@ -68,23 +66,21 @@ class BusinessController extends Controller
 
         Comment::create($request->all());
         return redirect()->back()->with('message', "Comment added successfully!");
-
-
     }
     public function upgrade($id)
     {
         $user = User::find($id);
         // dd($user);
         if ($user->user_type == 'customer') {
-           
-            if($user->balance < 3500) {
+
+            if ($user->balance < 3500) {
 
                 return redirect('/dashboard')->with('message', 'Insufficient balance for upgrading account!');
             }
-           
+
             $user->user_type = 'admin';
             $user->save();
-            $client_reference = "Upgrade_".Str::random(5);
+            $client_reference = "Upgrade_" . Str::random(5);
             $details = "Account Upgrade ~ Amount:NGN3,500 ";
             $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'debit', 3500, $user->id, 1);
             $datas = Data::where('user_id', $user->company_id)->get();
@@ -145,15 +141,15 @@ class BusinessController extends Controller
             return view('dashboard.setpin', $data);
         }
         // return redirect('/my-dashboard');
-        if($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'user' || $user->user_type == 'client_customer') {
             return redirect('/my-dashboard');
         }
-        
 
-      
+
+
         // $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
-        
+
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
@@ -180,7 +176,7 @@ class BusinessController extends Controller
         // dd($domain, $request->all());
         $apiKey = env("GO_DADDY_PUBLIC_KEY");
         $apiSecret = env("GO_DADDY_SECRET_KEY");
-      
+
 
         $response = Http::withHeaders([
             'Authorization' => 'sso-key ' . $apiKey . ':' . $apiSecret,
@@ -196,7 +192,7 @@ class BusinessController extends Controller
         // dd($domain, $request->all());
         $apiKey = env("GO_DADDY_PUBLIC_KEY");
         $apiSecret = env("GO_DADDY_SECRET_KEY");
-        
+
 
         $response = Http::withHeaders([
             'Authorization' => 'sso-key ' . $apiKey . ':' . $apiSecret,
@@ -220,7 +216,7 @@ class BusinessController extends Controller
     public function profile()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             return redirect('/my-profile');
         }
         return view('business_backend.profile', $data);
@@ -314,7 +310,7 @@ class BusinessController extends Controller
     {
 
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             return redirect('/user-fundwallet');
         }
         $data['active'] = 'fundwallet';
@@ -324,7 +320,7 @@ class BusinessController extends Controller
             $data['notification'] = $notification;
         }
 
-       
+
         return view('business_backend.fundwallet', $data);
     }
 
@@ -408,11 +404,11 @@ class BusinessController extends Controller
     public function theme_preview($id)
     {
         $data['theme'] = $theme = Theme::where('uuid', $id)->first();
-        $data['user'] = $user =Auth::user();
-        $data['mtn'] = Data::where('network', 1)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
-        $data['glo'] = Data::where('network', 2)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
-        $data['airtel'] = Data::where('network', 3)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
-        $data['nmobile'] = Data::where('network', 4)->where('user_id',$user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['user'] = $user = Auth::user();
+        $data['mtn'] = Data::where('network', 1)->where('user_id', $user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['glo'] = Data::where('network', 2)->where('user_id', $user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['airtel'] = Data::where('network', 3)->where('user_id', $user->company_id)->orderBy('data_price')->take(20)->get();
+        $data['nmobile'] = Data::where('network', 4)->where('user_id', $user->company_id)->orderBy('data_price')->take(20)->get();
         $view = "business_backend.theme" . $theme->id;
         return view($view, $data);
     }
@@ -448,36 +444,34 @@ class BusinessController extends Controller
         $data['user'] = $user = Auth::user();
         $data['active'] = 'transactions';
         $data['transactions'] = $transactions =  DuplicateTransaction::where('user_id', $user->id)->latest()->get();
-        if($user->user_type == 'admin') {
+        if ($user->user_type == 'admin') {
             return view('business_backend.pending_transactions', $data);
         }
         return view('dashboard.pending_transactions', $data);
-        
     }
     public function mytransactions()
     {
         $data['user'] = $user = Auth::user();
         $data['active'] = 'transactions';
         $data['transactions'] = $transactions =  Transaction::where('user_id', $user->id)->latest()->get();
-        if($user->user_type == 'admin') {
+        if ($user->user_type == 'admin') {
             return view('business_backend.mytransactions', $data);
         }
         return view('dashboard.transactions', $data);
-        
     }
     public function bulksms_transactions()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             return redirect('/premium-bulksms_transactions');
         }
-        $data['transactions'] = $transactions =  BulkSMSTransaction::where('company_id', $user->id)->where('user_id',$user->id)->latest()->get();
+        $data['transactions'] = $transactions =  BulkSMSTransaction::where('company_id', $user->id)->where('user_id', $user->id)->latest()->get();
         return view('business_backend.bulksms_transactions', $data);
     }
     public function data_prices()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer') {
+        if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
         $datas = Data::where('user_id', 0)->get();
@@ -523,7 +517,7 @@ class BusinessController extends Controller
     public function airtime_prices()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer') {
+        if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
         $airtime = Airtime::where('user_id', $user->id)->first();
@@ -563,7 +557,7 @@ class BusinessController extends Controller
     public function electricity_prices()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer') {
+        if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
         $electricity = Electricity::where('user_id', $user->id)->first();
@@ -583,7 +577,8 @@ class BusinessController extends Controller
     }
     public function bulksms_prices()
     {
-        $data['user'] = $user = Auth::user(); if($user->user_type == 'customer') {
+        $data['user'] = $user = Auth::user();
+        if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
 
@@ -593,7 +588,7 @@ class BusinessController extends Controller
     {
 
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer') {
+        if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
         $cables = Cable::where('user_id', 0)->get();
@@ -619,7 +614,7 @@ class BusinessController extends Controller
     public function examination_prices()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer') {
+        if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
 
@@ -819,7 +814,7 @@ class BusinessController extends Controller
 
     public function sendBulkEmail(Request $request)
     {
-      
+
         $this->validate($request, ['subject' => 'required', 'message' => 'required']);
         // dd($request->all());
         //check if the user is blocked
@@ -870,22 +865,21 @@ class BusinessController extends Controller
         //     'notf_id' => 'required'
         // ]);
         $user = Auth::user();
-        if($user->email == 'fasanyafemi@gmail.com') {
+        if ($user->email == 'fasanyafemi@gmail.com') {
             $notification = Notification::find($request->notf_id);
-            $notifications = Notification::where('type',$notification->type)->get();
-            foreach($notifications as $notification) {
+            $notifications = Notification::where('type', $notification->type)->get();
+            foreach ($notifications as $notification) {
                 $notification->title = $request->title;
                 $notification->description = $request->description;
                 $notification->save();
-            }           
-        }
-        else {
+            }
+        } else {
             $notification = Notification::find($request->notf_id);
             $notification->title = $request->title;
             $notification->description = $request->description;
             $notification->save();
         }
-       
+
         return redirect()->back()->with('success', 'Notification updated successfully!');
     }
     public function change_password()
@@ -926,21 +920,27 @@ class BusinessController extends Controller
     {
         //check if the user belongs to the brand
         $this->validate($request, [
-            'amount' => ['required', 'numeric', 'min:50'],
+            'amount' => ['required', 'numeric'],
             'user_id' => 'required'
         ]);
         $user = User::where('uuid', $request->user_id)->first();
         $company = Auth::user();
-        if($company->email == 'fasanyafemi@gmail.com') {
+        if ($company->email == 'fasanyafemi@gmail.com') {
             $reference = "man_fund_" . Str::random(7);
             $details = "Manual funding of " . $request->amount;
-          
 
-            $this->create_transaction('Manual Funding', $reference, $details, 'credit', $request->amount, $user->id, 1, $request->amount);
+
+
+            if ($request->amount > 1) {
+                $this->create_transaction('Manual Funding', $reference, $details, 'credit', $request->amount, $user->id, 1, $request->amount);
+            } else {
+                $reference = "man_deb_" . Str::random(7);
+                $details = "Manual debit of " . $request->amount;
+                $this->create_transaction('Manual Debit', $reference, $details, 'debit', $request->amount, $user->id, 1, $request->amount);
+            }
             return redirect()->route('users')->with('message', 'User Credited Successfully');
-    
         }
-        if ($user->company_id == $company->id ) {
+        if ($user->company_id == $company->id) {
             $reference = "man_fund_" . Str::random(7);
             $details = "Manual funding of " . $request->amount;
             if ($company->balance < $request->amount) {

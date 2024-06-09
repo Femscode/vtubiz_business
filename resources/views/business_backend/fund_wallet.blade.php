@@ -39,7 +39,7 @@
                             <div class="mb-3">
                                 <label for="heading" class="form-label">Amount</label>
                                 <input type='hidden' name='user_id' value='{{ $user->uuid }}'/>
-                                <input type="number" min='50' id='amount' class="form-control" name="amount" value=""
+                                <input type="number" id='amount' class="form-control" name="amount" value=""
                                     placeholder="Enter Amount">
 
                             </div>
