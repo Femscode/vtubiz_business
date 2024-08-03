@@ -423,6 +423,13 @@ class SuperController extends Controller
         $blog->delete();
         return redirect()->back()->with('message', 'Blog Deleted Successfully!');
     }
+    public function deleteuser($id)
+    {
+        $user = User::where('uuid',$id)->firstOrFail();
+        $trans = Transaction::where('id',$user->id)->delete();
+        $user->delete();
+        return redirect()->back()->with('message', 'User Deleted Successfully!');
+    }
 
     public function downloadCSV(Request $request)
     {

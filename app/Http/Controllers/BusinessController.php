@@ -941,6 +941,9 @@ class BusinessController extends Controller
             return redirect()->route('users')->with('message', 'User Credited Successfully');
         }
         if ($user->company_id == $company->id) {
+            if(intval($request->amount) < 50) {
+                return redirect()->back()->with('message','Minimum amount is NGN50');
+            }
             $reference = "man_fund_" . Str::random(7);
             $details = "Manual funding of " . $request->amount;
             if ($company->balance < $request->amount) {
