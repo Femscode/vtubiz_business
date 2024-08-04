@@ -352,7 +352,7 @@
                                         style="">
                                         <!--begin:Menu item-->
                                         <div class="menu-item">
-                                            <!--begin:Menu link--><a class="menu-link" href="/transactions"
+                                            <!--begin:Menu link--><a class="menu-link" href="/mytransactions"
                                                 data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                                 data-bs-placement="right" data-kt-initialized="1"><span
                                                     class="menu-title">My Transactions</span></a>

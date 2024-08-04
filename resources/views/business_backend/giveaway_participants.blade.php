@@ -9,7 +9,7 @@
 
 
 
-    <div class="row">
+    <div class="row mt-4">
 
         <div class="card mb-xl-10" style="border-left:5px solid #001f3f;background-color: hsl(210, 90%, 95%)">
             <div class="card-header flex-wrap border-0 pt-6 pb-0">
@@ -39,6 +39,8 @@
                         <a class="text-muted fw-medium">Lucky Numbers</a>
                         <h4 class="mb-0"> {{ $giveaway->data_price }} {{ $giveaway->airtime_price }}</h4>
                         <a class="text-muted fw-medium">Giveaway Prize</a>
+                        <h4 class="mb-0"> NGN{{ number_format($giveaway->entry_fee) }}</h4>
+                        <a class="text-muted fw-medium">Entry Fee</a>
 
 
                     </div>
@@ -79,13 +81,14 @@
         </div>
         <div class="card mb-xl-10">
             <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                <div class="card-title flex">
+              
                     <h2 class="fw-bolder">{{ $giveaway->name }} Participants
                     </h2>
                     <div>
                         <a href='/giveaway_transactions/{{ $giveaway->slug }}' class='btn btn-success'>View Transactions</a>
+                        <a href='/my-giveaway' class='btn btn-secondary'>Back</a>
                     </div>
-                </div>
+               
 
             </div>
             <div class="card-body">

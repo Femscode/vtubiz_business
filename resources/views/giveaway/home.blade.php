@@ -148,6 +148,13 @@
 												@endphp <b>Already Choosen Numbers :</b>  [@foreach($numbers as $win) {{ $win }}, @endforeach ]@endif
 													<input min="1" max="{{ $giveaway->part_no }}" required class='m-2 form-control shadow-none' 
 													type="number" name='part_no' placeholder="Enter Your Lucky Number">
+
+													@if($giveaway->entry_fee > 0)
+													<div class='alert alert-danger'>
+														<p>You will be charged ₦{{number_format($giveaway->entry_fee)}} for this giveaway</p>
+													</div>
+
+													@endif
 												<div class="m-2 input-group-append">
 													<button type='submit'
 														style='border:0px solid #fff;background:#856404'

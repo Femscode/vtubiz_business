@@ -39,6 +39,8 @@
                         <a class="text-muted fw-medium">Lucky Numbers</a>
                         <h4 class="mb-0"> {{ $giveaway->data_price }} {{ $giveaway->airtime_price }}</h4>
                         <a class="text-muted fw-medium">Giveaway Prize</a>
+                        <h4 class="mb-0"> NGN{{ number_format($giveaway->entry_fee) }}</h4>
+                        <a class="text-muted fw-medium">Entry Fee</a>
 
 
                     </div>

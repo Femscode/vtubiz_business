@@ -70,7 +70,7 @@
                                         <a onclick='return confirm("Are you sure you want to degrade this user?")' href='/upgrade_user/{{ $user->uuid }}' class='btn btn-light-danger btn-sm m-2'>Degrade User</a>
                                         @endif
 
-                                        <a href='/delete_user/{{ $user->uuid }}' class='btn btn-danger btn-sm m-2'>Delete User</a>
+                                        <a href='/delete_user/{{ $user->uuid }}' onclick="return confirm('Are you sure you want to delete this user');" class='btn btn-danger btn-sm m-2'>Delete User</a>
                                     </td>
                                 </tr>
                                 @endforeach

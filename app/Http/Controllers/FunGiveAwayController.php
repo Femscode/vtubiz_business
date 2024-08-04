@@ -156,7 +156,7 @@ class FunGiveAwayController extends Controller
         if ($user->balance < $amount || $amount <= 100) {
             $response = [
                 'success' => false,
-                'message' => 'Insufficient balance for the plan you want to get!',
+                'message' => 'Insufficient balance for the giveaway you want to create!',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -171,6 +171,7 @@ class FunGiveAwayController extends Controller
                     'name' => $request->name,
                     'part_no' => $request->part_no,
                     'no_of_winners' => $request->no_winner,
+                    'entry_fee' => $request->entry_fee,
                     'data_price' => $request->winner_price,
                     'estimated_amount' => $amount,
                     'type' => 'raffle_data',
@@ -182,6 +183,7 @@ class FunGiveAwayController extends Controller
                     'slug' => str_replace(' ', '-', $request->name . "-" . $rand),
                     'name' => $request->name,
                     'part_no' => $request->part_no,
+                    'entry_fee' => $request->entry_fee,
                     'no_of_winners' => $request->no_winner,
                     'airtime_price' => $request->raffle_cash_price,
                     'estimated_amount' => $amount,
@@ -195,6 +197,7 @@ class FunGiveAwayController extends Controller
                     'slug' => str_replace(' ', '-', $request->name . "-" . $rand),
                     'name' => $request->name,
                     'part_no' => $request->part_no,
+                    'entry_fee' => $request->entry_fee,
                     'no_of_winners' => $request->no_winner,
                     'airtime_price' => $request->raffle_airtime_price,
                     'estimated_amount' => $amount,
@@ -227,6 +230,7 @@ class FunGiveAwayController extends Controller
                     'slug' => str_replace(' ', '-', $request->name . "-" . $rand),
                     'name' => $request->name,
                     'time' => $request->time,
+                    'entry_fee' => $request->entry_fee,
                     'no_of_winners' => $request->no_winner,
                     'max_winners' => $request->no_winner,
                     'data_price' => $request->winner_price,
@@ -241,6 +245,7 @@ class FunGiveAwayController extends Controller
                     'slug' => str_replace(' ', '-', $request->name . "-" . $rand),
                     'name' => $request->name,
                     'time' => $request->time,
+                    'entry_fee' => $request->entry_fee,
                     'no_of_winners' => $request->no_winner,
                     'max_winners' => $request->no_winner,
                     'airtime_price' => $request->q_cash_price,
@@ -255,6 +260,7 @@ class FunGiveAwayController extends Controller
                     'slug' => str_replace(' ', '-', $request->name . "-" . $rand),
                     'name' => $request->name,
                     'time' => $request->time,
+                    'entry_fee' => $request->entry_fee,
                     'no_of_winners' => $request->no_winner,
                     'max_winners' => $request->no_winner,
                     'airtime_price' => $request->q_airtime_price,
@@ -318,6 +324,31 @@ class FunGiveAwayController extends Controller
         if (session()->has('participate_' . $giveaway->slug)) {
             return redirect()->back()->with('message', 'You have already participated in this giveaway');
         }
+
+        //charge the user
+        if ($giveaway->entry_fee > 0) {
+            // Check if the user is authenticated
+            if (Auth::check()) {
+                $user = Auth::user();
+                $this->create_transaction(
+                    "Giveaway Entry Fee",            // Description
+                    "GEF-" . Str::random(5),         // Unique ID
+                    "Amount Charged : ₦" . $giveaway->entry_fee, // Transaction details
+                    'debit',                         // Transaction type
+                    $giveaway->entry_fee,            // Amount
+                    $user->id,                       // User ID
+                    0,                               // Other parameters
+                    $real_dataprice = null,
+                    $phone_number = null,
+                    $network = null,
+                    $plan_id = null
+                );
+            } else {
+                // Redirect to login if the user is not authenticated
+                return redirect()->back()->with('message', "You have to login before you participate in this giveaway.");
+            }
+        }
+        
       
       
 
