@@ -330,6 +330,10 @@ class FunGiveAwayController extends Controller
             // Check if the user is authenticated
             if (Auth::check()) {
                 $user = Auth::user();
+                if($user->balance < $giveaway->entry_fee) {
+
+                    return redirect('/dashboard')->with('message', 'Insufficient balance to participate in this giveaway!');
+                }
                 $this->create_transaction(
                     "Giveaway Entry Fee",            // Description
                     "GEF-" . Str::random(5),         // Unique ID
