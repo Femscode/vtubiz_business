@@ -14,6 +14,35 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\LoginWithGoogleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+Route::any('removedouble/{id}', function($id) {
+    $planId = $id; // The specific plan_id to identify the data
+
+    $duplicateUsers = Data::select('user_id')
+        ->where('plan_id', $planId)
+        ->groupBy('user_id')
+        ->havingRaw('COUNT(*) > 1')
+        ->pluck('user_id');
+    
+    foreach ($duplicateUsers as $userId) {
+        // Get all records for the user with the specific plan_id, ordered by ID
+        $userData = Data::where('user_id', $userId)
+            ->where('plan_id', $planId)
+            ->orderBy('id', 'asc')
+            ->get();
+    
+        // Remove all but the first entry
+        $userData->shift(); // Remove the first entry from the collection (keep it)
+        
+        // Delete the remaining duplicates
+        foreach ($userData as $data) {
+            $data->delete();
+        }
+    }
+    
+    echo "Duplicate data entries for plan_id $planId removed successfully.";
+    
+});
+
 Route::any('runawoof', function() {
     
     // Data::create([
