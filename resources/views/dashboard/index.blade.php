@@ -15,7 +15,7 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
-                @if($notification2)
+                @if(isset($notification2))
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
                    
                   {!! $notification2->description !!}
