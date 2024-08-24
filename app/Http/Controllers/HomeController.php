@@ -163,6 +163,32 @@ class HomeController extends Controller
             return response()->view('dashboard.index', $data);
         }
     }
+    public function benefits()
+    {
+
+        $data['user'] = $user = Auth::user();
+        $data['company'] = User::where('id', $user->company_id)->first();
+
+        $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
+
+        // dd($user);
+        $data['active'] = 'dashboard';
+
+
+        // $data['banks'] = Bank::all();
+        $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+
+        if ($notification && $notification->title !== null) {
+            $data['notification'] = $notification;
+        }
+        $notification2 = Notification::where('user_id', 1)->where('type', 'Homepage Notification')->first();
+
+        if ($notification2 && $notification2->title !== null) {
+            $data['notification2'] = $notification2;
+        }
+        //    dd($data);
+        return response()->view('dashboard.benefits', $data);
+    }
 
 
     public function delete_order(Request $request)
@@ -397,8 +423,8 @@ class HomeController extends Controller
         // dd($data);
         $amount = $request->amount;
 
-        Mail::send('mail.withdraw_request', $data, function ($message) use($amount){
-            $message->to('fasanyafemi@gmail.com')->subject("Withdrawal request of NGN". $amount);
+        Mail::send('mail.withdraw_request', $data, function ($message) use ($amount) {
+            $message->to('fasanyafemi@gmail.com')->subject("Withdrawal request of NGN" . $amount);
             $message->from('support@vtubiz.com', 'VTUBIZ');
         });
         // return true;

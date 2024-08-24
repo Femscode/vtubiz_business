@@ -349,7 +349,7 @@ class FunGiveAwayController extends Controller
                 );
             } else {
                 // Redirect to login if the user is not authenticated
-                return redirect()->back()->with('message', "You have to login before you participate in this giveaway.");
+                return redirect()->back()->with('message', "You have to login on https://vtubiz.com before you participate in this giveaway.");
             }
         }
         

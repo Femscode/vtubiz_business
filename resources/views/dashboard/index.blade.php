@@ -15,20 +15,20 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
-                @if(isset($notification2))
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
+                <!-- @if(isset($notification2))
+                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' class='alert alert-dark'>
                    
                   {!! $notification2->description !!}
                   
                 </div>
-                @endif
-                {{-- <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;' class='alert alert-warning'>
-                        Let others pay for your data!
+                @endif -->
+                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' class='alert alert-dark'>
+                        <h4>Let others pay for your data!</h4>
                         Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by every users you refer!
 
                     Click <a href='/my-referral'>here</a> to join.
                   
-                </div> --}}
+                </div>
 
                 <div class="row mb-5 mb-xl-8 g-5 g-xl-8">
 

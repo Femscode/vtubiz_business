@@ -145,6 +145,7 @@ Route::any('runawoof', function() {
 return "awoof run successfully!";
 });
 
+
 Route::get('/', [BusinessController::class, 'index'])->name('homepage');
 Route::get('/blogs', [BusinessController::class, 'blogs'])->name('blogs');
 Route::get('/blog/{id}', [BusinessController::class, 'blogdetails'])->name('blogdetails');
@@ -305,6 +306,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/my-dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('customer_dashboard');
+    Route::get('/benefits', [App\Http\Controllers\HomeController::class, 'benefits'])->name('benefits');
     Route::post('/process_order', [App\Http\Controllers\HomeController::class, 'process_order'])->name('process_order');
     Route::get('/delete_order', [App\Http\Controllers\HomeController::class, 'delete_order'])->name('delete_order');
     // Route::post('/updateprofile', [App\Http\Controllers\HomeController::class, 'updateprofile'])->name('updateprofile');

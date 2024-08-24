@@ -43,6 +43,75 @@
             height: 50px;
             width: 50px;
         }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .progress-step {
+            text-align: center;
+            width: 20%;
+            position: relative;
+        }
+
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            color: black;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin: 0 auto;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 4px;
+            background-color: #ddd;
+            z-index: -1;
+            transform: translateX(-50%);
+        }
+
+        .progress-step.active .progress-circle {
+            background-color: black;
+            color: #fff;
+        }
+
+        .progress-step.active+.progress-line {
+            background-color: #28a745;
+        }
+
+        .progress-step-title {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Styling for the <p> element */
+        .message {
+            background-color: #343a40;
+            /* Dark background */
+            color: #fff;
+            /* White text */
+            padding: 10px 15px;
+            /* Padding around the text */
+            border-radius: 5px;
+            /* Rounded corners */
+            text-align: center;
+            /* Center the text */
+            margin-top: 20px;
+            /* Space above the message */
+            font-size: 15px;
+            font-family: 'Lato', sans-serif;
+        }
     </style>
     @yield('header')
 </head>
@@ -54,25 +123,25 @@
     <!--begin::Theme mode setup on page load-->
     <script>
         var defaultThemeMode = "light";
-	var themeMode;
+        var themeMode;
 
-	if ( document.documentElement ) {
-		if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
-			themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
-		} else {
-			if ( localStorage.getItem("data-bs-theme") !== null ) {
-				themeMode = localStorage.getItem("data-bs-theme");
-			} else {
-				themeMode = defaultThemeMode;
-			}			
-		}
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
 
-		if (themeMode === "system") {
-			themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-		}
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
 
-		document.documentElement.setAttribute("data-bs-theme", themeMode);
-	}            
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
     </script>
     <!--end::Theme mode setup on page load-->
     <!--Begin::Google Tag Manager (noscript) -->
@@ -365,7 +434,7 @@
                                                 data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                                 data-bs-placement="right" data-kt-initialized="1"><span
                                                     class="menu-title">Pending Transactions
-                                                    </span></a>
+                                                </span></a>
                                             <!--end:Menu link-->
                                         </div>
 
@@ -685,7 +754,7 @@
 
                 <!--begin::Toolbar-->
                 <div style='background:url({{ asset('/assets/media/auth/bg3.jpg') }});background-size:cover;width:100%' class="app-toolbar  py-6 ">
-                    {{-- <div style='background:url({{ asset('assets/img/bg7.jpg')}});background-size:cover' id="kt_app_toolbar" class="app-toolbar  py-6 "> --}}
+                    <!-- <div style='background:url({{ asset('assets/img/bg7.jpg')}});background-size:cover' id="kt_app_toolbar" class="app-toolbar py-6 "> -->
 
                     <!--begin::Toolbar container-->
                     <div id="kt_app_toolbar_container" class="app-container  container-xxl d-flex align-items-start ">
@@ -724,7 +793,21 @@
                                     <!--begin::Item-->
                                     <a href='https://vtubiz.com' class="breadcrumb-item text-white  lh-1">
                                         vtubiz.com</a>
-                                    <!--end::Item-->
+                                    <li class="breadcrumb-item">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
+                                        <span class="svg-icon svg-icon-4 svg-icon-white-700 mx-n1"><svg width="24"
+                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </li>
+                                    <a class="breadcrumb-item text-white  lh-1">
+                                        {{$user->name}}</a>
+
 
 
                                 </ul>
@@ -752,50 +835,108 @@
                                             <!--begin::Info-->
                                             <div class="d-flex align-items-center">
                                                 <!--begin::Currency-->
-                                                <span style='color:#ebab21 !important'
+                                                <span style='color:#ddd !important'
                                                     class="fs-4 fw-semibold text-gray-400 me-1 align-self-start">₦</span>
                                                 <!--end::Currency-->
 
                                                 <!--begin::Amount-->
-                                                <span style='color:#ebab21; font-weight:700 !important'
+
+                                                <span style='color:#ddd; font-weight:700 !important'
                                                     class="fs-2hx er me-2 lh-1 ls-n2">{{ number_format($user->balance,2)
                                                     }}</span>
                                                 <!--end::Amount-->
 
                                                 <!--begin::Badge-->
-                                                <a href='/my-referral' class="badge badge-light-success fs-base">
+                                                <a href='/my-referral' class="badge badge-light-dark fs-base">
                                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect id="bound" x="0" y="0" width="24" height="24"/>
-                                                            <rect id="Rectangle-2" fill="#000000" opacity="0.3" x="2" y="4" width="20" height="5" rx="1"/>
-                                                            <path d="M5,7 L8,7 L8,21 L7,21 C5.8954305,21 5,20.1045695 5,19 L5,7 Z M19,7 L19,19 C19,20.1045695 18.1045695,21 17,21 L11,21 L11,7 L19,7 Z" id="Combined-Shape" fill="#000000"/>
+                                                            <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                            <rect id="Rectangle-2" fill="#000000" opacity="0.3" x="2" y="4" width="20" height="5" rx="1" />
+                                                            <path d="M5,7 L8,7 L8,21 L7,21 C5.8954305,21 5,20.1045695 5,19 L5,7 Z M19,7 L19,19 C19,20.1045695 18.1045695,21 17,21 L11,21 L11,7 L19,7 Z" id="Combined-Shape" fill="#000000" />
                                                         </g>
                                                     </svg>
                                                     Referral Earnings:
                                                     <!--end::Svg Icon-->
                                                     ₦{{ number_format($earnings ?? 0) }}
                                                 </a>
+
                                                 <!--end::Badge-->
+                                            </div>
+
+                                            <div class='d-flex'>
+                                                <a class='btn btn-dark btn-sm' style='margin-right:8px'
+                                                    href='/fundwallet'>Fund Wallet</a>
+
                                             </div>
                                             <!--end::Info-->
 
                                             <!--begin::Subtitle-->
-                                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Wallet Balance</span>
+
+                                            <div class="container my-1">
+                                                <div class="progress-container">
+                                                    <div class="progress-step @if($user->total_spent < 10000) active @endif">
+                                                        <div class="progress-circle">1</div>
+                                                        <div class="progress-step-title">Starter</div>
+                                                        <div class="progress-line"></div>
+                                                    </div>
+                                                    <div class="progress-step @if($user->total_spent >= 10000 && $user->total_spent < 50000) active @endif">
+                                                        <div class="progress-circle">2</div>
+                                                        <div class="progress-step-title">Enthusiast</div>
+                                                        <div class="progress-line"></div>
+                                                    </div>
+                                                    <div class="progress-step @if($user->total_spent >= 50000 && $user->total_spent < 200000) active @endif">
+                                                        <div class="progress-circle">3</div>
+                                                        <div class="progress-step-title">Loyal</div>
+                                                        <div class="progress-line"></div>
+                                                    </div>
+                                                    <div class="progress-step @if($user->total_spent >= 200000 && $user->total_spent < 500000) active @endif">
+                                                        <div class="progress-circle">4</div>
+                                                        <div class="progress-step-title">Pro</div>
+                                                        <div class="progress-line"></div>
+                                                    </div>
+                                                    <div class="progress-step @if($user->total_spent >= 500000 && $user->total_spent < 1000000) active @endif">
+                                                        <div class="progress-circle">5</div>
+                                                        <div class="progress-step-title">Elite</div>
+                                                    </div>
+                                                    <div class="progress-step @if($user->total_spent >= 1000000) active @endif">
+                                                        <div class="progress-circle">6</div>
+                                                        <div class="progress-step-title">Legend</div>
+                                                    </div>
+                                                </div>
+                                                @if($user->total_spent < 10000)
+                                                    <p class="message">Perform a transaction worth ₦{{ number_format(10000 - $user->total_spent) }} to reach the next level!
+                                                    <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of each level.
+                                                    </p>
+                                                    @elseif($user->total_spent >= 10000 && $user->total_spent < 50000)
+                                                        <p class="message">Perform a transaction worth ₦{{ number_format(50000 - $user->total_spent) }} to reach the next level!
+                                                        <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of each level.
+                                                        </p>
+                                                        @elseif($user->total_spent >= 50000 && $user->total_spent < 200000)
+                                                            <p class="message">Perform a transaction worth ₦{{ number_format(200000 - $user->total_spent) }} to reach the next level!
+                                                            <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of each level.
+                                                            </p>
+                                                            @elseif($user->total_spent >= 200000 && $user->total_spent < 500000)
+                                                                <p class="message">Perform a transaction worth ₦{{ number_format(500000 - $user->total_spent) }} to reach the next level!
+                                                                <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of each level.
+                                                                </p>
+                                                                @elseif($user->total_spent >= 500000 && $user->total_spent < 1000000)
+                                                                    <p class="message">Perform a transaction worth ₦{{ number_format(1000000 - $user->total_spent) }} to reach the next level!
+                                                                    <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of each level.
+                                                                    </p>
+                                                                    @else
+                                                                    <p class="message">Congratulations! You have reached the Legend level.
+                                                                        <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of your level.
+                                                                    </p>
+                                                                    @endif
+                                            </div>
+
                                             <!--end::Subtitle-->
                                         </div>
 
-                                        <div class='d-flex'>
-                                            <a class='btn btn-warning btn-sm' style='margin-right:8px'
-                                                href='/fundwallet'>Fund Wallet</a>
-                                            {{-- <a class='btn btn-success btn-sm' href='/withdraw'>Withdraw Funds</a>
-                                            --}}
-                                        </div>
 
-                                        
-                                        {{-- <p class='text-white'>Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join our Whatsapp Community 
-                                            to get first hand update about our services.</p> --}}
-                                       
+
+
                                         <!--end::Description-->
                                     </h1>
 
@@ -818,7 +959,7 @@
 
 
                 <!--begin::Wrapper container-->
-                <div style='background:url({{ asset('/assets/img/wbg1.jpg') }});background-size:cover;'  class="app-container  container-xxl ">
+                <div style='background:url({{ asset('/assets/img/wbg1.jpg') }});background-size:cover;' class="app-container  container-xxl ">
 
                     <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
 
@@ -834,7 +975,7 @@
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-semibold me-1">
-                                <?php echo Date('Y');?> &copy;
+                                <?php echo Date('Y'); ?> &copy;
                             </span>
                             <a target="_blank" class="text-gray-800 text-hover-primary">
                                 @if($user->user_type == 'customer')
@@ -922,81 +1063,81 @@
     <link rel='stylesheet' href='https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css' /> --}}
     <script>
         // var oTable = $('.datatable').DataTable();   //using Capital D, which is mandatory to retrieve "api" datatables' object, latest jquery Datatable
-    //    $('#myInput').keyup(function(){
-    //          oTable.search($(this).val()).draw() ;
-    //    });
-       @if (session('message'))
-            Swal.fire('Success!',"{{ session('message') }}",'success');
+        //    $('#myInput').keyup(function(){
+        //          oTable.search($(this).val()).draw() ;
+        //    });
+        @if(session('message'))
+        Swal.fire('Success!', "{{ session('message') }}", 'success');
         @endif
         @if(isset($notification))
 
-        
-Swal.fire({
-      title: '',
-      html: `
+
+        Swal.fire({
+            title: '',
+            html: `
         <img src="{{ asset('assets/img/not.jpg') }}" style="width: 70%; max-height: 100px; object-fit: cover; border-radius: 10px;">
         <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $notification->title }}</h2>
         <p style="text-align: center;font-size: 14px; color: #888;">{{ $notification->description }}</p>
       `,
-      showCloseButton: true,
-      showConfirmButton: false,
-      customClass: {
-        popup: 'custom-sweetalert',
-        content: 'custom-sweetalert-content',
-        closeButton: 'custom-sweetalert-close'
-      }
-    });
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'custom-sweetalert',
+                content: 'custom-sweetalert-content',
+                closeButton: 'custom-sweetalert-close'
+            }
+        });
 
-// Swal.fire(
-//         '{{ $notification->title }}',
-//         '{{ $notification->description }}',
-//         'info'
-// )
-@endif
+        // Swal.fire(
+        //         '{{ $notification->title }}',
+        //         '{{ $notification->description }}',
+        //         'info'
+        // )
+        @endif
 
-@if(isset($dod))
+        @if(isset($dod))
 
-Swal.fire({
-      title: '',
-      html: `
+        Swal.fire({
+            title: '',
+            html: `
         <img src="{{ asset('assets/img/discount.jpg') }}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px;">
         <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $dod->title }}</h2>
         <p style="text-align: center;font-size: 24px; color: #888;"><b>{{ $dod->description }}</b></p>
       `,
-      showCloseButton: true,
-      showConfirmButton: false,
-      customClass: {
-        popup: 'custom-sweetalert',
-        content: 'custom-sweetalert-content',
-        closeButton: 'custom-sweetalert-close'
-      }
-    });
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'custom-sweetalert',
+                content: 'custom-sweetalert-content',
+                closeButton: 'custom-sweetalert-close'
+            }
+        });
 
 
-@endif
-
-@if (session('message'))
-                Swal.fire({
-                        icon: 'success',
-                        title: '{{ session("message") }}'
-                        }) 
-           
         @endif
 
-        @if (session('success'))
-                Swal.fire({
-                        icon: 'success',
-                        title: '{{ session("success") }}'
-                        }) 
-           
+        @if(session('message'))
+        Swal.fire({
+            icon: 'success',
+            title: '{{ session("message") }}'
+        })
+
         @endif
 
-        @if (session('error'))
-                Swal.fire({
-                        icon: 'error',
-                        title: '{{ session("error") }}'
-                        }) 
-           
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: '{{ session("success") }}'
+        })
+
+        @endif
+
+        @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: '{{ session("error") }}'
+        })
+
         @endif
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
