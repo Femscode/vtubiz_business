@@ -50,7 +50,7 @@
                             <li>Schedule Purchase</li>
                             <li>Bulk Purchase</li>
                             <li>Ability to create giveaways</li>
-                            <li>Free data worth 50MB weekly</li>
+                            <li>Free data worth 100MB weekly</li>
                         </ul>
                 </div>
 
@@ -67,7 +67,7 @@
                             <li>Schedule Purchase</li>
                             <li>Bulk Purchase</li>
                             <li>Ability to create and partake in giveaways</li>
-                            <li>Free data worth 100MB weekly</li>
+                            <li>Free data worth 200MB weekly</li>
                             <li>Get all products at a reseller price</li>
                         </ul>
                 </div>
@@ -84,14 +84,14 @@
                             <li>Schedule Purchase</li>
                             <li>Bulk Purchase</li>
                             <li>Ability to create and partake in giveaways</li>
-                            <li>Free data worth 200MB weekly</li>
+                            <li>Free data worth 500MB weekly</li>
                             <li>Get all products at a reseller price</li>
                             <li>A free VTU Website</li>
                         </ul>
                 </div>
 
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #d4af37;border:1px dashed black'
-                    @if($user->total_spent >= 5000000)
+                    @if($user->total_spent >= 500000)
                     class='alert alert-warning'
                     @else
                     class='alert alert-dark'
@@ -103,9 +103,10 @@
                         <li>Schedule Purchase</li>
                         <li>Bulk Purchase</li>
                         <li>Ability to create and partake in giveaways</li>
-                        <li>Free data worth 500MB weekly</li>
+                        <li>Free data worth 1GB weekly</li>
                         <li>Get all products at a reseller price</li>
                         <li>A free VTU Website</li>
+                        <li>Free data worth 1GB weekly</li>
                         <li>Exclusive customer support</li>
                         <li>Priority access to new features and services</li>
                     </ul>

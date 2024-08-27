@@ -15,20 +15,54 @@
             <div class="col-xl-4">
 
                 <!--begin::Misc Widget 1-->
-                <!-- @if(isset($notification2))
+                @if(isset($notification2))
                 <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' class='alert alert-dark'>
                    
                   {!! $notification2->description !!}
                   
                 </div>
-                @endif -->
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' class='alert alert-dark'>
+                @endif
+                <!-- <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' class='alert alert-dark'>
                         <h4>Let others pay for your data!</h4>
                         Participate in our ongoing referral program and earn an enticing 5% cashback on every purchase made by every users you refer!
 
                     Click <a href='/my-referral'>here</a> to join.
                   
-                </div>
+                </div> -->
+
+                <!-- <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' class='alert alert-dark'>
+                    <h4>It's the benefit day!</h4>
+                    <?php $user->total_spent = 1000000 ?>
+                    <p>You're entitled to @if($user->total_spent >= 50000 && $user->total_spent < 200000) 100MB @elseif ($user->total_spent >= 200000 && $user->total_spent < 500000) 200MB @elseif ($user->total_spent >= 500000 && $user->total_spent < 1000000) 500MB @elseif ($user->total_spent >= 1000000) 1GB @else 0MB @endif based on your level</p>
+                    <ul>
+
+                        @if($user->total_spent >= 50000 && $user->total_spent < 200000)
+                            <li>
+
+                            <a href=''>Click here to claim your 100MB benefit</a>
+                            </li>
+                                @elseif ($user->total_spent >= 200000 && $user->total_spent < 500000)
+                                
+                            <li>
+                                <a href=''>Click here to claim your 200MB benefit</a>
+                            </li>
+                            
+                                @elseif ($user->total_spent >= 500000 && $user->total_spent < 1000000)
+                                
+                            <li>
+                                <a href=''>Click here to claim your 500MB benefit</a>
+                            </li>
+                            
+                                @elseif ($user->total_spent >= 1000000)
+                                <li>
+                                <a href=''>Click here to claim your 1GB benefit</a>
+                            </li>
+                            @else
+                            @endif
+
+
+                    </ul>
+                </div> -->
 
                 <div class="row mb-5 mb-xl-8 g-5 g-xl-8">
 
@@ -42,9 +76,9 @@
                                 <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24"/>
-                                        <path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
-                                        <path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero"/>
+                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24" />
+                                        <path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                        <path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" />
                                     </g>
                                 </svg>
                                 <!--end::Svg Icon-->
@@ -62,22 +96,22 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/my-giveaway"  style='border-left:5px solid #ebab21 ';
+                            <a href="/my-giveaway" style='border-left:5px solid #ebab21 ' ;
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Clipboard-list.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24"/>
-                                        <path d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z" fill="#000000" opacity="0.3"/>
-                                        <path d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z" fill="#000000"/>
-                                        <rect fill="#000000" opacity="0.3" x="10" y="9" width="7" height="2" rx="1"/>
-                                        <rect fill="#000000" opacity="0.3" x="7" y="9" width="2" height="2" rx="1"/>
-                                        <rect fill="#000000" opacity="0.3" x="7" y="13" width="2" height="2" rx="1"/>
-                                        <rect fill="#000000" opacity="0.3" x="10" y="13" width="7" height="2" rx="1"/>
-                                        <rect fill="#000000" opacity="0.3" x="7" y="17" width="2" height="2" rx="1"/>
-                                        <rect fill="#000000" opacity="0.3" x="10" y="17" width="7" height="2" rx="1"/>
-                                    </g>
-                                </svg><!--end::Svg Icon--></span>
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z" fill="#000000" opacity="0.3" />
+                                            <path d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z" fill="#000000" />
+                                            <rect fill="#000000" opacity="0.3" x="10" y="9" width="7" height="2" rx="1" />
+                                            <rect fill="#000000" opacity="0.3" x="7" y="9" width="2" height="2" rx="1" />
+                                            <rect fill="#000000" opacity="0.3" x="7" y="13" width="2" height="2" rx="1" />
+                                            <rect fill="#000000" opacity="0.3" x="10" y="13" width="7" height="2" rx="1" />
+                                            <rect fill="#000000" opacity="0.3" x="7" y="17" width="2" height="2" rx="1" />
+                                            <rect fill="#000000" opacity="0.3" x="10" y="17" width="7" height="2" rx="1" />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
                                     Create Giveaway </span>
@@ -90,16 +124,16 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/data"  style='border-left:5px solid #FF4500 ';
+                            <a href="/data" style='border-left:5px solid #FF4500 ' ;
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo8/dist/../src/media/svg/icons/Devices/LTE2.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24"/>
-                                        <path d="M16.4508979,17.4029496 L15.1784978,15.8599014 C16.324501,14.9149052 17,13.5137472 17,12 C17,10.4912085 16.3289582,9.09418404 15.1893841,8.14910121 L16.466112,6.60963188 C18.0590936,7.93073905 19,9.88958759 19,12 C19,14.1173586 18.0528606,16.0819686 16.4508979,17.4029496 Z M19.0211112,20.4681628 L17.7438102,18.929169 C19.7927036,17.2286725 21,14.7140097 21,12 C21,9.28974232 19.7960666,6.77820732 17.7520315,5.07766256 L19.031149,3.54017812 C21.5271817,5.61676443 23,8.68922234 23,12 C23,15.3153667 21.523074,18.3916375 19.0211112,20.4681628 Z M7.54910207,17.4029496 C5.94713944,16.0819686 5,14.1173586 5,12 C5,9.88958759 5.94090645,7.93073905 7.53388797,6.60963188 L8.81061588,8.14910121 C7.67104182,9.09418404 7,10.4912085 7,12 C7,13.5137472 7.67549895,14.9149052 8.82150222,15.8599014 L7.54910207,17.4029496 Z M4.9788888,20.4681628 C2.47692603,18.3916375 1,15.3153667 1,12 C1,8.68922234 2.47281829,5.61676443 4.96885102,3.54017812 L6.24796852,5.07766256 C4.20393339,6.77820732 3,9.28974232 3,12 C3,14.7140097 4.20729644,17.2286725 6.25618985,18.929169 L4.9788888,20.4681628 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
-                                        <path d="M11,14.2919782 C10.1170476,13.9061998 9.5,13.0251595 9.5,12 C9.5,10.6192881 10.6192881,9.5 12,9.5 C13.3807119,9.5 14.5,10.6192881 14.5,12 C14.5,13.0251595 13.8829524,13.9061998 13,14.2919782 L13,20 C13,20.5522847 12.5522847,21 12,21 C11.4477153,21 11,20.5522847 11,20 L11,14.2919782 Z" fill="#000000"/>
-                                    </g>
-                                </svg><!--end::Svg Icon--></span>
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M16.4508979,17.4029496 L15.1784978,15.8599014 C16.324501,14.9149052 17,13.5137472 17,12 C17,10.4912085 16.3289582,9.09418404 15.1893841,8.14910121 L16.466112,6.60963188 C18.0590936,7.93073905 19,9.88958759 19,12 C19,14.1173586 18.0528606,16.0819686 16.4508979,17.4029496 Z M19.0211112,20.4681628 L17.7438102,18.929169 C19.7927036,17.2286725 21,14.7140097 21,12 C21,9.28974232 19.7960666,6.77820732 17.7520315,5.07766256 L19.031149,3.54017812 C21.5271817,5.61676443 23,8.68922234 23,12 C23,15.3153667 21.523074,18.3916375 19.0211112,20.4681628 Z M7.54910207,17.4029496 C5.94713944,16.0819686 5,14.1173586 5,12 C5,9.88958759 5.94090645,7.93073905 7.53388797,6.60963188 L8.81061588,8.14910121 C7.67104182,9.09418404 7,10.4912085 7,12 C7,13.5137472 7.67549895,14.9149052 8.82150222,15.8599014 L7.54910207,17.4029496 Z M4.9788888,20.4681628 C2.47692603,18.3916375 1,15.3153667 1,12 C1,8.68922234 2.47281829,5.61676443 4.96885102,3.54017812 L6.24796852,5.07766256 C4.20393339,6.77820732 3,9.28974232 3,12 C3,14.7140097 4.20729644,17.2286725 6.25618985,18.929169 L4.9788888,20.4681628 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <path d="M11,14.2919782 C10.1170476,13.9061998 9.5,13.0251595 9.5,12 C9.5,10.6192881 10.6192881,9.5 12,9.5 C13.3807119,9.5 14.5,10.6192881 14.5,12 C14.5,13.0251595 13.8829524,13.9061998 13,14.2919782 L13,20 C13,20.5522847 12.5522847,21 12,21 C11.4477153,21 11,20.5522847 11,20 L11,14.2919782 Z" fill="#000000" />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
                                     Buy Data </span>
@@ -112,7 +146,7 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/airtime"  style='border-bottom:5px solid brown'
+                            <a href="/airtime" style='border-bottom:5px solid brown'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -143,7 +177,7 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/cable"  style='border-bottom:5px solid #8A2BE2 '
+                            <a href="/cable" style='border-bottom:5px solid #8A2BE2 '
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -173,7 +207,7 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/electricity"  style='border-top:5px solid #00BFFF'
+                            <a href="/electricity" style='border-top:5px solid #00BFFF'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -200,7 +234,7 @@
                     <!--end::Col-->
 
                     <!--begin::Col-->
-                  
+
                     {{-- <div class="col-6">
                         <!--begin::Card-->
                         <div class="card card-stretch custom-box shadow-lg">
@@ -225,22 +259,22 @@
                         </div>
                         <!--end::Card-->
                     </div> --}}
-              
+
                     <!--end::Col-->
                     <div class="col-6">
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/examination"  style='border-top:5px solid #2E8B57'
+                            <a href="/examination" style='border-top:5px solid #2E8B57'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/abstract/abs025.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Layout/Layout-horizontal.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24"/>
-                                        <rect fill="#000000" opacity="0.3" x="4" y="5" width="16" height="6" rx="1.5"/>
-                                        <rect fill="#000000" x="4" y="13" width="16" height="6" rx="1.5"/>
-                                    </g>
-                                </svg><!--end::Svg Icon--></span>
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <rect fill="#000000" opacity="0.3" x="4" y="5" width="16" height="6" rx="1.5" />
+                                            <rect fill="#000000" x="4" y="13" width="16" height="6" rx="1.5" />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
                                     Exam Result Checker </span>
@@ -255,27 +289,27 @@
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/bulksms"  style='border-bottom:5px solid #CC99FF  '
+                            <a href="/bulksms" style='border-bottom:5px solid #CC99FF  '
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/abstract/abs025.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Shopping/ATM.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24"/>
-                                        <rect fill="#000000" opacity="0.3" x="2" y="4" width="20" height="5" rx="1"/>
-                                        <path d="M5,7 L8,7 L8,21 L7,21 C5.8954305,21 5,20.1045695 5,19 L5,7 Z M19,7 L19,19 C19,20.1045695 18.1045695,21 17,21 L11,21 L11,7 L19,7 Z" fill="#000000"/>
-                                    </g>
-                                </svg><!--end::Svg Icon--></span>
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <rect fill="#000000" opacity="0.3" x="2" y="4" width="20" height="5" rx="1" />
+                                            <path d="M5,7 L8,7 L8,21 L7,21 C5.8954305,21 5,20.1045695 5,19 L5,7 Z M19,7 L19,19 C19,20.1045695 18.1045695,21 17,21 L11,21 L11,7 L19,7 Z" fill="#000000" />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
                                     Bulk SMS </span>
-                               
+
                             </a>
                             <!--end::Link-->
                         </div>
                         <!--end::Card-->
                     </div>
-              
-                 
+
+
 
                     <div class="col-6">
                         <!--begin::Card-->
@@ -285,8 +319,8 @@
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                   
-                                   <i class='fa fa-gift' style='font-size:30px'></i>
+
+                                    <i class='fa fa-gift' style='font-size:30px'></i>
                                 </span>
                                 <!--end::Svg Icon-->
                                 <span class="fs-4 fw-normal">
@@ -302,14 +336,14 @@
                         <!--begin::Card-->
                         <div class="card card-stretch custom-box shadow-lg">
                             <!--begin::Link-->
-                            <a href="/profile"  style='border-left:5px solid #FF4081     '
+                            <a href="/profile" style='border-left:5px solid #FF4081     '
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
                                 <!--begin::Svg Icon | path: icons/duotune/abstract/abs025.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24"/>
-                                        <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
-                                        <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" id="Mask-Copy" fill="#000000" fill-rule="nonzero"/>
+                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24" />
+                                        <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                        <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" id="Mask-Copy" fill="#000000" fill-rule="nonzero" />
                                     </g>
                                 </svg>
                                 <!--end::Svg Icon-->
@@ -341,11 +375,11 @@
                         <div>
                             <h4 class="text-white line-height-lg mb-5">
                                 Upgrade to a business account and get yourself a free VTU website!
-                             
+
                             </h4>
-                            <a onclick='return confirmUpgrade()'  href="/upgrade/{{ $user->id }}" class="btn btn-success font-weight-bold px-6 py-3">
-                               Upgrade </a>
-                         
+                            <a onclick='return confirmUpgrade()' href="/upgrade/{{ $user->id }}" class="btn btn-success font-weight-bold px-6 py-3">
+                                Upgrade </a>
+
                         </div>
                     </div>
                     <!--end::Body-->
@@ -357,7 +391,7 @@
                     <div class="card-body d-flex flex-column align-items-start justify-content-start">
                         <div class="p-1 flex-grow-1">
                             <h3 class="text-white font-weight-bolder line-height-lg mb-5">
-                                Join our Whatsapp Community 
+                                Join our Whatsapp Community
                                 <br>to get first hand update about our services.
                             </h3>
                             <p class='text-white'>Click <a href='https://chat.whatsapp.com/Jukoxj54fvS9h51F00vgKu'>here</a> to join.</p>
@@ -365,8 +399,8 @@
                             <a href='{{ $company->twitter }}' class='btn btn-sm btn-info'>Twitter</a>
                             <a href='https://www.instagram.com/vtubiz/' class='btn btn-sm btn-warning'>Instagram</a> --}}
                             {{-- <a href='btn btn-sm'>Facebook</a> --}}
-                          
-                               
+
+
                         </div>
 
                         <span class="svg-icon svg-icon-lg svg-icon-warning">
@@ -415,10 +449,10 @@
 
 @section('script')
 <script>
-     function confirmUpgrade() {
+    function confirmUpgrade() {
         Swal.fire({
-    title: 'What does a business account entails?',
-    html: `
+            title: 'What does a business account entails?',
+            html: `
         <ul>
             <li>A free website</li>
             <li>Discount in all data plan prices</li>
@@ -427,21 +461,21 @@
         </ul>
         <p style='color:red'>Please note: Upgrading to a business account incurs a charge of NGN3,500.</p>
     `,
-    icon: 'info',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, upgrade!'
-}).then((result) => {
-    if (result.isConfirmed) {
-        // User clicked "Yes, upgrade!" button, navigate to the upgrade page
-        window.location.href = "/upgrade/{{ $user->id }}";
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, upgrade!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked "Yes, upgrade!" button, navigate to the upgrade page
+                window.location.href = "/upgrade/{{ $user->id }}";
+            }
+        });
+
+
+        // Prevent the default anchor tag behavior (navigation) until confirmation
+        return false;
     }
-});
-
-
-    // Prevent the default anchor tag behavior (navigation) until confirmation
-    return false;
-  }
-    </script>
+</script>
 @endsection
