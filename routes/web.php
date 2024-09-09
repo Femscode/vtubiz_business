@@ -301,10 +301,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('authorized/google/callback', [LoginWithGoogleController::class, 'handleGoogleCallback']);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    // Route::get('/', [App\Http\Controllers\FrontendController::class, 'index'])->name('home');
-    Route::get('/sample_import_data', [App\Http\Controllers\PayrollController::class, 'sample_import_data'])->name('sample_import_data');
-
-
     Route::get('/my-dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('customer_dashboard');
     Route::get('/benefits', [App\Http\Controllers\HomeController::class, 'benefits'])->name('benefits');
     Route::post('/process_order', [App\Http\Controllers\HomeController::class, 'process_order'])->name('process_order');
@@ -336,7 +332,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pay', [App\Http\Controllers\FundingController::class, 'redirectToGateway'])->name('pay');
     Route::get('/payment/callback', [App\Http\Controllers\FundingController::class, 'handleFLWCallback']);
     Route::get('/reserve_account', [App\Http\Controllers\FundingController::class, 'reserve_account']);
-    Route::post('monnify/transaction_complete', [App\Http\Controllers\MonnifyController::class, 'monnifyTransactionComplete2']);
     //subscription routes
     Route::get('/view_details/{id}', [BulkSMSController::class, 'viewDetails'])->name('view_details');
 
@@ -385,8 +380,6 @@ Route::middleware(['auth'])->group(function () {
 
     //groups
     Route::get('/data_group', [App\Http\Controllers\GroupController::class, 'data_group'])->name('data_group');
-
-    Route::post('/live_add', [App\Http\Controllers\PayrollController::class, 'live_add'])->name('live_add');
     // Payrll and payee 
     Route::get('/support', [App\Http\Controllers\HomeController::class, 'support'])->name('support');
 
@@ -582,7 +575,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pay', [App\Http\Controllers\FundingController::class, 'redirectToGateway'])->name('admin_pay');
     Route::get('/payment/callback', [App\Http\Controllers\FundingController::class, 'handleGatewayCallback']);
     Route::get('/reserve_account', [App\Http\Controllers\FundingController::class, 'reserve_account']);
-    Route::post('monnify/transaction_complete', [App\Http\Controllers\MonnifyController::class, 'monnifyTransactionComplete2']);
 
     //subscription routes
 

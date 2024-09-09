@@ -132,7 +132,6 @@ class SubscriptionController extends Controller
         //delete duplicate
         $duplicate->delete();
         return true;
-        dd($duplicate);
     }
     public function admin_delete_duplicate($type, $tranx_id)
     {

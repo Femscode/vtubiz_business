@@ -482,16 +482,16 @@ class FundingController extends Controller
 
         $amountpaid = $r_amountpaid;
         if ($amountpaid <= 1000) {
-            $charges = 10;
+            $charges = 25;
             $amountpaid -= $charges;
-        } elseif ($amountpaid < 3000) {
-            $charges = 30;
+        } elseif ($amountpaid < 5000) {
+            $charges = 50;
             $amountpaid -= $charges;
             // } elseif ($amountpaid < 5000) {
             //     $charges = 50;
             //     $amountpaid -= $charges;
         } else {
-            $charges = 50;
+            $charges = 100;
             $amountpaid -= $charges;
         }
         $details_paid = $amountpaid + $charges;
