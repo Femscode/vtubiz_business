@@ -159,7 +159,7 @@ class HomeController extends Controller
             if ($notification2 && $notification2->title !== null) {
                 $data['notification2'] = $notification2;
             }
-            //    dd($data);
+            // dd($data);
             return response()->view('dashboard.index', $data);
         }
     }

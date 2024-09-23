@@ -161,6 +161,7 @@ class SuperController extends Controller
         foreach ($cables as $cable) {
             $cable->plan_name = $request->plan_name;
             $cable->actual_price = $request->actual_price;
+            $cable->admin_price = $request->real_price;
             $cable->real_price = $request->real_price;
             $cable->save();
         }

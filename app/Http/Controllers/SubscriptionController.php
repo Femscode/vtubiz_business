@@ -1346,7 +1346,7 @@ class SubscriptionController extends Controller
             file_put_contents(__DIR__ . '/examinationlog.txt', json_encode($response_json, JSON_PRETTY_PRINT), FILE_APPEND);
 
             $details = "Result Checker : Pin" . $response_json['pin'] . ". Amount : NGN" . $amount;
-            $trans_id = $this->create_transaction('Examination Result Payment', $response_json['message']['requestId'], $details, 'debit', $amount, $user->id, 1, $real_amount);
+        $trans_id = $this->create_transaction('Examination Result Payment', $response_json['message']??"E pin purchase", $details, 'debit', $amount, $user->id, 1, $real_amount);
             $transaction = Transaction::find($trans_id);
             $transaction->amount = $amount;
             $transaction->company = $request->company;

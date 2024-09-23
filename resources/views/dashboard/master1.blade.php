@@ -899,6 +899,7 @@
                                                         <div class="progress-circle">5</div>
                                                         <div class="progress-step-title">Elite</div>
                                                     </div>
+            
                                                     <div class="progress-step @if($user->total_spent >= 1000000) active @endif">
                                                         <div class="progress-circle">6</div>
                                                         <div class="progress-step-title">Legend</div>
