@@ -1241,7 +1241,8 @@ class SubscriptionController extends Controller
 
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
-        $r_amount = Examination::where('exam_type', $request->exam_type)->where('user_id', $user->company_id)->first();
+        $r_amount = Examination::where('exam_type', $request->exam_type)->where('user_id', 0)->first();
+        // $r_amount = Examination::where('exam_type', $request->exam_type)->where('user_id', $user->company_id)->first();
         $real_amount = $r_amount->real_amount;
 
         $amount = $request->amount;
@@ -1889,7 +1890,8 @@ class SubscriptionController extends Controller
     {
         $data['user'] = $user = Auth::user();
         $data['active'] = 'examination';
-        $examination = Examination::where('user_id', $user->id)->first();
+        // $examination = Examination::where('user_id', $user->id)->first();
+        $examination = Examination::where('user_id', 0)->first();
         if (!$examination) {
 
             Examination::create([
@@ -1922,7 +1924,8 @@ class SubscriptionController extends Controller
             ]);
         }
         $data['company'] = User::where('id', $user->company_id)->first();
-        $data['examinations'] = Examination::where('user_id', $user->company_id)->get();
+        // $data['examinations'] = Examination::where('user_id', $user->company_id)->get();
+        $data['examinations'] = Examination::where('user_id', 0)->get();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Examination Notification')->first();
 
         if ($notification && $notification->title !== null) {

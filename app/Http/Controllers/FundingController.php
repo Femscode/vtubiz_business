@@ -241,7 +241,7 @@ class FundingController extends Controller
     }
     public function easywebhook(Request $request)
     {
-        file_put_contents(__DIR__ . '/neweasywebhook2.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+        file_put_contents(__DIR__ . '/easyaccesswebhook.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
 
         $jsonData = $request->getContent();
         $data = json_decode($jsonData, true);

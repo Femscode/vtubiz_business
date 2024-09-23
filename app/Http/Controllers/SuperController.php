@@ -156,7 +156,7 @@ class SuperController extends Controller
     public function update_cable(Request $request)
     {
         $cables = Cable::where('plan_id', $request->plan_id)
-            ->where('user_id', '!=', 888)
+            // ->where('user_id', '!=', 888)
             ->get();
         foreach ($cables as $cable) {
             $cable->plan_name = $request->plan_name;
