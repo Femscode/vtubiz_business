@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Blog;
-use App\Models\Data;
-use App\Models\User;
 use App\Models\Cable;
-use App\Models\GiveAway;
-use App\Models\Transaction;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\ScheduleAccount;
-use Illuminate\Support\Facades\DB;
+use App\Models\Data;
 use App\Models\DuplicateTransaction;
+use App\Models\Examination;
+use App\Models\GiveAway;
+use App\Models\ScheduleAccount;
+use App\Models\Transaction;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SuperController extends Controller
 {
@@ -168,6 +169,34 @@ class SuperController extends Controller
 
         return true;
     }
+
+    public function exam_price()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'super';
+        $data['exams'] = Examination::where('user_id', 0)->latest()->get();
+        return view('super.exam_price', $data);
+    }
+    public function update_exam(Request $request)
+    {
+       
+        $exams = Examination::where('name', $request->name)
+            // ->where('user_id', '!=', 888)
+            ->get();
+           
+        foreach ($exams as $exam) {
+            $exam->name = $request->name;
+            $exam->actual_amount = $request->actual_amount;
+            $exam->real_amount = $request->real_amount;
+            $exam->save();
+        }
+        return redirect()->back()->with('message', 'Examination Price Updated Successfully!');
+        return true;
+    }
+
     public function payment_transactions()
     {
         $data['user'] = $user =  Auth::user();

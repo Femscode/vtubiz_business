@@ -192,9 +192,9 @@
                                     <!--end:Menu link-->
 
                                 </a>
-                                <a href='/cable_price'
+                                <a href='/exam_price'
                                     class="menu-item  @if($active == 'transaction') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Electricity Price
+                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Exam Price
                                         </span></span>
                                     <!--end:Menu link-->
 
