@@ -18,6 +18,7 @@
                         <div class="card-title">
                             <h3 class="card-label">All Users({{ number_format($allusers) }})
                             </h3>
+                            <a href='/new_users' class='btn btn-success'>New Users</a>
                         </div>
                      
                     </div>

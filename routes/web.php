@@ -589,6 +589,7 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/approve_withdraw/{id}', [App\Http\Controllers\SuperController::class, 'approve_withdraw'])->name('approve_withdraw');
         Route::any('/revert_withdraw/{id}', [App\Http\Controllers\SuperController::class, 'revert_withdraw'])->name('revert_withdraw');
         Route::any('/user_management', [App\Http\Controllers\SuperController::class, 'user_management'])->name('user_management');
+        Route::any('/new_users', [App\Http\Controllers\SuperController::class, 'new_users'])->name('new_users');
         Route::any('/user_transaction/{id}', [App\Http\Controllers\SuperController::class, 'user_transaction'])->name('user_transaction');
         Route::any('/data_price', [App\Http\Controllers\SuperController::class, 'data_price'])->name('data_price');
         Route::any('/plan_status', [App\Http\Controllers\SuperController::class, 'plan_status'])->name('plan_status');

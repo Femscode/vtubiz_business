@@ -268,6 +268,20 @@ class SuperController extends Controller
 
         return view('super.user_management', $data);
     }
+    public function new_users()
+    {
+        $data['user'] = $user =  Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['allusers'] =  User::count();
+        
+        $data['users'] = User::latest()->take(100)->get();
+        // $data['users'] = User::latest()->get();
+        $data['active'] = 'super';
+
+        return view('super.user_management', $data);
+    }
     public function user_transaction($id)
     {
         $data['user'] =  $user = User::where('uuid', $id)->first();
