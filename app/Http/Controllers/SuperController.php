@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class SuperController extends Controller
@@ -182,11 +183,11 @@ class SuperController extends Controller
     }
     public function update_exam(Request $request)
     {
-       
+
         $exams = Examination::where('name', $request->name)
             // ->where('user_id', '!=', 888)
             ->get();
-           
+
         foreach ($exams as $exam) {
             $exam->name = $request->name;
             $exam->actual_amount = $request->actual_amount;
@@ -261,8 +262,8 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['allusers'] =  User::count();
-        
-        $data['users'] = User::where('total_spent','!=',0)->latest()->get();
+
+        $data['users'] = User::where('total_spent', '!=', 0)->latest()->get();
         // $data['users'] = User::latest()->get();
         $data['active'] = 'super';
 
@@ -275,7 +276,7 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['allusers'] =  User::count();
-        
+
         $data['users'] = User::latest()->take(100)->get();
         // $data['users'] = User::latest()->get();
         $data['active'] = 'super';
@@ -469,8 +470,8 @@ class SuperController extends Controller
     }
     public function deleteuser($id)
     {
-        $user = User::where('uuid',$id)->firstOrFail();
-        $trans = Transaction::where('id',$user->id)->delete();
+        $user = User::where('uuid', $id)->firstOrFail();
+        $trans = Transaction::where('id', $user->id)->delete();
         $user->delete();
         return redirect()->back()->with('message', 'User Deleted Successfully!');
     }
@@ -551,7 +552,7 @@ class SuperController extends Controller
                         // dd($matchingRealData);
                         if ($matchingRealData) {
                             // Update the data_price of $data with the account_price of $matchingRealData
-                            $data->data_price = $matchingRealData->account_price;                          
+                            $data->data_price = $matchingRealData->account_price;
                             $data->account_price = $matchingRealData->account_price;
                             $data->admin_price = $matchingRealData->account_price;
                             $data->save();
@@ -559,21 +560,21 @@ class SuperController extends Controller
                     }
                     $user->upgrade = 0;
                     $user->user_type = 'customer';
-                   
+
                     $user->save();
                     return redirect()->back()->with('message', "User Degraded Successfully!");
                 } else {
                     //update the user's data prices
                     $user->company_id = $user->id;
                     $user->save();
-                   
+
                     foreach ($datas as $data) {
-                        
+
                         // Get the corresponding $real_data with the same plan_id
                         $matchingRealData = $real_data->first(function ($realData) use ($data) {
                             return $realData->plan_id === $data->plan_id;
                         });
-                       
+
                         if ($matchingRealData) {
                             // dd( $data->data_price, $matchingRealData->data_price);
                             // Update the data_price of $data with the account_price of $matchingRealData
@@ -588,6 +589,34 @@ class SuperController extends Controller
                     $user->save();
                     return redirect()->back()->with('message', "User Upgraded Successfully!");
                 }
+            }
+        } else {
+            return "Access Denied";
+        }
+    }
+    public function reset_pin($id)
+    {
+
+        if (Auth::user()->email == 'fasanyafemi@gmail.com') {
+            $data['user'] =  $user = User::where('uuid', $id)->first();
+            if ($user) {
+                $user->pin =  hash('sha256', '1234');
+                $user->save();
+                return redirect()->route('dashboard')->with('message', 'Pin updated successfully');
+            }
+        } else {
+            return "Access Denied";
+        }
+    }
+    public function reset_password($id)
+    {
+
+        if (Auth::user()->email == 'fasanyafemi@gmail.com') {
+            $data['user'] =  $user = User::where('uuid', $id)->first();
+            if ($user) {
+                $user->password = Hash::make('Password123');
+                $user->save();
+                return redirect()->back()->with('message', 'Password updated successfully');
             }
         } else {
             return "Access Denied";

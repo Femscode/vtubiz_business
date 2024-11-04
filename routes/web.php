@@ -174,7 +174,6 @@ Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionControlle
 Route::any('/test_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'test_debit'])->name('test_debit');
 Route::any('/run_debit/{client_reference}/{reference}/{message}', [App\Http\Controllers\FundingController::class, 'run_debit'])->name('run_debit');
 Route::any('/run_failed/{client_reference}/{reference}/{message}', [App\Http\Controllers\FundingController::class, 'run_failed'])->name('run_failed');
-
 Route::get('run_data_type', function () {
 
     $datas = Data::where('type', null)->update([
@@ -601,6 +600,8 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/update_exam', [App\Http\Controllers\SuperController::class, 'update_exam'])->name('update_exam');
         Route::any('/block_user/{id}', [App\Http\Controllers\SuperController::class, 'block_user'])->name('block_user');
         Route::any('/upgrade_user/{id}', [App\Http\Controllers\SuperController::class, 'upgrade_user'])->name('upgrade_user');
+        Route::any('/reset_password/{id}', [App\Http\Controllers\SuperController::class, 'reset_password'])->name('reset_password');
+        Route::any('/reset_pin/{id}', [App\Http\Controllers\SuperController::class, 'reset_pin'])->name('reset_pin');
         Route::any('/duplicate_transactions/', [App\Http\Controllers\SuperController::class, 'duplicate_transactions'])->name('duplicate_transactions');
         Route::any('/contact_gain/', [App\Http\Controllers\SuperController::class, 'contact_gain'])->name('contact_gain');
         Route::any('/admin_blog/', [App\Http\Controllers\SuperController::class, 'admin_blog'])->name('admin_blog');
