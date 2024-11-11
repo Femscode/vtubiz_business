@@ -88,7 +88,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group row m-2">
+         <div class="form-group row m-2">
             <div class="col-md-3"></div>
             <div class="btn-group btn-group-example mb-3 col-md-6" role="group">
               <button
@@ -335,224 +335,345 @@ export default {
         });
       }
     },
-    buyData(selectedDate = null, selectedTime = null, SwalContent = null) {
-      if (this.transfer_status) {
-        Swal.fire({
-          // title:
-          //   "You are about to purchase" +
-          //   this.selectedPlan.plan_name +
-          //   " of NGN " +
-          //   this.amount,
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Buy Data",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
+    // buyData(selectedDate = null, selectedTime = null, SwalContent = null) {
+    //   if (this.transfer_status) {
+    //     Swal.fire({
+    //       title: "Input your four(4) digit pin to proceed",
+    //       icon: "warning",
+    //       input: "password",
+    //       inputAttributes: {
+    //         inputmode: "numeric",
+    //         maxlength: 4,
+    //         autocomplete: "new-password",
+    //         name: "my-pin",
+    //         autocapitalize: "off",
+    //         pattern: "[0-9]*",
+    //         style: "text-align:center;font-size:24px;letter-spacing: 20px",
+    //       },
+    //       showCancelButton: true,
+    //       confirmButtonColor: "#ebab21",
+    //       cancelButtonColor: "grey",
+    //       confirmButtonText: "Buy Data",
+    //       allowOutsideClick: false,
+    //       allowEscapeKey: false,
+    //       preConfirm: () => {
+    //         const confirmButton = Swal.getConfirmButton();
+    //         confirmButton.textContent = "Validating ";
+    //         confirmButton.disabled = true;
+    //         confirmButton.insertAdjacentHTML(
+    //           "beforeend",
+    //           `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
+    //         );
+    //         return new Promise((resolve) => {
+    //           // You can perform any necessary validation here, e.g. making a server call.
+    //           // Once validation is complete, call resolve() to close the modal.
+    //           setTimeout(() => {
+    //             resolve();
+    //           }, 500);
+    //         });
+    //       },
 
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
+    //       inputValidator: (text) => {
+    //         if (!/^\d{4}$/.test(text)) {
+    //           return "Please enter a four-digit PIN";
+    //         }
+    //       },
+    //     }).then((result) => {
+    //       if (result.isConfirmed == false) {
+    //         return;
+    //       }
+    //       const swalMessage =
+    //         SwalContent !== null
+    //           ? SwalContent
+    //           : "Purchasing data, please wait...";
+    //       Swal.fire({
+    //         title: swalMessage,
+    //         // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
+    //         showConfirmButton: false,
+    //         allowOutsideClick: false,
+    //         allowEscapeKey: false,
+    //         didOpen: () => {
+    //           Swal.showLoading();
+    //         },
+    //       });
+    //       let fd = new FormData();
+    //       fd.append("phone_number", this.phone_number);
+    //       fd.append("network", this.network);
+    //       fd.append("plan", this.selectedPlan);
+    //       fd.append("pin", result.value);
+    //       if (selectedDate !== null) {
+    //         fd.append("selectedDate", selectedDate);
+    //         fd.append("selectedTime", selectedTime);
+    //       }
+    //       axios
+    //         .post("/buydata", fd)
+    //         .then((response) => {
+    //           console.log(response, "the res");
+    //           if (response.data.success == "true") {
+    //             Swal.fire({
+    //               icon: "success",
+    //               title: "Purchase successful!",
+    //               showConfirmButton: true, // updated
+    //               confirmButtonColor: "#3085d6", // added
+    //               confirmButtonText: "Ok", // added
+    //               allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
+    //               allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
+    //             }).then((result) => {
+    //               if (result.isConfirmed) {
+    //                 location.reload();
+    //               }
+    //             });
+    //           } else if (response.data == "schedule_saved") {
+    //             Swal.fire({
+    //               icon: "success",
+    //               title: "Data Purchase Scheduled For Later Successfully!",
+    //               // text: "Updating...",
+    //               showConfirmButton: true, // updated
+    //               confirmButtonColor: "#3085d6", // added
+    //               confirmButtonText: "Ok", // added
+    //               allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
+    //               allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
+    //             }).then((result) => {
+    //               if (result.isConfirmed) {
+    //                 location.reload();
+    //               }
+    //             });
+    //           } else {
+    //             if(response.data.type == 'duplicate') {
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: response.data.message,
+    //                 showCancelButton: true,
+    //                 cancelButtonColor: "#d33",
+    //                 confirmButtonColor: "#3085d6",
+    //                 confirmButtonText: "Yes, Data Received!",
+    //                 cancelButtonText: "No, Data Not Received!",
+    //                 allowOutsideClick: false,
+    //                 allowEscapeKey: false,
+    //                 customClass: {
+    //                   actions: 'custom-actions-class' // add a custom class to actions for styling
+    //                 },
+    //                 showCloseButton: true, // show a close button to dismiss the modal
+    //                 showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
+    //                 preConfirm: () => {
+    //                   return new Promise((resolve) => {
+    //                     setTimeout(() => {
+    //                       resolve();
+    //                     }, 2000); // Add a delay (2 seconds) to simulate a process
+    //                   });
+    //                 },
+    //         }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           axios
+    //                 .get("/user_delete_duplicate")
+    //                 .then((response) => {
+    //                   console.log(response);
+    //                   if (response.data == true) {
+    //                     Swal.fire({
+    //             icon: "success",
+    //             title: "Previous Transaction Verified! You can now proceed with the current transaction",
+    //             showConfirmButton: true,
+    //             confirmButtonColor: "#3085d6",
+    //             confirmButtonText: "Ok"
+    //           });
+    //                   }
+    //                 })
+    //                 .catch((error) => {
+                    
+    //                   console.log(error.message);
+    //                 });
+    //           // This code block is executed when the "Confirm" button is clicked.
+                  
+    //         } else {
+    // // This code block is executed when the "Deny" button is clicked.
+    //             Swal.fire({
+    //               title: "Please reach out to the admin to sort out this issue",
+    //               showCloseButton: true,
+    //               customClass: {
+    //                 actions: 'custom-actions-class' // add the same custom class for styling
+    //               },
+    //               showCancelButton: true,
+    //               cancelButtonColor: "#3085d6",
+    //               confirmButtonColor: "#25d366",
+    //               confirmButtonText: "Chat with Admin",
+    //               cancelButtonText: "Not Now"
+    //             }).then((chatResult) => {
+    //               if (chatResult.isConfirmed) {
+    //                 // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
+    //                 window.location.href = "https://wa.me/2349058744473";
+    //               }
+    //             });
+    //           }
+    //       });
+
+
+    //           }
+    //           else {
+    //             Swal.fire({
+    //             icon: "error",
+    //             // title: response.data.message,
+    //             title: response.data.message,
+    //             // text: "Updating...",
+    //             showConfirmButton: true, // updated
+    //             confirmButtonColor: "#3085d6", // added
+    //             confirmButtonText: "Ok", // added
+    //             allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
+    //             allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
+    //           }).then((result) => {
+    //             if (result.isConfirmed) {
+    //               // location.reload();
+    //             }
+    //           });
+
+    //           }
+            
+    //           }
+    //         })
+    //         .catch((error) => {
+    //           console.log(error.message);
+    //           Swal.fire(error.message);
+    //         });
+    //     });
+    //   } else {
+    //     Swal.fire({
+    //       title: "Insufficient balance!,",
+    //       icon: "info",
+    //       html:
+    //         "Click " +
+    //         '<a href="https://vtubiz.com/fundwallet">here</a> ' +
+    //         "to fund your wallet.",
+    //       showCloseButton: true,
+    //       showCancelButton: true,
+    //       focusConfirm: false,
+    //     });
+    //   }
+    // },
+
+    buyData(selectedDate = null, selectedTime = null, SwalContent = null) {
+  if (this.transfer_status) {
+    if (this.user.pin_status === 0) {
+      // If pin_status is 0, proceed directly without prompt
+      this.showProcessingAlert(SwalContent || "Purchasing data, please wait...");
+      const formData = this.buildFormData(null, selectedDate, selectedTime);
+      axios.post("/buydata", formData)
+        .then((response) => this.handlePurchaseResponse(response))
+        .catch((error) => Swal.fire(error.message));
+    } else {
+      // Otherwise, prompt for PIN
+      this.promptUserPin()
+        .then(result => {
+          if (result.isConfirmed) {
+            this.showProcessingAlert(SwalContent || "Purchasing data, please wait...");
+            const formData = this.buildFormData(result.value, selectedDate, selectedTime);
+            return axios.post("/buydata", formData);
           }
-          const swalMessage =
-            SwalContent !== null
-              ? SwalContent
-              : "Purchasing data, please wait...";
-          Swal.fire({
-            title: swalMessage,
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          let fd = new FormData();
-          fd.append("phone_number", this.phone_number);
-          fd.append("network", this.network);
-          fd.append("plan", this.selectedPlan);
-          fd.append("pin", result.value);
-          if (selectedDate !== null) {
-            fd.append("selectedDate", selectedDate);
-            fd.append("selectedTime", selectedTime);
-          }
-          axios
-            .post("/buydata", fd)
-            .then((response) => {
-              console.log(response, "the res");
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Purchase successful!",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else if (response.data == "schedule_saved") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Data Purchase Scheduled For Later Successfully!",
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else {
-                if(response.data.type == 'duplicate') {
-                Swal.fire({
-  icon: "error",
-  title: response.data.message,
-  showCancelButton: true,
-  cancelButtonColor: "#d33",
-  confirmButtonColor: "#3085d6",
-  confirmButtonText: "Yes, Data Received!",
-  cancelButtonText: "No, Data Not Received!",
-  allowOutsideClick: false,
-  allowEscapeKey: false,
-  customClass: {
-    actions: 'custom-actions-class' // add a custom class to actions for styling
-  },
-  showCloseButton: true, // show a close button to dismiss the modal
-  showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
-  preConfirm: () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000); // Add a delay (2 seconds) to simulate a process
-    });
-  },
-}).then((result) => {
-  if (result.isConfirmed) {
-    axios
-          .get("/user_delete_duplicate")
-          .then((response) => {
-            console.log(response);
-            if (response.data == true) {
-              Swal.fire({
-      icon: "success",
-      title: "Previous Transaction Verified! You can now proceed with the current transaction",
-      showConfirmButton: true,
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Ok"
-    });
-            }
-          })
-          .catch((error) => {
-           
-            console.log(error.message);
-          });
-    // This code block is executed when the "Confirm" button is clicked.
-    
+        })
+        .then((response) => {
+          if (response) this.handlePurchaseResponse(response);
+        })
+        .catch((error) => Swal.fire(error.message));
+    }
   } else {
-    // This code block is executed when the "Deny" button is clicked.
     Swal.fire({
-      title: "Please reach out to the admin to sort out this issue",
+      title: "Insufficient balance!",
+      icon: "info",
+      html: 'Click <a href="https://vtubiz.com/fundwallet">here</a> to fund your wallet.',
       showCloseButton: true,
-      customClass: {
-        actions: 'custom-actions-class' // add the same custom class for styling
-      },
       showCancelButton: true,
-      cancelButtonColor: "#3085d6",
-      confirmButtonColor: "#25d366",
-      confirmButtonText: "Chat with Admin",
-      cancelButtonText: "Not Now"
-    }).then((chatResult) => {
-      if (chatResult.isConfirmed) {
-        // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
-        window.location.href = "https://wa.me/2349058744473";
-      }
+      focusConfirm: false,
     });
   }
-});
+},
 
-
-              }
-              else {
-                Swal.fire({
-                icon: "error",
-                // title: response.data.message,
-                title: response.data.message,
-                // text: "Updating...",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  // location.reload();
-                }
-              });
-
-              }
-            
-              }
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
-            });
-        });
-      } else {
-        Swal.fire({
-          title: "Insufficient balance!,",
-          icon: "info",
-          html:
-            "Click " +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            "to fund your wallet.",
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-        });
+// Separate function for prompting the user for PIN
+promptUserPin() {
+  return Swal.fire({
+    title: "Input your four(4) digit pin to proceed",
+    icon: "warning",
+    input: "password",
+    inputAttributes: {
+      inputmode: "numeric",
+      maxlength: 4,
+      autocomplete: "new-password",
+      name: "my-pin",
+      autocapitalize: "off",
+      pattern: "[0-9]*",
+      style: "text-align:center;font-size:24px;letter-spacing: 20px",
+    },
+    showCancelButton: true,
+    confirmButtonColor: "#ebab21",
+    cancelButtonColor: "grey",
+    confirmButtonText: "Buy Data",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    inputValidator: (text) => {
+      if (!/^\d{4}$/.test(text)) {
+        return "Please enter a four-digit PIN";
       }
     },
+  });
+},
+
+// Separate function to handle the processing alert
+showProcessingAlert(message) {
+  Swal.fire({
+    title: message,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+},
+
+// Separate function to build form data
+buildFormData(pin, selectedDate, selectedTime) {
+  let fd = new FormData();
+  fd.append("phone_number", this.phone_number);
+  fd.append("network", this.network);
+  fd.append("plan", this.selectedPlan);
+  fd.append("pin", pin || ""); // Use empty string if no pin required
+  if (selectedDate) fd.append("selectedDate", selectedDate);
+  if (selectedTime) fd.append("selectedTime", selectedTime);
+  return fd;
+},
+
+// Separate function to handle purchase response
+handlePurchaseResponse(response) {
+  if (response.data.success === "true") {
+    Swal.fire({
+      icon: "success",
+      title: "Purchase successful!",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Ok",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => location.reload());
+  } else if (response.data === "schedule_saved") {
+    Swal.fire({
+      icon: "success",
+      title: "Data Purchase Scheduled For Later Successfully!",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Ok",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => location.reload());
+  } else if (response.data.type === "duplicate") {
+    // Handle duplicate response as necessary
+    // (you could add here your duplicate handling logic)
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: response.data.message,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Ok",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    });
+  }
+}
+
   },
 };
 </script>

@@ -103,6 +103,22 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Incorrect pin/ unmatched pin');
         }
     }
+
+    public function change_pin_status(Request $request) {
+        $this->validate($request, ['current_pin' => 'required']);
+        $user = Auth::user();
+        if( hash('sha256', $request->current_pin) !== $user->pin) {
+            return redirect()->back()->with('error','Pin is invalid');
+        }
+        if($user->pin_status == 1) {
+            $user->pin_status = 0;
+            $user->save();
+        } else {
+            $user->pin_status = 1;
+            $user->save();
+        }
+        return redirect()->back()->with('message', 'Pin Status Updated Successfully!');
+    }
     public function resetforgotpin(Request $request)
     {
         // dd($request->all());

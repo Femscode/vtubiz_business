@@ -521,7 +521,7 @@
                                     </div>
                                     <div class="menu-item px-5">
                                         <a href="/change-pin" class="menu-link px-5">
-                                            <span class="menu-text">Change Pin</span>
+                                            <span class="menu-text">Pin Settings</span>
                                             <span class="menu-badge">
                                             </span>
                                         </a>
