@@ -490,9 +490,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'my_giveaway'])->name('my_giveaway');
     Route::get('/giveaway_participant/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'giveaway_participants'])->name('giveaway_participants');
     Route::get('/giveaway_transactions/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'giveaway_transactions'])->name('giveaway_transactions');
-    Route::get('/add_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'addQuestion'])->name('addQuestion');
-    Route::get('/delete_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_question'])->name('delete_question');
-    Route::get('/delete_giveaway/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_giveaway'])->name('delete_giveaway');
+    // Route::get('/add_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'addQuestion'])->name('addQuestion');
+    // Route::get('/delete_question/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_question'])->name('delete_question');
+    // Route::get('/delete_giveaway/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'delete_giveaway'])->name('delete_giveaway');
     Route::post('/createDataGiveaway', [App\Http\Controllers\FunGiveAwayController::class, 'createDataGiveaway'])->name('createDataGiveaway');
     Route::post('/storequestion', [App\Http\Controllers\FunGiveAwayController::class, 'storequestion'])->name('storequestion');
 
@@ -618,7 +618,7 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/admin_delete_duplicate/{type}/{id}', [App\Http\Controllers\SubscriptionController::class, 'admin_delete_duplicate'])->name('admin_delete_duplicate');
     });
 });
-Route::get('/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'giveawayHome'])->name('giveawayHome');
+// Route::get('/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'giveawayHome'])->name('giveawayHome');
 
 //business domain end
 //the subdomains
