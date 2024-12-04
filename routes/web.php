@@ -77,69 +77,81 @@ Route::any('runawoof', function() {
     // ]);
 
     // $users = User::where('upgrade',0)->whereColumn('id', 'company_id')->get();
-    $users = User::all();
+    $users = User::whereColumn('company_id', 'id')->get();
     foreach($users as $user) {
+    Data::create([
+        'user_id' => $user->id,
+        'network' => 2,
+        'plan_id' => 210,
+        'plan_name' => 'Glo 1GB (Awoof) 1day',
+        'actual_price' => 200,
+        'data_price' => 220,
+        'account_price' => 230,
+        'admin_price' => 230
+    ]);
+    Data::create([
+        'user_id' => $user->id,
+        'network' => 2,
+        'plan_id' => 211,
+        'plan_name' => 'Glo 2GB (Awoof) 1day',
+        'actual_price' => 300,
+        'data_price' => 330,
+        'account_price' => 345,
+        'admin_price' => 345
+    ]);
+    Data::create([
+        'user_id' => $user->id,
+        'network' => 2,
+        'plan_id' => 212,
+        'plan_name' => 'Glo 3.5GB (Awoof) 2days',
+        'actual_price' => 500,
+        'data_price' => 550,
+        'account_price' => 570,
+        'admin_price' => 570
+    ]);
+    Data::create([
+        'user_id' => $user->id,
+        'network' => 2,
+        'plan_id' => 213,
+        'plan_name' => 'Glo 15GB (Awoof) 7days',
+        'actual_price' => 2000,
+        'data_price' => 2200,
+        'account_price' => 2300,
+        'admin_price' => 2300
+    ]);
+    Data::create([
+        'user_id' => $user->id,
+        'network' => 3,
+        'plan_id' => 202,
+        'plan_name' => 'Airtel 100MB (Awoof) 1day',
+        'actual_price' => 68,
+        'data_price' => 70,
+        'account_price' => 75,
+        'admin_price' => 75
+    ]);
+    Data::create([
+        'user_id' => $user->id,
+        'network' => 3,
+        'plan_id' => 214,
+        'plan_name' => 'Airtel 250MB (Awoof) 14days',
+        'actual_price' => 80,
+        'data_price' => 85,
+        'account_price' => 90,
+        'admin_price' => 90
+    ]);
 
     Data::create([
         'user_id' => $user->id,
         'network' => 3,
-        'plan_id' => 204,
-        'plan_name' => 'Airtel 1GB (Awoof) 2day',
-        'actual_price' => 240,
-        'data_price' => 260,
-        'account_price' => 265,
-        'admin_price' => 265
+        'plan_id' => 221,
+        'plan_name' => 'Airtel 40GB (Awoof) 30days',
+        'actual_price' => 7100,
+        'data_price' => 7300,
+        'account_price' => 7400,
+        'admin_price' => 7400
     ]);
-    Data::create([
-        'user_id' => $user->id,
-        'network' => 3,
-        'plan_id' => 205,
-        'plan_name' => 'Airtel 2GB (Awoof) 2days',
-        'actual_price' => 333,
-        'data_price' => 370,
-        'account_price' => 380,
-        'admin_price' => 380
-    ]);
-    Data::create([
-        'user_id' => $user->id,
-        'network' => 3,
-        'plan_id' => 206,
-        'plan_name' => 'Airtel 3GB (Awoof) 7days',
-        'actual_price' => 537,
-        'data_price' => 580,
-        'account_price' => 600,
-        'admin_price' => 600
-    ]);
-    Data::create([
-        'user_id' => $user->id,
-        'network' => 3,
-        'plan_id' => 207,
-        'plan_name' => 'Airtel 4GB (Awoof) 30days',
-        'actual_price' => 1040,
-        'data_price' => 1150,
-        'account_price' => 1200,
-        'admin_price' => 1200
-    ]);
-    Data::create([
-        'user_id' => $user->id,
-        'network' => 3,
-        'plan_id' => 208,
-        'plan_name' => 'Airtel 10GB (Awoof) 30days',
-        'actual_price' => 2050,
-        'data_price' => 2300,
-        'account_price' => 2350,
-        'admin_price' => 2350
-    ]);
-    Data::create([
-        'user_id' => $user->id,
-        'network' => 3,
-        'plan_id' => 209,
-        'plan_name' => 'Airtel 15GB (Awoof) 30days',
-        'actual_price' => 3060,
-        'data_price' => 3300,
-        'account_price' => 3350,
-        'admin_price' => 3350
-    ]);
+
+
 
 }
 return "awoof run successfully!";
