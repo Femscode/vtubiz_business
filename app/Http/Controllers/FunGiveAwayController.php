@@ -310,7 +310,7 @@ class FunGiveAwayController extends Controller
             'giveaway_id' => 'required',
             'user_id' => 'required',
             // 'name' => 'required',
-            'part_no' => 'required'
+            // 'part_no' => 'required'
         ]);
         if($request->has('name')) {
            $name = $request->name;

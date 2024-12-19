@@ -140,6 +140,8 @@
 												<input required class='m-2 form-control shadow-none' id='search_changeschool'
 													type="number" name='phone' placeholder="09000000000">
 												@endif
+												
+													@if($giveaway->type == 'raffle_airtime' || $giveaway->type == 'raffle_data' )
 													
 													<label style='text-align:center !important'> <b>Select a number between 1 and {{ $giveaway->part_no }}</b></label>
 													<br>@if($giveaway->all_numbers !== null)  @php
@@ -148,6 +150,8 @@
 												@endphp <b>Already Choosen Numbers :</b>  [@foreach($numbers as $win) {{ $win }}, @endforeach ]@endif
 													<input min="1" max="{{ $giveaway->part_no }}" required class='m-2 form-control shadow-none' 
 													type="number" name='part_no' placeholder="Enter Your Lucky Number">
+
+													@endif
 
 													@if($giveaway->entry_fee > 0)
 													<div class='alert alert-danger'>
