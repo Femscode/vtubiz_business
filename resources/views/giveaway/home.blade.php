@@ -100,7 +100,7 @@
 					<div class='m-4'>
 						<a href="#">
 							{{-- <i class="fa fa-mobile-alt"></i> --}}
-							<img src="{{ asset('assets/img/logo/vtulogo.png')}}" width="200" height='50' alt='logo' class='lazyload'>
+							<img src="{{ asset('assets/img/logo/vtulogo.png')}}" width="120" height='30' alt='logo' class='lazyload'>
 						</a>
 					</div>
 					
@@ -173,8 +173,9 @@
 								</span>
 							</span>
 						</label><br><br><br>
-						<h4 class="bold-place;"><span class="bold-place" style="font-family: 'Grandstander', cursive">
-							This giveaway have a maximum number of {{ $giveaway->part_no }} participant, join now to be among the {{ $giveaway->no_of_winners }} lucky winners.🎉🎉 </span></h4><br><br><br><br><br><br><br><br><br><br><br>
+						<!-- <h4 class="bold-place;"><span class="bold-place" style="font-family: 'Grandstander', cursive">
+							This giveaway have a maximum number of {{ $giveaway->part_no }} participant, join now to be among the {{ $giveaway->no_of_winners }} lucky winners.🎉🎉 </span></h4> -->
+							<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 					</div>
 					{{-- <img src='assets/img/frontal.avif' style='width:300px;height:200px' /> --}}
 
