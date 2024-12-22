@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    
+
     return $request->user();
 });
 
@@ -30,16 +31,23 @@ Route::any('flw/webhook', [App\Http\Controllers\FundingController::class, 'webho
 Route::any('easywebhook', [App\Http\Controllers\FundingController::class, 'easywebhook'])->name('easywebhook');
 Route::any('smartwebook', [App\Http\Controllers\FundingController::class, 'smartwebook'])->name('smartwebook');
 
-//todo app
+//authentication 
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::any('/register', [AuthController::class, 'register'])->name('signup');
+    Route::post('/login', [AuthController::class, 'login'])->name('signin');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/setpin', [AuthController::class, 'setpin'])->name('setpin')->middleware('auth:sanctum');
+});
+
+Route::any('/auth/set-pin', [AuthController::class, 'update_password'])->name('set-pin');
+
+//authentication route
+Route::post('/password/forgot-password', [UserController::class, 'forgot_password']);
+Route::post('/password/reset-password', [UserController::class, 'reset'])->name('resetpasswordfield');
 
 
-Route::post('/todo/register', [TodoController::class, 'register'])->name('register-todo');
-Route::post('/todo/login', [TodoController::class, 'login'])->name('login-todo');
+
 
 // Protected Routes (require authentication)
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/todo/create', [TodoController::class, 'createTask'])->name('create-todo');
-    Route::get('/todo/fetch', [TodoController::class, 'fetchTasks'])->name('fetch-todo');
-    Route::put('/todo/update/{id}', [TodoController::class, 'updateTask'])->name('update-todo');
-    Route::delete('/todo/delete/{id}', [TodoController::class, 'deleteTask'])->name('delete-todo');
-});
+Route::middleware('auth:sanctum')->group(function () {});
