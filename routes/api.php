@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController as ApiUserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
@@ -38,6 +39,14 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [AuthController::class, 'login'])->name('signin');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/setpin', [AuthController::class, 'setpin'])->name('setpin')->middleware('auth:sanctum');
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/', [ApiUserController::class, 'index'])->name('profile');
+
+
+    });
 });
 
 Route::any('/auth/set-pin', [AuthController::class, 'update_password'])->name('set-pin');
