@@ -98,7 +98,7 @@
 				<nav>
                     <br><br>
 					<div class='m-4'>
-						<a href="#">
+						<a href="https://vtubiz.com" class='text-center'>
 							{{-- <i class="fa fa-mobile-alt"></i> --}}
 							<img src="{{ asset('assets/img/logo/vtulogo.png')}}" width="120" height='30' alt='logo' class='lazyload'>
 						</a>
