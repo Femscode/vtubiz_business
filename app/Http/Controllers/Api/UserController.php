@@ -12,14 +12,13 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $transactions = Transaction::where('user_id', $user->id)->latest()->take(10)->get();
-
+       
         return response()->json([
             'status' => true,
             'message' => 'User profile fetched successfully',
             'data' => $user,
-            'transactions' => $transactions,
 
         ], 201);
     }
+   
 }

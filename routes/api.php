@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TransactionController as TC;
 use App\Http\Controllers\Api\UserController as ApiUserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TodoController;
@@ -44,8 +45,14 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', [ApiUserController::class, 'index'])->name('profile');
-
-
+    });
+});
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['prefix' => 'transactions'], function () {
+        Route::get('/', [TC::class, 'index'])->name('transactions');
+        Route::get('/five_transactions', [TC::class, 'five_transactions'])->name('five_transactions');
+        Route::get('/all_transactions', [TC::class, 'all_transactions'])->name('all_transactions');
+        Route::post('/redo_transaction', [TC::class, 'redo_transaction'])->name('redo_transaction');
     });
 });
 
