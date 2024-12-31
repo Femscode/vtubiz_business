@@ -28,7 +28,7 @@ class TransactionController extends Controller
     public function five_transactions()
     {
         $user = Auth::user();
-        $transactions = Transaction::where('user_id', $user->id)->latest()->take(5)->get();
+        $transactions = Transaction::where('user_id', $user->id)->where('type', 'debit')->latest()->take(5)->get();
 
         return response()->json([
             'status' => true,
@@ -51,7 +51,7 @@ class TransactionController extends Controller
     }
     public function redo_transaction(Request $request)
     {
-    //pin, transaction_id
+        //pin, transaction_id
         $user = Auth::user();
         $hashed_pin = hash('sha256', $request->pin);
         if ($user->pin !== $hashed_pin) {
@@ -60,23 +60,15 @@ class TransactionController extends Controller
                 'message' => 'Incorrect Pin!',
                 'auto_refund_status' => 'Nil'
             ];
-            return response()->json($response);
+
+            return response()->json($response, 401);
         }
         $tranx = Transaction::find($request->transaction_id);
         if ($tranx->title == "Airtime Purchase") {
             $phone_number = $tranx->phone_number;
             $company = User::where('id', $user->company_id)->first();
 
-            $hashed_pin = hash('sha256', $request->pin);
-            if ($user->pin !== $hashed_pin) {
-                $response = [
-                    'success' => false,
-                    'message' => 'Incorrect Pin!',
-                    'auto_refund_status' => 'Nil'
-                ];
 
-                return response()->json($response);
-            }
             $actual_price = Airtime::where('user_id', $user->company_id)->where('network', $tranx->network)->first()->actual_price;
             $real_airtimeprice = $tranx->real_amount - ($actual_price / 100) * $tranx->real_amount;
             // dd($real_airtimeprice, $tranx->amount, $tranx->real_amount);
@@ -87,7 +79,7 @@ class TransactionController extends Controller
                     'auto_refund_status' => 'Nil'
                 ];
 
-                return response()->json($response);
+                return response()->json($response, 402);
             }
 
             //check duplicate
@@ -105,7 +97,7 @@ class TransactionController extends Controller
                     'auto_refund_status' => 'Nil'
                 ];
 
-                return response()->json($response);
+                return response()->json($response, 402);
             }
             //purchase the data
             $trans_id = $this->create_transaction('Airtime Purchase', $client_reference, $details, 'debit', $tranx->discounted_amount, $user->id, 3, $real_airtimeprice, $phone_number, $tranx->network, $tranx->real_amount);
@@ -135,20 +127,16 @@ class TransactionController extends Controller
             $response = curl_exec($curl);
 
             curl_close($curl);
+            return response()->json([
+                'status' => true,
+                'message' => 'Transactions successfully made',
+
+
+            ], 200);
+
             return $response;
         } elseif ($tranx->title == "Data Purchase") {
             $phone_number = $tranx->phone_number;
-            $company = User::where('id', $user->company_id)->first();
-            $hashed_pin = hash('sha256', $request->pin);
-            if ($user->pin !== $hashed_pin) {
-                $response = [
-                    'success' => false,
-                    'message' => 'Incorrect Pin!',
-                    'auto_refund_status' => 'Nil'
-                ];
-
-                return response()->json($response);
-            }
 
             $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
             if ($data == null) {
@@ -158,7 +146,7 @@ class TransactionController extends Controller
                     'auto_refund_status' => 'Nil'
                 ];
 
-                return response()->json($response);
+                return response()->json($response, 400);
             }
             $data_price =  $data->admin_price;
             $real_dataprice = $data->data_price;
@@ -171,7 +159,7 @@ class TransactionController extends Controller
                     'auto_refund_status' => 'Nil'
                 ];
 
-                return response()->json($response);
+                return response()->json($response, 402);
             }
 
             //check duplicate
@@ -200,7 +188,7 @@ class TransactionController extends Controller
                     'auto_refund_status' => 'Nil'
                 ];
 
-                return response()->json($response);
+                return response()->json($response, 401);
             }
 
             //purchase the data
@@ -229,9 +217,12 @@ class TransactionController extends Controller
             ));
             $response = curl_exec($curl);
             $response_json = json_decode($response, true);
-
-
             curl_close($curl);
+            return response()->json([
+                'status' => true,
+                'message' => 'Transactions successfully made',
+    
+            ], 200);
             return $response;
         } else {
             $response = [
@@ -239,7 +230,7 @@ class TransactionController extends Controller
                 'message' => 'Invalid Transaction!',
                 'auto_refund_status' => 'Nil'
             ];
-            return response()->json($response);
+            return response()->json($response, 401);
         }
     }
 }
