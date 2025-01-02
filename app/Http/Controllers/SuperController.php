@@ -323,7 +323,7 @@ class SuperController extends Controller
         }
         $data['active'] = 'super';
 
-
+        $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->intagram;
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
@@ -335,7 +335,8 @@ class SuperController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                "AuthorizationToken: " . env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
+                "AuthorizationToken: " .$fast_token, //replace this with your authorization_token
+                // "AuthorizationToken: " . env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
                 "cache-control: no-cache"
             ),
         ));
