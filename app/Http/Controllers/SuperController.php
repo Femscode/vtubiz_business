@@ -323,6 +323,7 @@ class SuperController extends Controller
         }
         $data['active'] = 'super';
 
+        
         $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->instagram;
         // return [ env("EASY_ACCESS_AUTH"), $fast_token];
         $curl = curl_init();
