@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
         $data['user'] = $user = Auth::user();
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Data Notification')->first();
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -97,7 +97,7 @@ class SubscriptionController extends Controller
         }
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Data Notification')->first();
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -1796,7 +1796,7 @@ class SubscriptionController extends Controller
             ]);
         }
         $data['active'] = 'airtime';
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Airtime Notification')->first();
 
         if ($notification && $notification->title !== null) {
@@ -1841,7 +1841,7 @@ class SubscriptionController extends Controller
         }
         $data['active'] = 'airtime';
         $data['airtime'] = Airtime::get();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
         $notification = Notification::where('user_id', $user->company_id)->where('type', 'Airtime Notification')->first();
 
         if ($notification && $notification->title !== null) {
@@ -1867,6 +1867,7 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','electricity')->latest()->get();
         return view('subscription.electricity', $data);
     }
     public function admin_electricity()
@@ -1881,6 +1882,8 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','electricity')->latest()->get();
+        
         return view('business_backend.electricity', $data);
     }
     public function examination()
@@ -1971,6 +1974,9 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
+
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','cable')->latest()->get();
+        
         return view('subscription.cable', $data);
     }
 
@@ -1986,6 +1992,8 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','cable')->latest()->get();
+        
 
         return view('business_backend.cable', $data);
     }

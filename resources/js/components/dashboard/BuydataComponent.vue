@@ -219,7 +219,7 @@ export default {
     selectFromBeneficiary() {
       const options = this.beneficiaries
         .map((beneficiary) => {
-          return `<option value="${beneficiary.phone}">${beneficiary.name}</option>`;
+          return `<option value="${beneficiary.phone}">${beneficiary.name} (${beneficiary.phone})</option>`;
         })
         .join("");
       Swal.fire({

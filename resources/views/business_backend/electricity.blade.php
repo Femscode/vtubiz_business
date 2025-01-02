@@ -12,7 +12,7 @@
           
             <!--end::Aside-->
             <!--begin::Content-->
-         <electricity-component :user='{{ $user  }}'></electricity-component>
+         <electricity-component :user='{{ $user  }}' :beneficiaries='{{$beneficiaries}}'></electricity-component>
             <!--end::Content-->
         </div>
         <!--end::Profile Account Information-->

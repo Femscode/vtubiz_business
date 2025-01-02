@@ -13,7 +13,7 @@
           
             <!--end::Aside-->
             <!--begin::Content-->
-         <cable-component :user='{{ $user  }}'></cable-component>
+         <cable-component :user='{{ $user  }}' :beneficiaries='{{$beneficiaries}}'></cable-component>
             <!--end::Content-->
         </div>
         <!--end::Profile Account Information-->

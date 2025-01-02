@@ -16,23 +16,14 @@
               <h4 class="font-weight-bold"><b>Cable Subscription</b></h4>
             </div>
             <div class="col text-end">
-              <a
-                onclick="window.history.back()"
-                class="btn-sm btn btn-secondary"
-                >Back</a
-              >
+              <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
             </div>
           </div>
           <!--begin::Form Group-->
           <div class="form-group row m-2">
             <h6 class="col-md-3">Cable Type</h6>
             <div class="col-md-6">
-              <select
-                @change="changePlan"
-                required
-                v-model="cable_type"
-                class="form-control"
-              >
+              <select @change="changePlan" required v-model="cable_type" class="form-control">
                 <option value="">-- Select Cable Type --</option>
                 <option value="01">DSTV</option>
                 <option value="02">GOTV</option>
@@ -44,12 +35,20 @@
           <div class="form-group row m-2">
             <h6 class="col-md-3">Decoder Number</h6>
             <div class="col-md-6">
-              <input
-                class="form-control"
-                type="number"
-                min="1000"
-                v-model="decoder_number"
-              />
+              <input class="form-control" type="number" min="1000" v-model="decoder_number" />
+              <div class="col-md-12  text-end">
+                <a @click="selectFromBeneficiary()" class="btn btn-primary btn-sm">Select From Beneficiary</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row m-2">
+            <h6 class="col-md-3"></h6>
+            <div class="col-md-6">
+              <div class="form-check form-switch form-sm">
+                <input class="form-check-input" type="checkbox" id="save_ben" @change="saveBeneficiary" />
+                <label id="alr_saved" class="form-check-label">Save as beneficiary</label>
+              </div>
             </div>
           </div>
           <div v-if="show_decoder" class="form-group row m-2">
@@ -60,44 +59,30 @@
                 <span class="svg-icon svg-icon-info mr-5">
                   <span class="svg-icon svg-icon-lg">
                     <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/icons/General/Attachment2.svg-->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      version="1.1"
-                    >
-                      <g
-                        stroke="none"
-                        stroke-width="1"
-                        fill="none"
-                        fill-rule="evenodd"
-                      >
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                      height="24px" viewBox="0 0 24 24" version="1.1">
+                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <rect x="0" y="0" width="24" height="24"></rect>
                         <path
                           d="M11.7573593,15.2426407 L8.75735931,15.2426407 C8.20507456,15.2426407 7.75735931,15.6903559 7.75735931,16.2426407 C7.75735931,16.7949254 8.20507456,17.2426407 8.75735931,17.2426407 L11.7573593,17.2426407 L11.7573593,18.2426407 C11.7573593,19.3472102 10.8619288,20.2426407 9.75735931,20.2426407 L5.75735931,20.2426407 C4.65278981,20.2426407 3.75735931,19.3472102 3.75735931,18.2426407 L3.75735931,14.2426407 C3.75735931,13.1380712 4.65278981,12.2426407 5.75735931,12.2426407 L9.75735931,12.2426407 C10.8619288,12.2426407 11.7573593,13.1380712 11.7573593,14.2426407 L11.7573593,15.2426407 Z"
-                          fill="#000000"
-                          opacity="0.3"
-                          transform="translate(7.757359, 16.242641) rotate(-45.000000) translate(-7.757359, -16.242641)"
-                        ></path>
+                          fill="#000000" opacity="0.3"
+                          transform="translate(7.757359, 16.242641) rotate(-45.000000) translate(-7.757359, -16.242641)">
+                        </path>
                         <path
                           d="M12.2426407,8.75735931 L15.2426407,8.75735931 C15.7949254,8.75735931 16.2426407,8.30964406 16.2426407,7.75735931 C16.2426407,7.20507456 15.7949254,6.75735931 15.2426407,6.75735931 L12.2426407,6.75735931 L12.2426407,5.75735931 C12.2426407,4.65278981 13.1380712,3.75735931 14.2426407,3.75735931 L18.2426407,3.75735931 C19.3472102,3.75735931 20.2426407,4.65278981 20.2426407,5.75735931 L20.2426407,9.75735931 C20.2426407,10.8619288 19.3472102,11.7573593 18.2426407,11.7573593 L14.2426407,11.7573593 C13.1380712,11.7573593 12.2426407,10.8619288 12.2426407,9.75735931 L12.2426407,8.75735931 Z"
                           fill="#000000"
-                          transform="translate(16.242641, 7.757359) rotate(-45.000000) translate(-16.242641, -7.757359)"
-                        ></path>
+                          transform="translate(16.242641, 7.757359) rotate(-45.000000) translate(-16.242641, -7.757359)">
+                        </path>
                         <path
                           d="M5.89339828,3.42893219 C6.44568303,3.42893219 6.89339828,3.87664744 6.89339828,4.42893219 L6.89339828,6.42893219 C6.89339828,6.98121694 6.44568303,7.42893219 5.89339828,7.42893219 C5.34111353,7.42893219 4.89339828,6.98121694 4.89339828,6.42893219 L4.89339828,4.42893219 C4.89339828,3.87664744 5.34111353,3.42893219 5.89339828,3.42893219 Z M11.4289322,5.13603897 C11.8194565,5.52656326 11.8194565,6.15972824 11.4289322,6.55025253 L10.0147186,7.96446609 C9.62419433,8.35499039 8.99102936,8.35499039 8.60050506,7.96446609 C8.20998077,7.5739418 8.20998077,6.94077682 8.60050506,6.55025253 L10.0147186,5.13603897 C10.4052429,4.74551468 11.0384079,4.74551468 11.4289322,5.13603897 Z M0.600505063,5.13603897 C0.991029355,4.74551468 1.62419433,4.74551468 2.01471863,5.13603897 L3.42893219,6.55025253 C3.81945648,6.94077682 3.81945648,7.5739418 3.42893219,7.96446609 C3.0384079,8.35499039 2.40524292,8.35499039 2.01471863,7.96446609 L0.600505063,6.55025253 C0.209980772,6.15972824 0.209980772,5.52656326 0.600505063,5.13603897 Z"
-                          fill="#000000"
-                          opacity="0.3"
-                          transform="translate(6.014719, 5.843146) rotate(-45.000000) translate(-6.014719, -5.843146)"
-                        ></path>
+                          fill="#000000" opacity="0.3"
+                          transform="translate(6.014719, 5.843146) rotate(-45.000000) translate(-6.014719, -5.843146)">
+                        </path>
                         <path
                           d="M17.9142136,15.4497475 C18.4664983,15.4497475 18.9142136,15.8974627 18.9142136,16.4497475 L18.9142136,18.4497475 C18.9142136,19.0020322 18.4664983,19.4497475 17.9142136,19.4497475 C17.3619288,19.4497475 16.9142136,19.0020322 16.9142136,18.4497475 L16.9142136,16.4497475 C16.9142136,15.8974627 17.3619288,15.4497475 17.9142136,15.4497475 Z M23.4497475,17.1568542 C23.8402718,17.5473785 23.8402718,18.1805435 23.4497475,18.5710678 L22.0355339,19.9852814 C21.6450096,20.3758057 21.0118446,20.3758057 20.6213203,19.9852814 C20.2307961,19.5947571 20.2307961,18.9615921 20.6213203,18.5710678 L22.0355339,17.1568542 C22.4260582,16.76633 23.0592232,16.76633 23.4497475,17.1568542 Z M12.6213203,17.1568542 C13.0118446,16.76633 13.6450096,16.76633 14.0355339,17.1568542 L15.4497475,18.5710678 C15.8402718,18.9615921 15.8402718,19.5947571 15.4497475,19.9852814 C15.0592232,20.3758057 14.4260582,20.3758057 14.0355339,19.9852814 L12.6213203,18.5710678 C12.2307961,18.1805435 12.2307961,17.5473785 12.6213203,17.1568542 Z"
-                          fill="#000000"
-                          opacity="0.3"
-                          transform="translate(18.035534, 17.863961) scale(1, -1) rotate(45.000000) translate(-18.035534, -17.863961)"
-                        ></path>
+                          fill="#000000" opacity="0.3"
+                          transform="translate(18.035534, 17.863961) scale(1, -1) rotate(45.000000) translate(-18.035534, -17.863961)">
+                        </path>
                       </g>
                     </svg>
                     <!--end::Svg Icon-->
@@ -107,22 +92,14 @@
                 <!--begin::Title-->
                 <div class="d-flex flex-column flex-grow-1 mr-2">
                   <span class="text-info font-weight-bold">Customer Name</span>
-                  <a
-                    href="#"
-                    class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
-                  >
-                    {{ customer_name }}</a
-                  >
+                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
+                    {{ customer_name }}</a>
                 </div>
                 <div class="d-flex flex-column flex-grow-1 mr-2">
                   <span class="text-info font-weight-bold">Current Plan</span>
-                  <a
-                    href="#"
-                    class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
-                  >
+                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
                     {{ current_plan }}
-                    <span style="color: red">({{ plan_status }})</span></a
-                  >
+                    <span style="color: red">({{ plan_status }})</span></a>
                 </div>
                 <!-- <div class="d-flex flex-column flex-grow-1 mr-2">
                   <span class="text-info font-weight-bold">Due Date</span>
@@ -155,12 +132,7 @@
             <div class="col-md-6">
               <select required v-model="selectedPlan" class="form-control">
                 <!-- <option value="">Select Plan</option> -->
-                <option
-                  :data-price="plan.actual_price"
-                  :key="plan.id"
-                  v-for="plan in plans"
-                  :value="plan.plan_id"
-                >
+                <option :data-price="plan.actual_price" :key="plan.id" v-for="plan in plans" :value="plan.plan_id">
                   {{ plan.plan_name }} - NGN{{ plan.admin_price }}
                 </option>
               </select>
@@ -169,21 +141,11 @@
           <div class="form-group row m-2">
             <div class="col-md-3"></div>
 
-            <button
-              v-if="showConfirm"
-              @click="confirmDecoder"
-              type="button"
-              class="btn btn-success col-md-6"
-            >
+            <button v-if="showConfirm" @click="confirmDecoder" type="button" class="btn btn-success col-md-6">
               Confirm Detail
             </button>
 
-            <button
-              v-else
-              :disabled="!transfer_status"
-              type="submit"
-              class="btn btn-success col-md-6"
-            >
+            <button v-else :disabled="!transfer_status" type="submit" class="btn btn-success col-md-6">
               Subscribe
             </button>
           </div>
@@ -194,10 +156,10 @@
     <!--end::Card-->
   </div>
 </template>
-    
-    <script>
+
+<script>
 export default {
-  props: ["user"],
+  props: ["user", "beneficiaries"],
   data() {
     return {
       cable_type: "",
@@ -275,6 +237,121 @@ export default {
           });
       } else {
         Swal.fire("Fill the neccessary field correctly");
+      }
+    },
+
+    selectFromBeneficiary() {
+      const options = this.beneficiaries
+        .map((beneficiary) => {
+          return `<option value="${beneficiary.phone}">${beneficiary.name} (${beneficiary.phone})</option>`;
+        })
+        .join("");
+      Swal.fire({
+        title: "Choose Beneficiary",
+        html: `<select  class='form-control' required id='beneficiary_choice'><option>--Choose Beneficiary--</option>${options}</select>`,
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.decoder_number = $("#beneficiary_choice").val();
+          this.ben_name = $("#beneficiary_choice").find(":selected").text();
+          $("#save_ben").prop("checked", true);
+          $("#alr_saved").text(
+            "Already Saved, toggle to remove from beneficiary"
+          );
+        }
+      });
+    },
+    saveBeneficiary(event) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      if (event.target.checked) {
+       
+          Swal.fire({
+            title: "Name Of Beneficiary",
+            html: `<input class='form-control' type='text' placeholder='My DSTV' required id='beneficiary_name'/>`,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.ben_name = $("#beneficiary_name").val();
+
+              let fd = new FormData();
+              fd.append("phone", this.decoder_number);
+              fd.append("name", this.ben_name);
+              fd.append("type", 'cable');
+              axios
+                .post("/saveBeneficiary", fd)
+                .then((response) => {
+                  console.log(response.data, "the data");
+                  $("#save_ben").prop("checked", true);
+                  $("#alr_saved").text(
+                    "Beneficiary Saved, toggle to save to beneficiary"
+                  );
+                  if (response.data.success == true) {
+                    Toast.fire({
+                      icon: "success",
+                      title: "Beneficiary Saved!",
+                    });
+                  } else {
+                    Toast.fire({
+                      icon: "info",
+                      title: "Beneficiary already exist",
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.log(error.message);
+                  Swal.fire(error.message);
+                });
+            }
+          });
+       
+      } else {
+        Swal.fire({
+          title: "Remove Contact?",
+          text: `Are you sure you want to remove ${this.ben_name} from beneficiary`,
+          showCancelButton: true,
+          confirmButtonText: "Yes, I'm Sure",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $("#save_ben").prop("checked", false);
+            $("#alr_saved").text(
+              "Removed from beneficiary, toggle to save to beneficiary"
+            );
+            let fd = new FormData();
+            fd.append("phone", this.meter_number);
+            axios
+              .post("/removeBeneficiary", fd)
+              .then((response) => {
+                console.log(response.data, "the data");
+                if (response.data.success == true) {
+                  Toast.fire({
+                    icon: "success",
+                    title: "Beneficiary Removed!",
+                  });
+                } else {
+                  Toast.fire({
+                    icon: "info",
+                    title: "Beneficiary can't be removed",
+                  });
+                }
+              })
+              .catch((error) => {
+                console.log(error.message);
+                Swal.fire(error.message);
+              });
+          }
+        });
       }
     },
     buyCable() {
@@ -404,6 +481,5 @@ export default {
   },
 };
 </script>
-    
-    <style>
-</style>
+
+<style></style>
