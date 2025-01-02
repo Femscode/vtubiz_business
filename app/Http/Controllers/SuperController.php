@@ -324,6 +324,7 @@ class SuperController extends Controller
         $data['active'] = 'super';
 
         $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->intagram;
+        return [ env("EASY_ACCESS_AUTH"), $fast_token];
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
