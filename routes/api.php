@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'transactions'], function () {
         Route::get('/', [TC::class, 'index'])->name('transactions');
-        Route::get('/five_transactions', [TC::class, 'five_transactions'])->name('five_transactions');
+        Route::get('/five_transactions/{type}', [TC::class, 'five_transactions'])->name('five_transactions');
         Route::get('/all_transactions', [TC::class, 'all_transactions'])->name('all_transactions');
         Route::post('/redo_transaction', [TC::class, 'redo_transaction'])->name('redo_transaction');
     });

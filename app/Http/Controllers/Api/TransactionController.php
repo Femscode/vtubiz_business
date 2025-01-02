@@ -27,10 +27,10 @@ class TransactionController extends Controller
 
         ], 201);
     }
-    public function five_transactions()
+    public function five_transactions($type)
     {
         $user = Auth::user();
-        $transactions = Transaction::where('user_id', $user->id)->where('type', 'debit')->latest()->take(5)->get();
+        $transactions = Transaction::where('user_id', $user->id)->where('type', 'debit')->where('status',1)->where('title',$type)->latest()->take(5)->get();
 
         return response()->json([
             'status' => true,
