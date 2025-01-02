@@ -287,7 +287,7 @@ class SubscriptionController extends Controller
         //just to replace env
         $trans_id = $this->create_transaction('Data Purchase', $client_reference, $details, 'debit', $data_price, $user->id, 3, $real_dataprice, $phone_number, $request->network, $request->plan);
 
-        $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->intagram;
+        $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->instagram;
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/data.php",
