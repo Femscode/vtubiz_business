@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BeneficiaryController as BC;
 use App\Http\Controllers\Api\TransactionController as TC;
 use App\Http\Controllers\Api\UserController as ApiUserController;
 use App\Http\Controllers\HomeController;
@@ -53,6 +54,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/five_transactions/{type}', [TC::class, 'five_transactions'])->name('five_transactions');
         Route::get('/all_transactions', [TC::class, 'all_transactions'])->name('all_transactions');
         Route::post('/redo_transaction', [TC::class, 'redo_transaction'])->name('redo_transaction');
+    });
+    Route::group(['prefix' => 'beneficiary'], function () {
+        Route::get('/{type}', [BC::class, 'index'])->name('transactions');
+        Route::get('/create_beneficiary', [BC::class, 'create_beneficiary'])->name('create_beneficiary');
+      
     });
 });
 
