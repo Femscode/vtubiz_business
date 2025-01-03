@@ -325,7 +325,7 @@ class SuperController extends Controller
 
         
         $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->instagram;
-        return [ env("EASY_ACCESS_AUTH"), $fast_token];
+        return [ ENV("EASY_ACCESS_AUTH"), $fast_token];
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
