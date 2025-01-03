@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'EASY_ACCESS_AUTH' => 'bace8dcca1562735ce84bbe73042925d',
-    'name' => env('APP_NAME', 'Laravel'),
+    // 'EASY_ACCESS_AUTH' => 'bace8dcca1562735ce84bbe73042925d',
+    'name' => env('APP_NAME', 'VTUBIZ'),
 
     /*
     |--------------------------------------------------------------------------
