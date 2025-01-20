@@ -57,7 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::group(['prefix' => 'beneficiary'], function () {
         Route::get('/{type}', [BC::class, 'index'])->name('transactions');
-        Route::get('/create_beneficiary', [BC::class, 'create_beneficiary'])->name('create_beneficiary');
+        Route::post('/create_beneficiary', [BC::class, 'create_beneficiary'])->name('create_beneficiary');
       
     });
 });
