@@ -37,6 +37,7 @@ class BeneficiaryController extends Controller
             Beneficiary::create([
                 'name' => $request->name,
                 'phone' => $request->phone,
+                'type' => $request->type ?? 'data',
                 'user_id' => $user->id
             ]);
 
