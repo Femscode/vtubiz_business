@@ -26,4 +26,31 @@ class BeneficiaryController extends Controller
             ], 500);
         }
     }
+    public function create_beneficiary(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'phone' => 'required'
+        ]);
+        try {
+            $user = Auth::user();
+            Beneficiary::create([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'user_id' => $user->id
+            ]);
+
+            $beneficiaries = Beneficiary::where('user_id', $user->id)->latest()->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $beneficiaries
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
