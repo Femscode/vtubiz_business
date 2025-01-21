@@ -54,4 +54,35 @@ class BeneficiaryController extends Controller
             ], 500);
         }
     }
+
+    public function removeBeneficiary(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $user = Auth::user();
+            $this->validate($request, [
+                'phone' => 'required',
+            ]);
+            Beneficiary::where('phone', $request->phone)->where('user_id', $user->id)->delete();
+
+            $response = [
+                'success' => true,
+                'message' => 'Beneficiary Removed Successfully',
+            ];
+            return response()->json([
+                'success' => true,
+                'status' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json([
+                'success' => false,
+                'status' => 'false',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
 }
