@@ -325,6 +325,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::post('/checkout/{checkout?}', [App\Http\Controllers\FundingController::class, 'checkout'])->name('checkout');
+    Route::post('/manualpayment/{manualpayment?}', [App\Http\Controllers\FundingController::class, 'manualpayment'])->name('manualpayment');
     // Route::get('withdraw', [App\Http\Controllers\HomeController::class, 'withdraw'])->name('withdraw');
     // Route::any('confirm_account', [HomeController::class, 'confirm_account'])->name('confirm_account');
     // Route::any('make_transfer', [HomeController::class, 'make_transfer'])->name('make_transfer');

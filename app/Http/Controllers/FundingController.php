@@ -139,6 +139,15 @@ class FundingController extends Controller
         // dd($request->all(), $request->amount/100);
 
     }
+    public function manualpayment(Request $request, $subdomain = null)
+    {
+        $this->validate($request, [
+            'amount' => 'required',
+        ]);
+        $amount = $request->amount;
+        return redirect("https://wa.me/2349058744473?text=Hi+Admin,+I+just+funded+a+total+of+NGN{$amount}.+Kindly+check+and+approve+my+payment.");
+    }
+
     public function admin_checkout(Request $request)
     {
         $this->validate($request, [
@@ -267,11 +276,10 @@ class FundingController extends Controller
                 $giveaway->save();
             }
 
-            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference . '/' . $message;
             // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
-        } 
-        elseif ($status == 'pending') {
+        } elseif ($status == 'pending') {
             if (substr($client_reference, 0, 3) == 'sgw') {
                 $tranx = Transaction::where('reference', $client_reference)
                     ->orderByDesc('created_at')
@@ -287,11 +295,10 @@ class FundingController extends Controller
                 $giveaway->save();
             }
 
-            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference . '/' . $message;
             // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
-        } 
-        elseif ($status == 'failed') {
+        } elseif ($status == 'failed') {
             if (substr($client_reference, 0, 3) == 'sgw') {
                 $tranx = Transaction::where('reference', $client_reference)
                     ->orderByDesc('created_at')
@@ -310,27 +317,24 @@ class FundingController extends Controller
                 }
             }
 
-            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference . '/' . $message;
             $response = Http::get($url);
-        } 
-       
-        
-        else {
+        } else {
             if (substr($client_reference, 0, 3) == 'sgw') {
-            $tranx = Transaction::where('reference', $client_reference)
-                ->orderByDesc('created_at')
-                ->first();
-            $tranx->reference = $reference;
-            $tranx->status = 0;
-            $tranx->save();
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 0;
+                $tranx->save();
 
-            $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
-                ->first();
-            $giveaway->reference = $reference;
-            $giveaway->status = 0;
-            $giveaway->save();
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                $giveaway->reference = $reference;
+                $giveaway->status = 0;
+                $giveaway->save();
             }
-            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference . '/' . $message;
             $response = Http::get($url);
         }
 
@@ -364,11 +368,10 @@ class FundingController extends Controller
                 $giveaway->save();
             }
 
-            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference . '/' . $message;
             // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
-        } 
-        elseif ($status == 'pending') {
+        } elseif ($status == 'pending') {
             if (substr($client_reference, 0, 3) == 'sgw') {
                 $tranx = Transaction::where('reference', $client_reference)
                     ->orderByDesc('created_at')
@@ -384,11 +387,10 @@ class FundingController extends Controller
                 $giveaway->save();
             }
 
-            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_debit/' . $client_reference . '/' . $reference . '/' . $message;
             // file_put_contents(__DIR__ . '/easy_success.json', $url);
             $response = Http::get($url);
-        } 
-        elseif ($status == 'failed') {
+        } elseif ($status == 'failed') {
             if (substr($client_reference, 0, 3) == 'sgw') {
                 $tranx = Transaction::where('reference', $client_reference)
                     ->orderByDesc('created_at')
@@ -407,34 +409,31 @@ class FundingController extends Controller
                 }
             }
 
-            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference . '/' . $message;
             $response = Http::get($url);
-        } 
-       
-        
-        else {
+        } else {
             if (substr($client_reference, 0, 3) == 'sgw') {
-            $tranx = Transaction::where('reference', $client_reference)
-                ->orderByDesc('created_at')
-                ->first();
-            $tranx->reference = $reference;
-            $tranx->status = 0;
-            $tranx->save();
+                $tranx = Transaction::where('reference', $client_reference)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $tranx->reference = $reference;
+                $tranx->status = 0;
+                $tranx->save();
 
-            $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
-                ->first();
-            $giveaway->reference = $reference;
-            $giveaway->status = 0;
-            $giveaway->save();
+                $giveaway = GiveawaySchedule::where('reference', $client_reference)->orderByDesc('created_at')
+                    ->first();
+                $giveaway->reference = $reference;
+                $giveaway->status = 0;
+                $giveaway->save();
             }
-            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference.'/'.$message;
+            $url = 'https://vtubiz.com/run_failed/' . $client_reference . '/' . $reference . '/' . $message;
             $response = Http::get($url);
         }
 
         return response()->json("OK", 200);
     }
 
-    public function run_debit($client_reference, $reference,$message)
+    public function run_debit($client_reference, $reference, $message)
     {
         $tranx = Transaction::where('reference', $client_reference)
             ->orderByDesc('created_at')
@@ -460,7 +459,7 @@ class FundingController extends Controller
         $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
         $duplicate->delete();
     }
-    public function run_failed($client_reference, $reference,$message)
+    public function run_failed($client_reference, $reference, $message)
     {
 
         $tranx = Transaction::where('reference', $client_reference)
