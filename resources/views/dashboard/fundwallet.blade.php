@@ -2,86 +2,132 @@
 
 @section('header')
 <style>
-    /* General Styling */
+    /* Global Styles */
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'Roboto', sans-serif;
+        background-color: #f5f6fa;
+        margin: 0;
+        padding: 0;
     }
 
-    .credit-card {
-        background: linear-gradient(to right, #fb9129, #155724);
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-        width: 100%;
-        max-width: 400px;
-        margin: 20px auto;
-        color: white;
+    .container {
+        max-width: 450px;
+        margin: 0 auto;
         padding: 20px;
+    }
+
+    .text-center {
+        text-align: center;
     }
 
     .card {
-        border: none;
-        background: #f8f9fa;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         padding: 20px;
+        margin-bottom: 20px;
     }
 
-    .btn-lg {
-        background-color: #28a745;
-        color: white;
+    .credit-card {
+        background: linear-gradient(to right, #e2e3e5, #e2e3e5);
+        color: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .credit-card h4 {
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .credit-card p {
+        margin: 5px 0;
+        font-size: 1rem;
+    }
+
+    .btn {
+        background-color: #383d41;
+        color: #fff;
         font-size: 1.1rem;
-        padding: 10px 20px;
-        border-radius: 8px;
         border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        width: 100%;
+        text-transform: uppercase;
+        font-weight: bold;
         transition: background-color 0.3s ease;
     }
 
-    .btn-lg:hover {
-        background-color: #218838;
+    .btn:hover {
+        background-color: #383d41;
     }
 
     .form-control {
         border: 1px solid #ced4da;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 15px;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .form-check-label {
         font-size: 1rem;
     }
 
-    .text-gray-500 {
+    .divider {
+        text-align: center;
         color: #6c757d;
+        margin: 20px 0;
+        position: relative;
     }
 
-    .alert-success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-        border-radius: 5px;
-        padding: 20px;
+    .divider::before, .divider::after {
+        content: "";
+        display: block;
+        width: 40%;
+        height: 1px;
+        background: #ddd;
+        position: absolute;
+        top: 50%;
+    }
+
+    .divider::before {
+        left: 0;
+    }
+
+    .divider::after {
+        right: 0;
+    }
+
+    .alert {
+        background: #e9f7ef;
+        border: 1px solid #28a745;
+        border-radius: 8px;
+        padding: 15px;
         margin-top: 20px;
-    }
-
-    .alert-success h2 {
-        font-size: 1.5rem;
+        color: #155724;
     }
 
     #bvnfield {
-        margin-top: 10px;
         display: none;
+        margin-top: 10px;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="container mt-4">
+<div class="container">
+    <!-- Page Title -->
     <div class="text-center mb-4">
-        <h2 class="text-gray-500 fw-bold">-- ACCOUNT FUNDING --</h2>
+        <h2 class="fw-bold" style="color: #383d41;">Account Funding</h2>
     </div>
-    
+
     <!-- Funding Form -->
-    <div class="card mb-4">
-        <form method="POST" action="{{ route('checkout', ['subdomain']) }}" accept-charset="UTF-8" class="form-horizontal">
+    <div class="card">
+        <form method="POST" action="{{ route('checkout', ['subdomain']) }}" accept-charset="UTF-8">
             @csrf
             <input required name="amount" type="number" min="100" id="u_amount" class="form-control" placeholder="Enter Amount">
             <span class="text-danger" id="show_charge"></span>
@@ -97,16 +143,12 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-lg btn-block mt-4">
-                <i class="fa fa-plus-circle"></i> Fund Wallet
-            </button>
+            <button type="submit" class="btn mt-4">Fund Wallet</button>
         </form>
     </div>
 
-    <!-- Or Divider -->
-    <div class="text-center mb-4">
-        <h4>-------------- Or --------------</h4>
-    </div>
+    <!-- Divider -->
+    <div class="divider">Or</div>
 
     <!-- Virtual Account Details -->
     @if($user->account_no)
@@ -117,19 +159,19 @@
         <p><strong>Account Name:</strong> {{ $user->account_name }}</p>
     </div>
     @else
-    <div class="alert alert-success">
-        <h2>Get Your Permanent Virtual Account!</h2>
-        <ol>
+    <div class="alert">
+        <h4>Get Your Permanent Virtual Account!</h4>
+        <ul>
             <li>Send any amount anytime</li>
             <li>Enjoy lower charges</li>
             <li>Experience faster funding transactions</li>
-        </ol>
-        <a id="showBvn" style="cursor: pointer; color: #007bff;">Click here to generate your permanent virtual account →</a>
+        </ul>
+        <a id="showBvn" style="cursor: pointer; color: #383d41;">Click <span style="color:red">here</span> to generate your permanent virtual account &rarr;</a>
         <div id="bvnfield">
             <form method="POST" action="/generatePermanentAccount">
                 @csrf
-                <input type="number" name="bvn" placeholder="Enter Your BVN" class="form-control d-inline-block" style="width: auto;">
-                <button type="submit" class="btn btn-success d-inline-block">Generate</button>
+                <input type="number" name="bvn" placeholder="Enter Your BVN" class="form-control">
+                <button type="submit" class="btn mt-2">Generate</button>
             </form>
         </div>
     </div>
@@ -147,7 +189,7 @@
 
         // Toggle BVN field visibility
         $("#showBvn").on('click', function() {
-            $("#bvnfield").toggle();
+            $("#bvnfield").slideToggle();
         });
 
         // Calculate charges on amount input
