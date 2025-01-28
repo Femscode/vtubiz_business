@@ -27,6 +27,6 @@ class PurchaseController extends Controller
             'message' => 'Data Plans Fetched Successfully!',
             'data' => $data,
 
-        ], 201);
+        ], 200);
     }
 }
