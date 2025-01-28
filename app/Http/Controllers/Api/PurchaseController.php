@@ -13,11 +13,7 @@ class PurchaseController extends Controller
     {
 
         $user = Auth::user();
-        return response()->json([
-            'status' => false,
-            'message' => $type,
-            
-        ], 401);
+       
         if ($type == "data") {
             $data = Data::where('network', $network)->where('user_id', $user->company_id)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
         } else {
