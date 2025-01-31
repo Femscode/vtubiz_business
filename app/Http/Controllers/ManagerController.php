@@ -172,7 +172,7 @@ class ManagerController extends Controller
                 ->orWhere('title', 'Electricity Payment')
                 ->orWhere('title', 'Bulk SMS')
                 ->orWhere('title', 'Examination Result Payment');
-        })->whereYear('created_at', '2025')->count();
+        })->where('status',1)->whereYear('created_at', '2025')->count();
         
         foreach (range(1, 12) as $month) {
             $monthName = strtolower(Carbon::createFromDate(2024, $month, 1)->format('F'));
@@ -184,7 +184,7 @@ class ManagerController extends Controller
                     ->orWhere('title', 'Electricity Payment')
                     ->orWhere('title', 'Bulk SMS')
                     ->orWhere('title', 'Examination Result Payment');
-            })->whereBetween('created_at', [
+            })->where('status',1)->whereBetween('created_at', [
                 Carbon::createFromDate(2025, $month, 1)->startOfMonth(),
                 Carbon::createFromDate(2025, $month, 1)->endOfMonth()
             ])->count();
@@ -195,7 +195,6 @@ class ManagerController extends Controller
     public function purchase_records_2024() {
         $data['active'] = 'user_orders';
         $data['user'] = Auth::user();
-
         $data['total_transactions'] = Transaction::where(function($query) {
             $query->where('title', 'Data Purchase')
                 ->orWhere('title', 'Airtime Purchase')
@@ -203,8 +202,7 @@ class ManagerController extends Controller
                 ->orWhere('title', 'Electricity Payment')
                 ->orWhere('title', 'Bulk SMS')
                 ->orWhere('title', 'Examination Result Payment');
-        })->whereYear('created_at', '2024')->count();
-        
+        })->where('status',1)->whereYear('created_at', '2024')->count();
         foreach (range(1, 12) as $month) {
             $monthName = strtolower(Carbon::createFromDate(2024, $month, 1)->format('F'));
         
@@ -218,7 +216,7 @@ class ManagerController extends Controller
             })->whereBetween('created_at', [
                 Carbon::createFromDate(2024, $month, 1)->startOfMonth(),
                 Carbon::createFromDate(2024, $month, 1)->endOfMonth()
-            ])->count();
+            ])->where('status',1)->count();
         }
         // dd($jan);
         return view('manager.purchase_records', $data);
