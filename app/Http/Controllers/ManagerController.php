@@ -24,8 +24,8 @@ class ManagerController extends Controller
     public function index()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'manager';
         $data['transactions'] = Transaction::where('title', 'Data Purchase')
@@ -40,8 +40,8 @@ class ManagerController extends Controller
     public function alltransactions()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
         $data['transactions'] = Transaction::latest()->take(150)->get();
@@ -52,8 +52,8 @@ class ManagerController extends Controller
     public function data_price()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
         $data['datas'] = Data::where('user_id', 0)->latest()->orderBy('network')->get();
@@ -81,8 +81,8 @@ class ManagerController extends Controller
     public function plan_status()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
         $data['mtn_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 1)->first();
@@ -294,8 +294,8 @@ class ManagerController extends Controller
     public function payment_transactions()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
         $data['payments'] = Transaction::where('title', 'Account Funding')
@@ -309,8 +309,8 @@ class ManagerController extends Controller
     public function user_management()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['allusers'] =  User::count();
 
@@ -323,8 +323,8 @@ class ManagerController extends Controller
     public function new_users()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['allusers'] =  User::count();
 
@@ -354,8 +354,8 @@ class ManagerController extends Controller
     {
         $data['user'] = $user =  Auth::user();
 
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
 
@@ -390,8 +390,8 @@ class ManagerController extends Controller
     public function contact_gain()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
 
@@ -400,8 +400,8 @@ class ManagerController extends Controller
     public function admin_blog()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
         $data['blogs'] = Blog::latest()->get();
@@ -411,8 +411,8 @@ class ManagerController extends Controller
     public function create_blog()
     {
         $data['user'] = $user =  Auth::user();
-        if ($user->email !== 'fasanyafemi@gmail.com' || $user->email !== 'manager@gmail.com') {
-            return redirect()->route('dashboard');
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
         }
         $data['active'] = 'super';
 
@@ -635,7 +635,7 @@ class ManagerController extends Controller
             if ($user) {
                 $user->pin =  hash('sha256', '1234');
                 $user->save();
-                return redirect()->route('dashboard')->with('message', 'Pin updated successfully');
+                return redirect('dashboard')->with('message', 'Pin updated successfully');
             }
         } else {
             return "Access Denied";
