@@ -1,4 +1,4 @@
-@extends('super.master')
+@extends('manager.master')
 
 @section('header')
 @endsection
@@ -18,9 +18,8 @@
                         <div class="card-title">
                             <h3 class="card-label">All Users({{ number_format($allusers) }})
                             </h3>
-                            <a href='/new_users' class='btn btn-success m-2'>New Users</a>
-                            <a href='/manager/user_records_2024' class='btn btn-primary m-2'>2024 User Records</a>
-                            <a href='/manager/user_records' class='btn btn-info m-2'>2025 User Records</a>
+                            <a href='/manager/new_users' class='btn btn-primary'>New Users</a>
+                            <a href='/manager/user_records' class='btn btn-success m-2'>User Records</a>
                         </div>
                      
                     </div>
@@ -62,11 +61,7 @@
                                         <a href='/user_transaction/{{ $user->uuid }}' class='btn btn-info btn-sm m-2'>Transactions</a>
                                         <a href='/user_purchase/{{ $user->uuid }}' class='btn btn-warning btn-sm m-2'>Payment History</a>
                                         <a href='https://wa.me/234{{ substr($user->phone,1) }}' class='btn btn-success btn-sm m-2'>Message</a>
-                                        @if($user->block == 1)
-                                        <a onclick='return confirm("Are you sure you want to unblock this user?")' href='/block_user/{{ $user->uuid }}' class='btn btn-secondary btn-sm m-2'>Unblock User</a>
-                                        @else 
-                                        <a onclick='return confirm("Are you sure you want to block this user?")' href='/block_user/{{ $user->uuid }}' class='btn btn-light-danger btn-sm m-2'>Block User</a>
-                                        @endif
+                                       
                                         @if($user->upgrade == 0)
                                         <a onclick='return confirm("Are you sure you want to upgrade this user?")' href='/upgrade_user/{{ $user->uuid }}' class='btn btn-secondary btn-sm m-2'>Upgrade User</a>
                                         @else 
@@ -75,8 +70,7 @@
                                         <a onclick='return confirm("Are you sure you want to reset this users password?")' href='/reset_password/{{ $user->uuid }}' class='btn btn-light-warning btn-sm m-2'>Reset Password</a>
                                         <a onclick='return confirm("Are you sure you want to reset this users pin?")' href='/reset_pin/{{ $user->uuid }}' class='btn btn-light-info btn-sm m-2'>Reset Pin</a>
 
-                                        <a href='/delete_user/{{ $user->uuid }}' onclick="return confirm('Are you sure you want to delete this user');" class='btn btn-danger btn-sm m-2'>Delete User</a>
-                                    </td>
+                                     </td>
                                 </tr>
                                 @endforeach
 

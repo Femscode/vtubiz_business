@@ -1,4 +1,4 @@
-@extends('super.master')
+@extends('manager.master')
 
 @section('header')
 @endsection
@@ -16,11 +16,8 @@
                 <div class="card card-custom">
                     <div class="card-header flex-wrap border-0 pt-6 pb-0">
                         <div class="card-title">
-                            <h3 class="card-label">User Transactions
+                            <h3 class="card-label">Payment Transactions
                             </h3>
-                            <a href="manager/purchase_records_2024" class="btn btn-success m-2">Purchase Records 2024</a>
-                            <a href="manager/purchase_records" class="btn btn-success m-2">Purchase Records</a>
-                        
                         </div>
                      
                     </div>
@@ -42,11 +39,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($transactions as $key => $tranx)
+                                @foreach($payments as $key => $tranx)
 
                                 <tr>
 
-                                    <td>{{ $tranx->reference }}<br><span class='text-danger'>{{ $tranx->user->name ?? ""}}</span><br><span class='text-success'>{{ $tranx->user->brand->brand_name ?? "Big Pel" }}</span></td>
+                                    <td>{{ $tranx->reference }}<br><span class='text-danger'>{{ $tranx->user->name ?? "" }}</span></td>
                                     <td>{{ $tranx->description }}</td>
                                     <td>₦{{ number_format($tranx->amount) }}</td>
                                     <td>₦{{ number_format($tranx->before) }}</td>
@@ -62,9 +59,7 @@
                                     
                                     </td>
                                     <td>
-                                        <a href='/fund_wallet/{{ $tranx->user->uuid ?? "" }}' class='btn btn-warning btn-sm'>Fund Wallet</a>
-                                        <a href='https://wa.me/{{ substr($tranx->user->phone ?? "09058744473", 1) }}' class='btn btn-success btn-sm'>Message</a>
-                                        <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-info btn-sm'>Print</a>
+                                        <a href='' class='btn btn-success btn-sm'>Print</a>
                                     </td>
                                 </tr>
                                 @endforeach

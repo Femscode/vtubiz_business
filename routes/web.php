@@ -630,6 +630,40 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/downloadCSV/', [App\Http\Controllers\SuperController::class, 'downloadCSV'])->name('downloadCSV');
         Route::any('/admin_delete_duplicate/{type}/{id}', [App\Http\Controllers\SubscriptionController::class, 'admin_delete_duplicate'])->name('admin_delete_duplicate');
     });
+
+    //route for manager
+    Route::group(['middleware' => 'auth'], function () {
+        // Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
+        Route::any('/manager', [App\Http\Controllers\ManagerController::class, 'index'])->name('manager');
+        Route::any('/manager/transactions', [App\Http\Controllers\ManagerController::class, 'alltransactions'])->name('alltransactions');
+        Route::any('/manager/user_records_2024', [App\Http\Controllers\ManagerController::class, 'user_records_2024'])->name('alltransactions');
+        Route::any('/manager/user_records', [App\Http\Controllers\ManagerController::class, 'user_records'])->name('alltransactions');
+        Route::any('/manager/purchase_records', [App\Http\Controllers\ManagerController::class, 'purchase_records'])->name('alltransactions');
+        Route::any('/manager/purchase_records_2024', [App\Http\Controllers\ManagerController::class, 'purchase_records_2024'])->name('alltransactions');
+        Route::any('/manager/admin_giveaway', [App\Http\Controllers\ManagerController::class, 'admin_giveaway'])->name('admin_giveaway');
+        Route::any('/manager/payment_transactions', [App\Http\Controllers\ManagerController::class, 'payment_transactions'])->name('all_payment_transactions');
+        Route::any('/manager/user_management', [App\Http\Controllers\ManagerController::class, 'user_management'])->name('user_management');
+        Route::any('/manager/new_users', [App\Http\Controllers\ManagerController::class, 'new_users'])->name('new_users');
+        Route::any('/manager/user_transaction/{id}', [App\Http\Controllers\ManagerController::class, 'user_transaction'])->name('user_transaction');
+         Route::any('/manager/plan_status', [App\Http\Controllers\ManagerController::class, 'plan_status'])->name('plan_status');
+        Route::any('/manager/plan_status/{network_id}/{type}', [App\Http\Controllers\ManagerController::class, 'update_plan_status'])->name('update_plan_status');
+        Route::any('/manager/upgrade_user/{id}', [App\Http\Controllers\ManagerController::class, 'upgrade_user'])->name('upgrade_user');
+        Route::any('/manager/reset_password/{id}', [App\Http\Controllers\ManagerController::class, 'reset_password'])->name('reset_password');
+        Route::any('/manager/reset_pin/{id}', [App\Http\Controllers\ManagerController::class, 'reset_pin'])->name('reset_pin');
+        Route::any('/manager/notifications/', [App\Http\Controllers\ManagerController::class, 'notifications'])->name('duplicate_transactions');
+        Route::any('/manager/duplicate_transactions/', [App\Http\Controllers\ManagerController::class, 'duplicate_transactions'])->name('duplicate_transactions');
+        Route::any('/manager/contact_gain/', [App\Http\Controllers\ManagerController::class, 'contact_gain'])->name('contact_gain');
+        Route::any('/manager/admin_blog/', [App\Http\Controllers\ManagerController::class, 'admin_blog'])->name('admin_blog');
+        Route::any('/manager/create_blog/', [App\Http\Controllers\ManagerController::class, 'create_blog'])->name('create_blog');
+        Route::post('/manager/saveblog', [App\Http\Controllers\ManagerController::class, 'saveblog'])->name('saveblog');
+        Route::any('/manager/editblog/{id}', [App\Http\Controllers\ManagerController::class, 'editblog'])->name('editblog');
+        Route::post('/manager/updateblog/', [App\Http\Controllers\ManagerController::class, 'updateblog'])->name('updateblog');
+        Route::get('/manager/changeblogstatus/{id}', [App\Http\Controllers\ManagerController::class, 'changeblogstatus'])->name('changeblogstatus');
+        Route::any('/manager/deleteblog/{id}', [App\Http\Controllers\ManagerController::class, 'deleteblog'])->name('deleteblog');
+        Route::any('/manager/downloadCSV/', [App\Http\Controllers\ManagerController::class, 'downloadCSV'])->name('downloadCSV');
+        Route::any('/manager/admin_delete_duplicate/{type}/{id}', [App\Http\Controllers\SubscriptionController::class, 'admin_delete_duplicate'])->name('admin_delete_duplicate');
+    });
+
 });
 Route::get('/{slug}', [App\Http\Controllers\FunGiveAwayController::class, 'giveawayHome'])->name('giveawayHome');
 

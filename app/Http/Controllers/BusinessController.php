@@ -866,7 +866,7 @@ class BusinessController extends Controller
         //     'notf_id' => 'required'
         // ]);
         $user = Auth::user();
-        if ($user->email == 'fasanyafemi@gmail.com') {
+        if ($user->email == 'fasanyafemi@gmail.com' || $user->email == 'manager@gmail.com') {
             $notification = Notification::find($request->notf_id);
             $notifications = Notification::where('type', $notification->type)->get();
             foreach ($notifications as $notification) {

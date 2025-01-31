@@ -1,4 +1,4 @@
-@extends('super.master')
+@extends('manager.master')
 
 @section('header')
 @endsection
@@ -9,25 +9,22 @@
     <div id="kt_app_content" class="app-content  flex-column-fluid ">
         <!--begin::Profile Account Information-->
         <div class="row">
-           
+
             <!--begin::Content-->
             <div class="col-md-12">
                 <!--begin::Card-->
                 <div class="card card-custom">
                     <div class="card-header flex-wrap border-0 pt-6 pb-0">
                         <div class="card-title">
-                            <h3 class="card-label">User Transactions
+                            <h3 class="card-label">Payment Transactions
                             </h3>
-                            <a href="manager/purchase_records_2024" class="btn btn-success m-2">Purchase Records 2024</a>
-                            <a href="manager/purchase_records" class="btn btn-success m-2">Purchase Records</a>
-                        
                         </div>
-                     
+
                     </div>
                     <div class="card-body">
                         <div class='col-md-6'>
                             <input type="text" class="form-control" placeholder="Search..." id="searchTable">
-                            </div>
+                        </div>
                         <table class="datatable table table-striped">
                             <thead>
                                 <tr>
@@ -42,29 +39,64 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($transactions as $key => $tranx)
+                                @foreach($payments as $key => $tranx)
 
                                 <tr>
 
-                                    <td>{{ $tranx->reference }}<br><span class='text-danger'>{{ $tranx->user->name ?? ""}}</span><br><span class='text-success'>{{ $tranx->user->brand->brand_name ?? "Big Pel" }}</span></td>
+                                    <td>{{ $tranx->reference }}<br><span class='text-danger'>{{ $tranx->user->name ?? ""
+                                            }}</span></td>
                                     <td>{{ $tranx->description }}</td>
                                     <td>₦{{ number_format($tranx->amount) }}</td>
                                     <td>₦{{ number_format($tranx->before) }}</td>
                                     <td>₦{{ number_format($tranx->after) }}</td>
                                     <td>{{ $tranx->type }}</td>
-                                    <td>
-                                        {{ Date('d-m-Y H:i',strtotime($tranx->created_at)) }}
-                                        @if($tranx->status == 1)
+                                    <td>@if($tranx->status == 1)
                                         <span class='badge badge-light-success'>Success</span>
+                                        @elseif($tranx->status == 2)
+                                        <span class='badge badge-light-warning'>Pending</span>
                                         @else
                                         <span class='badge badge-light-danger'>Failed</span>
                                         @endif
-                                    
+
                                     </td>
                                     <td>
-                                        <a href='/fund_wallet/{{ $tranx->user->uuid ?? "" }}' class='btn btn-warning btn-sm'>Fund Wallet</a>
-                                        <a href='https://wa.me/{{ substr($tranx->user->phone ?? "09058744473", 1) }}' class='btn btn-success btn-sm'>Message</a>
-                                        <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-info btn-sm'>Print</a>
+                                        @if($tranx->status == 2)
+                                        <a onclick="
+                                         event.preventDefault();
+                                        Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: 'You are about to approve this withdraw.',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, approve!'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.href = '/approve_withdraw/{{ $tranx->id }}';
+                                            }
+                                        });
+                                    " href='/approve_withdraw/{{ $tranx->id }}'
+                                            class='btn btn-success btn-sm'>Approve</a>
+                                            @else
+                                            <a onclick="
+                                            event.preventDefault();
+                                           Swal.fire({
+                                               title: 'Are you sure?',
+                                               text: 'You are about to deny this withdraw.',
+                                               icon: 'warning',
+                                               showCancelButton: true,
+                                               confirmButtonColor: '#3085d6',
+                                               cancelButtonColor: '#d33',
+                                               confirmButtonText: 'Yes, revert!'
+                                           }).then((result) => {
+                                               if (result.isConfirmed) {
+                                                   window.location.href = '/revert_withdraw/{{ $tranx->id }}';
+                                               }
+                                           });
+                                       " href='/revert_withdraw/{{ $tranx->id }}'
+                                               class='btn btn-danger btn-sm'>Revert</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
