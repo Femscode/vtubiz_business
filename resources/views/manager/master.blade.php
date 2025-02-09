@@ -33,7 +33,7 @@
 <!--begin::Body-->
 
 <body id="kt_app_body" data-kt-app-header-fixed-mobile="true" data-kt-app-toolbar-enabled="true" class="app-default">
-   
+
     <!--begin::App-->
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
         <!--begin::Page-->
@@ -101,16 +101,7 @@
             my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0
         " id="kt_app_header_menu" data-kt-menu="true">
                                 <!--begin:Menu item-->
-                                <a href='/manager/transactions'
-                                    class="menu-item @if($active == 'dashboard') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span
-                                            class="menu-title">All Transactions</span><span
-                                            class="menu-arrow d-lg-none"></span></span>
-                                    <!--end:Menu link-->
-                                    <!--begin:Menu sub-->
 
-                                    <!--end:Menu sub-->
-                                </a>
                                 <a href='/manager'
                                     class="menu-item @if($active == 'dashboard') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span
@@ -128,6 +119,13 @@
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Payment Transactions</span></span>
 
                                 </a>
+                                <a href='/manager/duplicate_transactions'
+                                    class="menu-item  @if($active == 'withdrawal') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <span class="menu-link"><span class="menu-title">Pending Transactions
+                                        </span></span>
+
+
+                                </a>
                                 <a href='/my-giveaway' class="menu-item  @if($active == 'pay_cttaste') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Giveaways</span></span>
 
@@ -140,7 +138,7 @@
 
                                 <!--end:Menu item-->
                                 <!--begin:Menu item-->
-                               
+
                                 <a href='/manager/plan_status'
                                     class="menu-item @if($active == 'change_pin') here show menu-here-bg @endif menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Plan Status
@@ -148,8 +146,8 @@
                                     <!--end:Menu link-->
 
                                 </a>
-                               
-                
+
+
                                 <a href='/manager/contact_gain'
                                     class="menu-item  @if($active == 'withdrawal') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Contact Gain
@@ -171,13 +169,7 @@
                                     <!--end:Menu link-->
 
                                 </a>
-                                <a href='/manager/duplicate_transactions'
-                                    class="menu-item  @if($active == 'withdrawal') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Duplicate Transactions
-                                        </span></span>
-                                    <!--end:Menu link-->
 
-                                </a>
                                 <!--end:Menu item-->
                             </div>
                             <!--end::Menu-->
@@ -526,7 +518,7 @@
                                     </h1>
                                     <!--end::Title-->
                                 </div>
-                              
+
                             </div>
                             <!--end::Toolbar wrapper--->
                         </div>

@@ -131,7 +131,7 @@ class SuperController extends Controller
         // dd($request->all());
 
         $datas = Data::where('plan_id', $request->plan_id)
-            ->where('user_id', '!=', 888)
+            // ->where('user_id', '!=', 888)
             ->get();
         foreach ($datas as $data) {
             $data->plan_name = $request->plan_name;

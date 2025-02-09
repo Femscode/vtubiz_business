@@ -457,6 +457,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/email_marketing', [BusinessController::class, 'email_marketing'])->name('email_marketing');
     Route::any('/send_bulk_email', [BusinessController::class, 'sendBulkEmail'])->name('send_bulk_email');
     Route::any('/fund_wallet/{id}', [BusinessController::class, 'fund_wallet'])->name('fund_wallet');
+    Route::any('/refund/{id}', [BusinessController::class, 'refund'])->name('refund');
     Route::any('/credit_user', [BusinessController::class, 'credit_user'])->name('credit_user');
     Route::any('/transactions/{id}', [BusinessController::class, 'transactions'])->name('transactions');
     Route::any('/block_user/{id}', [BusinessController::class, 'block_user'])->name('transactions');

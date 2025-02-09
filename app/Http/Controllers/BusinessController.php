@@ -917,6 +917,29 @@ class BusinessController extends Controller
             return Redirect()->route('dashboard')->with('Message', 'Permission Denied');
         }
     }
+    public function refund($id)
+    {
+        //check if the user belongs to the brand
+       $user = Auth::user();
+        if ( $user->email == 'fasanyafemi@gmail.com' || $user->email == 'manager@gmail.com') {
+           
+            $transaction = Transaction::find($id);
+         
+            if ($transaction->refund_status == 0 && substr($transaction->reference, 0, 7) == 'data_pu') {
+                $user = User::find($transaction->user_id)->first();
+                $user->balance = $user->balance + $transaction->amount;
+                $user->save();
+                $details = "Manual funding of " . $transaction->amount;
+                $this->create_transaction('Manual Funding', $transaction->reference, $details, 'credit', $transaction->amount, $user->id, 1, $transaction->amount);
+                return redirect()->back()->with('message','User refunded successfully!');
+            } else {
+                return redirect()->back()->with('error','Invalid Operation!');
+
+            }
+        } else {
+            return Redirect()->route('dashboard')->with('Message', 'Permission Denied');
+        }
+    }
     public function credit_user(Request $request)
     {
         //check if the user belongs to the brand
@@ -942,8 +965,8 @@ class BusinessController extends Controller
             return redirect()->route('users')->with('message', 'User Credited Successfully');
         }
         if ($user->company_id == $company->id) {
-            if(intval($request->amount) < 50) {
-                return redirect()->back()->with('message','Minimum amount is NGN50');
+            if (intval($request->amount) < 50) {
+                return redirect()->back()->with('message', 'Minimum amount is NGN50');
             }
             $reference = "man_fund_" . Str::random(7);
             $details = "Manual funding of " . $request->amount;

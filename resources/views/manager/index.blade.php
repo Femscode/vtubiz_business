@@ -60,7 +60,9 @@
                                     
                                     </td>
                                     <td>
-                                        <a href='/fund_wallet/{{ $tranx->user->uuid ?? "" }}' class='btn btn-warning btn-sm'>Fund Wallet</a>
+                                        @if(substr($tranx->reference,0,7) == 'data_pur' && $tranx->refund_status == 0)
+                                        <a href='/refund/{{ $tranx->id ?? "" }}' class='btn btn-warning btn-sm'>Refund </a>
+                                        @endif
                                         <a href='https://wa.me/{{ substr($tranx->user->phone ?? "09058744473", 1) }}' class='btn btn-success btn-sm'>Message</a>
                                         <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-info btn-sm'>Print</a>
                                     </td>
