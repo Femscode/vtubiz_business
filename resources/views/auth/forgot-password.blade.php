@@ -5,14 +5,14 @@
 <head>
     <title>VTUBIZ | Reset Password</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Payment Portal For CT_Taste" />
-    <meta name="keywords" content="Quick pay with CT_Taste" />
+    <meta name="description" content="Home of affordable data plans and instant digital services." />
+    <meta name="keywords" content="VTUBIZ" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="CT_Taste" />
-    <meta property="og:url" content="https://cttaste.com" />
-    <meta property="og:site_name" content="CT_Taste" />
+    <meta property="og:title" content="VTUBIZ" />
+    <meta property="og:url" content="https://vtubiz.com" />
+    <meta property="og:site_name" content="VTUBIZ" />
     <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
 
     @laravelPWA
