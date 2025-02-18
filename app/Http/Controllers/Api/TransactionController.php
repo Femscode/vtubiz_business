@@ -139,8 +139,15 @@ class TransactionController extends Controller
                 return $response;
             } elseif ($tranx->title == "Data Purchase") {
                 $phone_number = $tranx->phone_number;
+                if($user->upgrade == 1) {
+                    $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                    
+                } else {
+                    $data = Data::where('user_id', 0)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+    
+                }
 
-                $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                // $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
                 if ($data == null) {
                     $response = [
                         'success' => false,

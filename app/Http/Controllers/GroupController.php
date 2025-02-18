@@ -161,7 +161,14 @@ class GroupController extends Controller
             'phone' => 'required',
             'plan_id' => 'required'
         ]);
-        $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan_id)->where('network', $request->network)->first();
+        if($user->upgrade == 1) {
+            $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+            
+        } else {
+            $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+
+        }
+        // $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan_id)->where('network', $request->network)->first();
         $amount =  $data->admin_price;
         $data = $request->all();
         $data['amount'] = $amount;

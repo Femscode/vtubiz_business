@@ -581,7 +581,14 @@ trait TransactionTrait
             $tranx = Transaction::find($schedule->transaction_id);
             $user = User::find($tranx->user_id);
             if ($schedule->title == 'Data Purchase') {
-                $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                if($user->upgrade == 1) {
+                    $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                    
+                } else {
+                    $data = Data::where('user_id', 0)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+    
+                }
+                // $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
                 // dd($data);
                 if ($data == null) {
                     $tranx->status = 0;

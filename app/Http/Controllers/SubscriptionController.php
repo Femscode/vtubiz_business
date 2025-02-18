@@ -258,7 +258,13 @@ class SubscriptionController extends Controller
         // dd($request->all());
         if ($request->has('selectedDate')) {
             $reference = "schedule_purchase_data_" . Str::random(5);
-            $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+            if($user->upgrade == 1) {
+                $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+                
+            } else {
+                $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+
+            }
             $data_price =  $data->admin_price;
 
             $details = "Data Purchase of " . $data->data_price . " on " . $request->phone_number;
@@ -291,8 +297,14 @@ class SubscriptionController extends Controller
             return "schedule_saved";
         }
         // dd($request->all());
-        $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
-        $data_price =  $data->admin_price;
+        if($user->upgrade == 1) {
+            $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+            
+        } else {
+            $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+
+        }
+         $data_price =  $data->admin_price;
         $real_dataprice = $data->data_price;
         if ($data == null) {
             $response = [
@@ -389,7 +401,14 @@ class SubscriptionController extends Controller
             $phone_number = "0" . $phone_number;
         }
 
-        $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
+        if($user->upgrade == 1) {
+            $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
+            
+        } else {
+            $data = Data::where('user_id', 0)->where('plan_id', $plan_id)->where('network', $network)->first();
+
+        }
+        // $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
         $data_price =  $data->admin_price;
         $real_dataprice = $data->data_price;
         if ($data == null) {
@@ -482,7 +501,14 @@ class SubscriptionController extends Controller
             $phone_number = "0" . $phone_number;
         }
 
-        $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
+        if($user->upgrade == 1) {
+            $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
+            
+        } else {
+            $data = Data::where('user_id', 0)->where('plan_id', $plan_id)->where('network', $network)->first();
+
+        }
+        // $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
         $data_price =  $data->admin_price;
         $real_dataprice = $data->data_price;
         if ($data == null) {
@@ -567,7 +593,14 @@ class SubscriptionController extends Controller
             $tranx = Transaction::find($schedule->transaction_id);
             $user = User::find($tranx->user_id);
             if ($schedule->title == 'Data Purchase') {
-                $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                if($user->upgrade == 1) {
+                    $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                    
+                } else {
+                    $data = Data::where('user_id', 0)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+    
+                }
+                // $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
                 // dd($data);
                 if ($data == null) {
                     $tranx->status = 0;
@@ -980,7 +1013,14 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
 
-            $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+            if($user->upgrade == 1) {
+                $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+                
+            } else {
+                $data = Data::where('user_id', 0)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
+
+            }
+            // $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
             if ($data == null) {
                 $response = [
                     'success' => false,
