@@ -149,7 +149,7 @@ class HomeController extends Controller
         } else {
 
             // $data['banks'] = Bank::all();
-            $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+            $notification = Notification::where('user_id', 1)->where('type', 'General Notification')->first();
 
             if ($notification && $notification->title !== null) {
                 $data['notification'] = $notification;
@@ -176,7 +176,7 @@ class HomeController extends Controller
 
 
         // $data['banks'] = Bank::all();
-        $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+        $notification = Notification::where('user_id', 1)->where('type', 'General Notification')->first();
 
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -259,7 +259,7 @@ class HomeController extends Controller
         $data['active'] = 'fundwallet';
         $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
 
-        $notification = Notification::where('user_id', $user->company_id)->where('type', 'Payment Notification')->first();
+        $notification = Notification::where('user_id', 1)->where('type', 'Payment Notification')->first();
 
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;

@@ -148,7 +148,7 @@ class BusinessController extends Controller
 
 
         // $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
-        $notification = Notification::where('user_id', $user->company_id)->where('type', 'General Notification')->first();
+        $notification = Notification::where('user_id', 1)->where('type', 'General Notification')->first();
 
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -314,7 +314,7 @@ class BusinessController extends Controller
             return redirect('/user-fundwallet');
         }
         $data['active'] = 'fundwallet';
-        $notification = Notification::where('user_id', $user->company_id)->where('type', 'Payment Notification')->first();
+        $notification = Notification::where('user_id', 1)->where('type', 'Payment Notification')->first();
 
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
