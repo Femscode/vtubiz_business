@@ -810,4 +810,17 @@ class FunGiveAwayController extends Controller
     {
         $this->run_data_giveaway();
     }
+    public function clear_duplicate_transaction() {
+        $twoMinutesAgo = Carbon::now()->subMinutes(2);
+        $dd = DuplicateTransaction::where('created_at', '<', $twoMinutesAgo)->delete();
+
+            $response = [
+                'success' => true,
+                'message' => 'Duplicate cleared ',
+                'data' => null,
+            ];
+    
+            return response()->json($response);
+
+    }
 }
