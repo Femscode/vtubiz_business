@@ -346,7 +346,9 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                    
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -449,7 +451,9 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                    
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -964,7 +968,7 @@ class SubscriptionController extends Controller
                 $response = [
                     'type' => 'duplicate',
                     'success' => false,
-                    'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                    'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
                     'auto_refund_status' => 'Nil'
                 ];
 
@@ -1066,7 +1070,8 @@ class SubscriptionController extends Controller
                 $response = [
                     'type' => 'duplicate',
                     'success' => false,
-                    'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                    'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                    // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                     'auto_refund_status' => 'Nil'
                 ];
 
@@ -1167,7 +1172,8 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -1275,7 +1281,8 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -1379,7 +1386,8 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -1548,7 +1556,8 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
@@ -1667,7 +1676,8 @@ class SubscriptionController extends Controller
             $response = [
                 'type' => 'duplicate',
                 'success' => false,
-                'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
+                'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
+                // 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
 
