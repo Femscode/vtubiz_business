@@ -26,7 +26,10 @@ class MailPayController extends Controller
         
         try {
             $client->setAuthConfig($credentialsPath);
-            $client->addScope(Google_Service_Gmail::GMAIL_READONLY);
+            $client->addScope([
+                'https://www.googleapis.com/auth/gmail.readonly',
+                'https://www.googleapis.com/auth/gmail.modify'
+            ]);
             $client->setAccessType('offline');
             $client->setPrompt('consent');
             
