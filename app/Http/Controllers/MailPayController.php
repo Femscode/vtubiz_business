@@ -169,6 +169,32 @@ class MailPayController extends Controller
     
     public function handleGoogleCallback(Request $request)
     {
+        if (!$request->has('code')) {
+            return redirect()->back()->with('error', 'Authorization code not received');
+        }
+
+        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
+        
+        // Exchange code for token
+        $response = Http::post('https://oauth2.googleapis.com/token', [
+            'client_id' => $credentials['web']['client_id'],
+            'client_secret' => $credentials['web']['client_secret'],
+            'code' => $request->code,
+            'redirect_uri' => $credentials['web']['redirect_uris'][0],
+            'grant_type' => 'authorization_code'
+        ]);
+        
+        if ($response->successful()) {
+            $token = $response->json();
+            $tokenPath = storage_path('app/gmail_token.json');
+            file_put_contents($tokenPath, json_encode($token));
+            return redirect()->route('process.emails');
+        }
+        
+        return redirect()->back()->with('error', 'Failed to obtain access token');
+    }
+    public function oldhandleGoogleCallback(Request $request)
+    {
         $client = new Google_Client();
         $client->setAuthConfig(public_path('gmail_credentials.json'));
         
