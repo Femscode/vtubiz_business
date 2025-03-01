@@ -17,6 +17,82 @@ class MailPayController extends Controller
 {
     //
     function processCreditAlertEmails() {
+        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
+        $tokenPath = storage_path('app/gmail_token.json');
+        
+        try {
+            // Get or refresh access token
+            if (!file_exists($tokenPath)) {
+                return redirect()->away('https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                    'client_id' => $credentials['web']['client_id'],
+                    'redirect_uri' => $credentials['web']['redirect_uris'][0],
+                    'response_type' => 'code',
+                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
+                    'access_type' => 'offline',
+                    'prompt' => 'consent'
+                ]));
+            }
+
+            $token = json_decode(file_get_contents($tokenPath), true);
+            
+            // Check if token needs refresh
+            if (time() > $token['expires_in']) {
+                $response = Http::post('https://oauth2.googleapis.com/token', [
+                    'client_id' => $credentials['web']['client_id'],
+                    'client_secret' => $credentials['web']['client_secret'],
+                    'refresh_token' => $token['refresh_token'],
+                    'grant_type' => 'refresh_token'
+                ]);
+                
+                if ($response->successful()) {
+                    $token = $response->json();
+                    file_put_contents($tokenPath, json_encode($token));
+                }
+            }
+
+            // Make API request
+            $response = Http::withToken($token['access_token'])
+                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                ]);
+
+            $messages = $response->json();
+            dd($messages);
+            
+            // Process messages
+            if (!empty($messages['messages'])) {
+                foreach ($messages['messages'] as $message) {
+                    $messageDetails = Http::withToken($token['access_token'])
+                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}")
+                        ->json();
+                        
+                    $emailContent = $this->decodeEmailContent($messageDetails);
+                    $transaction = $this->extractTransactionDetails($emailContent);
+                    
+                    if ($transaction) {
+                        $this->creditUserAccount($transaction);
+                    }
+                }
+            }
+            
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    private function decodeEmailContent($messageDetails) {
+        $parts = $messageDetails['payload']['parts'] ?? [$messageDetails['payload']];
+        $content = '';
+        
+        foreach ($parts as $part) {
+            if ($part['mimeType'] === 'text/plain') {
+                $content .= base64_decode(str_replace(['-', '_'], ['+', '/'], $part['body']['data']));
+            }
+        }
+        
+        return $content;
+    }
+    function oldprocessCreditAlertEmails() {
         $client = new Google_Client();
         
         $credentialsPath = public_path('gmail_credentials.json');
