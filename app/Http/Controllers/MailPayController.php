@@ -23,14 +23,20 @@ class MailPayController extends Controller
         try {
             // Get or refresh access token
             if (!file_exists($tokenPath)) {
-                return redirect()->away('https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
                     'client_id' => $credentials['web']['client_id'],
                     'redirect_uri' => $credentials['web']['redirect_uris'][0],
                     'response_type' => 'code',
                     'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
                     'access_type' => 'offline',
                     'prompt' => 'consent'
-                ]));
+                ]);
+                
+                return response()->json([
+                    'status' => 'auth_required',
+                    'auth_url' => $authUrl,
+                    'message' => 'Please visit this URL to authorize the application'
+                ]);
             }
 
             $token = json_decode(file_get_contents($tokenPath), true);
@@ -112,11 +118,12 @@ class MailPayController extends Controller
         $tokenPath = storage_path('app/gmail_token.json');
         
         try {
-            // Get or refresh access token
+            // Debug token file existence
             if (!file_exists($tokenPath)) {
+                \Log::info('Token file not found, initiating auth flow');
                 $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
                     'client_id' => $credentials['web']['client_id'],
-                    'redirect_uri' => url('/api/gmail/callback'), // Updated to match API route
+                    'redirect_uri' => url('/api/gmail/callback'),
                     'response_type' => 'code',
                     'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
                     'access_type' => 'offline',
@@ -125,11 +132,13 @@ class MailPayController extends Controller
                 
                 return response()->json([
                     'status' => 'auth_required',
-                    'auth_url' => $authUrl
+                    'auth_url' => $authUrl,
+                    'message' => 'Please visit this URL to authorize the application'
                 ]);
             }
 
             $token = json_decode(file_get_contents($tokenPath), true);
+            \Log::info('Current token:', ['token' => $token]); // Debug token content
             
             // Check if token needs refresh
             if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
