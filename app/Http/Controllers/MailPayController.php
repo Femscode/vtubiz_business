@@ -113,7 +113,7 @@ class MailPayController extends Controller
         return redirect()->back()->with('error', 'Failed to obtain access token');
     }
 
-    function processCreditAlertEmails() {
+    function newnewprocessCreditAlertEmails() {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
         
@@ -180,6 +180,65 @@ class MailPayController extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ], 500);
+        }
+    }
+    function processCreditAlertEmails() {
+        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
+        $tokenPath = storage_path('app/gmail_token.json');
+        
+        try {
+            // Check if token file exists
+            if (!file_exists($tokenPath)) {
+                \Log::info('Token file not found, initiating auth flow');
+                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                    'client_id' => $credentials['web']['client_id'],
+                    'redirect_uri' => url('/api/gmail/callback'),
+                    'response_type' => 'code',
+                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
+                    'access_type' => 'offline',
+                    'prompt' => 'consent'
+                ]);
+                
+                return redirect()->away($authUrl);
+            }
+
+            $token = json_decode(file_get_contents($tokenPath), true);
+            \Log::info('Current token:', ['token' => $token]);
+            
+            // Check if token needs refresh
+            if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
+                if (isset($token['refresh_token'])) {
+                    $response = Http::post('https://oauth2.googleapis.com/token', [
+                        'client_id' => $credentials['web']['client_id'],
+                        'client_secret' => $credentials['web']['client_secret'],
+                        'refresh_token' => $token['refresh_token'],
+                        'grant_type' => 'refresh_token'
+                    ]);
+                    
+                    if ($response->successful()) {
+                        $newToken = $response->json();
+                        $newToken['refresh_token'] = $token['refresh_token'];
+                        $newToken['created'] = time();
+                        file_put_contents($tokenPath, json_encode($newToken));
+                        $token = $newToken;
+                    }
+                } else {
+                    @unlink($tokenPath);
+                    return redirect()->away($authUrl);
+                }
+            }
+
+            // Make API request
+            $response = Http::withToken($token['access_token'])
+                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                ]);
+
+            return $response->json();
+            
+        } catch(\Exception $e) {
+            \Log::error('Gmail API Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
         }
     }
 
