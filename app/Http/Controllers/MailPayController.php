@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 class MailPayController extends Controller
 {
     //
-    function processCreditAlertEmails() {
+    function newprocessCreditAlertEmails() {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
         
@@ -80,7 +80,7 @@ class MailPayController extends Controller
         }
     }
 
-    public function handleGoogleCallback(Request $request)
+    public function newhandleGoogleCallback(Request $request)
     {
         if (!$request->has('code')) {
             return redirect()->back()->with('error', 'Authorization code not received');
@@ -105,6 +105,112 @@ class MailPayController extends Controller
         }
         
         return redirect()->back()->with('error', 'Failed to obtain access token');
+    }
+
+    function processCreditAlertEmails() {
+        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
+        $tokenPath = storage_path('app/gmail_token.json');
+        
+        try {
+            // Get or refresh access token
+            if (!file_exists($tokenPath)) {
+                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                    'client_id' => $credentials['web']['client_id'],
+                    'redirect_uri' => url('/api/gmail/callback'), // Updated to match API route
+                    'response_type' => 'code',
+                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
+                    'access_type' => 'offline',
+                    'prompt' => 'consent'
+                ]);
+                
+                return response()->json([
+                    'status' => 'auth_required',
+                    'auth_url' => $authUrl
+                ]);
+            }
+
+            $token = json_decode(file_get_contents($tokenPath), true);
+            
+            // Check if token needs refresh
+            if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
+                if (isset($token['refresh_token'])) {
+                    $response = Http::post('https://oauth2.googleapis.com/token', [
+                        'client_id' => $credentials['web']['client_id'],
+                        'client_secret' => $credentials['web']['client_secret'],
+                        'refresh_token' => $token['refresh_token'],
+                        'grant_type' => 'refresh_token'
+                    ]);
+                    
+                    if ($response->successful()) {
+                        $newToken = $response->json();
+                        // Preserve refresh token as it's not always returned
+                        $newToken['refresh_token'] = $token['refresh_token'];
+                        $newToken['created'] = time();
+                        file_put_contents($tokenPath, json_encode($newToken));
+                        $token = $newToken;
+                    }
+                } else {
+                    @unlink($tokenPath);
+                    return response()->json([
+                        'status' => 'auth_required',
+                        'message' => 'Reauthorization required'
+                    ]);
+                }
+            }
+
+            // Make API request
+            $response = Http::withToken($token['access_token'])
+                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                ]);
+
+            return response()->json($response->json());
+            
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function handleGoogleCallback(Request $request)
+    {
+        try {
+            if (!$request->has('code')) {
+                throw new \Exception('Authorization code not received');
+            }
+
+            $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
+            
+            $response = Http::post('https://oauth2.googleapis.com/token', [
+                'client_id' => $credentials['web']['client_id'],
+                'client_secret' => $credentials['web']['client_secret'],
+                'code' => $request->code,
+                'redirect_uri' => url('/api/gmail/callback'), // Updated to match API route
+                'grant_type' => 'authorization_code'
+            ]);
+            
+            if ($response->successful()) {
+                $token = $response->json();
+                $token['created'] = time();
+                $tokenPath = storage_path('app/gmail_token.json');
+                file_put_contents($tokenPath, json_encode($token));
+                
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Authentication successful'
+                ]);
+            }
+            
+            throw new \Exception('Failed to obtain access token');
+            
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
     private function decodeEmailContent($messageDetails) {
         $parts = $messageDetails['payload']['parts'] ?? [$messageDetails['payload']];
