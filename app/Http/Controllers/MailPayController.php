@@ -228,6 +228,54 @@ class MailPayController extends Controller
                 }
             }
 
+                                // Get message IDs first
+                                $response = Http::withToken($token['access_token'])
+                                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                                ]);
+                
+                            $messages = $response->json();
+                            $emailContents = [];
+                
+                            // Fetch full message content for each message
+                            if (!empty($messages['messages'])) {
+                                foreach ($messages['messages'] as $message) {
+                                    $messageDetails = Http::withToken($token['access_token'])
+                                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
+                                            'format' => 'full'
+                                        ])->json();
+                                    
+                                    $content = $this->decodeEmailContent($messageDetails);
+                                    
+                                    // Extract sender name from headers
+                                    $headers = $messageDetails['payload']['headers'];
+                                    $sender = '';
+                                    $date = '';
+                                    foreach ($headers as $header) {
+                                        if ($header['name'] === 'From') {
+                                            $sender = preg_replace('/<.*?>/', '', $header['value']);
+                                        }
+                                        if ($header['name'] === 'Date') {
+                                            $date = date('Y-m-d H:i:s', strtotime($header['value']));
+                                        }
+                                    }
+                                    
+                                    // Extract amount and narration using regex
+                                    preg_match('/₦([\d,]+)/', $content, $amountMatch);
+                                    preg_match('/Narration:\s*(.*?)(?:\n|$)/i', $content, $narrationMatch);
+                                    
+                                    $emailContents[] = [
+                                        'sender' => trim($sender),
+                                        'amount' => $amountMatch[1] ?? '',
+                                        'date' => $date,
+                                        'narration' => $narrationMatch[1] ?? '',
+                                        'raw_content' => $content // keeping raw content for debugging
+                                    ];
+                                }
+                            }
+                
+                            return response()->json($emailContents);
+
                         // Get message IDs first
                         $response = Http::withToken($token['access_token'])
                         ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
