@@ -228,6 +228,32 @@ class MailPayController extends Controller
                 }
             }
 
+                        // Get message IDs first
+                        $response = Http::withToken($token['access_token'])
+                        ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                            'q' => 'subject:"Credit Alert" newer_than:1d'
+                        ]);
+        
+                    $messages = $response->json();
+                    $emailContents = [];
+        
+                    // Fetch full message content for each message
+                    if (!empty($messages['messages'])) {
+                        foreach ($messages['messages'] as $message) {
+                            $messageDetails = Http::withToken($token['access_token'])
+                                ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
+                                    'format' => 'full'
+                                ])->json();
+                            
+                            $emailContents[] = [
+                                'id' => $message['id'],
+                                'content' => $this->decodeEmailContent($messageDetails)
+                            ];
+                        }
+                    }
+        
+                    return response()->json($emailContents);
+
             // Make API request
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
