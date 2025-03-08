@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Mail;
 class MailPayController extends Controller
 {
     //
-    function newprocessCreditAlertEmails() {
+    function newprocessCreditAlertEmails()
+    {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
-        
+
         try {
             // Get or refresh access token
             if (!file_exists($tokenPath)) {
@@ -31,7 +32,7 @@ class MailPayController extends Controller
                     'access_type' => 'offline',
                     'prompt' => 'consent'
                 ]);
-                
+
                 return response()->json([
                     'status' => 'auth_required',
                     'auth_url' => $authUrl,
@@ -40,7 +41,7 @@ class MailPayController extends Controller
             }
 
             $token = json_decode(file_get_contents($tokenPath), true);
-            
+
             // Check if token needs refresh
             if (time() > $token['expires_in']) {
                 $response = Http::post('https://oauth2.googleapis.com/token', [
@@ -49,7 +50,7 @@ class MailPayController extends Controller
                     'refresh_token' => $token['refresh_token'],
                     'grant_type' => 'refresh_token'
                 ]);
-                
+
                 if ($response->successful()) {
                     $token = $response->json();
                     file_put_contents($tokenPath, json_encode($token));
@@ -64,24 +65,23 @@ class MailPayController extends Controller
 
             $messages = $response->json();
             dd($messages);
-            
+
             // Process messages
             if (!empty($messages['messages'])) {
                 foreach ($messages['messages'] as $message) {
                     $messageDetails = Http::withToken($token['access_token'])
                         ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}")
                         ->json();
-                        
+
                     $emailContent = $this->decodeEmailContent($messageDetails);
                     $transaction = $this->extractTransactionDetails($emailContent);
-                    
+
                     if ($transaction) {
                         $this->creditUserAccount($transaction);
                     }
                 }
             }
-            
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             dd($e->getMessage());
         }
     }
@@ -93,7 +93,7 @@ class MailPayController extends Controller
         }
 
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
-        
+
         // Exchange code for token
         $response = Http::post('https://oauth2.googleapis.com/token', [
             'client_id' => $credentials['web']['client_id'],
@@ -102,21 +102,22 @@ class MailPayController extends Controller
             'redirect_uri' => $credentials['web']['redirect_uris'][0],
             'grant_type' => 'authorization_code'
         ]);
-        
+
         if ($response->successful()) {
             $token = $response->json();
             $tokenPath = storage_path('app/gmail_token.json');
             file_put_contents($tokenPath, json_encode($token));
             return redirect()->route('process.emails');
         }
-        
+
         return redirect()->back()->with('error', 'Failed to obtain access token');
     }
 
-    function newnewprocessCreditAlertEmails() {
+    function newnewprocessCreditAlertEmails()
+    {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
-        
+
         try {
             // Debug token file existence
             if (!file_exists($tokenPath)) {
@@ -129,7 +130,7 @@ class MailPayController extends Controller
                     'access_type' => 'offline',
                     'prompt' => 'consent'
                 ]);
-                
+
                 return response()->json([
                     'status' => 'auth_required',
                     'auth_url' => $authUrl,
@@ -139,7 +140,7 @@ class MailPayController extends Controller
 
             $token = json_decode(file_get_contents($tokenPath), true);
             \Log::info('Current token:', ['token' => $token]); // Debug token content
-            
+
             // Check if token needs refresh
             if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
                 if (isset($token['refresh_token'])) {
@@ -149,7 +150,7 @@ class MailPayController extends Controller
                         'refresh_token' => $token['refresh_token'],
                         'grant_type' => 'refresh_token'
                     ]);
-                    
+
                     if ($response->successful()) {
                         $newToken = $response->json();
                         // Preserve refresh token as it's not always returned
@@ -174,18 +175,18 @@ class MailPayController extends Controller
                 ]);
 
             return response()->json($response->json());
-            
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }
     }
-    function processCreditAlertEmails() {
+    function processCreditAlertEmails()
+    {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
-        
+
         try {
             // Check if token file exists
             if (!file_exists($tokenPath)) {
@@ -198,13 +199,13 @@ class MailPayController extends Controller
                     'access_type' => 'offline',
                     'prompt' => 'consent'
                 ]);
-                
+
                 return redirect()->away($authUrl);
             }
 
             $token = json_decode(file_get_contents($tokenPath), true);
             \Log::info('Current token:', ['token' => $token]);
-            
+
             // Check if token needs refresh
             if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
                 if (isset($token['refresh_token'])) {
@@ -214,7 +215,7 @@ class MailPayController extends Controller
                         'refresh_token' => $token['refresh_token'],
                         'grant_type' => 'refresh_token'
                     ]);
-                    
+
                     if ($response->successful()) {
                         $newToken = $response->json();
                         $newToken['refresh_token'] = $token['refresh_token'];
@@ -228,79 +229,85 @@ class MailPayController extends Controller
                 }
             }
 
-                                // Get message IDs first
-                                $response = Http::withToken($token['access_token'])
-                                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                                    'q' => 'subject:"Credit Alert" newer_than:7d'
-                                ]);
-                
-                            $messages = $response->json();
-                            $emailContents = [];
-                
-                            // Fetch full message content for each message
-                            if (!empty($messages['messages'])) {
-                                foreach ($messages['messages'] as $message) {
-                                    $messageDetails = Http::withToken($token['access_token'])
-                                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
-                                            'format' => 'full'
-                                        ])->json();
-                                    
-                                    $content = $this->decodeEmailContent($messageDetails);
-                                    
-                                    // Extract sender name from headers
-                                    $headers = $messageDetails['payload']['headers'];
-                                    $sender = '';
-                                    $date = '';
-                                    foreach ($headers as $header) {
-                                        if ($header['name'] === 'From') {
-                                            $sender = preg_replace('/<.*?>/', '', $header['value']);
-                                        }
-                                        if ($header['name'] === 'Date') {
-                                            $date = date('Y-m-d H:i:s', strtotime($header['value']));
-                                        }
-                                    }
-                                    
-                                    // Extract amount and narration using regex
-                                    preg_match('/₦([\d,]+)/', $content, $amountMatch);
-                                    preg_match('/Narration:\s*(.*?)(?:\n|$)/i', $content, $narrationMatch);
-                                    
-                                    $emailContents[] = [
-                                        'sender' => trim($sender),
-                                        'amount' => $amountMatch[1] ?? '',
-                                        'date' => $date,
-                                        'narration' => $narrationMatch[1] ?? '',
-                                        'raw_content' => $content // keeping raw content for debugging
-                                    ];
-                                }
-                            }
-                
-                            return response()->json($emailContents);
+            // Get message IDs first
+            $response = Http::withToken($token['access_token'])
+                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                ]);
 
-                        // Get message IDs first
-                        $response = Http::withToken($token['access_token'])
-                        ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                            'q' => 'subject:"Credit Alert" newer_than:1d'
-                        ]);
-        
-                    $messages = $response->json();
-                    $emailContents = [];
-        
-                    // Fetch full message content for each message
-                    if (!empty($messages['messages'])) {
-                        foreach ($messages['messages'] as $message) {
-                            $messageDetails = Http::withToken($token['access_token'])
-                                ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
-                                    'format' => 'full'
-                                ])->json();
-                            
-                            $emailContents[] = [
-                                'id' => $message['id'],
-                                'content' => $this->decodeEmailContent($messageDetails)
-                            ];
+            $messages = $response->json();
+            $emailContents = [];
+
+            // Fetch full message content for each message
+            if (!empty($messages['messages'])) {
+                foreach ($messages['messages'] as $message) {
+                    $messageDetails = Http::withToken($token['access_token'])
+                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
+                            'format' => 'full'
+                        ])->json();
+
+                    $content = $this->decodeEmailContent($messageDetails);
+
+                    // Extract sender name from headers
+                    // Extract sender name from headers
+                    $headers = $messageDetails['payload']['headers'];
+                    $sender = 'Moniepoint';  // Default sender
+                    $date = '';
+                    foreach ($headers as $header) {
+                        if ($header['name'] === 'Date') {
+                            $date = date('Y-m-d H:i:s', strtotime($header['value']));
                         }
                     }
-        
-                    return response()->json($emailContents);
+
+                    // Extract amount using regex
+                    preg_match('/Credit Amount\s*\n\s*(\d+(?:\.\d{2})?)/s', $content, $amountMatch);
+
+                    // Extract sender's name
+                    preg_match('/Sender\'s Name:\s*\n\s*from (.*?)\s*\n/s', $content, $senderMatch);
+
+                    // Extract narration
+                    preg_match('/Narration:\s*\n\s*(.*?)\s*\n/s', $content, $narrationMatch);
+
+                    // Extract transaction date from content
+                    preg_match('/Date & Time:\s*\n\s*(.*?)\s*\n/s', $content, $dateMatch);
+
+                    $emailContents[] = [
+                        'sender' => $senderMatch[1] ?? 'Unknown',
+                        'amount' => $amountMatch[1] ?? '0.00',
+                        'date' => $dateMatch[1] ?? $date,
+                        'narration' => $narrationMatch[1] ?? 'No narration',
+                        // 'raw_content' => $content // keeping for debugging
+                    ];
+                }
+            }
+
+            return response()->json($emailContents);
+
+            // Get message IDs first
+            $response = Http::withToken($token['access_token'])
+                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                ]);
+
+            $messages = $response->json();
+            $emailContents = [];
+
+            // Fetch full message content for each message
+            if (!empty($messages['messages'])) {
+                foreach ($messages['messages'] as $message) {
+                    $messageDetails = Http::withToken($token['access_token'])
+                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
+                            'format' => 'full'
+                        ])->json();
+
+                    $emailContents[] = [
+                        'id' => $message['id'],
+                        'content' => $this->decodeEmailContent($messageDetails)
+                    ];
+                }
+            }
+
+            return response()->json($emailContents);
 
             // Make API request
             $response = Http::withToken($token['access_token'])
@@ -309,8 +316,7 @@ class MailPayController extends Controller
                 ]);
 
             return $response->json();
-            
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             \Log::error('Gmail API Error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
         }
@@ -324,7 +330,7 @@ class MailPayController extends Controller
             }
 
             $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
-            
+
             $response = Http::post('https://oauth2.googleapis.com/token', [
                 'client_id' => $credentials['web']['client_id'],
                 'client_secret' => $credentials['web']['client_secret'],
@@ -332,48 +338,49 @@ class MailPayController extends Controller
                 'redirect_uri' => url('/api/gmail/callback'), // Updated to match API route
                 'grant_type' => 'authorization_code'
             ]);
-            
+
             if ($response->successful()) {
                 $token = $response->json();
                 $token['created'] = time();
                 $tokenPath = storage_path('app/gmail_token.json');
                 file_put_contents($tokenPath, json_encode($token));
-                
+
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Authentication successful'
                 ]);
             }
-            
+
             throw new \Exception('Failed to obtain access token');
-            
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }
     }
-    private function decodeEmailContent($messageDetails) {
+    private function decodeEmailContent($messageDetails)
+    {
         $parts = $messageDetails['payload']['parts'] ?? [$messageDetails['payload']];
         $content = '';
-        
+
         foreach ($parts as $part) {
             if ($part['mimeType'] === 'text/plain') {
                 $content .= base64_decode(str_replace(['-', '_'], ['+', '/'], $part['body']['data']));
             }
         }
-        
+
         return $content;
     }
-    function oldprocessCreditAlertEmails() {
+    function oldprocessCreditAlertEmails()
+    {
         $client = new Google_Client();
-        
+
         $credentialsPath = public_path('gmail_credentials.json');
         if (!file_exists($credentialsPath)) {
             throw new \Exception('Gmail credentials file not found');
         }
-        
+
         try {
             $client->setAuthConfig($credentialsPath);
             $client->addScope([
@@ -382,21 +389,21 @@ class MailPayController extends Controller
             ]);
             $client->setAccessType('offline');
             $client->setPrompt('consent');
-            
+
             $tokenPath = storage_path('app/gmail_token.json');
-            
+
             // If no token exists, get authorization URL
             if (!file_exists($tokenPath)) {
                 $authUrl = $client->createAuthUrl();
                 return redirect($authUrl);
             }
-            
+
             // Rest of the token handling code
             if (file_exists($tokenPath)) {
                 $accessToken = json_decode(file_get_contents($tokenPath), true);
                 $client->setAccessToken($accessToken);
             }
-            
+
             if ($client->isAccessTokenExpired()) {
                 if ($client->getRefreshToken()) {
                     $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
@@ -408,63 +415,64 @@ class MailPayController extends Controller
                     return redirect($authUrl);
                 }
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             dd($e->getMessage());
         }
-        
+
         $service = new Google_Service_Gmail($client);
         $user = 'me'; // Authenticated Gmail user
-    
+
         // Search for "credit alert" emails (modify based on your bank's format)
         $messages = $service->users_messages->listUsersMessages($user, [
             'q' => 'subject:"Credit Alert" newer_than:1d' // Last 1 day alerts
         ]);
-    
+
         dd($messages);
         if ($messages->getMessages()) {
             foreach ($messages->getMessages() as $message) {
                 $msg = $service->users_messages->get($user, $message->getId());
                 $payload = $msg->getPayload();
                 $headers = $payload->getHeaders();
-    
+
                 // Extract email content
                 $bodyData = $payload->getBody()->getData();
                 $emailContent = base64_decode($bodyData);
-    
+
                 // Extract Amount, User ID from email body
                 $transaction = extractTransactionDetails($emailContent);
-    
+
                 if ($transaction) {
                     creditUserAccount($transaction);
                 }
             }
         }
     }
-    
-   
+
+
     public function oldhandleGoogleCallback(Request $request)
     {
         $client = new Google_Client();
         $client->setAuthConfig(public_path('gmail_credentials.json'));
-        
+
         if ($request->has('code')) {
             $token = $client->fetchAccessTokenWithAuthCode($request->code);
-            
+
             if (!isset($token['error'])) {
                 $tokenPath = storage_path('app/gmail_token.json');
                 file_put_contents($tokenPath, json_encode($token));
                 return redirect()->route('process.emails');
             }
         }
-        
+
         return redirect()->back()->with('error', 'Authorization failed');
     }
-    function extractTransactionDetails($emailContent) {
+    function extractTransactionDetails($emailContent)
+    {
         // Adjust regex based on your bank's email format
         preg_match('/₦([\d,]+)/', $emailContent, $amountMatch); // Extract amount
         preg_match('/Ref: ([A-Za-z0-9]+)/', $emailContent, $referenceMatch); // Extract ref ID
         preg_match('/Comment: (\d+)/', $emailContent, $userIdMatch); // Extract User ID from comment
-    
+
         if (!empty($amountMatch) && !empty($userIdMatch)) {
             return [
                 'amount' => str_replace(',', '', $amountMatch[1]), // Remove commas
@@ -472,13 +480,14 @@ class MailPayController extends Controller
                 'reference' => $referenceMatch[1] ?? null,
             ];
         }
-    
+
         return null;
     }
 
-    function creditUserAccount($transaction) {
+    function creditUserAccount($transaction)
+    {
         $user = User::where('unique_id', $transaction['user_id'])->first();
-    
+
         if ($user) {
             // Record transaction in DB
             Transaction::create([
@@ -487,11 +496,11 @@ class MailPayController extends Controller
                 'transaction_reference' => $transaction['reference'],
                 'status' => 'successful',
             ]);
-    
+
             // Update user wallet balance
             $user->wallet_balance += $transaction['amount'];
             $user->save();
-    
+
             // Notify user via email or in-app notification
             sendUserNotification($user, $transaction);
         } else {
@@ -499,11 +508,13 @@ class MailPayController extends Controller
         }
     }
 
-    function sendUserNotification($user, $transaction) {
+    function sendUserNotification($user, $transaction)
+    {
         Mail::to($user->email)->send(new \App\Mail\CreditNotification($transaction));
     }
 
-    protected function schedule(Schedule $schedule) {
+    protected function schedule(Schedule $schedule)
+    {
         $schedule->call(function () {
             processCreditAlertEmails();
         })->everyFiveMinutes();
