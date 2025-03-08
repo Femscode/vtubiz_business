@@ -231,7 +231,7 @@ class MailPayController extends Controller
                                 // Get message IDs first
                                 $response = Http::withToken($token['access_token'])
                                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                                    'q' => 'subject:"Credit Alert" newer_than:7d'
                                 ]);
                 
                             $messages = $response->json();
