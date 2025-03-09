@@ -60,7 +60,7 @@
                                     
                                     </td>
                                     <td>
-                                        @if(substr($tranx->reference,0,7) == 'data_pur' && $tranx->refund_status == 0)
+                                        @if(substr($tranx->reference,0,7) == 'data_pu' && $tranx->refund_status == 0 || substr($tranx->reference,0,7) == 'resolve' && $tranx->refund_status == 0 )
                                         <a href='/refund/{{ $tranx->id ?? "" }}' class='btn btn-warning btn-sm'>Refund </a>
                                         @endif
                                         <a href='https://wa.me/{{ substr($tranx->user->phone ?? "09058744473", 1) }}' class='btn btn-success btn-sm'>Message</a>

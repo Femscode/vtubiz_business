@@ -12,38 +12,23 @@
 
           <div class="row">
             <label class="col-md-3"></label>
-           
+
             <div class="col">
               <h4 class="font-weight-bold"><b>Buy Airtime</b></h4>
             </div>
             <div class="col text-end">
-              <a
-                onclick="window.history.back()"
-                class="btn-sm btn btn-secondary"
-                >Back</a
-              >
+              <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
             </div>
           </div>
           <!--begin::Form Group-->
           <div class="form-group row m-2">
             <h6 class="col-md-3">Phone Number</h6>
             <div class="col-md-6">
-              <input
-                required
-                @input="fetchNetwork()"
-                v-model="phone_number"
-                class="form-control form-control-lg form-control-solid"
-                type="number"
-                minlength="10"
-                maxlength="11"
-                placeholder="08000000000"
-              />
+              <input required @input="fetchNetwork()" v-model="phone_number"
+                class="form-control form-control-lg form-control-solid" type="number" minlength="10" maxlength="11"
+                placeholder="08000000000" />
               <div class="col-md-12 text-end">
-                <a
-                  @click="selectFromBeneficiary()"
-                  class="btn btn-primary btn-sm"
-                  >Select From Beneficiaries</a
-                >
+                <a @click="selectFromBeneficiary()" class="btn btn-primary btn-sm">Select From Beneficiaries</a>
               </div>
             </div>
           </div>
@@ -51,11 +36,7 @@
           <div class="form-group row m-2">
             <h6 class="col-md-3">Network</h6>
             <div class="col-md-6">
-              <select
-                @change="fetchDiscount()"
-                v-model="network"
-                class="form-control"
-              >
+              <select @change="fetchDiscount()" v-model="network" class="form-control">
                 <option value="1">MTN</option>
                 <option value="2">GLO</option>
                 <option value="3">AIRTEL</option>
@@ -66,44 +47,22 @@
           <div class="form-group row m-2">
             <h6 class="col-md-3">Amount</h6>
             <div class="col-md-6">
-              <input
-                required
-                @input="fetchDiscount"
-                class="form-control"
-                v-model="amount"
-                placeholder="Amount"
-              />
+              <input required @input="fetchDiscount" class="form-control" v-model="amount" placeholder="Amount" />
 
               You will be charged : NGN{{ discountedAmount }}
               <div class="form-check form-switch form-sm">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="save_ben"
-                  @change="saveBeneficiary"
-                />
-                <label id="alr_saved" class="form-check-label"
-                  >Save as beneficiary</label
-                >
+                <input class="form-check-input" type="checkbox" id="save_ben" @change="saveBeneficiary" />
+                <label id="alr_saved" class="form-check-label">Save as beneficiary</label>
               </div>
             </div>
           </div>
           <div class="form-group row m-2">
             <div class="col-md-3"></div>
             <div class="btn-group btn-group-example mb-3 col-md-6" role="group">
-              <button
-                :disabled="!transfer_status"
-                type="submit"
-                class="btn btn-primary col-md-3"
-              >
+              <button :disabled="!transfer_status" type="submit" class="btn btn-primary col-md-3">
                 Buy Now
               </button>
-              <button
-                :disabled="!transfer_status"
-                type="button"
-                @click="scheduleBuy"
-                class="btn btn-success col-md-3"
-              >
+              <button :disabled="!transfer_status" type="button" @click="scheduleBuy" class="btn btn-success col-md-3">
                 Buy For Later
               </button>
             </div>
@@ -130,7 +89,7 @@ export default {
       transfer_status: false,
     };
   },
-  mounted() {},
+  mounted() { },
   methods: {
     fetchNetwork() {
       if (this.phone_number.length >= 10 && this.phone_number.length <= 12) {
@@ -431,91 +390,91 @@ export default {
               } else {
 
                 //pelumio
-                if(response.data.type == 'duplicate') {
-                Swal.fire({
-  icon: "error",
-  title: response.data.message,
-  showCancelButton: true,
-  cancelButtonColor: "#d33",
-  confirmButtonColor: "#3085d6",
-  confirmButtonText: "Yes, Data Received!",
-  cancelButtonText: "No, Data Not Received!",
-  allowOutsideClick: false,
-  allowEscapeKey: false,
-  customClass: {
-    actions: 'custom-actions-class' // add a custom class to actions for styling
-  },
-  showCloseButton: true, // show a close button to dismiss the modal
-  showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
-  preConfirm: () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000); // Add a delay (2 seconds) to simulate a process
-    });
-  },
-}).then((result) => {
-  if (result.isConfirmed) {
-    axios
-          .get("/user_delete_duplicate")
-          .then((response) => {
-            console.log(response);
-            if (response.data == true) {
-              Swal.fire({
-      icon: "success",
-      title: "Previous Transaction Verified! You can now proceed with the current transaction",
-      showConfirmButton: true,
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Ok"
-    });
-            }
-          })
-          .catch((error) => {
-           
-            console.log(error.message);
-          });
-    // This code block is executed when the "Confirm" button is clicked.
-    
-  } else {
-    // This code block is executed when the "Deny" button is clicked.
-    Swal.fire({
-      title: "Please reach out to the admin to sort out this issue",
-      showCloseButton: true,
-      customClass: {
-        actions: 'custom-actions-class' // add the same custom class for styling
-      },
-      showCancelButton: true,
-      cancelButtonColor: "#3085d6",
-      confirmButtonColor: "#25d366",
-      confirmButtonText: "Chat with Admin",
-      cancelButtonText: "Not Now"
-    }).then((chatResult) => {
-      if (chatResult.isConfirmed) {
-        // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
-        window.location.href = "https://wa.me/2349058744473";
-      }
-    });
-  }
-});
+                if (response.data.type == 'duplicate') {
+                  Swal.fire({
+                    icon: "error",
+                    title: response.data.message,
+                    showCancelButton: true,
+                    cancelButtonColor: "#d33",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, Data Received!",
+                    cancelButtonText: "No, Data Not Received!",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                      actions: 'custom-actions-class' // add a custom class to actions for styling
+                    },
+                    showCloseButton: true, // show a close button to dismiss the modal
+                    showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
+                    preConfirm: () => {
+                      return new Promise((resolve) => {
+                        setTimeout(() => {
+                          resolve();
+                        }, 2000); // Add a delay (2 seconds) to simulate a process
+                      });
+                    },
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      axios
+                        .get("/user_delete_duplicate")
+                        .then((response) => {
+                          console.log(response);
+                          if (response.data == true) {
+                            Swal.fire({
+                              icon: "success",
+                              title: "Previous Transaction Verified! You can now proceed with the current transaction",
+                              showConfirmButton: true,
+                              confirmButtonColor: "#3085d6",
+                              confirmButtonText: "Ok"
+                            });
+                          }
+                        })
+                        .catch((error) => {
+
+                          console.log(error.message);
+                        });
+                      // This code block is executed when the "Confirm" button is clicked.
+
+                    } else {
+                      // This code block is executed when the "Deny" button is clicked.
+                      Swal.fire({
+                        title: "Please reach out to the admin to sort out this issue",
+                        showCloseButton: true,
+                        customClass: {
+                          actions: 'custom-actions-class' // add the same custom class for styling
+                        },
+                        showCancelButton: true,
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonColor: "#25d366",
+                        confirmButtonText: "Chat with Admin",
+                        cancelButtonText: "Not Now"
+                      }).then((chatResult) => {
+                        if (chatResult.isConfirmed) {
+                          // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
+                          window.location.href = "https://wa.me/2348128722501";
+                        }
+                      });
+                    }
+                  });
 
 
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: response.data.message,
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    // location.reload();
-                  }
-                });
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: response.data.message,
+                    // text: "Updating...",
+                    showConfirmButton: true, // updated
+                    confirmButtonColor: "#3085d6", // added
+                    confirmButtonText: "Ok", // added
+                    allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
+                    allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      // location.reload();
+                    }
+                  });
+                }
               }
-            }
             })
             .catch((error) => {
               console.log(error.message);
@@ -540,5 +499,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
