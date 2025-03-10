@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mailpay;
 use Exception;
-use Illuminate\Http\Request;
 use Google_Client;
 use Google_Service_Gmail;
 use Google_Service_Gmail_Message;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -133,7 +134,7 @@ class MailPayController extends Controller
                 'date' => $emailContents['date']?? 'Unknown',
                 'narration' => $emailContents['narration']?? 'No narration',
                 'status' => 0,
-            ])
+            ]);
 
             // Get message IDs first
             $response = Http::withToken($token['access_token'])
