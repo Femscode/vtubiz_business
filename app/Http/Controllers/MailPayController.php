@@ -12,6 +12,7 @@ use Google_Service_Gmail_Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 
 
@@ -236,7 +237,7 @@ class MailPayController extends Controller
             // Get message IDs first
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                    'q' => 'subject:"Credit Alert" newer_than:3m'
                 ]);
 
             $messages = $response->json();
@@ -286,6 +287,7 @@ class MailPayController extends Controller
 
                         // Only create transaction if user exists
                         if ($user) {
+                            $reference = 'mailpay'.$mailpay->id.Str::rand(5); // Assuming 'id' is the primary key of 'mailpays'
                             $this->create_transaction(
                                 'Account Funded Through Transfer',
                                 $mailpay->id,
