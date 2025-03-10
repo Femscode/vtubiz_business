@@ -20,7 +20,7 @@ class MailPayController extends Controller
     //
    
 
-    function oldprocessCreditAlertEmails()
+    function processCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
@@ -130,7 +130,7 @@ class MailPayController extends Controller
                 }
             }
 
-            return response()->json($emailContents);
+            // return response()->json($emailContents);
 
             //get user 
 
@@ -148,6 +148,7 @@ class MailPayController extends Controller
                 'status' => 0,
             ]);
 
+            return response()->json($emailContents);
             // Get message IDs first
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
@@ -187,7 +188,7 @@ class MailPayController extends Controller
         }
     }
    
-    function processCreditAlertEmails()
+    function newprocessCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
