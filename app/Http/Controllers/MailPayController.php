@@ -300,7 +300,7 @@ class MailPayController extends Controller
                                 $reference = 'mailpay'.$mailpay->id.Str::rand(5);
                                 $this->create_transaction(
                                     'Account Funded Through Transfer',
-                                    $mailpay->id,
+                                    $reference,
                                     $details,
                                     'credit',
                                     $amountpaid,
