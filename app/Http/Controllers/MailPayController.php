@@ -272,7 +272,7 @@ class MailPayController extends Controller
                     preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
 
                     // Find user and create payment record
-                    return 'this';
+                    
                     if ($phoneMatch[1] ?? null) {
                         $user = User::where('phone', $phoneMatch[1])->first();
                         $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
@@ -288,7 +288,7 @@ class MailPayController extends Controller
 
                         // Only create transaction if user exists
                         if ($user) {
-                            $reference = 'mailpay'.$mailpay->id.Str::rand(5); // Assuming 'id' is the primary key of 'mailpays'
+                            $reference = 'mailpay'.$mailpay->id. "-".Str::rand(5); // Assuming 'id' is the primary key of 'mailpays'
                             $this->create_transaction(
                                 'Account Funded Through Transfer',
                                 $mailpay->id,
