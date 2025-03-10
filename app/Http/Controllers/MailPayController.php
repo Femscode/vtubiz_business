@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mailpay;
+use App\Models\User;
 use Exception;
 use Google_Client;
 use Google_Service_Gmail;
@@ -19,7 +20,7 @@ class MailPayController extends Controller
     //
    
 
-    function processCreditAlertEmails()
+    function oldprocessCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
@@ -133,9 +134,9 @@ class MailPayController extends Controller
 
             //get user 
 
-            $phone_number = '09058744473';
+            $phone_number = $emailContents['phone_number'] ?? 'Unknown';
             //get user_id from user table
-            $user = User::where('phone_number', $phone_number)->first();
+            $user = User::where('phone', $phone_number)->first();
 
             //insert into Mailpay
 
@@ -185,7 +186,121 @@ class MailPayController extends Controller
             return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
         }
     }
+   
+    function processCreditAlertEmails()
+    {
+        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
+        $tokenPath = storage_path('app/gmail_token.json');
 
+        try {
+            // Check if token file exists
+            if (!file_exists($tokenPath)) {
+                \Log::info('Token file not found, initiating auth flow');
+                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                    'client_id' => $credentials['web']['client_id'],
+                    'redirect_uri' => url('/api/gmail/callback'),
+                    'response_type' => 'code',
+                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
+                    'access_type' => 'offline',
+                    'prompt' => 'consent'
+                ]);
+
+                return redirect()->away($authUrl);
+            }
+
+            $token = json_decode(file_get_contents($tokenPath), true);
+
+            // Check if token needs refresh
+            if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
+                if (isset($token['refresh_token'])) {
+                    $response = Http::post('https://oauth2.googleapis.com/token', [
+                        'client_id' => $credentials['web']['client_id'],
+                        'client_secret' => $credentials['web']['client_secret'],
+                        'refresh_token' => $token['refresh_token'],
+                        'grant_type' => 'refresh_token'
+                    ]);
+
+                    if ($response->successful()) {
+                        $newToken = $response->json();
+                        $newToken['refresh_token'] = $token['refresh_token'];
+                        $newToken['created'] = time();
+                        file_put_contents($tokenPath, json_encode($newToken));
+                        $token = $newToken;
+                    }
+                } else {
+                    @unlink($tokenPath);
+                    return redirect()->away($authUrl);
+                }
+            }
+
+            // Get message IDs first
+            $response = Http::withToken($token['access_token'])
+                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                    'q' => 'subject:"Credit Alert" newer_than:1d'
+                ]);
+
+            $messages = $response->json();
+            $processedEmails = [];
+
+            // Process each email
+            if (!empty($messages['messages'])) {
+                foreach ($messages['messages'] as $message) {
+                    $messageDetails = Http::withToken($token['access_token'])
+                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
+                            'format' => 'full'
+                        ])->json();
+
+                    $content = $this->decodeEmailContent($messageDetails);
+
+                    // Extract date from headers
+                    $date = '';
+                    foreach ($messageDetails['payload']['headers'] as $header) {
+                        if ($header['name'] === 'Date') {
+                            $date = date('Y-m-d H:i:s', strtotime($header['value']));
+                            break;
+                        }
+                    }
+
+                    // Extract email data using regex
+                    preg_match('/Credit Amount\s*\n\s*([\d,]+\.\d{2})/s', $content, $amountMatch);
+                    preg_match('/Sender\'s Name:\s*\n\s*from (.*?)\s*\n/s', $content, $senderMatch);
+                    preg_match('/Narration:\s*\n\s*(.*?)\s*\n/s', $content, $narrationMatch);
+                    preg_match('/Date & Time:\s*\n\s*(.*?)\s*\n/s', $content, $dateMatch);
+
+                    $narration = $narrationMatch[1] ?? 'No narration';
+                    preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
+
+                    // Find user and create payment record
+                    if ($phoneMatch[1] ?? null) {
+                        $user = User::where('phone', $phoneMatch[1])->first();
+                        if ($user) {
+                            Mailpay::create([
+                                'user_id' => $user->id,
+                                'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
+                                'date' => $dateMatch[1] ?? $date,
+                                'narration' => $narration,
+                                'status' => 0,
+                            ]);
+                        }
+                    }
+
+                    $processedEmails[] = [
+                        'sender' => $senderMatch[1] ?? 'Unknown',
+                        'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
+                        'date' => $dateMatch[1] ?? $date,
+                        'narration' => $narration,
+                        'phone_number' => $phoneMatch[1] ?? null,
+                    ];
+                }
+            }
+
+            return response()->json($processedEmails);
+
+        } catch (\Exception $e) {
+            \Log::error('Gmail API Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
+        }
+    }
     public function handleGoogleCallback(Request $request)
     {
         try {
@@ -236,82 +351,7 @@ class MailPayController extends Controller
 
         return $content;
     }
-    function oldprocessCreditAlertEmails()
-    {
-        $client = new Google_Client();
-
-        $credentialsPath = public_path('gmail_credentials.json');
-        if (!file_exists($credentialsPath)) {
-            throw new \Exception('Gmail credentials file not found');
-        }
-
-        try {
-            $client->setAuthConfig($credentialsPath);
-            $client->addScope([
-                'https://www.googleapis.com/auth/gmail.readonly',
-                'https://www.googleapis.com/auth/gmail.modify'
-            ]);
-            $client->setAccessType('offline');
-            $client->setPrompt('consent');
-
-            $tokenPath = storage_path('app/gmail_token.json');
-
-            // If no token exists, get authorization URL
-            if (!file_exists($tokenPath)) {
-                $authUrl = $client->createAuthUrl();
-                return redirect($authUrl);
-            }
-
-            // Rest of the token handling code
-            if (file_exists($tokenPath)) {
-                $accessToken = json_decode(file_get_contents($tokenPath), true);
-                $client->setAccessToken($accessToken);
-            }
-
-            if ($client->isAccessTokenExpired()) {
-                if ($client->getRefreshToken()) {
-                    $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-                    file_put_contents($tokenPath, json_encode($client->getAccessToken()));
-                } else {
-                    // Delete invalid token file and redirect to auth
-                    @unlink($tokenPath);
-                    $authUrl = $client->createAuthUrl();
-                    return redirect($authUrl);
-                }
-            }
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-
-        $service = new Google_Service_Gmail($client);
-        $user = 'me'; // Authenticated Gmail user
-
-        // Search for "credit alert" emails (modify based on your bank's format)
-        $messages = $service->users_messages->listUsersMessages($user, [
-            'q' => 'subject:"Credit Alert" newer_than:1d' // Last 1 day alerts
-        ]);
-
-        dd($messages);
-        if ($messages->getMessages()) {
-            foreach ($messages->getMessages() as $message) {
-                $msg = $service->users_messages->get($user, $message->getId());
-                $payload = $msg->getPayload();
-                $headers = $payload->getHeaders();
-
-                // Extract email content
-                $bodyData = $payload->getBody()->getData();
-                $emailContent = base64_decode($bodyData);
-
-                // Extract Amount, User ID from email body
-                $transaction = extractTransactionDetails($emailContent);
-
-                if ($transaction) {
-                    creditUserAccount($transaction);
-                }
-            }
-        }
-    }
-
+  
 
     public function oldhandleGoogleCallback(Request $request)
     {
