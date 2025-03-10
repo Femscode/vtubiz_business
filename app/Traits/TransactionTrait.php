@@ -214,7 +214,38 @@ trait TransactionTrait
             $tranx->plan_id = $plan_id;
             $tranx->save();
             return $tranx->id;
-        } elseif ($title == 'Giveaway') {
+        } 
+        elseif ($title == 'Account Funding') {
+
+
+            $r_user->balance += $amount;
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+            $tranx->status = 1;
+            $tranx->save();
+            return $tranx->id;
+        } elseif ($title == 'Bonus Credited') {
+
+
+            $r_user->bonus += $amount;
+
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+            $tranx->status = 1;
+            $tranx->save();
+            return $tranx->id;
+        } elseif ($title == 'Account Funded Through Transfer') {
+
+
+            $r_user->balance += $amount;
+
+            $r_user->save();
+            $tranx->after = $r_user->balance;
+            $tranx->status = 1;
+            $tranx->save();
+            return $tranx->id;
+        } 
+        elseif ($title == 'Giveaway') {
             $r_user->balance -= $amount;
             $r_user->total_spent += $amount;
             $r_user->save();
@@ -322,36 +353,6 @@ trait TransactionTrait
 
             $tranx->status = 1;
             $tranx->save();
-        } elseif ($title == 'Account Funding') {
-
-
-            $r_user->balance += $amount;
-
-            $r_user->save();
-            $tranx->after = $r_user->balance;
-            $tranx->status = 1;
-            $tranx->save();
-            return $tranx->id;
-        } elseif ($title == 'Bonus Credited') {
-
-
-            $r_user->bonus += $amount;
-
-            $r_user->save();
-            $tranx->after = $r_user->balance;
-            $tranx->status = 1;
-            $tranx->save();
-            return $tranx->id;
-        } elseif ($title == 'Account Funded Through Transfer') {
-
-
-            $r_user->balance += $amount;
-
-            $r_user->save();
-            $tranx->after = $r_user->balance;
-            $tranx->status = 1;
-            $tranx->save();
-            return $tranx->id;
         } elseif ($title == 'Pending Credit') {
 
 

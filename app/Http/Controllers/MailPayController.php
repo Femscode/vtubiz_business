@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mailpay;
 use App\Models\User;
+use App\Traits\TransactionTrait;
 use Exception;
 use Google_Client;
 use Google_Service_Gmail;
@@ -18,8 +19,8 @@ use Illuminate\Support\Facades\Mail;
 class MailPayController extends Controller
 {
     //
-   
 
+    use TransactionTrait;
     function oldprocessCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
@@ -112,7 +113,7 @@ class MailPayController extends Controller
                     // Extract narration and phone number
                     preg_match('/Narration:\s*\n\s*(.*?)\s*\n/s', $content, $narrationMatch);
                     $narration = $narrationMatch[1] ?? 'No narration';
-                    
+
                     // Extract phone number from narration (matches both formats)
                     preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
                     $phone_number = $phoneMatch[1] ?? null;
@@ -125,8 +126,6 @@ class MailPayController extends Controller
                         'phone_number' => $phone_number,
                         'raw_content' => $content // keeping for debugging
                     ];
-
-                  
                 }
             }
 
@@ -141,10 +140,10 @@ class MailPayController extends Controller
             //insert into Mailpay
 
             $mailpay = Mailpay::create([
-                'user_id' => $user->id?? 'Unknown',
-                'amount' => $emailContents['amount']?? '0.00',
-                'date' => $emailContents['date']?? 'Unknown',
-                'narration' => $emailContents['narration']?? 'No narration',
+                'user_id' => $user->id ?? 'Unknown',
+                'amount' => $emailContents['amount'] ?? '0.00',
+                'date' => $emailContents['date'] ?? 'Unknown',
+                'narration' => $emailContents['narration'] ?? 'No narration',
                 'status' => 0,
             ]);
 
@@ -187,7 +186,7 @@ class MailPayController extends Controller
             return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
         }
     }
-   
+
     function processCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
@@ -274,14 +273,28 @@ class MailPayController extends Controller
                     // Find user and create payment record
                     if ($phoneMatch[1] ?? null) {
                         $user = User::where('phone', $phoneMatch[1])->first();
+                        $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
+                        $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
+
+                        $mailpay = Mailpay::create([
+                            'user_id' => $user->id ?? null,
+                            'amount' => $amountpaid,
+                            'date' => $dateMatch[1] ?? $date,
+                            'narration' => $narration,
+                            'status' => $user ? 1 : 0, // Set status based on user existence
+                        ]);
+
+                        // Only create transaction if user exists
                         if ($user) {
-                            Mailpay::create([
-                                'user_id' => $user->id,
-                                'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
-                                'date' => $dateMatch[1] ?? $date,
-                                'narration' => $narration,
-                                'status' => 0,
-                            ]);
+                            $this->create_transaction(
+                                'Account Funded Through Transfer',
+                                $mailpay->id,
+                                $details,
+                                'credit',
+                                $amountpaid,
+                                $user->id,
+                                1
+                            );
                         }
                     }
 
@@ -296,7 +309,6 @@ class MailPayController extends Controller
             }
 
             return response()->json($processedEmails);
-
         } catch (\Exception $e) {
             \Log::error('Gmail API Error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
@@ -352,7 +364,7 @@ class MailPayController extends Controller
 
         return $content;
     }
-  
+
 
     public function oldhandleGoogleCallback(Request $request)
     {
