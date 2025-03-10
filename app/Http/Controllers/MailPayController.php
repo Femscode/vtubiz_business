@@ -297,7 +297,7 @@ class MailPayController extends Controller
 
                             // Only create transaction if user exists
                             if ($user) {
-                                $reference = 'mailpay'.$mailpay->id.Str::rand(5);
+                                $reference = 'mailpay'.$mailpay->id;
                                 $this->create_transaction(
                                     'Account Funded Through Transfer',
                                     $reference,
