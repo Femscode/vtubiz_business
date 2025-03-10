@@ -96,8 +96,9 @@ class MailPayController extends Controller
                         }
                     }
 
-                    // Extract amount using regex
-                    preg_match('/Credit Amount\s*\n\s*(\d+(?:\.\d{2})?)/s', $content, $amountMatch);
+                    // Extract amount using regex (now handles commas in amount)
+                    preg_match('/Credit Amount\s*\n\s*([\d,]+\.\d{2})/s', $content, $amountMatch);
+                    $amount = $amountMatch[1] ? str_replace(',', '', $amountMatch[1]) : '0.00';
 
                     // Extract sender's name
                     preg_match('/Sender\'s Name:\s*\n\s*from (.*?)\s*\n/s', $content, $senderMatch);
@@ -110,7 +111,7 @@ class MailPayController extends Controller
 
                     $emailContents[] = [
                         'sender' => $senderMatch[1] ?? 'Unknown',
-                        'amount' => $amountMatch[1] ?? '0.00',
+                        'amount' => $amount,
                         'date' => $dateMatch[1] ?? $date,
                         'narration' => $narrationMatch[1] ?? 'No narration',
                         'raw_content' => $content // keeping for debugging
