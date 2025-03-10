@@ -276,7 +276,7 @@ class MailPayController extends Controller
                     if ($phoneMatch[1] ?? null) {
                         $user = User::where('phone', $phoneMatch[1])->first();
                         $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
-                        $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
+                        $details = "Payment of NGN this and that";
 
                         $mailpay = Mailpay::create([
                             'user_id' => $user->id ?? null,
