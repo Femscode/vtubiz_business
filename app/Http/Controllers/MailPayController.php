@@ -20,7 +20,7 @@ class MailPayController extends Controller
     //
    
 
-    function processCreditAlertEmails()
+    function oldprocessCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
@@ -188,7 +188,7 @@ class MailPayController extends Controller
         }
     }
    
-    function newprocessCreditAlertEmails()
+    function processCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');

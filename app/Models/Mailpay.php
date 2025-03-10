@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Mailpay extends Model
 {
     use HasFactory;
-    protected $guarded = 'mailpay';
+    protected $guarded = [];
     protected $table ='mailpays';
 
     public function user() {
