@@ -16,172 +16,8 @@ use Illuminate\Support\Facades\Mail;
 class MailPayController extends Controller
 {
     //
-    function newprocessCreditAlertEmails()
-    {
-        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
-        $tokenPath = storage_path('app/gmail_token.json');
+   
 
-        try {
-            // Get or refresh access token
-            if (!file_exists($tokenPath)) {
-                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
-                    'client_id' => $credentials['web']['client_id'],
-                    'redirect_uri' => $credentials['web']['redirect_uris'][0],
-                    'response_type' => 'code',
-                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
-                    'access_type' => 'offline',
-                    'prompt' => 'consent'
-                ]);
-
-                return response()->json([
-                    'status' => 'auth_required',
-                    'auth_url' => $authUrl,
-                    'message' => 'Please visit this URL to authorize the application'
-                ]);
-            }
-
-            $token = json_decode(file_get_contents($tokenPath), true);
-
-            // Check if token needs refresh
-            if (time() > $token['expires_in']) {
-                $response = Http::post('https://oauth2.googleapis.com/token', [
-                    'client_id' => $credentials['web']['client_id'],
-                    'client_secret' => $credentials['web']['client_secret'],
-                    'refresh_token' => $token['refresh_token'],
-                    'grant_type' => 'refresh_token'
-                ]);
-
-                if ($response->successful()) {
-                    $token = $response->json();
-                    file_put_contents($tokenPath, json_encode($token));
-                }
-            }
-
-            // Make API request
-            $response = Http::withToken($token['access_token'])
-                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                    'q' => 'subject:"Credit Alert" newer_than:1d'
-                ]);
-
-            $messages = $response->json();
-            dd($messages);
-
-            // Process messages
-            if (!empty($messages['messages'])) {
-                foreach ($messages['messages'] as $message) {
-                    $messageDetails = Http::withToken($token['access_token'])
-                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}")
-                        ->json();
-
-                    $emailContent = $this->decodeEmailContent($messageDetails);
-                    $transaction = $this->extractTransactionDetails($emailContent);
-
-                    if ($transaction) {
-                        $this->creditUserAccount($transaction);
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-    }
-
-    public function newhandleGoogleCallback(Request $request)
-    {
-        if (!$request->has('code')) {
-            return redirect()->back()->with('error', 'Authorization code not received');
-        }
-
-        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
-
-        // Exchange code for token
-        $response = Http::post('https://oauth2.googleapis.com/token', [
-            'client_id' => $credentials['web']['client_id'],
-            'client_secret' => $credentials['web']['client_secret'],
-            'code' => $request->code,
-            'redirect_uri' => $credentials['web']['redirect_uris'][0],
-            'grant_type' => 'authorization_code'
-        ]);
-
-        if ($response->successful()) {
-            $token = $response->json();
-            $tokenPath = storage_path('app/gmail_token.json');
-            file_put_contents($tokenPath, json_encode($token));
-            return redirect()->route('process.emails');
-        }
-
-        return redirect()->back()->with('error', 'Failed to obtain access token');
-    }
-
-    function newnewprocessCreditAlertEmails()
-    {
-        $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
-        $tokenPath = storage_path('app/gmail_token.json');
-
-        try {
-            // Debug token file existence
-            if (!file_exists($tokenPath)) {
-                \Log::info('Token file not found, initiating auth flow');
-                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
-                    'client_id' => $credentials['web']['client_id'],
-                    'redirect_uri' => url('/api/gmail/callback'),
-                    'response_type' => 'code',
-                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
-                    'access_type' => 'offline',
-                    'prompt' => 'consent'
-                ]);
-
-                return response()->json([
-                    'status' => 'auth_required',
-                    'auth_url' => $authUrl,
-                    'message' => 'Please visit this URL to authorize the application'
-                ]);
-            }
-
-            $token = json_decode(file_get_contents($tokenPath), true);
-            \Log::info('Current token:', ['token' => $token]); // Debug token content
-
-            // Check if token needs refresh
-            if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
-                if (isset($token['refresh_token'])) {
-                    $response = Http::post('https://oauth2.googleapis.com/token', [
-                        'client_id' => $credentials['web']['client_id'],
-                        'client_secret' => $credentials['web']['client_secret'],
-                        'refresh_token' => $token['refresh_token'],
-                        'grant_type' => 'refresh_token'
-                    ]);
-
-                    if ($response->successful()) {
-                        $newToken = $response->json();
-                        // Preserve refresh token as it's not always returned
-                        $newToken['refresh_token'] = $token['refresh_token'];
-                        $newToken['created'] = time();
-                        file_put_contents($tokenPath, json_encode($newToken));
-                        $token = $newToken;
-                    }
-                } else {
-                    @unlink($tokenPath);
-                    return response()->json([
-                        'status' => 'auth_required',
-                        'message' => 'Reauthorization required'
-                    ]);
-                }
-            }
-
-            // Make API request
-            $response = Http::withToken($token['access_token'])
-                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                    'q' => 'subject:"Credit Alert" newer_than:1d'
-                ]);
-
-            return response()->json($response->json());
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
     function processCreditAlertEmails()
     {
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
@@ -276,12 +112,28 @@ class MailPayController extends Controller
                         'amount' => $amountMatch[1] ?? '0.00',
                         'date' => $dateMatch[1] ?? $date,
                         'narration' => $narrationMatch[1] ?? 'No narration',
-                        // 'raw_content' => $content // keeping for debugging
+                        'raw_content' => $content // keeping for debugging
                     ];
                 }
             }
 
             return response()->json($emailContents);
+
+            //get user 
+
+            $phone_number = 09058744473;
+            //get user_id from user table
+            $user = User::where('phone_number', $phone_number)->first();
+
+            //insert into Mailpay
+
+            $mailpay = Mailpay::create([
+                'user_id' => $user->id?? 'Unknown',
+                'amount' => $emailContents['amount']?? '0.00',
+                'date' => $emailContents['date']?? 'Unknown',
+                'narration' => $emailContents['narration']?? 'No narration',
+                'status' => 0,
+            ])
 
             // Get message IDs first
             $response = Http::withToken($token['access_token'])
