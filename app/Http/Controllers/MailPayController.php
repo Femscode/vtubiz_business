@@ -108,14 +108,24 @@ class MailPayController extends Controller
 
                     // Extract transaction date from content
                     preg_match('/Date & Time:\s*\n\s*(.*?)\s*\n/s', $content, $dateMatch);
+                    // Extract narration and phone number
+                    preg_match('/Narration:\s*\n\s*(.*?)\s*\n/s', $content, $narrationMatch);
+                    $narration = $narrationMatch[1] ?? 'No narration';
+                    
+                    // Extract phone number from narration (matches both formats)
+                    preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
+                    $phone_number = $phoneMatch[1] ?? null;
 
                     $emailContents[] = [
                         'sender' => $senderMatch[1] ?? 'Unknown',
                         'amount' => $amount,
                         'date' => $dateMatch[1] ?? $date,
-                        'narration' => $narrationMatch[1] ?? 'No narration',
+                        'narration' => $narration,
+                        'phone_number' => $phone_number,
                         'raw_content' => $content // keeping for debugging
                     ];
+
+                  
                 }
             }
 
