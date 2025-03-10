@@ -274,30 +274,39 @@ class MailPayController extends Controller
                     // Find user and create payment record
                     
                     if ($phoneMatch[1] ?? null) {
-                        $user = User::where('phone', $phoneMatch[1])->first();
-                        $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
-                        $details = "Payment of NGN this and that";
-
-                        $mailpay = Mailpay::create([
-                            'user_id' => $user->id ?? null,
-                            'amount' => $amountpaid,
-                            'date' => $dateMatch[1] ?? $date,
+                        // Check for existing transaction with same details
+                        $existingMailpay = Mailpay::where([
+                            'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
                             'narration' => $narration,
-                            'status' => $user ? 1 : 0, // Set status based on user existence
-                        ]);
+                            'date' => $dateMatch[1] ?? $date
+                        ])->first();
 
-                        // Only create transaction if user exists
-                        if ($user) {
-                            $reference = 'mailpay'.$mailpay->id. "-".Str::rand(5); // Assuming 'id' is the primary key of 'mailpays'
-                            $this->create_transaction(
-                                'Account Funded Through Transfer',
-                                $mailpay->id,
-                                $details,
-                                'credit',
-                                $amountpaid,
-                                $user->id,
-                                1
-                            );
+                        if (!$existingMailpay) {
+                            $user = User::where('phone', $phoneMatch[1])->first();
+                            $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
+                            $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
+
+                            $mailpay = Mailpay::create([
+                                'user_id' => $user->id ?? null,
+                                'amount' => $amountpaid,
+                                'date' => $dateMatch[1] ?? $date,
+                                'narration' => $narration,
+                                'status' => $user ? 1 : 0,
+                            ]);
+
+                            // Only create transaction if user exists
+                            if ($user) {
+                                $reference = 'mailpay'.$mailpay->id.Str::rand(5);
+                                $this->create_transaction(
+                                    'Account Funded Through Transfer',
+                                    $mailpay->id,
+                                    $details,
+                                    'credit',
+                                    $amountpaid,
+                                    $user->id,
+                                    1
+                                );
+                            }
                         }
                     }
 
