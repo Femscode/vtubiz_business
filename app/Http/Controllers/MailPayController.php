@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Erion;
 use App\Models\Mailpay;
 use App\Models\User;
 use App\Traits\TransactionTrait;
@@ -286,11 +287,11 @@ class MailPayController extends Controller
                             $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
                             $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
 
-                            $reference = $reference = 'MAILPAY_'.time();
+                            $reference = $reference = 'MAILPAY_' . time();
                             $mailpay = Mailpay::create([
-                                'sender_name' =>  $senderMatch[1] ?? 'Unknown', 
+                                'sender_name' =>  $senderMatch[1] ?? 'Unknown',
                                 'reference' => $reference,
-                                'phone' => $phoneMatch[1] ?? null, 
+                                'phone' => $phoneMatch[1] ?? null,
                                 'user_id' => $user->id ?? null,
                                 'amount' => $amountpaid,
                                 'date' => $dateMatch[1] ?? $date,
@@ -300,7 +301,7 @@ class MailPayController extends Controller
 
                             // Only create transaction if user exists
                             if ($user) {
-                               
+
                                 $this->create_transaction(
                                     'Account Funded Through Transfer',
                                     $reference,
@@ -457,5 +458,31 @@ class MailPayController extends Controller
         $schedule->call(function () {
             processCreditAlertEmails();
         })->everyFiveMinutes();
+    }
+
+
+    public function saveErion(Request $request)
+    {
+        try {
+            $email = $request->email;
+
+            // Validate email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(['message' => 'not save'], 400);
+            }
+
+            // Check if email already exists
+            $existingEmail = Erion::where('email', $email)->first();
+            if ($existingEmail) {
+                return response()->json(['message' => 'already saved'], 200);
+            }
+            // Save new email
+            $erion = Erion::create($request->all());
+            
+            return response()->json(['message' => 'saved'], 201);
+        } catch (\Exception $e) {
+            \Log::error('Newsletter subscription error: ' . $e->getMessage());
+            return response()->json(['message' => 'not save'], 500);
+        }
     }
 }
