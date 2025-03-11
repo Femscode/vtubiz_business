@@ -16,6 +16,7 @@ class CreateMailpaysTable extends Migration
         Schema::create('mailpays', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
+            $table->string('reference')->nullable();
             $table->decimal('amount',20,2);
             $table->string('narration');
             $table->string('phone');

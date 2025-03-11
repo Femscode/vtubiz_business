@@ -236,7 +236,7 @@ class MailPayController extends Controller
 
             // Get message IDs first
 
-            $threeMinutesAgo = time() - (300 * 60);
+            $threeMinutesAgo = time() - (3 * 60);
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
@@ -286,8 +286,10 @@ class MailPayController extends Controller
                             $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
                             $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
 
+                            $reference = 'mailpay'.Str::rand(7);
                             $mailpay = Mailpay::create([
                                 'sender_name' =>  $senderMatch[1] ?? 'Unknown', 
+                                'reference' => $reference,
                                 'phone' => $phoneMatch[1] ?? null, 
                                 'user_id' => $user->id ?? null,
                                 'amount' => $amountpaid,
@@ -298,7 +300,7 @@ class MailPayController extends Controller
 
                             // Only create transaction if user exists
                             if ($user) {
-                                $reference = 'mailpay' . $mailpay->id;
+                               
                                 $this->create_transaction(
                                     'Account Funded Through Transfer',
                                     $reference,
@@ -322,9 +324,15 @@ class MailPayController extends Controller
                 }
             }
 
+            return response()->json("OK", 200);
+
             return response()->json($processedEmails);
         } catch (\Exception $e) {
             \Log::error('Gmail API Error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gmail API Error: ' . $e->getMessage()
+            ], 500);
             return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
         }
     }
