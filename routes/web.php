@@ -164,6 +164,8 @@ Route::get('/blog/{id}', [BusinessController::class, 'blogdetails'])->name('blog
 Route::post('/saveComment', [BusinessController::class, 'saveComment'])->name('saveComment');
 Route::get('/run_schedule_giveaway', [App\Http\Controllers\FunGiveAwayController::class, 'run_schedule_giveaway'])->name('run_schedule_giveaway');
 Route::get('/clear_duplicate_transaction', [App\Http\Controllers\FunGiveAwayController::class, 'clear_duplicate_transaction'])->name('clear_duplicate_transaction');
+Route::any('mailpay/process', [App\Http\Controllers\MailPayController::class, 'processCreditAlertEmails'])->name('process.emails');
+
 Route::get('/claim_giveaway/{giveaway_id}/{user_id}/{rand_no?}', [App\Http\Controllers\FunGiveAwayController::class, 'claim_price'])->name('claim_price');
 Route::post('/saveGiveAwayContacts', [App\Http\Controllers\FunGiveAwayController::class, 'saveGiveAwayContacts'])->name('saveGiveAwayContacts');
 Route::any('/retryGiveaway/{id}', [App\Http\Controllers\FunGiveAwayController::class, 'retryGiveaway'])->name('retryGiveaway')->middleware('auth');
