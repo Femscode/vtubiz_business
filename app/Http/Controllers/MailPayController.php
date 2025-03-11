@@ -286,7 +286,7 @@ class MailPayController extends Controller
                             $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
                             $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
 
-                            $reference = 'mailpay'.Str::rand(7);
+                            $reference = $reference = 'MAILPAY_'.time();
                             $mailpay = Mailpay::create([
                                 'sender_name' =>  $senderMatch[1] ?? 'Unknown', 
                                 'reference' => $reference,
