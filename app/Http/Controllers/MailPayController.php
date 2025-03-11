@@ -236,7 +236,7 @@ class MailPayController extends Controller
 
             // Get message IDs first
 
-            $threeMinutesAgo = time() - (30 * 60);
+            $threeMinutesAgo = time() - (300 * 60);
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
