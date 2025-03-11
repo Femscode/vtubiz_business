@@ -238,21 +238,11 @@ class MailPayController extends Controller
 
             $threeMinutesAgo = time() - (3 * 60);
             $response = Http::withToken($token['access_token'])
-    ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-        'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
-    ]);
-
-
-    return $response;
-            $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                    'q' => 'subject:"Credit Alert" newer_than:1d'
-                    
+                    'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
                 ]);
-
             $messages = $response->json();
             $processedEmails = [];
-
             // Process each email
             if (!empty($messages['messages'])) {
                 foreach ($messages['messages'] as $message) {
@@ -282,7 +272,7 @@ class MailPayController extends Controller
                     preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
 
                     // Find user and create payment record
-                    
+
                     if ($phoneMatch[1] ?? null) {
                         // Check for existing transaction with same details
                         $existingMailpay = Mailpay::where([
@@ -297,6 +287,8 @@ class MailPayController extends Controller
                             $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
 
                             $mailpay = Mailpay::create([
+                                'sender_name' =>  $senderMatch[1] ?? 'Unknown', 
+                                'phone' => $phoneMatch[1] ?? null, 
                                 'user_id' => $user->id ?? null,
                                 'amount' => $amountpaid,
                                 'date' => $dateMatch[1] ?? $date,
@@ -306,7 +298,7 @@ class MailPayController extends Controller
 
                             // Only create transaction if user exists
                             if ($user) {
-                                $reference = 'mailpay'.$mailpay->id;
+                                $reference = 'mailpay' . $mailpay->id;
                                 $this->create_transaction(
                                     'Account Funded Through Transfer',
                                     $reference,

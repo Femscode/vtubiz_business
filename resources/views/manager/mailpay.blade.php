@@ -12,33 +12,40 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">Duplicate Transactions, <span class='alert alert-success'>Balance : NGN{{ number_format($easy_balance,2) }}</span></h4>
+                        <h4 class="card-title mb-4">Mailpay Transactions ({{ number_format(count($mailpays)) }})</h4>
                         <table class="datatable table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">Username</th>
+                                    <th scope="col">Sender Details</th>
+                                    <th scope="col">User Details</th>
                                    
-                                    <th scope="col">Details</th>
+                                    <th scope="col">Narration</th>
                                     <th scope="col">Amount</th>
-                                    <th scope="col">Date & Time</th>
-                                  
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($duplicate_transactions as $key => $tranx)
+                                @foreach($mailpays as $key => $tranx)
 
                                 <tr>
 
-                                    <td>{{ $tranx->user->name ?? "No name" }}<br><span class='text-danger'>{{ $tranx->title }}</span></td>
-                                    <td>{{ $tranx->details }}</td>
-                                    <td>₦{{ number_format($tranx->amount) }}</td>
-                                    <td>{{ Date('d-m-Y | h:i',strtotime($tranx->created_at))}} | {{ Date("h:i", strtotime($tranx->created_at)) }}</td>
+                                    <td>{{ $tranx->sender_name  }}<br><span class='text-danger'>{{ $tranx->phone }}</span></td>
+                                    <td>{{ $tranx->user->name ?? "Nil" }}<br><span class='text-danger'>{{ $tranx->user->email ?? "Nil" }}</span></td>
                                    
+                                    <td>{{ $tranx->narration }}</td>
+                                    <td>₦{{ number_format($tranx->amount) }}</td>
                                     <td>
-                                        <a href='/manager/admin_delete_duplicate/confirm/{{ $tranx->id }}' onclick="return confirm('Are you sure you want to approve/debit this transaction?')" class='btn btn-success btn-sm'>Confirm/Debit User</a>
-                                        <a href='/manager/admin_delete_duplicate/delete/{{ $tranx->id }}' onclick="return confirm('Are you sure you want to delete/disconfirm this transaction?')" class='btn btn-danger btn-sm'>Clear Transaction</a>
+                                        @if($tranx->status == 1)
+                                            <span class="badge bg-success">Confirmed</span>
+                                        @elseif($tranx->status == 2)
+                                            <span class="badge bg-warning">Pending</span>
+                                        @else
+                                            <span class="badge bg-danger">Failed</span>
+                                        @endif
                                     </td>
+                                    <td>{{ $tranx->date }}</td>
+                                   
                                 </tr>
                                 @endforeach
 

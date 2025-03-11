@@ -8,6 +8,7 @@ use App\Models\Data;
 use App\Models\DuplicateTransaction;
 use App\Models\Examination;
 use App\Models\GiveAway;
+use App\Models\Mailpay;
 use App\Models\Notification;
 use App\Models\ScheduleAccount;
 use App\Models\Transaction;
@@ -297,6 +298,7 @@ class ManagerController extends Controller
         }
         $data['active'] = 'super';
         $data['payments'] = Transaction::where('title', 'Account Funding')
+            ->orWhere('title', 'Account Funded Through Transfer')
             ->orWhere('title', 'Fund Transfer')
             ->orWhere('title', 'Payment Received')
             ->orWhere('title', 'Funds Withdraw')
@@ -384,6 +386,21 @@ class ManagerController extends Controller
         $data['duplicate_transactions'] = DuplicateTransaction::latest()->get();
 
         return view('manager.duplicate_transactions', $data);
+    }
+    public function mailpay_dashboard()
+    {
+        $data['user'] = $user =  Auth::user();
+
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+        $data['active'] = 'super';
+
+        
+        $data['mailpays'] = Mailpay::latest()->get();
+
+
+        return view('manager.mailpay', $data);
     }
     public function contact_gain()
     {

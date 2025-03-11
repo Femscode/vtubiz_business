@@ -196,7 +196,7 @@ class SubscriptionController extends Controller
         $duplicate = DuplicateTransaction::find($tranx_id);
         $user = User::find($duplicate->user_id);
         // dd($user, $type,$duplicate);
-        if (Auth::user()->id == $user->id || Auth::user()->email == 'fasanyafemi@gmail.com') {
+        if (Auth::user()->id == $user->id || Auth::user()->email == 'fasanyafemi@gmail.com' || Auth::user()->email == 'manager@gmail.com') {
 
 
             if ($type == 'confirm') {
@@ -221,7 +221,7 @@ class SubscriptionController extends Controller
                 return redirect()->back()->with('message', 'Duplicate confirmed successfully!');
                 return true;
             } else {
-                if (Auth::user()->email == 'fasanyafemi@gmail.com') {
+                if (Auth::user()->email == 'fasanyafemi@gmail.com' || Auth::user()->email == 'manager@gmail.com') {
                     $duplicate->delete();
                     return redirect()->back()->with('message', 'Duplicate deleted successfully!');
                 } else {

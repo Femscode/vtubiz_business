@@ -654,6 +654,7 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/manager/reset_pin/{id}', [App\Http\Controllers\ManagerController::class, 'reset_pin'])->name('reset_pin');
         Route::any('/manager/notifications/', [App\Http\Controllers\ManagerController::class, 'notifications'])->name('duplicate_transactions');
         Route::any('/manager/duplicate_transactions/', [App\Http\Controllers\ManagerController::class, 'duplicate_transactions'])->name('duplicate_transactions');
+        Route::any('/manager/mailpay_dashboard/', [App\Http\Controllers\ManagerController::class, 'mailpay_dashboard'])->name('mailpay_dashboard');
         Route::any('/manager/contact_gain/', [App\Http\Controllers\ManagerController::class, 'contact_gain'])->name('contact_gain');
         Route::any('/manager/admin_blog/', [App\Http\Controllers\ManagerController::class, 'admin_blog'])->name('admin_blog');
         Route::any('/manager/create_blog/', [App\Http\Controllers\ManagerController::class, 'create_blog'])->name('create_blog');

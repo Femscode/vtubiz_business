@@ -18,6 +18,8 @@ class CreateMailpaysTable extends Migration
             $table->string('user_id')->nullable();
             $table->decimal('amount',20,2);
             $table->string('narration');
+            $table->string('phone');
+            $table->string('sender_name');
             $table->integer('status')->default(0);
             $table->string('date');
             $table->timestamps();

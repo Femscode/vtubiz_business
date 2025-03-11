@@ -241,6 +241,13 @@
                                     <!--end:Menu link-->
 
                                 </a>
+                                <a href='/manager/mailpay_dashboard'
+                                    class="menu-item  @if($active == 'withdrawal') here show menu-here-bg @endif menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <span class="menu-link"><span class="menu-title">Mailpay
+                                        </span></span>
+                                    <!--end:Menu link-->
+
+                                </a>
                                 <!--end:Menu item-->
                             </div>
                             <!--end::Menu-->
