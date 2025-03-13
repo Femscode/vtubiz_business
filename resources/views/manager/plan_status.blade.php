@@ -51,6 +51,22 @@
                                </tr>
                                <tr>
                                     <td>MTN</td>
+                                    <td>AWOOF</td>
+                                    <td>{{ $mtn_awoof->status }}</td>
+                                    <td>
+                                        @if($mtn_awoof->status == 0)
+                                        <a href="/plan_status/1/awoof" class='btn btn-sm btn-success' onclick='return confirm("Change the status of this plan?")'>
+                                            Enable
+                                        </a>
+                                        @else 
+                                        <a href="/plan_status/1/awoof" class='btn btn-sm btn-danger' onclick='return confirm("Change the status of this plan?")'>
+                                            Disable
+                                        </a>
+                                        @endif
+                                    </td>
+                               </tr>
+                               <tr>
+                                    <td>MTN</td>
                                     <td>CG</td>
                                     <td>{{ $mtn_cg->status }}</td>
                                     <td>
@@ -142,6 +158,22 @@
                                         </a>
                                         @else 
                                         <a href="/plan_status/3/cg" class='btn btn-sm btn-danger' onclick='return confirm("Change the status of this plan?")'>
+                                            Disable
+                                        </a>
+                                        @endif
+                                    </td>
+                               </tr>
+                               <tr>
+                                    <td>AIRTEL</td>
+                                    <td>AWOOF</td>
+                                    <td>{{ $airtel_awoof->status }}</td>
+                                    <td>
+                                        @if($airtel_awoof->status == 0)
+                                        <a href="/plan_status/3/awoof" class='btn btn-sm btn-success' onclick='return confirm("Change the status of this plan?")'>
+                                            Enable
+                                        </a>
+                                        @else 
+                                        <a href="/plan_status/3/awoof" class='btn btn-sm btn-danger' onclick='return confirm("Change the status of this plan?")'>
                                             Disable
                                         </a>
                                         @endif

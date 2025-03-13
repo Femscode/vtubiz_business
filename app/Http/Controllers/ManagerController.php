@@ -86,7 +86,10 @@ class ManagerController extends Controller
             return redirect('dashboard');
         }
         $data['active'] = 'super';
+
+        $data['active'] = 'super';
         $data['mtn_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 1)->first();
+        $data['mtn_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 1)->first();
         $data['mtn_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 1)->first();
         $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
         $data['mtn_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 1)->first();
@@ -98,6 +101,7 @@ class ManagerController extends Controller
         $data['glo_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 2)->first();
 
         $data['airtel_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 3)->first();
+        $data['airtel_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 3)->first();
         $data['airtel_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 3)->first();
         $data['airtel_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 3)->first();
         $data['airtel_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 3)->first();
@@ -107,6 +111,7 @@ class ManagerController extends Controller
         $data['nmobile_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 4)->first();
         $data['nmobile_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 4)->first();
 
+        
 
         return view('manager.plan_status', $data);
     }
