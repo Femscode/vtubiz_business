@@ -924,11 +924,12 @@ class BusinessController extends Controller
         if ( $user->email == 'fasanyafemi@gmail.com' || $user->email == 'manager@gmail.com') {
            
             $transaction = Transaction::find($id);
+           
           
          
             if ($transaction->refund_status == 0 ) {
-                $user = User::find($transaction->user_id)->first();
-              
+                $user = User::find($transaction->user_id);
+               
                 $user->balance = $user->balance + $transaction->amount;
                 $user->save();
                 $transaction->refund_status = 1;
