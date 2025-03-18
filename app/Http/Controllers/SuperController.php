@@ -265,7 +265,9 @@ class SuperController extends Controller
         }
         $data['allusers'] =  User::count();
 
-        $data['users'] = User::where('total_spent', '!=', 0)->latest()->get();
+        $data['users'] = User::where('total_spent', '!=', 0)->
+        orWhere('balance', '>', 0)
+        ->latest()->get();
         // $data['users'] = User::latest()->get();
         $data['active'] = 'super';
 
