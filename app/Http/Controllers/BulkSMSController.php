@@ -555,9 +555,9 @@ class BulkSMSController extends Controller
             $tranx->after = $user->balance;
 
             //charging the admin       
-            $profit = $amount - floatval($real_amount);
-            $company->balance += $profit;
-            $tranx->admin_after = $company->balance;
+            // $profit = $amount - floatval($real_amount);
+            // $company->balance += $profit;
+            // $tranx->admin_after = $company->balance;
             $tranx->save();
             $company->save();
         } else {
