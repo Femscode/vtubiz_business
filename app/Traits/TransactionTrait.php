@@ -450,11 +450,11 @@ trait TransactionTrait
                 $r_user->balance -= $amount;
                 $r_user->total_spent += $amount;
                 $r_user->save();
-                $profit = $amount - floatval($real_dataprice);
-                $company->balance += $profit;
-                $company->save();
+                // $profit = $amount - floatval($real_dataprice);
+                // $company->balance += $profit;
+                // $company->save();
                 $tranx->after = $r_user->balance;
-                $tranx->admin_after = $company->balance;
+                // $tranx->admin_after = $company->balance;
                 $tranx->save();
                 return $tranx->id;
             } else {
