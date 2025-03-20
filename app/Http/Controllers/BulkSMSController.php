@@ -484,7 +484,7 @@ class BulkSMSController extends Controller
                 $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
 
                 //save the record for succesfully sent SMS
-                $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type);
+                $this->create_transaction('Bulk SMS', $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type);
                 $response = [
                     'success' => true,
                     'message' => 'Sent Successfully!',

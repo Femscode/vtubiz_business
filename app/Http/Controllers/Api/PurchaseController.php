@@ -11,9 +11,7 @@ class PurchaseController extends Controller
 {
     public function fetchplan($type, $network = null)
     {
-
         $user = Auth::user();
-
         if ($type == "data") {
             if ($user->upgrade == 1) {
 
