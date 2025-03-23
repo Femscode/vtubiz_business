@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'purchase'], function () {
         Route::get('/fetch-plan/{type}/{network}', [PurchaseController::class, 'fetchPlan'])->name('transactions');
-        Route::get('/buydata', [SubscriptionController::class, 'buydata'])->name('buydata');
+        Route::post('/buydata', [SubscriptionController::class, 'buydata'])->name('buydata');
     });
 });
 
