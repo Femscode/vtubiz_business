@@ -297,13 +297,13 @@ class SubscriptionController extends Controller
             return "schedule_saved";
         }
         // dd($request->all());
-        if($user->upgrade == 1) {
-            $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+        // if($user->upgrade == 1) {
+        //     $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
             
-        } else {
+        // } else {
             $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
 
-        }
+        // }
          $data_price =  $data->admin_price;
         $real_dataprice = $data->data_price;
         if ($data == null) {
