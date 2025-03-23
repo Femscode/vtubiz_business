@@ -7,11 +7,13 @@ use App\Http\Controllers\Api\TransactionController as TC;
 use App\Http\Controllers\Api\UserController as ApiUserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailPayController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -69,6 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'purchase'], function () {
         Route::get('/fetch-plan/{type}/{network}', [PurchaseController::class, 'fetchPlan'])->name('transactions');
+        Route::get('/buydata', [SubscriptionController::class, 'buydata'])->name('buydata');
     });
 });
 
