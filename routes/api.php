@@ -74,7 +74,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/buydata', [SubscriptionController::class, 'buydata'])->name('buydata');
         Route::post('/fetch_meter_details', [App\Http\Controllers\SubscriptionController::class, 'fetch_meter_details']);
         Route::post('/buyElectricity', [App\Http\Controllers\SubscriptionController::class, 'buyElectricity']);
-    
+        Route::post('/fetch_decoder_details', [App\Http\Controllers\SubscriptionController::class, 'fetch_decoder_details']);
+        Route::post('/buyCable', [App\Http\Controllers\SubscriptionController::class, 'buyCable']);
     });
 });
 
