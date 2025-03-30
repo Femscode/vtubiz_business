@@ -1346,6 +1346,7 @@ class SubscriptionController extends Controller
     }
     public function buyExamination(Request $request)
     {
+
         $this->validate($request, ['amount' => ['required', 'numeric', 'min:100']]);
 
         $user = Auth::user();
@@ -1397,7 +1398,7 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
 
-
+        return $request->all();
         if ($request->exam_type == 'WAEC RESULT CHECKER') {
             //purchase the eexampin
             $curl = curl_init();
