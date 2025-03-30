@@ -1123,7 +1123,6 @@ class SubscriptionController extends Controller
 
     public function buyCable(Request $request)
     {
-        return $request->all();
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
         if ($request->plan == 'renew') {
