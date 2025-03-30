@@ -1347,7 +1347,7 @@ class SubscriptionController extends Controller
     public function buyExamination(Request $request)
     {
 
-        return $request->all();
+        // return $request->all();
         $this->validate($request, ['amount' => ['required', 'numeric', 'min:100']]);
 
         $user = Auth::user();
