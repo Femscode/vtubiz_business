@@ -1399,7 +1399,7 @@ class SubscriptionController extends Controller
             return response()->json($response);
         }
 
-        return $request->all();
+        // return $request->all();
         if ($request->exam_type == 'WAEC RESULT CHECKER') {
             //purchase the eexampin
             $curl = curl_init();
