@@ -1999,6 +1999,11 @@ class SubscriptionController extends Controller
         
         return view('business_backend.electricity', $data);
     }
+
+    public function get_exam_types() {
+        $data['examinations'] = Examination::where('user_id', 0)->get();
+        return response()->json($data);
+    }
     public function examination()
     {
         $data['user'] = $user = Auth::user();

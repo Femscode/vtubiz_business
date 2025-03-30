@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/fetch_decoder_details', [App\Http\Controllers\SubscriptionController::class, 'fetch_decoder_details']);
         Route::get('/fetch_cable_plan/{network}', [App\Http\Controllers\SubscriptionController::class, 'fetch_cable_plan']);
         Route::post('/buyCable', [App\Http\Controllers\SubscriptionController::class, 'buyCable']);
+        Route::get('/get_exam_types', [App\Http\Controllers\SubscriptionController::class, 'get_exam_types']);
     });
 });
 
