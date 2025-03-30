@@ -1241,6 +1241,7 @@ class SubscriptionController extends Controller
     }
     public function buyElectricity(Request $request)
     {
+        return $request->all();
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
         $discounted_ratio = Electricity::find(1)->{'electricity_price_' . $company->id};

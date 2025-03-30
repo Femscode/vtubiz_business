@@ -73,7 +73,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/fetch-plan/{type}/{network}', [PurchaseController::class, 'fetchPlan'])->name('transactions');
         Route::post('/buydata', [SubscriptionController::class, 'buydata'])->name('buydata');
         Route::post('/fetch_meter_details', [App\Http\Controllers\SubscriptionController::class, 'fetch_meter_details']);
-   
+        Route::post('/buyElectricity', [App\Http\Controllers\SubscriptionController::class, 'buyElectricity']);
+    
     });
 });
 
