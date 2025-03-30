@@ -13,7 +13,7 @@ class BeneficiaryController extends Controller
     {
         try {
             $user = Auth::user();
-            $beneficiaries = Beneficiary::where('user_id', $user->id)->latest()->get();
+            $beneficiaries = Beneficiary::where('user_id', $user->id)->where('type', $type)->latest()->get();
 
             return response()->json([
                 'status' => 'success',
