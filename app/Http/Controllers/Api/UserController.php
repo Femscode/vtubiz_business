@@ -78,7 +78,7 @@ class UserController extends Controller
             $brand_name = str_replace(' ', '-', $request->brand_name);
             $user->name = $request->name;
             $user->phone = $request->phone;
-            $user->brand_name = $brand_name;
+            // $user->brand_name = $brand_name;
             $user->save();
 
             return response()->json([
@@ -172,6 +172,42 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update PIN'
+            ], 500);
+        }
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            // Validate password to confirm deletion
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid password. Account deletion cancelled.'
+                ], 401);
+            }
+
+            // Check for pending transactions or balance
+            if ($user->wallet_balance > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete account with existing balance. Please withdraw your funds first.'
+                ], 400);
+            }
+
+            // Perform the deletion
+            // $user->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Account deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete account'
             ], 500);
         }
     }

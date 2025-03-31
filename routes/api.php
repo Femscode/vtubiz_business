@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/update', [ApiUserController::class, 'updateProfile'])->name('updateProfile');
         Route::post('/update-pin', [ApiUserController::class, 'updatePin'])->name('updatePin');
         Route::post('/update-password', [ApiUserController::class, 'updatePassword'])->name('updatePassword');
+        Route::post('/delete-account', [ApiUserController::class, 'deleteAccount'])->name('deleteAccount');
     });
 });
 Route::group(['middleware' => ['auth:sanctum']], function () {
