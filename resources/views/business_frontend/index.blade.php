@@ -42,7 +42,7 @@
           <div class="navbar-collapse offcanvas offcanvas-nav offcanvas-start" style="visibility: hidden;"
             aria-hidden="true">
             <div class="offcanvas-header d-lg-none">
-              <h3 class="text-black fs-30 mb-0">  <img src="{{ asset('assets/img/logo/vtulogo.png') }}"  width='100px' height='25px'  alt="" /></h3>
+              <h3 class="text-black fs-30 mb-0"> <img src="{{ asset('assets/img/logo/vtulogo.png') }}" width='100px' height='25px' alt="" /></h3>
               <button type="button" class="fa fa-close" style=' display: inline-block;
               padding: 5px 7px;
               font-size: 16px;
@@ -60,7 +60,7 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link" href="#" data-bs-toggle="dropdown">Our Products <i class='fa fa-angle-down'></i></a>
                   <ul class="dropdown-menu">
-                 
+
                     <li class="dropdown-item"><a href='/data'>Affordable Dataplans</a></li>
                     <li class="dropdown-item"><a href='/airtime'>Airtime Top Up</a></li>
                     <li class="dropdown-item"><a href='/cable'>Cable Subscription</a></li>
@@ -72,7 +72,7 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link" href="#" data-bs-toggle="dropdown">Our Features <i class='fa fa-angle-down'></i></a>
                   <ul class="dropdown-menu">
-                 
+
                     <li class="dropdown-item">Transaction Redo</li>
                     <li class="dropdown-item">Save Beneficiary</li>
                     <li class="dropdown-item">Bulk/Group Purchase</li>
@@ -81,16 +81,16 @@
                     <li class="dropdown-item">Self Service</li>
                   </ul>
                 </li>
-              
+
                 <li class="nav-item dropdown">
                   <a class="nav-link" href="/blogs">Our Blog</a>
-                
+
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link" href="#" data-bs-toggle="dropdown">Login <i class='fa fa-angle-down'></i></a>
                   <ul class="dropdown-menu">
                     <li class="nav-item"><a class="dropdown-item" href="/login">Login
-                        </a></li>
+                      </a></li>
                     <li class="nav-item"><a class="dropdown-item" href="/register">Register
                       </a></li>
 
@@ -300,7 +300,7 @@
               border:0px solid white;
               border-radius: 3px;             
               cursor: pointer;' data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
+            aria-label="Close"></button>
         </div>
         <div class="offcanvas-body pb-6">
           <div class="widget mb-8">
@@ -356,18 +356,18 @@
               {{-- <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Smart Champ, Welcome to 2024!</h2> --}}
               {{-- <img class="w-auto"
                 src="{{ asset('assets/img/xmas.png') }}"
-                srcset="{{ asset('assets/img/xmas.png') }}"
-                alt="headin" /> --}}
-                {{-- <img class="w-auto"
+              srcset="{{ asset('assets/img/xmas.png') }}"
+              alt="headin" /> --}}
+              {{-- <img class="w-auto"
                 src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
                 alt="headin" /> --}}
-                <img class="w-auto" style='border-radius:20px'
+              <img class="w-auto" style='border-radius:20px'
                 src="{{ asset('assets/img/Work_7.jpg') }}"
                 srcset="{{ asset('assets/img/Work_7.jpg') }}"
                 alt="headin" />
-              
-              </figure>
+
+            </figure>
           </div>
           <!-- /column -->
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-5 text-center text-lg-start">
@@ -569,7 +569,7 @@
                   </span>
                   <h4>Bulk SMS</h4>
                   <p class="mb-2">
-                   
+
                     Reach your audience seamlessly with our Bulk SMS packages.
                   </p>
                 </div>
@@ -956,12 +956,12 @@
                     <!--/.prices -->
                     <h4 class="card-title mt-2">MTN Data Plans</h4>
                     <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦250</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦500</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,600</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,700</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦25,500</strong> ~ 100GB 30Days </span></li>
+                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦820</strong> ~ 1GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,640</strong> ~ 2GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦4,100</strong> ~ 5GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦8,200</strong> ~ 10GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦82,000</strong> ~ 100GB 30Days </span></li>
                     </ul>
                     <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
                   </div>
@@ -977,12 +977,12 @@
                     <!--/.prices -->
                     <h4 class="card-title mt-2">Glo Data Plans</h4>
                     <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦235</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦480</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,300</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,400</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦23,500</strong> ~ 100GB 30Days </span></li>
+                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦480</strong> ~ 1GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦960</strong> ~ 2GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,400</strong> ~ 5GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦4,800</strong> ~ 10GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦48,000</strong> ~ 100GB 30Days </span></li>
 
                     </ul>
                     <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
@@ -998,12 +998,12 @@
                     <!--/.prices -->
                     <h4 class="card-title mt-2">Airtel Data Plans</h4>
                     <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦235</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦480</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,300</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,400</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦23,500</strong> ~ 100GB 30Days </span></li>
+                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦940</strong> ~ 1GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,880</strong> ~ 2GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦4,700</strong> ~ 5GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦9,400</strong> ~ 10GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦94,000</strong> ~ 100GB 30Days </span></li>
 
                     </ul>
                     <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
@@ -1020,13 +1020,12 @@
                     <!--/.prices -->
                     <h4 class="card-title mt-2">9Mobile Data Plans</h4>
                     <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦235</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦480</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,300</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,400</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦23,500</strong> ~ 100GB 30Days </span></li>
-
+                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦310</strong> ~ 1GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦620</strong> ~ 2GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,550</strong> ~ 5GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦3,100</strong> ~ 10GB 30Days </span></li>
+                      <li><i class="fa fa-check fs-21"></i><span><strong>₦31,000</strong> ~ 100GB 30Days </span></li>
                     </ul>
                     <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
                   </div>
@@ -1091,7 +1090,7 @@
             <img class="mb-4" height='30px' width='100px' src="{{ asset('assets/img/logo/vtulogo.png') }}"
               srcset="{{ asset('assets/img/logo/vtulogo.png') }}" alt="" />
             <p class="mb-4">©
-              <?php echo Date('Y');?> VTUBIZ. <br class="d-none d-lg-block" />All rights reserved.
+              <?php echo Date('Y'); ?> VTUBIZ. <br class="d-none d-lg-block" />All rights reserved.
             </p>
             <a class='btn btn-secondary' href='https://www.instagram.com/vtubiz/'>Follow us on Instagram</a>
             {{-- <nav class="nav social social-white">
