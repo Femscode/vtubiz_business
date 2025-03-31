@@ -60,6 +60,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/update-pin', [ApiUserController::class, 'updatePin'])->name('updatePin');
         Route::post('/update-password', [ApiUserController::class, 'updatePassword'])->name('updatePassword');
         Route::post('/delete-account', [ApiUserController::class, 'deleteAccount'])->name('deleteAccount');
+       //Funding
+        Route::post('/generate-virtual-account', [ApiUserController::class, 'generateVirtualAccount'])->name('deleteAccount');
     });
 });
 Route::group(['middleware' => ['auth:sanctum']], function () {

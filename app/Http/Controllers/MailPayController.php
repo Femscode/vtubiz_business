@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Erion;
 use App\Models\Mailpay;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Traits\TransactionTrait;
 use Exception;
@@ -438,7 +439,7 @@ class MailPayController extends Controller
             ]);
 
             // Update user wallet balance
-            $user->wallet_balance += $transaction['amount'];
+            $user->balance += $transaction['amount'];
             $user->save();
 
             // Notify user via email or in-app notification

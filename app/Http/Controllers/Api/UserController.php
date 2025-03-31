@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -190,10 +191,10 @@ class UserController extends Controller
             }
 
             // Check for pending transactions or balance
-            if ($user->wallet_balance > 0) {
+            if ($user->balance > 0) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Cannot delete account with existing balance. Please withdraw your funds first.'
+                    'message' => 'Cannot delete account with existing balance. Please spend your funds first.'
                 ], 400);
             }
 
@@ -208,6 +209,70 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete account'
+            ], 500);
+        }
+    }
+
+    public function generateVirtualAccount(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'amount' => 'required|numeric'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $user = Auth::user();
+            $str_name = explode(" ", $user->name);
+            $first_name = $str_name[0];
+            $last_name = end($str_name);
+            $trx_ref = Str::random(7);
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . env('FLW_SECRET_KEY')
+            ])->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
+                'email' => $user->email,
+                'is_permanent' => false,
+                'tx_ref' => $trx_ref,
+                'phonenumber' => $user->phone,
+                'amount' => $request->amount,
+                'firstname' => $first_name,
+                'lastname' => $last_name,
+                'narration' => 'VTUBIZ/' . $first_name . '-' . $last_name,
+            ]);
+
+            $responseData = $response->json();
+
+            if ($response->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Virtual account generated successfully',
+                    'data' => [
+                        'account_number' => $responseData['data']['account_number'],
+                        'bank_name' => $responseData['data']['bank_name'],
+                        'amount' => $responseData['data']['amount'],
+                        'expiry_date' => $responseData['data']['expiry_date']
+                    ]
+                ], 200);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate virtual account',
+                'errors' => $responseData['message'] ?? 'Unknown error occurred'
+            ], 400);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while generating virtual account'
             ], 500);
         }
     }
