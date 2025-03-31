@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', [ApiUserController::class, 'index'])->name('profile');
         Route::get('/referral_details', [ApiUserController::class, 'referral_details'])->name('referral_details');
-        Route::get('/remit-earnings', [ApiUserController::class, 'remitearning'])->name('remitearning');
+        Route::post('/remit-earnings', [ApiUserController::class, 'remitearning'])->name('remitearning');
     });
 });
 Route::group(['middleware' => ['auth:sanctum']], function () {
