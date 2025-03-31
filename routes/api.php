@@ -56,6 +56,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/', [ApiUserController::class, 'index'])->name('profile');
         Route::get('/referral_details', [ApiUserController::class, 'referral_details'])->name('referral_details');
         Route::post('/remit-earnings', [ApiUserController::class, 'remitearning'])->name('remitearning');
+        Route::post('/update', [ApiUserController::class, 'updateProfile'])->name('updateProfile');
+        Route::post('/update-pin', [ApiUserController::class, 'updatePin'])->name('updatePin');
+        Route::post('/update-password', [ApiUserController::class, 'updatePassword'])->name('updatePassword');
     });
 });
 Route::group(['middleware' => ['auth:sanctum']], function () {
