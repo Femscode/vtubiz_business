@@ -508,6 +508,12 @@ class FundingController extends Controller
         }
         return response()->json("OK", 200);
     }
+
+    public function whatsapp_webhook(Request $request)
+    {
+        file_put_contents(__DIR__ . '/whatsapp.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+        return response()->json("OK", 200);
+    }
     public static function computeSHA512TransactionHash($stringifiedData, $clientSecret)
     {
         $computedHash = hash_hmac('sha512', $stringifiedData, $clientSecret);

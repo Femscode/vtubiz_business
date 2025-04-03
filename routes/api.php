@@ -42,6 +42,7 @@ Route::any('flw/webhook', [App\Http\Controllers\FundingController::class, 'webho
 Route::any('easywebhook', [App\Http\Controllers\FundingController::class, 'easywebhook'])->name('easywebhook');
 Route::any('smartwebook', [App\Http\Controllers\FundingController::class, 'smartwebook'])->name('smartwebook');
 
+Route::any('whatsapp/webhook', [App\Http\Controllers\FundingController::class, 'whatsapp_webhook'])->name('whatsapp_webook');
 //authentication 
 
 Route::group(['prefix' => 'auth'], function () {
