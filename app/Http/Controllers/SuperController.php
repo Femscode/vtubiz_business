@@ -117,7 +117,7 @@ class SuperController extends Controller
                     'user_id' => 0,
                     'network' => $network,
                     'plan_id' => $data['plan_id'],
-                    'plan_name' => $network_prefix . ' ' . $data['name'],
+                    'plan_name' => $network_prefix . ' ' . $data['name']. ' '. $data['validity'],
                     'actual_price' => ceil($data['price']),
                     'data_price' => ceil($data['price'] + (0.02 * $data['price'])),
                     'account_price' => ceil($data['price'] + (0.04 * $data['price'])),
