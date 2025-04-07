@@ -2172,6 +2172,7 @@ class SubscriptionController extends Controller
         } else {
             $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
         }
+        $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
 
         // dd($data);
 
