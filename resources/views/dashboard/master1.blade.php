@@ -967,7 +967,7 @@
                         <!--begin::Main-->
                         @yield('content')
                         <!--end:::Main-->
-                        <a href="https://wa.me/2348128722501"><img src="{{asset('assets/media/logos/whatsapp.png')}}"
+                        <a href="https://wa.me/2349058744473"><img src="{{asset('assets/media/logos/whatsapp.png')}}"
                                 alt='whatsapp' id="fixedbutton"></a>
 
                     </div>
