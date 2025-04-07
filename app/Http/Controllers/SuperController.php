@@ -56,9 +56,79 @@ class SuperController extends Controller
             return redirect()->route('dashboard');
         }
         $data['active'] = 'super';
-        $data['datas'] = Data::where('user_id', 0)->latest()->orderBy('network')->get();
+        $data['datas'] = Data::where('user_id', 0)->orderBy('network')->get();
 
         return view('super.data_price', $data);
+    }
+    public function reset_data_price($type)
+    {
+        $data['user'] = $user = Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+
+        // Extract network and plan type from the incoming type parameter
+        $type_parts = explode('_', strtolower($type));
+        $network_name = $type_parts[0];
+        $plan_type = $type_parts[1];
+
+
+
+        // Map network names to their IDs
+        $network_mapping = [
+            'mtn' => 1,
+            'glo' => 2,
+            'airtel' => 3,
+            '9mobile' => 4
+        ];
+
+        // Get network ID and formatted network name
+        $network = $network_mapping[$network_name] ?? 1;
+        $network_prefix = strtoupper($network_name);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/get_plans.php?product_type=" . $type,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'),
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response_json = json_decode($response, true);
+        $online_data = reset($response_json);
+        // dd($network, $online_data, $network_prefix);
+
+        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            // Delete previous data only if we have valid response
+            Data::where('user_id', 0)->where('type', $plan_type)->where('network', $network)->delete();
+
+            foreach ($online_data as $data) {
+                Data::create([
+                    'user_id' => 0,
+                    'network' => $network,
+                    'plan_id' => $data['plan_id'],
+                    'plan_name' => $network_prefix . ' ' . $data['name'],
+                    'actual_price' => $data['price'],
+                    'data_price' => $data['price'] + (0.02 * $data['price']),
+                    'account_price' => $data['price'] + (0.04 * $data['price']),
+                    'type' => $plan_type,
+                    'admin_price' => $data['price'] + (0.04 * $data['price'])
+                ]);
+            }
+            return redirect()->back()->with('message', 'Data Price Updated Successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Failed to update data price.');
     }
 
     public function schedule_accounts()
@@ -89,31 +159,26 @@ class SuperController extends Controller
         $data['mtn_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 1)->first();
         $data['mtn_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 1)->first();
         $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
-        $data['mtn_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 1)->first();
+        $data['mtn_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 1)->first();
 
-        $data['glo_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 2)->first();
 
         $data['glo_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 2)->first();
-        $data['glo_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 2)->first();
-        $data['glo_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 2)->first();
+        $data['glo_awoof'] = Data::where('user_id', 0)->where('type', 'awoof')->where('network', 2)->first();
+        $data['glo_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 2)->first();
 
-        $data['airtel_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 3)->first();
         $data['airtel_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 3)->first();
         $data['airtel_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 3)->first();
-        $data['airtel_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 3)->first();
-        $data['airtel_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 3)->first();
+        $data['airtel_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 3)->first();
 
         $data['nmobile_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 4)->first();
-        $data['nmobile_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 4)->first();
-        $data['nmobile_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 4)->first();
-        $data['nmobile_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 4)->first();
+        $data['nmobile_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 4)->first();
 
 
         return view('super.plan_status', $data);
     }
     public function update_plan_status($network_id, $type)
     {
-        
+
         if (Data::where('network', $network_id)->where('type', $type)->first()->status == 0) {
             $datas = Data::where('network', $network_id)->where('type', $type)->update([
                 'status' => 1
@@ -265,9 +330,8 @@ class SuperController extends Controller
         }
         $data['allusers'] =  User::count();
 
-        $data['users'] = User::where('total_spent', '!=', 0)->
-        orWhere('balance', '>', 0)
-        ->latest()->get();
+        $data['users'] = User::where('total_spent', '!=', 0)->orWhere('balance', '>', 0)
+            ->latest()->get();
         // $data['users'] = User::latest()->get();
         $data['active'] = 'super';
 
@@ -327,7 +391,7 @@ class SuperController extends Controller
         }
         $data['active'] = 'super';
 
-        
+
         // $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->instagram;
         // return [ env("EASY_ACCESS_AUTH"), $fast_token];
         $curl = curl_init();

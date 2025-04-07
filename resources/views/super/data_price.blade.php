@@ -18,7 +18,8 @@
                         <div class="card-title">
                             <h3 class="card-label">Data Prices
                             </h3>
-                        </div>
+
+                          </div>
 
                     </div>
                     <div class="card-body">

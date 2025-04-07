@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
         $data['user'] = $user = Auth::user();
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'data')->latest()->get();
         $notification = Notification::where('user_id', 1)->where('type', 'Data Notification')->first();
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -94,7 +94,7 @@ class SubscriptionController extends Controller
         $datas = Data::where('user_id', 0)->get();
         $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
 
-       
+
         // Data::where('user_id', $user->id)->delete();
         // dd($check_data,$datas[0]);
         if ($user->upgrade == 1) {
@@ -113,7 +113,7 @@ class SubscriptionController extends Controller
                     ]);
                 }
             }
-        
+
             if (!$check_data) {
                 foreach ($datas as $data) {
                     Data::create([
@@ -134,7 +134,7 @@ class SubscriptionController extends Controller
         $data['user'] = $user = Auth::user();
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'data')->latest()->get();
         $notification = Notification::where('user_id', 1)->where('type', 'Data Notification')->first();
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -155,7 +155,7 @@ class SubscriptionController extends Controller
         }
         $data['active'] = 'data';
         $data['company'] = User::where('id', $user->company_id)->first();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'data')->latest()->get();
         $notification = Notification::where('user_id', 1)->where('type', 'Data Notification')->first();
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
@@ -242,28 +242,26 @@ class SubscriptionController extends Controller
             $phone_number = "0" . $phone_number;
         }
 
-        if($user->pin_status == 1) {
+        if ($user->pin_status == 1) {
 
-        $hashed_pin = hash('sha256', $request->pin);
-        if ($user->pin !== $hashed_pin) {
-            $response = [
-                'success' => false,
-                'message' => 'Incorrect Pin!',
-                'auto_refund_status' => 'Nil'
-            ];
+            $hashed_pin = hash('sha256', $request->pin);
+            if ($user->pin !== $hashed_pin) {
+                $response = [
+                    'success' => false,
+                    'message' => 'Incorrect Pin!',
+                    'auto_refund_status' => 'Nil'
+                ];
 
-            return response()->json($response);
-        }
+                return response()->json($response);
+            }
         }
         // dd($request->all());
         if ($request->has('selectedDate')) {
             $reference = "schedule_purchase_data_" . Str::random(5);
-            if($user->upgrade == 1) {
+            if ($user->upgrade == 1) {
                 $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
-                
             } else {
                 $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
-
             }
             $data_price =  $data->admin_price;
 
@@ -297,14 +295,12 @@ class SubscriptionController extends Controller
             return "schedule_saved";
         }
         // dd($request->all());
-        if($user->upgrade == 1) {
+        if ($user->upgrade == 1) {
             $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
-            
         } else {
             $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
-
         }
-         $data_price =  $data->admin_price;
+        $data_price =  $data->admin_price;
         $real_dataprice = $data->data_price;
         if ($data == null) {
             $response = [
@@ -348,7 +344,7 @@ class SubscriptionController extends Controller
                 'success' => false,
 
                 // 'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
-                    
+
                 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
@@ -404,12 +400,10 @@ class SubscriptionController extends Controller
             $phone_number = "0" . $phone_number;
         }
 
-        if($user->upgrade == 1) {
+        if ($user->upgrade == 1) {
             $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
-            
         } else {
             $data = Data::where('user_id', 0)->where('plan_id', $plan_id)->where('network', $network)->first();
-
         }
         // $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
         $data_price =  $data->admin_price;
@@ -453,7 +447,7 @@ class SubscriptionController extends Controller
                 'type' => 'duplicate',
                 'success' => false,
                 // 'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
-                    
+
                 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
             ];
@@ -506,12 +500,10 @@ class SubscriptionController extends Controller
             $phone_number = "0" . $phone_number;
         }
 
-        if($user->upgrade == 1) {
+        if ($user->upgrade == 1) {
             $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
-            
         } else {
             $data = Data::where('user_id', 0)->where('plan_id', $plan_id)->where('network', $network)->first();
-
         }
         // $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
         $data_price =  $data->admin_price;
@@ -598,12 +590,10 @@ class SubscriptionController extends Controller
             $tranx = Transaction::find($schedule->transaction_id);
             $user = User::find($tranx->user_id);
             if ($schedule->title == 'Data Purchase') {
-                if($user->upgrade == 1) {
+                if ($user->upgrade == 1) {
                     $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
-                    
                 } else {
                     $data = Data::where('user_id', 0)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
-    
                 }
                 // $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
                 // dd($data);
@@ -970,7 +960,7 @@ class SubscriptionController extends Controller
                     'type' => 'duplicate',
                     'success' => false,
                     'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
-                
+
                     // 'message' => 'Please note: The transaction ' . $check[1]->details . 'is still pending. Kindly wait for 1 minute before your next purchase.',
                     'auto_refund_status' => 'Nil'
                 ];
@@ -1020,12 +1010,10 @@ class SubscriptionController extends Controller
                 return response()->json($response);
             }
 
-            if($user->upgrade == 1) {
+            if ($user->upgrade == 1) {
                 $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
-                
             } else {
                 $data = Data::where('user_id', 0)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
-
             }
             // $data = Data::where('user_id', $user->company_id)->where('plan_id', $tranx->plan_id)->where('network', $tranx->network)->first();
             if ($data == null) {
@@ -1911,7 +1899,7 @@ class SubscriptionController extends Controller
             ]);
         }
         $data['active'] = 'airtime';
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'data')->latest()->get();
         $notification = Notification::where('user_id', 1)->where('type', 'Airtime Notification')->first();
 
         if ($notification && $notification->title !== null) {
@@ -1956,7 +1944,7 @@ class SubscriptionController extends Controller
         }
         $data['active'] = 'airtime';
         $data['airtime'] = Airtime::get();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','data')->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'data')->latest()->get();
         $notification = Notification::where('user_id', 1)->where('type', 'Airtime Notification')->first();
 
         if ($notification && $notification->title !== null) {
@@ -1982,7 +1970,7 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','electricity')->latest()->get();
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'electricity')->latest()->get();
         return view('subscription.electricity', $data);
     }
     public function admin_electricity()
@@ -1997,12 +1985,13 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','electricity')->latest()->get();
-        
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'electricity')->latest()->get();
+
         return view('business_backend.electricity', $data);
     }
 
-    public function get_exam_types() {
+    public function get_exam_types()
+    {
         $data['examinations'] = Examination::where('user_id', 0)->get();
         return response()->json($data);
     }
@@ -2095,8 +2084,8 @@ class SubscriptionController extends Controller
             $data['notification'] = $notification;
         }
 
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','cable')->latest()->get();
-        
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'cable')->latest()->get();
+
         return view('subscription.cable', $data);
     }
 
@@ -2112,8 +2101,8 @@ class SubscriptionController extends Controller
         if ($notification && $notification->title !== null) {
             $data['notification'] = $notification;
         }
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type','cable')->latest()->get();
-        
+        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'cable')->latest()->get();
+
 
         return view('business_backend.cable', $data);
     }
@@ -2177,12 +2166,11 @@ class SubscriptionController extends Controller
         }
         $user = Auth::user();
         // dd($user);
-        if($user->upgrade == 1) {
+        if ($user->upgrade == 1) {
 
             $data = Data::where('network', $network)->where('user_id', $user->company_id)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
         } else {
             $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-
         }
 
         // dd($data);
