@@ -257,14 +257,14 @@
                                                 </span></a>
 
                                         </div>
-                                        <div class="menu-item">
-                                            <!--begin:Menu link--><a class="menu-link" href="/airtime"
+                                        <!-- <div class="menu-item">
+                                            <a class="menu-link" href="/airtime"
                                                 data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                                 data-bs-placement="right" data-kt-initialized="1"><span
                                                     class="menu-title">Buy Airtime
                                                 </span></a>
 
-                                        </div>
+                                        </div> -->
                                         <div class="menu-item">
                                             <!--begin:Menu link--><a class="menu-link" href="/cable"
                                                 data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
