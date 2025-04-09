@@ -42,13 +42,11 @@ class TransactionController extends Controller
     public function all_transactions()
     {
         $user = Auth::user();
-        $transactions = Transaction::where('user_id', $user->id)->latest()->get();
-
+        $transactions = Transaction::where('user_id', $user->id)->latest()->take(100)->get();
         return response()->json([
             'status' => true,
             'message' => 'Transactions Fetched successfully',
             'transactions' => $transactions,
-
         ], 201);
     }
     public function redo_transaction(Request $request)
