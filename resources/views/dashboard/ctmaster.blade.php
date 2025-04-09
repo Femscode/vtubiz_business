@@ -52,25 +52,25 @@
     <!--begin::Theme mode setup on page load-->
     <script>
         var defaultThemeMode = "light";
-	var themeMode;
+        var themeMode;
 
-	if ( document.documentElement ) {
-		if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
-			themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
-		} else {
-			if ( localStorage.getItem("data-bs-theme") !== null ) {
-				themeMode = localStorage.getItem("data-bs-theme");
-			} else {
-				themeMode = defaultThemeMode;
-			}			
-		}
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
 
-		if (themeMode === "system") {
-			themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-		}
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
 
-		document.documentElement.setAttribute("data-bs-theme", themeMode);
-	}            
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
     </script>
     <!--end::Theme mode setup on page load-->
     <!--Begin::Google Tag Manager (noscript) -->
@@ -176,12 +176,12 @@
                                             Data</span></span>
 
                                 </a>
-                                <a href='/airtime'
+                                <!-- <a href='/airtime'
                                     class="menu-item  @if($active == 'airtime') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Buy
+                                    <span class="menu-link"><span class="menu-title">Buy
                                             Airtime</span></span>
 
-                                </a>
+                                </a> -->
                                 <a href='/cable'
                                     class="menu-item  @if($active == 'cable') here show menu-here-bg @endif menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Tv
@@ -210,7 +210,7 @@
                             <!--begin::User menu-->
                             <div class="app-navbar-item ms-5" id="kt_header_user_menu_toggle">
                                 <!--begin::Menu wrapper-->
-                                <div  class="cursor-pointer symbol symbol-35px symbol-md-40px"
+                                <div class="cursor-pointer symbol symbol-35px symbol-md-40px"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
                                     data-kt-menu-placement="bottom-end">
                                     <div style='background:#fff' class="p-5 symbol symbol-50px me-5 fa fa-user">
@@ -603,14 +603,14 @@
                         @yield('content')
                         <!--end:::Main-->
                         <a href="https://wa.me/2349058744473"><img src="{{asset('assets/media/logos/whatsapp.png')}}" alt='whatsapp'
-                            id="fixedbutton"></a>
+                                id="fixedbutton"></a>
                     </div>
                     <div id="kt_app_footer"
                         class="app-footer  d-flex flex-column flex-md-row align-items-center flex-center flex-md-stack py-2 py-lg-4 ">
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-semibold me-1">
-                                <?php echo Date('Y');?>&copy;
+                                <?php echo Date('Y'); ?>&copy;
                             </span>
                             <a href="https://paycirclex.com/" target="_blank"
                                 class="text-gray-800 text-hover-primary">CT_Taste</a>
@@ -619,11 +619,11 @@
 
                         <!--begin::Menu-->
                         <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
-                            <li class="menu-item"><a href="https://keenthemes.com/" target="_blank"
+                            <li class="menu-item"><a href="https://wa.me/2349058744473" target="_blank"
                                     class="menu-link px-2">About</a>
                             </li>
 
-                            <li class="menu-item"><a href="https://devs.keenthemes.com/" target="_blank"
+                            <li class="menu-item"><a href="https://wa.me/2349058744473" target="_blank"
                                     class="menu-link px-2">Support</a></li>
 
                             <li class="menu-item"><a
@@ -691,11 +691,11 @@
     <link rel='stylesheet' href='https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css' /> --}}
     <script>
         // var oTable = $('.datatable').DataTable();   //using Capital D, which is mandatory to retrieve "api" datatables' object, latest jquery Datatable
-    //    $('#myInput').keyup(function(){
-    //          oTable.search($(this).val()).draw() ;
-    //    });
-       @if (session('message'))
-            Swal.fire('Success!',"{{ session('message') }}",'success');
+        //    $('#myInput').keyup(function(){
+        //          oTable.search($(this).val()).draw() ;
+        //    });
+        @if(session('message'))
+        Swal.fire('Success!', "{{ session('message') }}", 'success');
         @endif
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"

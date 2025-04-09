@@ -142,15 +142,12 @@
                         </div>
                         <!--end::Card-->
                     </div>
-                    <div class="col-6">
-                        <!--begin::Card-->
+                    <!-- <div class="col-6">
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
-                            <!--begin::Link-->
                             <a href="/airtime" style='border-bottom:5px solid brown'
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
-                                <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo8/dist/../src/media/svg/icons/Communication/Active-call.svg--><svg
+                                    <svg
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                         width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -163,17 +160,15 @@
                                                 fill="#000000" fill-rule="nonzero" opacity="0.3" />
                                         </g>
                                     </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
-                                <!--end::Svg Icon-->
+                                  </span>
                                 <span class="fs-4 fw-normal">
                                     Buy Airtime </span>
                             </a>
-                            <!--end::Link-->
+                           
                         </div>
-                        <!--end::Card-->
-                    </div>
-                    <!-- <div class="col-6">
+                       
+                    </div> -->
+                     <div class="col-6">
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
                             <a href="/cable" style='border-bottom:5px solid #8A2BE2 '
                                 class="btn btn-flex btn-text-gray-800 btn-icon-gray-400 btn-active-color-primary bg-body flex-column justfiy-content-start align-items-start text-start w-100 p-10">
@@ -199,7 +194,7 @@
 
                         </div>
 
-                    </div> -->
+                    </div> 
                     <div class="col-6">
                         <!--begin::Card-->
                         <div style='opacity:0.8' class="card card-stretch custom-box shadow-lg">
