@@ -309,7 +309,7 @@ class UserController extends Controller
 
     public function generatePermanentAccount(Request $request)
     {
-        return $request->all();
+        // return $request->all();
         try {
             $user = Auth::user();
             $str_name = explode(" ", $user->name);
