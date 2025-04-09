@@ -62,7 +62,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/update-password', [ApiUserController::class, 'updatePassword'])->name('updatePassword');
         Route::post('/delete-account', [ApiUserController::class, 'deleteAccount'])->name('deleteAccount');
        //Funding
-        Route::post('/generate-virtual-account', [ApiUserController::class, 'generateVirtualAccount'])->name('deleteAccount');
+        Route::post('/generate-virtual-account', [ApiUserController::class, 'generateVirtualAccount'])->name('generateAccount');
+        Route::post('/generate-permanent-account', [ApiUserController::class, 'generatePermanentAccount'])->name('generatePermanentAccount');
     });
 });
 Route::group(['middleware' => ['auth:sanctum']], function () {

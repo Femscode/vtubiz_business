@@ -268,6 +268,92 @@ class UserController extends Controller
                 'message' => 'Failed to generate virtual account',
                 'errors' => $responseData['message'] ?? 'Unknown error occurred'
             ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while generating virtual account'
+            ], 500);
+        }
+    }
+
+    public function oldgeneratePermanentAccount(Request $request)
+    {
+        // dd($request->all(),env('FLW_SECRET_KEY'));
+        $user = Auth::user();
+        $str_name = explode(" ", $user->name);
+        $first_name = $str_name[0];
+        $last_name = end($str_name);
+        $trx_ref = Str::random(7);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . env('FLW_SECRET_KEY'), // Replace with your actual secret key
+        ])
+            ->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
+                'email' => $user->email,
+                'is_permanent' => true,
+                'bvn' => $request->bvn,
+                'tx_ref' => $trx_ref,
+                'phonenumber' => $user->phone,
+                'firstname' => $first_name,
+                'lastname' => $last_name,
+                'narration' => 'VTUBIZ/' . $first_name . '-' . $last_name,
+            ]);
+
+        $responseData = $response->json(); // Converts JSON response to an array
+        $user->bank_name = $responseData['data']['bank_name'];
+        $user->account_no = $responseData['data']['account_number'];
+        $user->account_name = 'VTUBIZ/' . $first_name . '-' . $last_name;
+        $user->save();
+        return redirect('/fundwallet')->with('message', 'Permanent Account Created Successfully!');
+    }
+
+    public function generatePermanentAccount(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $str_name = explode(" ", $user->name);
+            $first_name = $str_name[0];
+            $last_name = end($str_name);
+            $trx_ref = Str::random(7);
+            
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . env('FLW_SECRET_KEY'),
+            ])->post('https://api.flutterwave.com/v3/virtual-account-numbers/', [
+                'email' => $user->email,
+                'is_permanent' => true,
+                'bvn' => $request->bvn,
+                'tx_ref' => $trx_ref,
+                'phonenumber' => $user->phone,
+                'firstname' => $first_name,
+                'lastname' => $last_name,
+                'narration' => 'VTUBIZ/' . $first_name . '-' . $last_name,
+            ]);
+
+            $responseData = $response->json();
+            
+            if ($response->successful()) {
+                $user->bank_name = $responseData['data']['bank_name'];
+                $user->account_no = $responseData['data']['account_number'];
+                $user->account_name = 'VTUBIZ/' . $first_name . '-' . $last_name;
+                $user->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Virtual account generated successfully',
+                    'data' => [
+                        'bank_name' => $user->bank_name,
+                        'account_no' => $user->account_no,
+                        'account_name' => $user->account_name
+                    ]
+                ], 200);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate virtual account',
+                'errors' => $responseData['message'] ?? 'Unknown error occurred'
+            ], 400);
 
         } catch (\Exception $e) {
             return response()->json([
