@@ -546,7 +546,7 @@
 
                                     </div>
                                 </li>
-                                <li class="event-list">
+                                <!-- <li class="event-list">
                                     <div class="event-timeline-dot">
                                         <i class="bx bx-right-arrow-circle font-size-18"></i>
                                     </div>
@@ -558,7 +558,7 @@
                                         </div>
 
                                     </div>
-                                </li>
+                                </li> -->
                                 <li class="event-list">
                                     <div class="event-timeline-dot">
                                         <i class="bx bx-right-arrow-circle font-size-18"></i>

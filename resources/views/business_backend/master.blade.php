@@ -296,7 +296,7 @@
                                 <span key="t-contacts">Personal Purchase</span>
                             </a>
                             <ul class="sub-menu mm-collapse mm-show" aria-expanded="false" style="">
-                                <li><a href="/airtime" key="t-user-grid">Buy Airtime</a></li>
+                                <!-- <li><a href="/airtime" key="t-user-grid">Buy Airtime</a></li> -->
                                 <li><a href="/data" key="t-user-list">Buy Data</a></li>
                                 <li><a href="/cable" key="t-profile">Cable(Tv) Subscription</a></li>
                                 <li><a href="/electricity" key="t-profile">Pay Light Bills</a></li>
