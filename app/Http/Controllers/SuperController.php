@@ -122,6 +122,7 @@ class SuperController extends Controller
                     'data_price' => ceil($data['price'] + (0.02 * $data['price'])),
                     'account_price' => ceil($data['price'] + (0.04 * $data['price'])),
                     'type' => $plan_type,
+                    'status' => 1,
                     'admin_price' => ceil($data['price'] + (0.04 * $data['price']))
                 ]);
             }

@@ -2166,12 +2166,12 @@ class SubscriptionController extends Controller
         }
         $user = Auth::user();
         // dd($user);
-        if ($user->upgrade == 1) {
+        // if ($user->upgrade == 1) {
 
-            $data = Data::where('network', $network)->where('user_id', $user->company_id)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-        } else {
-            $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-        }
+        //     $data = Data::where('network', $network)->where('user_id', $user->company_id)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
+        // } else {
+        //     $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
+        // }
         $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
 
         // dd($data);
