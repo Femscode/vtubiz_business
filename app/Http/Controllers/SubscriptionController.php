@@ -2165,7 +2165,7 @@ class SubscriptionController extends Controller
             $network = $subdomain;
         }
         $user = Auth::user();
-        return true;
+        // return true;
         // dd($user);
         // if ($user->upgrade == 1) {
 
@@ -2174,8 +2174,7 @@ class SubscriptionController extends Controller
         //     $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
         // }
         $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-
-        // dd($data);
+      
 
         return $data;
     }

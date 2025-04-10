@@ -86,32 +86,23 @@ class ManagerController extends Controller
             return redirect('dashboard');
         }
         $data['active'] = 'super';
-
-        $data['active'] = 'super';
         $data['mtn_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 1)->first();
         $data['mtn_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 1)->first();
         $data['mtn_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 1)->first();
         $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
-        $data['mtn_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 1)->first();
+        $data['mtn_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 1)->first();
 
-        $data['glo_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 2)->first();
 
         $data['glo_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 2)->first();
-        $data['glo_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 2)->first();
-        $data['glo_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 2)->first();
+        $data['glo_awoof'] = Data::where('user_id', 0)->where('type', 'awoof')->where('network', 2)->first();
+        $data['glo_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 2)->first();
 
-        $data['airtel_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 3)->first();
         $data['airtel_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 3)->first();
         $data['airtel_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 3)->first();
-        $data['airtel_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 3)->first();
-        $data['airtel_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 3)->first();
+        $data['airtel_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 3)->first();
 
         $data['nmobile_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 4)->first();
-        $data['nmobile_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 4)->first();
-        $data['nmobile_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 4)->first();
-        $data['nmobile_direct'] = Data::where('user_id', 0)->where('type', 'direct')->where('network', 4)->first();
-
-        
+        $data['nmobile_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 4)->first();
 
         return view('manager.plan_status', $data);
     }
@@ -133,7 +124,8 @@ class ManagerController extends Controller
         return redirect()->back()->with('message', 'Status Updated Successfully');
     }
 
-    public function user_records() {
+    public function user_records()
+    {
         $data['active'] = 'user_orders';
         $data['user'] = Auth::user();
 
@@ -142,15 +134,16 @@ class ManagerController extends Controller
 
         foreach (range(1, 12) as $month) {
             $monthName = strtolower(Carbon::createFromDate(2025, $month, 1)->format('F'));
-        
+
             $data[$monthName] = User::whereBetween('created_at', [
                 Carbon::createFromDate(2025, $month, 1)->startOfMonth(),
                 Carbon::createFromDate(2025, $month, 1)->endOfMonth()
             ])->count();
         }
-         return view('manager.user_records', $data);
+        return view('manager.user_records', $data);
     }
-    public function user_records_2024() {
+    public function user_records_2024()
+    {
         $data['active'] = 'user_orders';
         $data['user'] = Auth::user();
 
@@ -159,38 +152,39 @@ class ManagerController extends Controller
 
         foreach (range(1, 12) as $month) {
             $monthName = strtolower(Carbon::createFromDate(2024, $month, 1)->format('F'));
-        
+
             $data[$monthName] = User::whereBetween('created_at', [
                 Carbon::createFromDate(2024, $month, 1)->startOfMonth(),
                 Carbon::createFromDate(2024, $month, 1)->endOfMonth()
             ])->count();
         }
-         return view('manager.user_records', $data);
+        return view('manager.user_records', $data);
     }
-    public function purchase_records() {
+    public function purchase_records()
+    {
         $data['active'] = 'user_orders';
         $data['user'] = Auth::user();
 
-        $data['total_transactions'] = Transaction::where(function($query) {
+        $data['total_transactions'] = Transaction::where(function ($query) {
             $query->where('title', 'Data Purchase')
                 ->orWhere('title', 'Airtime Purchase')
                 ->orWhere('title', 'Cable Subscription')
                 ->orWhere('title', 'Electricity Payment')
                 ->orWhere('title', 'Bulk SMS')
                 ->orWhere('title', 'Examination Result Payment');
-        })->where('status',1)->whereYear('created_at', '2025')->count();
-        
+        })->where('status', 1)->whereYear('created_at', '2025')->count();
+
         foreach (range(1, 12) as $month) {
             $monthName = strtolower(Carbon::createFromDate(2024, $month, 1)->format('F'));
-        
-            $data[$monthName] = Transaction::where(function($query) {
+
+            $data[$monthName] = Transaction::where(function ($query) {
                 $query->where('title', 'Data Purchase')
                     ->orWhere('title', 'Airtime Purchase')
                     ->orWhere('title', 'Cable Subscription')
                     ->orWhere('title', 'Electricity Payment')
                     ->orWhere('title', 'Bulk SMS')
                     ->orWhere('title', 'Examination Result Payment');
-            })->where('status',1)->whereBetween('created_at', [
+            })->where('status', 1)->whereBetween('created_at', [
                 Carbon::createFromDate(2025, $month, 1)->startOfMonth(),
                 Carbon::createFromDate(2025, $month, 1)->endOfMonth()
             ])->count();
@@ -198,21 +192,22 @@ class ManagerController extends Controller
         // dd($jan);
         return view('manager.purchase_records', $data);
     }
-    public function purchase_records_2024() {
+    public function purchase_records_2024()
+    {
         $data['active'] = 'user_orders';
         $data['user'] = Auth::user();
-        $data['total_transactions'] = Transaction::where(function($query) {
+        $data['total_transactions'] = Transaction::where(function ($query) {
             $query->where('title', 'Data Purchase')
                 ->orWhere('title', 'Airtime Purchase')
                 ->orWhere('title', 'Cable Subscription')
                 ->orWhere('title', 'Electricity Payment')
                 ->orWhere('title', 'Bulk SMS')
                 ->orWhere('title', 'Examination Result Payment');
-        })->where('status',1)->whereYear('created_at', '2024')->count();
+        })->where('status', 1)->whereYear('created_at', '2024')->count();
         foreach (range(1, 12) as $month) {
             $monthName = strtolower(Carbon::createFromDate(2024, $month, 1)->format('F'));
-        
-            $data[$monthName] = Transaction::where(function($query) {
+
+            $data[$monthName] = Transaction::where(function ($query) {
                 $query->where('title', 'Data Purchase')
                     ->orWhere('title', 'Airtime Purchase')
                     ->orWhere('title', 'Cable Subscription')
@@ -222,7 +217,7 @@ class ManagerController extends Controller
             })->whereBetween('created_at', [
                 Carbon::createFromDate(2024, $month, 1)->startOfMonth(),
                 Carbon::createFromDate(2024, $month, 1)->endOfMonth()
-            ])->where('status',1)->count();
+            ])->where('status', 1)->count();
         }
         // dd($jan);
         return view('manager.purchase_records', $data);
@@ -354,7 +349,7 @@ class ManagerController extends Controller
 
         return view('manager.index', $data);
     }
-   
+
     public function duplicate_transactions()
     {
         $data['user'] = $user =  Auth::user();
@@ -364,7 +359,7 @@ class ManagerController extends Controller
         }
         $data['active'] = 'super';
 
-        
+
         // $fast_token = User::where('email','fasanyafemi@gmail.com')->first()->instagram;
         // return [ env("EASY_ACCESS_AUTH"), $fast_token];
         $curl = curl_init();
@@ -401,7 +396,7 @@ class ManagerController extends Controller
         }
         $data['active'] = 'super';
 
-        
+
         $data['mailpays'] = Mailpay::latest()->get();
 
 
@@ -527,7 +522,7 @@ class ManagerController extends Controller
         $blog->delete();
         return redirect()->back()->with('message', 'Blog Deleted Successfully!');
     }
-  
+
 
     public function downloadCSV(Request $request)
     {

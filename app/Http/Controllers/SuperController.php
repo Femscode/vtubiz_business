@@ -179,7 +179,7 @@ class SuperController extends Controller
     }
     public function update_plan_status($network_id, $type)
     {
-
+    //    dd(Data::where('network', $network_id)->where('type', $type)->where('user_id',0)->get());
         if (Data::where('network', $network_id)->where('type', $type)->first()->status == 0) {
             $datas = Data::where('network', $network_id)->where('type', $type)->update([
                 'status' => 1
@@ -674,7 +674,7 @@ class SuperController extends Controller
             if ($user) {
                 $user->pin =  hash('sha256', '1234');
                 $user->save();
-                return redirect()->route('dashboard')->with('message', 'Pin updated successfully');
+                return redirect('/superadmin')->with('message', 'Pin updated successfully');
             }
         } else {
             return "Access Denied";
