@@ -2165,6 +2165,7 @@ class SubscriptionController extends Controller
             $network = $subdomain;
         }
         $user = Auth::user();
+        return true;
         // dd($user);
         // if ($user->upgrade == 1) {
 
