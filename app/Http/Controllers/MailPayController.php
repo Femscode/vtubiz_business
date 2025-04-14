@@ -210,7 +210,6 @@ class MailPayController extends Controller
 
                 return redirect()->away($authUrl);
             }
-
             $token = json_decode(file_get_contents($tokenPath), true);
           
             // Check if token needs refresh
@@ -238,7 +237,7 @@ class MailPayController extends Controller
 
             // Get message IDs first
 
-            $threeMinutesAgo = time() - (10 * 60);
+            $threeMinutesAgo = time() - (20 * 60);
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
