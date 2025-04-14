@@ -197,7 +197,7 @@ class MailPayController extends Controller
 
         // try {
             // Check if token file exists
-            if (!file_exists($tokenPath)) {
+            if (file_exists($tokenPath)) {
                 \Log::info('Token file not found, initiating auth flow');
                 $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
                     'client_id' => $credentials['web']['client_id'],
@@ -244,7 +244,7 @@ class MailPayController extends Controller
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
                 ]);
             $messages = $response->json();
-            dd($messages, $token['access_token']);
+          
             $processedEmails = [];
             // Process each email
             if (!empty($messages['messages'])) {
