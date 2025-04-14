@@ -212,7 +212,7 @@ class MailPayController extends Controller
             }
 
             $token = json_decode(file_get_contents($tokenPath), true);
-            dd($token);
+          
             // Check if token needs refresh
             if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
                 if (isset($token['refresh_token'])) {
@@ -244,6 +244,7 @@ class MailPayController extends Controller
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
                 ]);
             $messages = $response->json();
+            dd($messages);
             $processedEmails = [];
             // Process each email
             if (!empty($messages['messages'])) {
