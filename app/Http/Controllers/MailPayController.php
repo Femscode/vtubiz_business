@@ -195,7 +195,7 @@ class MailPayController extends Controller
         $credentials = json_decode(file_get_contents(public_path('gmail_credentials.json')), true);
         $tokenPath = storage_path('app/gmail_token.json');
 
-        try {
+        // try {
             // Check if token file exists
             if (!file_exists($tokenPath)) {
                 \Log::info('Token file not found, initiating auth flow');
@@ -212,7 +212,7 @@ class MailPayController extends Controller
             }
 
             $token = json_decode(file_get_contents($tokenPath), true);
-
+            dd($token);
             // Check if token needs refresh
             if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
                 if (isset($token['refresh_token'])) {
@@ -238,7 +238,7 @@ class MailPayController extends Controller
 
             // Get message IDs first
 
-            $threeMinutesAgo = time() - (3 * 60);
+            $threeMinutesAgo = time() - (10 * 60);
             $response = Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
@@ -329,14 +329,14 @@ class MailPayController extends Controller
             return response()->json("OK", 200);
 
             return response()->json($processedEmails);
-        } catch (\Exception $e) {
-            \Log::error('Gmail API Error: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gmail API Error: ' . $e->getMessage()
-            ], 500);
-            return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
-        }
+        // } catch (\Exception $e) {
+        //     \Log::error('Gmail API Error: ' . $e->getMessage());
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Gmail API Error: ' . $e->getMessage()
+        //     ], 500);
+        //     return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
+        // }
     }
     public function handleGoogleCallback(Request $request)
     {
