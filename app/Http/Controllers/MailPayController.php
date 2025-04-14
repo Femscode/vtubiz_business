@@ -244,7 +244,7 @@ class MailPayController extends Controller
                     'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
                 ]);
             $messages = $response->json();
-            dd($messages);
+            dd($messages, $token['access_token']);
             $processedEmails = [];
             // Process each email
             if (!empty($messages['messages'])) {
