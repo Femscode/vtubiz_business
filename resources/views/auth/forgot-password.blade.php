@@ -46,25 +46,25 @@
 
     <script>
         var defaultThemeMode = "light";
-	var themeMode;
+        var themeMode;
 
-	if ( document.documentElement ) {
-		if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
-			themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
-		} else {
-			if ( localStorage.getItem("data-bs-theme") !== null ) {
-				themeMode = localStorage.getItem("data-bs-theme");
-			} else {
-				themeMode = defaultThemeMode;
-			}			
-		}
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
 
-		if (themeMode === "system") {
-			themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-		}
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
 
-		document.documentElement.setAttribute("data-bs-theme", themeMode);
-	}            
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
     </script>
     <!--end::Theme mode setup on page load-->
     <!--Begin::Google Tag Manager (noscript) -->
@@ -92,23 +92,23 @@
             <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
                 <!--begin::Aside-->
                 <div class="d-flex flex-center flex-lg-start flex-column">
-                  <!--begin::Logo-->
-                  <a href="/" class="mb-7">
-                    <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}"
-                      width='140px' height='35px' alt="">
-        
-                    {{-- <img alt="Logo" src="/assets/media/logos/ct_white.png" style='width:150px;height:40px' /> --}}
-                  </a>
-                  <!--end::Logo-->
-        
-                  <!--begin::Title-->
-                  <h2 class="text-white fw-normal m-0">
-                    Reset Your Password
-                  </h2>
-                  <!--end::Title-->
+                    <!--begin::Logo-->
+                    <a href="/" class="mb-7">
+                        <img src="{{ asset('assets/img/logo/vtulogo.png') }}" srcset="{{ asset('assets/img/logo/vtulogo.png') }}"
+                            width='140px' height='35px' alt="">
+
+                        {{-- <img alt="Logo" src="/assets/media/logos/ct_white.png" style='width:150px;height:40px' /> --}}
+                    </a>
+                    <!--end::Logo-->
+
+                    <!--begin::Title-->
+                    <h2 class="text-white fw-normal m-0">
+                        Reset Your Password
+                    </h2>
+                    <!--end::Title-->
                 </div>
                 <!--begin::Aside-->
-              </div>
+            </div>
             <!--begin::Aside-->
 
             <!--begin::Body-->
@@ -123,56 +123,50 @@
                             <!--begin::Form-->
                             <div id='app'>
                                 <div>
-                                    <h1>Password Recovery</h1>
-                                    <form class="text-left" action='{{ route("password.email") }}' method='post'>@csrf
-                                        <div class="form">
-                                            @if($errors->any())
-                                            <div class="alert alert-danger">
-                                                <p><strong>Opps Something went wrong</strong></p>
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
+                                    <form class="form w-100" action='{{ route("password.email") }}' method='post'>
+                                        @csrf
+                                        <div class="text-center mb-10">
+                                            <h1 class="text-dark mb-3 fs-3">Forgot Password</h1>
+                                            <div class="text-dark fw-semibold fs-6">
+                                                Enter your email to reset your password.
                                             </div>
-                                            @else
-                                            @if (request()->isMethod('POST') && !old('_token'))
-                                            <div class='alert alert-success'>Password reset link has been sent to your
-                                                email address</div>
-                                                @else
-                                                <div class='alert alert-info'>A mail will be sent to your mailbox after you input your email below!</div>
-                                                <div class='alert alert-danger'>Please do not click the Reset button more than one time, input your email, click the button once and proceed to your gmail.</div>
-                                            @endif
+                                        </div>
 
-                                            @endif
-
-                                            {{-- <div class="text-gray-400 fw-bold fs-20">
-                                                {{ __('Forgot your password? No problem. Just let us know your email
-                                                address and we will
-                                                email you a password reset link that will allow you to choose a new
-                                                one.') }}
-
-                                            </div> --}}
-
-
-                                            <div id="email-field" class="field-wrapper input">
-                                                <label>Email Address</label>
-
-                                                <input id="email" name="email" class='form-control' type="text" value=""
-                                                    placeholder="Email">
+                                        @if(session('status'))
+                                        <div class="alert alert-success d-flex align-items-center p-5 mb-10">
+                                            <i class="ki-duotone ki-shield-tick fs-2hx text-success me-4"><span class="path1"></span><span class="path2"></span></i>
+                                            <div class="d-flex flex-column">
+                                                <h4 class="mb-1 text-success">Success</h4>
+                                                <span>{{ session('status') }}</span>
                                             </div>
+                                        </div>
+                                        @endif
 
-
-                                            <div class="d-sm-flex justify-content-between">
-                                                <div class="field-wrapper toggle-pass">
-
-                                                </div>
-                                                <div class="field-wrapper">
-                                                    <button type="submit" class="btn btn-primary m-2 w-100"
-                                                        value="">Reset</button>
-                                                </div>
+                                        @if($errors->any())
+                                        <div class="alert alert-danger d-flex align-items-center p-5 mb-10">
+                                            <i class="ki-duotone ki-shield-cross fs-2hx text-danger me-4"><span class="path1"></span><span class="path2"></span></i>
+                                            <div class="d-flex flex-column">
+                                                <h4 class="mb-1 text-danger">Error</h4>
+                                                <span>{{ $errors->first() }}</span>
                                             </div>
+                                        </div>
+                                        @endif
 
+                                        <div class="fv-row mb-10">
+                                            <!-- <label class="form-label fw-bolder text-gray-900 fs-6">Email</label> -->
+                                            <input type="email" class="form-control form-control-solid"
+                                                name="email"
+                                                id="email"
+                                                autocomplete="off"
+                                                placeholder="Enter your email address"
+                                                required />
+                                        </div>
+
+                                        <div class="d-flex flex-wrap justify-content-center pb-lg-0">
+                                            <button type="submit" class="btn btn-primary me-4">
+                                                <span class="indicator-label">Submit</span>
+                                            </button>
+                                            <a href="{{ route('login') }}" class="btn btn-light">Cancel</a>
                                         </div>
                                     </form>
 
