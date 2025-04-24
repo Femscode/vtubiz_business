@@ -720,8 +720,8 @@
         <div class="row gx-md-8 gx-xl-12 gy-10 mb-14 mb-md-18 align-items-center">
           <div class="col-lg-6">
             <h2 class="fs-16 text-uppercase text-muted mb-3">Be In Power</h2>
-            <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for FREE😊.</h3>
-            <p>Start selling all products like we do at your own price with our ready-made, easily customizable website for free.</p>
+            <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for a token of ₦45,000😊.</h3>
+            <p>Start selling all products like we do at your own price with our ready-made, easily customizable website.</p>
             <a href="/business" class="btn btn-primary rounded-pill mb-0">Get Started</a>
           </div>
           <div class="col-lg-6 order-lg-2">

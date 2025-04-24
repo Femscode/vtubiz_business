@@ -178,7 +178,7 @@ class MailPayController extends Controller
             return response()->json($emailContents);
 
             // Make API request
-            $response = Http::withToken($token['access_token'])
+            $response =  Http::withToken($token['access_token'])
                 ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
                     'q' => 'subject:"Credit Alert" newer_than:1d'
                 ]);

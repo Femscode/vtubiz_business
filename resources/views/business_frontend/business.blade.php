@@ -733,10 +733,10 @@
                   <div class="card-body pb-12">
                     <div class="prices text-dark">
                       <div class="price price-show"><span class="price-currency">NGN</span><span
-                          class="price-value">15,000</span> <span class="price-duration">year</span></div>
+                          class="price-value">45,000</span> <span class="price-duration">year</span></div>
                     </div>
                     <!--/.prices -->
-                    <h4 class="card-title mt-2">Maintenance Fee</h4>
+                    <h4 class="card-title mt-2">Annual Fee</h4>
                     <ul class="icon-list bullet-soft-primary mt-8 mb-9">
                       <li><i class="uil uil-check fs-21"></i><span><strong>Domain Maintenance</strong>  </span></li>
                       <li><i class="uil uil-check fs-21"></i><span><strong>Secured SSL Certificate</strong>  </span></li>
