@@ -1079,7 +1079,7 @@
             html: `
         <img src="{{ asset('assets/img/not.jpg') }}" style="width: 70%; max-height: 100px; object-fit: cover; border-radius: 10px;">
         <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $notification->title }}</h2>
-        <p style="text-align: center;font-size: 14px; color: #888;">{{ $notification->description }}</p>
+        <p style="text-align: center;font-size: 14px; color: #888;">{!!   $notification->description !!}</p>
       `,
             showCloseButton: true,
             showConfirmButton: false,
@@ -1104,7 +1104,7 @@
             html: `
         <img src="{{ asset('assets/img/discount.jpg') }}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px;">
         <h2 style="font-weight: bold; text-align: center; margin-top: 10px;">{{ $dod->title }}</h2>
-        <p style="text-align: center;font-size: 24px; color: #888;"><b>{{ $dod->description }}</b></p>
+        <p style="text-align: center;font-size: 24px; color: #888;"><b>{!!   $dod->description !!}</b></p>
       `,
             showCloseButton: true,
             showConfirmButton: false,
