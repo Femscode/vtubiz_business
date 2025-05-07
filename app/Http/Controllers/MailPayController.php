@@ -510,11 +510,18 @@ class MailPayController extends Controller
         curl_close($curl);
         $response_json = json_decode($response, true);
         $balance = $response_json['balance'];
-        if ($balance < 10000) {
-            Mail::raw('Your account balance is less than NGN2,000. Please fund your account to continue enjoying our services.', function ($message) {
-                $message->to('fasanyafemi@gmail.com')
-                    ->subject('Low Balance Alert on VTUBIZ');
-            });
+        if ($balance < 2000) {
+            try {
+                Mail::raw('Your account balance is less than NGN2,000. Please fund your account to continue enjoying our services.', function ($message) {
+                    $message->to('fasanyafemi@gmail.com')
+                        ->subject('Low Balance Alert on VTUBIZ');
+                });
+                return response()->json(['message' => 'sent'], 200);
+            } catch (\Exception $e) {
+                \Log::error('Email sending error: '. $e->getMessage());
+                return response()->json(['message' => 'not sent'], 500);
+            }   
+            
         }
     }
 }
