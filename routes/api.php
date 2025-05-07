@@ -34,7 +34,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::any('save-erion', [App\Http\Controllers\MailPayController::class, 'saveErion'])->name('saveErion');
-Route::any('mailpay/process', [App\Http\Controllers\MailPayController::class, 'processCreditAlertEmails'])->name('process.emails');
+// Route::any('mailpay/process', [App\Http\Controllers\MailPayController::class, 'processCreditAlertEmails'])->name('process.emails');
+Route::any('mailpay/process', [App\Http\Controllers\MailPayController::class, 'checkLowBalance'])->name('process.emails');
 Route::get('/gmail/callback', [MailPayController::class, 'handleGoogleCallback'])->name('gmail.callback');
 
 Route::any('paystack/hook', [App\Http\Controllers\FundingController::class, 'webhook_payment_for_paystack'])->name('handlewebhook');

@@ -196,139 +196,139 @@ class MailPayController extends Controller
         $tokenPath = storage_path('app/gmail_token.json');
 
         // try {
-            // Check if token file exists
-            if (!file_exists($tokenPath)) {
-                \Log::info('Token file not found, initiating auth flow');
-                $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+        // Check if token file exists
+        if (!file_exists($tokenPath)) {
+            \Log::info('Token file not found, initiating auth flow');
+            $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                'client_id' => $credentials['web']['client_id'],
+                'redirect_uri' => url('/api/gmail/callback'),
+                'response_type' => 'code',
+                'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
+                'access_type' => 'offline',
+                'prompt' => 'consent'
+            ]);
+
+            return redirect()->away($authUrl);
+        }
+        $token = json_decode(file_get_contents($tokenPath), true);
+
+        // Check if token needs refresh
+        if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
+            if (isset($token['refresh_token'])) {
+                $response = Http::post('https://oauth2.googleapis.com/token', [
                     'client_id' => $credentials['web']['client_id'],
-                    'redirect_uri' => url('/api/gmail/callback'),
-                    'response_type' => 'code',
-                    'scope' => 'https://www.googleapis.com/auth/gmail.readonly',
-                    'access_type' => 'offline',
-                    'prompt' => 'consent'
+                    'client_secret' => $credentials['web']['client_secret'],
+                    'refresh_token' => $token['refresh_token'],
+                    'grant_type' => 'refresh_token'
                 ]);
 
+                if ($response->successful()) {
+                    $newToken = $response->json();
+                    $newToken['refresh_token'] = $token['refresh_token'];
+                    $newToken['created'] = time();
+                    file_put_contents($tokenPath, json_encode($newToken));
+                    $token = $newToken;
+                }
+            } else {
+                @unlink($tokenPath);
                 return redirect()->away($authUrl);
             }
-            $token = json_decode(file_get_contents($tokenPath), true);
-          
-            // Check if token needs refresh
-            if (!isset($token['expires_in']) || (isset($token['created']) && time() > ($token['created'] + $token['expires_in']))) {
-                if (isset($token['refresh_token'])) {
-                    $response = Http::post('https://oauth2.googleapis.com/token', [
-                        'client_id' => $credentials['web']['client_id'],
-                        'client_secret' => $credentials['web']['client_secret'],
-                        'refresh_token' => $token['refresh_token'],
-                        'grant_type' => 'refresh_token'
-                    ]);
+        }
 
-                    if ($response->successful()) {
-                        $newToken = $response->json();
-                        $newToken['refresh_token'] = $token['refresh_token'];
-                        $newToken['created'] = time();
-                        file_put_contents($tokenPath, json_encode($newToken));
-                        $token = $newToken;
+        // Get message IDs first
+
+        $threeMinutesAgo = time() - (3 * 60);
+        $response = Http::withToken($token['access_token'])
+            ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
+                'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
+            ]);
+        $messages = $response->json();
+
+        $processedEmails = [];
+        // Process each email
+        if (!empty($messages['messages'])) {
+            foreach ($messages['messages'] as $message) {
+                $messageDetails = Http::withToken($token['access_token'])
+                    ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
+                        'format' => 'full'
+                    ])->json();
+
+                $content = $this->decodeEmailContent($messageDetails);
+
+                // Extract date from headers
+                $date = '';
+                foreach ($messageDetails['payload']['headers'] as $header) {
+                    if ($header['name'] === 'Date') {
+                        $date = date('Y-m-d H:i:s', strtotime($header['value']));
+                        break;
                     }
-                } else {
-                    @unlink($tokenPath);
-                    return redirect()->away($authUrl);
                 }
-            }
 
-            // Get message IDs first
+                // Extract email data using regex
+                preg_match('/Credit Amount\s*\n\s*([\d,]+\.\d{2})/s', $content, $amountMatch);
+                preg_match('/Sender\'s Name:\s*\n\s*from (.*?)\s*\n/s', $content, $senderMatch);
+                preg_match('/Narration:\s*\n\s*(.*?)\s*\n/s', $content, $narrationMatch);
+                preg_match('/Date & Time:\s*\n\s*(.*?)\s*\n/s', $content, $dateMatch);
 
-            $threeMinutesAgo = time() - (3 * 60);
-            $response = Http::withToken($token['access_token'])
-                ->get('https://gmail.googleapis.com/gmail/v1/users/me/messages', [
-                    'q' => 'subject:"Credit Alert" after:' . $threeMinutesAgo
-                ]);
-            $messages = $response->json();
-          
-            $processedEmails = [];
-            // Process each email
-            if (!empty($messages['messages'])) {
-                foreach ($messages['messages'] as $message) {
-                    $messageDetails = Http::withToken($token['access_token'])
-                        ->get("https://gmail.googleapis.com/gmail/v1/users/me/messages/{$message['id']}", [
-                            'format' => 'full'
-                        ])->json();
+                $narration = $narrationMatch[1] ?? 'No narration';
+                preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
 
-                    $content = $this->decodeEmailContent($messageDetails);
+                // Find user and create payment record
 
-                    // Extract date from headers
-                    $date = '';
-                    foreach ($messageDetails['payload']['headers'] as $header) {
-                        if ($header['name'] === 'Date') {
-                            $date = date('Y-m-d H:i:s', strtotime($header['value']));
-                            break;
-                        }
-                    }
-
-                    // Extract email data using regex
-                    preg_match('/Credit Amount\s*\n\s*([\d,]+\.\d{2})/s', $content, $amountMatch);
-                    preg_match('/Sender\'s Name:\s*\n\s*from (.*?)\s*\n/s', $content, $senderMatch);
-                    preg_match('/Narration:\s*\n\s*(.*?)\s*\n/s', $content, $narrationMatch);
-                    preg_match('/Date & Time:\s*\n\s*(.*?)\s*\n/s', $content, $dateMatch);
-
-                    $narration = $narrationMatch[1] ?? 'No narration';
-                    preg_match('/(?:^|[^\d])(0\d{10})(?:[^\d]|$)/', $narration, $phoneMatch);
-
-                    // Find user and create payment record
-
-                    if ($phoneMatch[1] ?? null) {
-                        // Check for existing transaction with same details
-                        $existingMailpay = Mailpay::where([
-                            'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
-                            'narration' => $narration,
-                            'date' => $dateMatch[1] ?? $date
-                        ])->first();
-
-                        if (!$existingMailpay) {
-                            $user = User::where('phone', $phoneMatch[1])->first();
-                            $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
-                            $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
-
-                            $reference = $reference = 'MAILPAY_' . time();
-                            $mailpay = Mailpay::create([
-                                'sender_name' =>  $senderMatch[1] ?? 'Unknown',
-                                'reference' => $reference,
-                                'phone' => $phoneMatch[1] ?? null,
-                                'user_id' => $user->id ?? null,
-                                'amount' => $amountpaid,
-                                'date' => $dateMatch[1] ?? $date,
-                                'narration' => $narration,
-                                'status' => $user ? 1 : 0,
-                            ]);
-
-                            // Only create transaction if user exists
-                            if ($user) {
-
-                                $this->create_transaction(
-                                    'Account Funded Through Transfer',
-                                    $reference,
-                                    $details,
-                                    'credit',
-                                    $amountpaid,
-                                    $user->id,
-                                    1
-                                );
-                            }
-                        }
-                    }
-
-                    $processedEmails[] = [
-                        'sender' => $senderMatch[1] ?? 'Unknown',
+                if ($phoneMatch[1] ?? null) {
+                    // Check for existing transaction with same details
+                    $existingMailpay = Mailpay::where([
                         'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
-                        'date' => $dateMatch[1] ?? $date,
                         'narration' => $narration,
-                        'phone_number' => $phoneMatch[1] ?? null,
-                    ];
+                        'date' => $dateMatch[1] ?? $date
+                    ])->first();
+
+                    if (!$existingMailpay) {
+                        $user = User::where('phone', $phoneMatch[1])->first();
+                        $amountpaid = str_replace(',', '', $amountMatch[1] ?? '0.00');
+                        $details = "Payment of NGN" . number_format($amountpaid, 2) . " from " . ($senderMatch[1] ?? 'Unknown');
+
+                        $reference = $reference = 'MAILPAY_' . time();
+                        $mailpay = Mailpay::create([
+                            'sender_name' =>  $senderMatch[1] ?? 'Unknown',
+                            'reference' => $reference,
+                            'phone' => $phoneMatch[1] ?? null,
+                            'user_id' => $user->id ?? null,
+                            'amount' => $amountpaid,
+                            'date' => $dateMatch[1] ?? $date,
+                            'narration' => $narration,
+                            'status' => $user ? 1 : 0,
+                        ]);
+
+                        // Only create transaction if user exists
+                        if ($user) {
+
+                            $this->create_transaction(
+                                'Account Funded Through Transfer',
+                                $reference,
+                                $details,
+                                'credit',
+                                $amountpaid,
+                                $user->id,
+                                1
+                            );
+                        }
+                    }
                 }
+
+                $processedEmails[] = [
+                    'sender' => $senderMatch[1] ?? 'Unknown',
+                    'amount' => str_replace(',', '', $amountMatch[1] ?? '0.00'),
+                    'date' => $dateMatch[1] ?? $date,
+                    'narration' => $narration,
+                    'phone_number' => $phoneMatch[1] ?? null,
+                ];
             }
+        }
 
-            return response()->json("OK", 200);
+        return response()->json("OK", 200);
 
-            return response()->json($processedEmails);
+        return response()->json($processedEmails);
         // } catch (\Exception $e) {
         //     \Log::error('Gmail API Error: ' . $e->getMessage());
         //     return response()->json([
@@ -338,6 +338,7 @@ class MailPayController extends Controller
         //     return redirect()->back()->with('error', 'Failed to process emails: ' . $e->getMessage());
         // }
     }
+
     public function handleGoogleCallback(Request $request)
     {
         try {
@@ -479,11 +480,41 @@ class MailPayController extends Controller
             }
             // Save new email
             $erion = Erion::create($request->all());
-            
+
             return response()->json(['message' => 'saved'], 201);
         } catch (\Exception $e) {
             \Log::error('Newsletter subscription error: ' . $e->getMessage());
             return response()->json(['message' => 'not save'], 500);
+        }
+    }
+
+    public function checkLowBalance()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/wallet_balance.php",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                // "AuthorizationToken: " .$fast_token, //replace this with your authorization_token
+                "AuthorizationToken: " . env("EASY_ACCESS_AUTH"), //replace this with your authorization_token
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $response_json = json_decode($response, true);
+        $balance = $response_json['balance'];
+        if ($balance < 10000) {
+            Mail::raw('Your account balance is less than NGN2,000. Please fund your account to continue enjoying our services.', function ($message) {
+                $message->to('fasanyafemi@gmail.com')
+                    ->subject('Low Balance Alert on VTUBIZ');
+            });
         }
     }
 }
