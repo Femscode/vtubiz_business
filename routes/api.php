@@ -10,6 +10,7 @@ use App\Http\Controllers\MailPayController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WhatsappController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,9 @@ Route::any('/auth/set-pin', [AuthController::class, 'update_password'])->name('s
 Route::post('/password/forgot-password', [UserController::class, 'forgot_password']);
 Route::post('/password/reset-password', [UserController::class, 'reset'])->name('resetpasswordfield');
 
+
+//whatsapp messages 
+Route::any('/resolve_pending', [WhatsappController::class, 'resolve_pending'])->name('resolve_pending');
 
 
 
