@@ -42,6 +42,10 @@ class WhatsappController extends Controller
                     'message' => 'Failed to send notification',
                 ], 500);
             }
+        } else {
+            return response()->json([
+               'message' => 'No unresolved transactions found',
+            ]);
         }
     }
 
