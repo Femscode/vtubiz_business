@@ -15,9 +15,9 @@ class WhatsappController extends Controller
     {
         //for transactions that are more than 2minuetes
         // $duplicate = DuplicateTransaction::where('created_at', '<=', now()->subMinutes(2))->first();
-        // $duplicate =DuplicateTransaction::latest()->first();
+        $duplicate =DuplicateTransaction::latest()->first();
         // dd($duplicate);
-        $duplicate = DuplicateTransaction::where('created_at', '<', now()->subMinutes(40))->first();
+        // $duplicate = DuplicateTransaction::where('created_at', '<', now()->subMinutes(40))->first();
         $unresolved_transactions = Transaction::where('reference', 'like', 'data_p%')
             ->where('refund_status', 0)
             ->where('created_at', '>=', now()->subMinutes(5))
