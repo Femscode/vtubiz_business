@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DuplicateTransaction;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class WhatsappController extends Controller
 {
@@ -21,6 +22,18 @@ class WhatsappController extends Controller
             ->first();
         //You should write a function that send messages to users informing them that we are fixing the issue currently.
         if ($duplicate || $unresolved_transactions) {
+
+            try {
+                Mail::raw('Your urgent assistance is needed on the website.', function ($message) {
+                    $message->to(['fasanyafemi@gmail.com','ogungbemioluwagbenga22@gmail.com'])
+                        ->subject('Urgent Attention needed on VTUBIZ');
+                });
+                return response()->json(['message' => 'sent'], 200);
+            } catch (\Exception $e) {
+                \Log::error('Email sending error: '. $e->getMessage());
+                return response()->json(['message' => 'not sent'], 500);
+            }   
+            
             $parameters = [
                 [
                     'type' => 'body',
