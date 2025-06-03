@@ -119,11 +119,11 @@ class SuperController extends Controller
                     'plan_id' => $data['plan_id'],
                     'plan_name' => $network_prefix . ' ' . $data['name']. ' '. $data['validity'],
                     'actual_price' => ceil($data['price']),
-                    'data_price' => ceil($data['price'] + (0.02 * $data['price'])),
-                    'account_price' => ceil($data['price'] + (0.04 * $data['price'])),
+                    'data_price' => ceil($data['price'] + (0.04 * $data['price'])),
+                    'account_price' => ceil($data['price'] + (0.06 * $data['price'])),
                     'type' => $plan_type,
                     'status' => 1,
-                    'admin_price' => ceil($data['price'] + (0.04 * $data['price']))
+                    'admin_price' => ceil($data['price'] + (0.06 * $data['price']))
                 ]);
             }
             return redirect()->back()->with('message', 'Data Price Updated Successfully!');
