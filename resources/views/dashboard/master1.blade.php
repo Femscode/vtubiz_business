@@ -873,7 +873,7 @@
 
                                             <!--begin::Subtitle-->
 
-                                            <div class="container my-1">
+                                            <!-- <div class="container my-1">
                                                 <div class="progress-container">
                                                     <div class="progress-step @if($user->total_spent < 10000) active @endif">
                                                         <div class="progress-circle">1</div>
@@ -930,8 +930,8 @@
                                                                         <a href='/benefits' style='color:#28a745;'>Click here</a> to view benefits of your level.
                                                                     </p>
                                                                     @endif
-                                            </div>
-
+                                            </div> -->
+<p class="message">Join our Whatsapp community for freebies, discounts and product availability updates. <a href='https://chat.whatsapp.com/CpR9IBMUE5xFyJJwhK2KzD'>Click here</a> to join.</p>
                                             <!--end::Subtitle-->
                                         </div>
 
