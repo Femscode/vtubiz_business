@@ -66,7 +66,6 @@ class SuperController extends Controller
         if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
             return redirect('dashboard');
         }
-
         // Extract network and plan type from the incoming type parameter
         $type_parts = explode('_', strtolower($type));
         $network_name = $type_parts[0];

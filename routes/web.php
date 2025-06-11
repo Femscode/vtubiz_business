@@ -185,6 +185,9 @@ Route::get('/asset-location', function () {
 });
 
 Route::view('/business', 'business_frontend.business');
+
+Route::view('/privacy-policy', 'frontend.privacy-policy');
+Route::view('/terms-of-service', 'frontend.terms-of-service');
 Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
 Route::any('/test_debit/{client_reference}/{reference}', [App\Http\Controllers\FundingController::class, 'test_debit'])->name('test_debit');
 Route::any('/run_debit/{client_reference}/{reference}/{message}', [App\Http\Controllers\FundingController::class, 'run_debit'])->name('run_debit');
