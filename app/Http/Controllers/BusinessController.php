@@ -920,26 +920,25 @@ class BusinessController extends Controller
     public function refund($id)
     {
         //check if the user belongs to the brand
-       $user = Auth::user();
-        if ( $user->email == 'fasanyafemi@gmail.com' || $user->email == 'manager@gmail.com') {
-           
+        $user = Auth::user();
+        if ($user->email == 'fasanyafemi@gmail.com' || $user->email == 'manager@gmail.com') {
+
             $transaction = Transaction::find($id);
-           
-          
-         
-            if ($transaction->refund_status == 0 ) {
+
+
+
+            if ($transaction->refund_status == 0) {
                 $user = User::find($transaction->user_id);
-               
+
                 $user->balance = $user->balance + $transaction->amount;
                 $user->save();
                 $transaction->refund_status = 1;
                 $transaction->save();
                 $details = "Manual funding of " . $transaction->amount;
                 $this->create_transaction('Manual Funding', $transaction->reference, $details, 'credit', $transaction->amount, $user->id, 1, $transaction->amount);
-                return redirect()->back()->with('message','User refunded successfully!');
+                return redirect()->back()->with('message', 'User refunded successfully!');
             } else {
-                return redirect()->back()->with('error','Invalid Operation!');
-
+                return redirect()->back()->with('error', 'Invalid Operation!');
             }
         } else {
             return Redirect()->route('dashboard')->with('Message', 'Permission Denied');
@@ -1017,6 +1016,77 @@ class BusinessController extends Controller
             }
         } else {
             return Redirect()->route('dashboard')->with('Message', 'Permission Denied');
+        }
+    }
+
+    public function delete_user_interface()
+    {
+        $user = Auth::user();
+        $data['customer'] = $data['user'] = Auth::user();
+
+        return view('frontend.delete_user_interface', $data);
+    }
+
+    public function deleteuser_confirm(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        try {
+            // Find user based on account type and email
+
+            $user = User::where('email', $request->email)->first();
+
+
+            // Check if user exists
+            if (!$user) {
+                return redirect()->back()
+                    ->with('error', 'Account not found with the provided email.');
+            }
+
+            // Validate password
+            if (!Hash::check($request->password, $user->password)) {
+                return redirect()->back()
+                    ->with('error', 'The password you entered is incorrect.');
+            }
+
+            // Begin transaction
+            DB::beginTransaction();
+            try {
+                Transaction::where('user_id', $user->id)->delete();
+
+
+
+                // Delete the user
+                $user->delete();
+                DB::commit();
+
+
+                Auth::logout();
+
+
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect('/')
+                    ->with('message', 'Your account has been successfully deleted.')
+                    ->with('message_type', 'success');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                \Log::error($request->account_type . ' deletion failed: ' . $e->getMessage());
+
+                return redirect()->back()
+                    ->with('error', 'Failed to delete account. Please try again later.')
+                    ->with('error_type', 'system');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Account deletion process failed: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'An unexpected error occurred. Please try again later.')
+                ->with('error_type', 'system');
         }
     }
 }
