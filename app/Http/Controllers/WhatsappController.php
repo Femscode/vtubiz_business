@@ -41,7 +41,7 @@ class WhatsappController extends Controller
                 }
                 return response()->json(['message' => 'sent'], 200);
             } catch (\Exception $e) {
-                \Log::error('Email sending error: '. $e->getMessage());
+                dd('Email sending error: '. $e->getMessage());
                 return response()->json(['message' => 'not sent'], 500);
             }   
             
