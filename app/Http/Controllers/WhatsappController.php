@@ -15,21 +15,30 @@ class WhatsappController extends Controller
     {
         //for transactions that are more than 2minuetes
         // $duplicate = DuplicateTransaction::where('created_at', '<=', now()->subMinutes(2))->first();
-        $duplicate =DuplicateTransaction::latest()->first();
+        $duplicate = DuplicateTransaction::latest()->first();
         // dd($duplicate);
         // $duplicate = DuplicateTransaction::where('created_at', '<', now()->subMinutes(40))->first();
         $unresolved_transactions = Transaction::where('reference', 'like', 'data_p%')
             ->where('refund_status', 0)
+            ->where('notification_status', 0)
             ->where('created_at', '>=', now()->subMinutes(5))
             ->first();
         //You should write a function that send messages to users informing them that we are fixing the issue currently.
         if ($duplicate || $unresolved_transactions) {
 
             try {
-                Mail::raw('Your urgent assistance is needed on the website.', function ($message) {
+                Mail::raw('Attention is needed on the website.', function ($message) {
                     $message->to(['fasanyafemi@gmail.com','ogungbemioluwagbenga22@gmail.com'])
                         ->subject('Urgent Attention needed on VTUBIZ');
                 });
+                if($duplicate) {
+                    $duplicate->notification_status = 1;
+                    $duplicate->save();
+                }
+                if($unresolved_transactions) {
+                    $unresolved_transactions->notification_status = 1;
+                    $unresolved_transactions->save();
+                }
                 return response()->json(['message' => 'sent'], 200);
             } catch (\Exception $e) {
                 \Log::error('Email sending error: '. $e->getMessage());
