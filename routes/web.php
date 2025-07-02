@@ -616,6 +616,7 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/user_transaction/{id}', [App\Http\Controllers\SuperController::class, 'user_transaction'])->name('user_transaction');
         Route::any('/data_price', [App\Http\Controllers\SuperController::class, 'data_price'])->name('data_price');
         Route::any('/reset_data_price/{type}', [App\Http\Controllers\SuperController::class, 'reset_data_price'])->name('reset_data_price');
+        Route::any('/reset_all_data_prices', [App\Http\Controllers\SuperController::class, 'reset_all_data_prices'])->name('reset_all_data_prices');
         Route::any('/plan_status', [App\Http\Controllers\SuperController::class, 'plan_status'])->name('plan_status');
         Route::any('/plan_status/{network_id}/{type}', [App\Http\Controllers\SuperController::class, 'update_plan_status'])->name('update_plan_status');
         Route::any('/update_data', [App\Http\Controllers\SuperController::class, 'update_data'])->name('update_data');

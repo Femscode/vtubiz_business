@@ -116,7 +116,7 @@ class SuperController extends Controller
                     'user_id' => 0,
                     'network' => $network,
                     'plan_id' => $data['plan_id'],
-                    'plan_name' => $network_prefix . ' ' . $data['name']. ' '. $data['validity'],
+                    'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
                     'actual_price' => ceil($data['price']),
                     'data_price' => ceil($data['price'] + (0.04 * $data['price'])),
                     'account_price' => ceil($data['price'] + (0.06 * $data['price'])),
@@ -130,6 +130,109 @@ class SuperController extends Controller
 
         return redirect()->back()->with('error', 'Failed to update data price.');
     }
+
+    private function reset_data_price_logic($type)
+    {
+        $type_parts = explode('_', strtolower($type));
+        $network_name = $type_parts[0];
+        $plan_type = $type_parts[1];
+
+        $network_mapping = [
+            'mtn' => 1,
+            'glo' => 2,
+            'airtel' => 3,
+            '9mobile' => 4
+        ];
+
+        $network = $network_mapping[$network_name] ?? 1;
+        $network_prefix = strtoupper($network_name);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/get_plans.php?product_type=" . $type,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'),
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response_json = json_decode($response, true);
+        $online_data = reset($response_json);
+
+        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            Data::where('user_id', 0)->where('type', $plan_type)->where('network', $network)->delete();
+
+            foreach ($online_data as $data) {
+                Data::create([
+                    'user_id' => 0,
+                    'network' => $network,
+                    'plan_id' => $data['plan_id'],
+                    'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
+                    'actual_price' => ceil($data['price']),
+                    'data_price' => ceil($data['price'] + (0.04 * $data['price'])),
+                    'account_price' => ceil($data['price'] + (0.06 * $data['price'])),
+                    'type' => $plan_type,
+                    'status' => 1,
+                    'admin_price' => ceil($data['price'] + (0.06 * $data['price']))
+                ]);
+            }
+
+            return ['success' => true];
+        }
+
+        return ['success' => false];
+    }
+
+    public function reset_all_data_prices()
+    {
+        $user = Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+
+        // Define all combinations of type strings used in the buttons
+        $types = [
+            'mtn_sme',
+            'mtn_awoof',
+            'mtn_cg',
+            'mtn_cg_lite',
+            'mtn_direct',
+            'glo_cg',
+            'glo_gifting',
+            'glo_awoof',
+            'airtel_cg',
+            'airtel_awoof',
+            'airtel_direct',
+            '9mobile_sme',
+            '9mobile_gifting'
+        ];
+
+        $errors = [];
+        foreach ($types as $type) {
+            $response = $this->reset_data_price_logic($type); // Custom logic extracted from your original function
+           
+
+            if (!$response['success']) {
+                $errors[] = $type;
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->with('error', 'Some plans failed to reset: ' . implode(', ', $errors));
+        }
+
+        return redirect()->back()->with('success', 'All Data Prices Reset Successfully!');
+    }
+
 
     public function schedule_accounts()
     {
@@ -178,7 +281,7 @@ class SuperController extends Controller
     }
     public function update_plan_status($network_id, $type)
     {
-    //    dd(Data::where('network', $network_id)->where('type', $type)->where('user_id',0)->get());
+        //    dd(Data::where('network', $network_id)->where('type', $type)->where('user_id',0)->get());
         if (Data::where('network', $network_id)->where('type', $type)->first()->status == 0) {
             $datas = Data::where('network', $network_id)->where('type', $type)->update([
                 'status' => 1
