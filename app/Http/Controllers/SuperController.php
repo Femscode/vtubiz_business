@@ -216,11 +216,12 @@ class SuperController extends Controller
             '9mobile_gifting'
         ];
 
+      
+
         $errors = [];
         foreach ($types as $type) {
             $response = $this->reset_data_price_logic($type); // Custom logic extracted from your original function
-           
-
+          
             if (!$response['success']) {
                 $errors[] = $type;
             }
@@ -230,7 +231,7 @@ class SuperController extends Controller
             return redirect()->back()->with('error', 'Some plans failed to reset: ' . implode(', ', $errors));
         }
 
-        return redirect()->back()->with('success', 'All Data Prices Reset Successfully!');
+        return redirect()->back()->with('message', 'All Data Prices Reset Successfully!');
     }
 
 

@@ -428,6 +428,9 @@
         @if(session('message'))
         Swal.fire('Success!', "{{ session('message') }}", 'success');
         @endif
+        @if(session('error'))
+        Swal.fire('Error!', "{{ session('error') }}", 'error');
+        @endif
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
