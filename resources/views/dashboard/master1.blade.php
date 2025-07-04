@@ -36,6 +36,7 @@
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
     <!-- //google ads -->
+     <meta name="google-adsense-account" content="ca-pub-9520357947525167">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
      crossorigin="anonymous"></script>
     <style>

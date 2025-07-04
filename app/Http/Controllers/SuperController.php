@@ -205,13 +205,13 @@ class SuperController extends Controller
             'mtn_awoof',
             'mtn_cg',
             'mtn_cg_lite',
-            'mtn_direct',
+            'mtn_gifting',
             'glo_cg',
             'glo_gifting',
             'glo_awoof',
             'airtel_cg',
             'airtel_awoof',
-            'airtel_direct',
+            'airtel_gifting',
             '9mobile_sme',
             '9mobile_gifting'
         ];
