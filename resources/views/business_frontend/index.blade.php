@@ -1144,8 +1144,8 @@
               <li><a href="#">About Us</a></li>
               <li><a href="#">Our Products</a></li>
               <li><a href="#">Our Products</a></li>
-              <li><a href="#">Terms of Use</a></li>
-              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="/terms-of-service">Terms of Use</a></li>
+              <li><a href="/privacy-policy">Privacy Policy</a></li>
             </ul>
           </div>
           <!-- /.widget -->

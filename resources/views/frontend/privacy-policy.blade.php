@@ -62,62 +62,71 @@
         <div class="row gx-lg-8 gx-xl-12 gy-10">
           <div class="col-lg-12">
             <h1 style="font-family: 'Grandstander', cursive" class="display-1 mb-5">Privacy Policy</h1>
-            <p><strong>Last Updated:</strong> June 11, 2025</p>
+            <p><strong>Last Updated:</strong> July 4, 2025</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Introduction</h2>
-            <p>vtubiz.com provides services for purchasing data subscriptions, airtime, cable subscriptions, electricity bill payments, bulk SMS, and exam result checking through our website, mobile app, and WhatsApp Business API. This Privacy Policy explains how we collect, use, store, and protect your personal data when you interact with our services.</p>
+            <p>VTUBiz (<a href="https://www.vtubiz.com">www.vtubiz.com</a>) provides services for purchasing data subscriptions, airtime, cable subscriptions, electricity bill payments, bulk SMS, and exam result checking through our website, mobile app, and WhatsApp Business API. As a service provider, we are committed to protecting your personal data and complying with applicable regulations, including those required by our payment processing partner, Flutterwave. This Privacy Policy outlines how we collect, use, store, share, and protect your personal data when you use our services.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Data We Collect</h2>
-            <p>We collect the following data to facilitate our services and communication via WhatsApp:</p>
+            <p>We collect the following data to deliver our services and ensure compliance with regulatory standards:</p>
             <ul>
-              <li><strong>Phone Numbers:</strong> To send and receive messages, process transactions, and deliver services like airtime or data subscriptions.</li>
-              <li><strong>Message Content:</strong> To respond to your inquiries and manage transaction-related communication.</li>
-              <li><strong>Transaction Details:</strong> Information about your purchases, such as data plans, airtime amounts, cable or electricity payments, bulk SMS orders, or exam result requests, to fulfill and track your transactions.</li>
-              <li><strong>Payment Information:</strong> Details such as payment method or transaction IDs, collected via secure third-party payment gateways, to process payments.</li>
-              <li><strong>Metadata:</strong> Information such as timestamps and message status, as provided by Meta.</li>
+              <li><strong>Personal Information:</strong> Name, phone number, and email address provided during account creation, transaction processing, or customer support interactions.</li>
+              <li><strong>Transaction Details:</strong> Information about your purchases, such as data plans, airtime amounts, cable or electricity payments, bulk SMS orders, or exam result requests, to fulfill and track transactions.</li>
+              <li><strong>Payment Information:</strong> Payment method details (e.g., card details, bank account information, or transaction IDs) collected securely via Flutterwave, our third-party payment processor.</li>
+              <li><strong>Communication Data:</strong> Phone numbers and message content via WhatsApp Business API to respond to inquiries and manage transaction-related communication.</li>
+              <li><strong>Metadata:</strong> Information such as timestamps, message status, and IP addresses, as provided by Meta or collected during website/app usage.</li>
+              <li><strong>Virtual Account Information:</strong> If you opt to generate a permanent virtual account, we may collect your National Identification Number (NIN) or Bank Verification Number (BVN) as required by regulatory standards.</li>
             </ul>
-            <p>We do not collect additional personal information unless explicitly provided by you.</p>
+            <p>We do not collect additional personal information unless explicitly provided by you or required for service delivery.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">How We Use Your Data</h2>
-            <p>Your data is used solely to:</p>
+            <p>We use your data to:</p>
             <ul>
               <li>Process and fulfill transactions for data, airtime, cable, electricity, bulk SMS, and exam result services.</li>
-              <li>Provide customer support and respond to inquiries via WhatsApp.</li>
+              <li>Facilitate secure payment processing through Flutterwave.</li>
+              <li>Provide customer support and respond to inquiries via WhatsApp, email, or other channels.</li>
               <li>Coordinate with third-party providers (e.g., mobile networks, utility companies) to deliver services.</li>
-              <li>Improve our services based on usage patterns.</li>
-              <li>Comply with legal obligations and Meta’s Platform Policy.</li>
+              <li>Analyze usage patterns to improve our services and user experience.</li>
+              <li>Comply with legal and regulatory obligations, including those enforced by Flutterwave and Meta’s Platform Policy.</li>
             </ul>
 
             <h2 style="font-family: 'Grandstander', cursive">Data Sharing</h2>
-            <p>We share your data with:</p>
+            <p>We share your data only as necessary to provide our services or comply with legal requirements:</p>
             <ul>
-              <li><strong>Meta:</strong> To operate the WhatsApp Business API, as governed by Meta’s policies.</li>
+              <li><strong>Flutterwave:</strong> Payment information is shared with Flutterwave, our secure payment processor, to process transactions. Flutterwave’s privacy practices are governed by their <a href="https://flutterwave.com/ng/privacy-policy">Privacy Policy</a>.</li>
+              <li><strong>Meta:</strong> Communication data is shared with Meta to operate the WhatsApp Business API, as governed by Meta’s policies.</li>
               <li><strong>Service Providers:</strong> Transaction details are shared with mobile network operators, utility companies, or other relevant providers to fulfill your requests.</li>
-              <li><strong>Payment Processors:</strong> Secure third-party payment gateways to process transactions.</li>
-              <li><strong>Legal Authorities:</strong> If required by law or to protect our rights.</li>
+              <li><strong>Regulatory Authorities:</strong> We may share data if required by law, such as in response to legal requests or audits, to comply with anti-money laundering (AML) and counter-terrorism financing (CTF) regulations.</li>
             </ul>
-            <p>We do not share your data with other third parties for marketing purposes.</p>
+            <p>We do not sell or share your data with third parties for marketing purposes.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Data Retention</h2>
-            <p>We retain your data only as long as necessary to provide our services or as required by law. Message content, transaction details, and metadata are deleted after 30 days unless required for legal compliance or dispute resolution.</p>
+            <p>We retain your data only as long as necessary to provide our services or comply with legal obligations:</p>
+            <ul>
+              <li>Transaction and communication data are retained for 30 days unless required for legal compliance or dispute resolution.</li>
+              <li>Virtual account information (e.g., NIN or BVN) is retained as required by regulatory standards for permanent virtual accounts.</li>
+              <li>Payment data processed via Flutterwave is handled according to their retention policies.</li>
+            </ul>
+            <p>Data no longer needed is securely deleted or anonymized.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Your Rights</h2>
             <p>You have the right to:</p>
             <ul>
-              <li>Request access to the data we hold about you.</li>
-              <li>Request correction or deletion of your data.</li>
-              <li>Opt out of receiving messages by contacting us.</li>
+              <li>Access the personal data we hold about you.</li>
+              <li>Request correction or deletion of your data, subject to legal retention requirements.</li>
+              <li>Opt out of receiving messages by contacting us or unsubscribing from communications.</li>
+              <li>Request information about how your data is processed or shared, including with Flutterwave or other third parties.</li>
             </ul>
             <p>To exercise these rights, contact us at <a href="mailto:support@vtubiz.com">support@vtubiz.com</a>.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Security</h2>
-            <p>We implement industry-standard security measures to protect your data, including encryption during transmission and secure storage practices.</p>
+            <p>We implement industry-standard security measures, including encryption during data transmission and secure storage practices, to protect your data. Payment processing via Flutterwave uses secure protocols to safeguard your financial information.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Changes to This Policy</h2>
-            <p>We may update this Privacy Policy to reflect changes in our practices or legal requirements. The latest version will always be available at this URL.</p>
+            <p>We may update this Privacy Policy to reflect changes in our practices, services, or legal requirements. The latest version will always be available at <a href="https://www.vtubiz.com/privacy-policy">www.vtubiz.com/privacy-policy</a>. Significant changes will be communicated via email or our website.</p>
 
             <h2 style="font-family: 'Grandstander', cursive">Contact Us</h2>
-            <p>For questions or concerns about this Privacy Policy, please contact us at:</p>
+            <p>For questions, concerns, or to exercise your data rights, please contact us at:</p>
             <p>Email: <a href="mailto:support@vtubiz.com">support@vtubiz.com</a><br>
             Website: <a href="https://www.vtubiz.com">www.vtubiz.com</a><br>
             Address: No 1, Igbelowowa Street, Kobape, Abeokuta, Ogun State<br>
@@ -146,7 +155,8 @@
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="widget">
-            <h4 class="widget-title text-white mb-3">Company</h4>
+            <h4 class="widget%
+-title text-white mb-3">Company</h4>
             <ul class="list-unstyled mb-0">
               <li><a href="#">About Us</a></li>
               <li><a href="#">Our Services</a></li>
