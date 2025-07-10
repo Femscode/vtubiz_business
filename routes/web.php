@@ -621,9 +621,11 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/plan_status/{network_id}/{type}', [App\Http\Controllers\SuperController::class, 'update_plan_status'])->name('update_plan_status');
         Route::any('/update_data', [App\Http\Controllers\SuperController::class, 'update_data'])->name('update_data');
         Route::any('/cable_price', [App\Http\Controllers\SuperController::class, 'cable_price'])->name('cable_price');
+        Route::any('/reset_all_cable_prices', [App\Http\Controllers\SuperController::class, 'reset_all_cable_prices'])->name('reset_all_cable_prices');
         Route::any('/exam_price', [App\Http\Controllers\SuperController::class, 'exam_price'])->name('exam_price');
         Route::any('/update_cable', [App\Http\Controllers\SuperController::class, 'update_cable'])->name('update_cable');
         Route::any('/update_exam', [App\Http\Controllers\SuperController::class, 'update_exam'])->name('update_exam');
+        Route::any('/reset_all_exam_prices', [App\Http\Controllers\SuperController::class, 'reset_all_exam_prices'])->name('reset_all_exam_prices');
         Route::any('/block_user/{id}', [App\Http\Controllers\SuperController::class, 'block_user'])->name('block_user');
         Route::any('/upgrade_user/{id}', [App\Http\Controllers\SuperController::class, 'upgrade_user'])->name('upgrade_user');
         Route::any('/reset_password/{id}', [App\Http\Controllers\SuperController::class, 'reset_password'])->name('reset_password');

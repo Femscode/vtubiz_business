@@ -18,6 +18,7 @@
                         <div class="card-title">
                             <h3 class="card-label">Cable Prices
                             </h3>
+                            <a href="/reset_all_cable_prices" class="btn btn-success" onclick="return confirm('Are you sure you want to reset all cable prices');">Reset All Cable Prices</a>
                         </div>
 
                     </div>
@@ -43,12 +44,12 @@
                                         DSTV
                                         @elseif($cable->company == 2)
                                         GOTV
+                                        @elseif($cable->company == 3)
+                                        STARTIMES
                                        
                                         @else
-                                        STARTIMES
+                                        SHOWMAX
                                         @endif
-
-
 
                                     </td>
                                     <td><input id='plan_name_{{ $cable->plan_id }}' class='form-control' value="{{ $cable->plan_name }}"/></td>

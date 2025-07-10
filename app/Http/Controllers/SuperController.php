@@ -118,8 +118,8 @@ class SuperController extends Controller
                     'plan_id' => $data['plan_id'],
                     'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
                     'actual_price' => ceil($data['price']),
-                    'data_price' => ceil($data['price'] + (0.04 * $data['price'])),
-                    'account_price' => ceil($data['price'] + (0.06 * $data['price'])),
+                    'data_price' => ceil($data['price'] + (0.03 * $data['price'])),
+                    'account_price' => ceil($data['price'] + (0.03 * $data['price'])),
                     'type' => $plan_type,
                     'status' => 1,
                     'admin_price' => ceil($data['price'] + (0.06 * $data['price']))
@@ -178,8 +178,8 @@ class SuperController extends Controller
                     'plan_id' => $data['plan_id'],
                     'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
                     'actual_price' => ceil($data['price']),
-                    'data_price' => ceil($data['price'] + (0.04 * $data['price'])),
-                    'account_price' => ceil($data['price'] + (0.06 * $data['price'])),
+                    'data_price' => ceil($data['price'] + (0.03 * $data['price'])),
+                    'account_price' => ceil($data['price'] + (0.03 * $data['price'])),
                     'type' => $plan_type,
                     'status' => 1,
                     'admin_price' => ceil($data['price'] + (0.06 * $data['price']))
@@ -216,12 +216,12 @@ class SuperController extends Controller
             '9mobile_gifting'
         ];
 
-      
+
 
         $errors = [];
         foreach ($types as $type) {
             $response = $this->reset_data_price_logic($type); // Custom logic extracted from your original function
-          
+
             if (!$response['success']) {
                 $errors[] = $type;
             }
@@ -342,6 +342,158 @@ class SuperController extends Controller
         return true;
     }
 
+    //I am not using this function for now, but this is meant to reset cable price from easyaccess
+    public function reset_cable_price($type)
+    {
+        $user = Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+
+        // Map cable types to company IDs
+        $company_mapping = [
+            'dstv' => 1,
+            'gotv' => 2,
+            'startimes' => 3,
+            'showmax' => 4
+        ];
+
+        $company = $company_mapping[$type] ?? 1;
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/get_plans.php?product_type=" . $type,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'),
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response_json = json_decode($response, true);
+        $online_data = reset($response_json);
+
+        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            // Delete previous cable data for this type and company
+            Cable::where('user_id', 0)->where('type', $type)->where('company', $company)->delete();
+
+            foreach ($online_data as $cable) {
+                Cable::create([
+                    'user_id' => 0,
+                    'company' => $company,
+                    'plan_id' => $cable['plan_id'],
+                    'plan_name' => strtoupper($type) . ' ' . $cable['name'],
+                    'actual_price' => ceil($cable['price']),
+                    'real_price' => ceil($cable['price'] + (0.04 * $cable['price'])),
+                    'admin_price' => ceil($cable['price'] + (0.06 * $cable['price'])),
+                    'type' => $type,
+                    'status' => 1
+                ]);
+            }
+            return redirect()->back()->with('message', 'Cable Price Updated Successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Failed to update cable price.');
+    }
+
+    private function reset_cable_price_logic($type)
+    {
+        // Map cable types to company IDs
+        $company_mapping = [
+            'dstv' => 1,
+            'gotv' => 2,
+            'startimes' => 3,
+            'showmax' => 4
+        ];
+
+        $company = $company_mapping[$type] ?? 1;
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/get_plans.php?product_type=" . $type,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'),
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response_json = json_decode($response, true);
+        $online_data = reset($response_json);
+
+        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            Cable::where('user_id', 0)->where('type', $type)->where('company', $company)->delete();
+
+            foreach ($online_data as $cable) {
+                Cable::create([
+                    'user_id' => 0,
+                    'company' => $company,
+                    'plan_id' => $cable['plan_id'],
+                    'plan_name' => strtoupper($type) . ' ' . $cable['name'],
+                    'actual_price' => ceil($cable['price']),
+                    'real_price' => ceil($cable['price'] + (0.04 * $cable['price'])),
+                    'admin_price' => ceil($cable['price'] + (0.06 * $cable['price'])),
+                    'type' => $type,
+                    // 'status' => 1
+                ]);
+            }
+
+            return ['success' => true];
+        }
+
+        return ['success' => false];
+    }
+
+    // reset_all_cable_prices() method remains the same
+
+    public function reset_all_cable_prices()
+    {
+        $user = Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+
+        // Define all cable types
+        $types = [
+            'dstv',
+            'gotv',
+            'startimes',
+            'showmax'
+        ];
+
+        $errors = [];
+        foreach ($types as $type) {
+            $response = $this->reset_cable_price_logic($type);
+
+            if (!$response['success']) {
+                $errors[] = $type;
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->with('error', 'Some cable plans failed to reset: ' . implode(', ', $errors));
+        }
+
+        return redirect()->back()->with('message', 'All Cable Prices Reset Successfully!');
+    }
+
+
     public function exam_price()
     {
         $data['user'] = $user =  Auth::user();
@@ -367,6 +519,128 @@ class SuperController extends Controller
         }
         return redirect()->back()->with('message', 'Examination Price Updated Successfully!');
         return true;
+    }
+
+    public function reset_exam_price($type)
+    {
+        $user = Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/get_plans.php?product_type=" . $type,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'),
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response_json = json_decode($response, true);
+        $online_data = reset($response_json);
+
+        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            // Delete previous exam data for this type
+            Examination::where('user_id', 0)->where('name', $type)->delete();
+
+            foreach ($online_data as $exam) {
+                Examination::create([
+                    'user_id' => 0,
+                   'exam_type' => $type,
+                    'name' => ucfirst(Str::lower($type)) . " Result Checker",
+                    'actual_amount' => ceil($exam['price']),
+                    'real_amount' => ceil($exam['price'] + (0.03 * $exam['price'])),
+                    'status' => 1
+                ]);
+            }
+            return redirect()->back()->with('message', 'Exam Price Updated Successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Failed to update exam price.');
+    }
+
+    private function reset_exam_price_logic($type)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://easyaccessapi.com.ng/api/get_plans.php?product_type=" . $type,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "AuthorizationToken: " . env('EASY_ACCESS_AUTH'),
+                "cache-control: no-cache"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response_json = json_decode($response, true);
+        $online_data = reset($response_json);
+
+        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            Examination::where('user_id', 0)->where('exam_type', $type)->delete();
+
+            foreach ($online_data as $exam) {
+                Examination::create([
+                    'user_id' => 0,
+                    'exam_type' => $type,
+                    'name' => ucfirst(Str::lower($type)) . " Result Checker",
+                    'actual_amount' => ceil($exam['price']),
+                    'real_amount' => ceil($exam['price'] + (0.05 * $exam['price'])),
+                    // 'status' => 1
+                ]);
+            }
+
+            return ['success' => true];
+        }
+
+        return ['success' => false];
+    }
+
+    public function reset_all_exam_prices()
+    {
+        $user = Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+
+        // Define all exam types
+        $types = [
+            'waec',
+            'neco',
+            'nabteb',
+            'nbais'
+        ];
+
+        $errors = [];
+        foreach ($types as $type) {
+            $response = $this->reset_exam_price_logic($type);
+
+            if (!$response['success']) {
+                $errors[] = $type;
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->with('error', 'Some exam plans failed to reset: ' . implode(', ', $errors));
+        }
+
+        return redirect()->back()->with('message', 'All Exam Prices Reset Successfully!');
     }
 
     public function payment_transactions()

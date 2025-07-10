@@ -16,8 +16,10 @@
                 <div class="card card-custom">
                     <div class="card-header flex-wrap border-0 pt-6 pb-0">
                         <div class="card-title">
-                            <h3 class="card-label">Cable Prices
+                            <h3 class="card-label">Exam Prices
                             </h3>
+                            <a href="/reset_all_exam_prices" class="btn btn-success" onclick="return confirm('Are you sure you want to reset all exam prices');">Reset All Exam Prices</a>
+
                         </div>
 
                     </div>
@@ -38,17 +40,17 @@
 
                                 <tr>
                                     <form action='/update_exam' method='post'>@csrf
-                                        
 
 
-                                    <td> <input name='name' class='form-control' value="{{ $exam->name }}" /></td>
-                                    <td><input name='actual_amount' class='form-control' value="{{ $exam->actual_amount }}" /></td>
-                                    <td><input name='real_amount' class='form-control' value="{{ $exam->real_amount }}" /></td>
 
-                                    <td>
-                                        <button type='submit' class=' btn btn-success btn-sm'>Update</button>
-                                    </td>
-</form>
+                                        <td> <input name='name' class='form-control' value="{{ $exam->name }}" /></td>
+                                        <td><input name='actual_amount' class='form-control' value="{{ $exam->actual_amount }}" /></td>
+                                        <td><input name='real_amount' class='form-control' value="{{ $exam->real_amount }}" /></td>
+
+                                        <td>
+                                            <button type='submit' class=' btn btn-success btn-sm'>Update</button>
+                                        </td>
+                                    </form>
                                 </tr>
                                 @endforeach
 
