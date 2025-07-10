@@ -109,7 +109,7 @@ class SuperController extends Controller
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
             // Delete previous data only if we have valid response
-            Data::where('user_id', 0)->where('type', $plan_type)->where('network', $network)->delete();
+            Data::where('type', $plan_type)->where('network', $network)->delete();
 
             foreach ($online_data as $data) {
                 Data::create([
@@ -169,7 +169,7 @@ class SuperController extends Controller
         $online_data = reset($response_json);
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
-            Data::where('user_id', 0)->where('type', $plan_type)->where('network', $network)->delete();
+            Data::where('type', $plan_type)->where('network', $network)->delete();
 
             foreach ($online_data as $data) {
                 Data::create([
@@ -438,14 +438,14 @@ class SuperController extends Controller
         $online_data = reset($response_json);
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
-            Cable::where('user_id', 0)->where('type', $type)->where('company', $company)->delete();
+            Cable::where('type', $type)->where('company', $company)->delete();
 
             foreach ($online_data as $cable) {
                 Cable::create([
                     'user_id' => 0,
                     'company' => $company,
                     'plan_id' => $cable['plan_id'],
-                    'plan_name' => strtoupper($type) . ' ' . $cable['name'],
+                    'plan_name' => $cable['name'],
                     'actual_price' => ceil($cable['price']),
                     'real_price' => ceil($cable['price'] + (0.04 * $cable['price'])),
                     'admin_price' => ceil($cable['price'] + (0.06 * $cable['price'])),
@@ -551,7 +551,7 @@ class SuperController extends Controller
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
             // Delete previous exam data for this type
-            Examination::where('user_id', 0)->where('name', $type)->delete();
+            Examination::where('exam_type', $type)->delete();
 
             foreach ($online_data as $exam) {
                 Examination::create([
@@ -593,7 +593,7 @@ class SuperController extends Controller
         $online_data = reset($response_json);
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
-            Examination::where('user_id', 0)->where('exam_type', $type)->delete();
+            Examination::where('exam_type', $type)->delete();
 
             foreach ($online_data as $exam) {
                 Examination::create([
