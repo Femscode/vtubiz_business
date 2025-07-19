@@ -172,17 +172,30 @@ class SuperController extends Controller
             Data::where('type', $plan_type)->where('network', $network)->delete();
 
             foreach ($online_data as $data) {
+                $percentage = 0.04; // Default 4% for prices >= 5000
+                $selling_price_percentage = 0.07; // Default 4% for prices >= 5000
+                if ($data['price'] < 1000) {
+                    $percentage = 0.013; 
+                    $selling_price_percentage = 0.018; 
+                } elseif ($data['price'] < 3000) {
+                    $percentage = 0.02; 
+                    $selling_price_percentage = 0.025; 
+                } elseif ($data['price'] < 5000) {
+                    $percentage = 0.03; 
+                    $selling_price_percentage = 0.05; 
+                }
+
                 Data::create([
                     'user_id' => 0,
                     'network' => $network,
                     'plan_id' => $data['plan_id'],
                     'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
                     'actual_price' => ceil($data['price']),
-                    'data_price' => ceil($data['price'] + (0.03 * $data['price'])),
-                    'account_price' => ceil($data['price'] + (0.03 * $data['price'])),
+                    'data_price' => ceil($data['price'] + ($percentage * $data['price'])),
+                    'account_price' => ceil($data['price'] + ($percentage * $data['price'])),
                     'type' => $plan_type,
                     'status' => 1,
-                    'admin_price' => ceil($data['price'] + (0.06 * $data['price']))
+                    'admin_price' => ceil($data['price'] + ($selling_price_percentage * $data['price']))
                 ]);
             }
 
@@ -556,7 +569,7 @@ class SuperController extends Controller
             foreach ($online_data as $exam) {
                 Examination::create([
                     'user_id' => 0,
-                   'exam_type' => $type,
+                    'exam_type' => $type,
                     'name' => ucfirst(Str::lower($type)) . " Result Checker",
                     'actual_amount' => ceil($exam['price']),
                     'real_amount' => ceil($exam['price'] + (0.03 * $exam['price'])),

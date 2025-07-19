@@ -57,7 +57,7 @@
                                     <td><input id='plan_name_{{ $data->plan_id }}' class='form-control' value="{{ $data->plan_name }}"/></td>
                                     <td><input id='actual_price_{{ $data->plan_id }}' class='form-control' value="{{ $data->actual_price }}"/></td>
                                     <td><input id='data_price_{{ $data->plan_id }}' class='form-control' value="{{ $data->data_price }}"/></td>
-                                    <td><input id='account_price_{{ $data->plan_id }}' class='form-control' value="{{ $data->account_price }}"/></td>
+                                    <td><input id='account_price_{{ $data->plan_id }}' class='form-control' value="{{ $data->admin_price }}"/></td>
                                    
                                     <td>
                                         <a data-id='{{ $data->plan_id }}' class='update_data btn btn-success btn-sm'>Update</a>

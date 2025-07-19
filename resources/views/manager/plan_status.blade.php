@@ -56,7 +56,7 @@
                         <div class="card-title">
                             <h3 class="card-label">Data Plan Status
                             </h3>
-                            <a href="/reset_data_price/all" class="btn btn-primary">Reset All</a>
+                            <a href="/reset_all_data_prices" class="btn btn-primary">Reset All</a>
                         </div>
 
                     </div>
