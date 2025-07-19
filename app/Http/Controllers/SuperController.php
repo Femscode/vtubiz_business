@@ -175,13 +175,13 @@ class SuperController extends Controller
                 $percentage = 0.04; // Default 4% for prices >= 5000
                 $selling_price_percentage = 0.07; // Default 4% for prices >= 5000
                 if ($data['price'] < 1000) {
-                    $percentage = 0.013; 
+                    $percentage = 0.01; 
                     $selling_price_percentage = 0.018; 
                 } elseif ($data['price'] < 3000) {
-                    $percentage = 0.02; 
+                    $percentage = 0.013; 
                     $selling_price_percentage = 0.025; 
                 } elseif ($data['price'] < 5000) {
-                    $percentage = 0.03; 
+                    $percentage = 0.02; 
                     $selling_price_percentage = 0.05; 
                 }
 
