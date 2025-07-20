@@ -182,7 +182,7 @@ class SuperController extends Controller
                     $selling_price_percentage = 0.025; 
                 } elseif ($data['price'] < 5000) {
                     $percentage = 0.015; 
-                    $selling_price_percentage = 0.05; 
+                    $selling_price_percentage = 0.03; 
                 }
 
                 Data::create([
