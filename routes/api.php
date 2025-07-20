@@ -39,6 +39,9 @@ Route::any('save-erion', [App\Http\Controllers\MailPayController::class, 'saveEr
 Route::any('mailpay/process', [App\Http\Controllers\MailPayController::class, 'checkLowBalance'])->name('process.emails');
 Route::get('/gmail/callback', [MailPayController::class, 'handleGoogleCallback'])->name('gmail.callback');
 
+Route::any('moniepoint/webhook', [App\Http\Controllers\FundingController::class, 'moniepoint_webhook'])->name('handlewebhookMoniepoint');
+
+
 Route::any('paystack/hook', [App\Http\Controllers\FundingController::class, 'webhook_payment_for_paystack'])->name('handlewebhook');
 Route::any('flw/webhook', [App\Http\Controllers\FundingController::class, 'webhook_payment'])->name('handlewebhook');
 Route::any('easywebhook', [App\Http\Controllers\FundingController::class, 'easywebhook'])->name('easywebhook');

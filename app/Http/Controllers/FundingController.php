@@ -35,6 +35,11 @@ class FundingController extends Controller
         }
     }
 
+    public function moniepoint_webhook(Request $request)
+    {
+        file_put_contents(__DIR__ . '/moniepoint.txt', json_encode($request->all(), JSON_PRETTY_PRINT), FILE_APPEND);
+        return response()->json("OK", 200);
+    }
     public function generatePermanentAccount(Request $request)
     {
         // dd($request->all(),env('FLW_SECRET_KEY'));
