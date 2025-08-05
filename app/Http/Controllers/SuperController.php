@@ -170,7 +170,7 @@ class SuperController extends Controller
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
            
-            Data::where('network', $network)->delete();
+            Data::where('type', $plan_type)->where('network', $network)->delete();
 
             foreach ($online_data as $data) {
                 // $percentage = 0.015; // Default 4% for prices >= 5000
