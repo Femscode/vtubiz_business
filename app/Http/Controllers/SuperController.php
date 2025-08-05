@@ -172,8 +172,12 @@ class SuperController extends Controller
             Data::where('type', $plan_type)->where('network', $network)->delete();
 
             foreach ($online_data as $data) {
-                $percentage = 0.015; // Default 4% for prices >= 5000
-                $selling_price_percentage = 0.07; // Default 4% for prices >= 5000
+                // $percentage = 0.015; // Default 4% for prices >= 5000
+                // $selling_price_percentage = 0.07; 
+                
+                $percentage = 0.01; // Default 4% for prices >= 5000
+                $selling_price_percentage = 0.03; 
+                // Default 4% for prices >= 5000
                 if ($data['price'] < 1000) {
                     $percentage = 0.01; 
                     $selling_price_percentage = 0.018; 
