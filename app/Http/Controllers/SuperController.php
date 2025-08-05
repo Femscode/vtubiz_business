@@ -169,8 +169,8 @@ class SuperController extends Controller
         $online_data = reset($response_json);
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
-            dd($plan_type, $network);
-            Data::where('type', $plan_type)->where('network', $network)->delete();
+           
+            Data::where('network', $network)->delete();
 
             foreach ($online_data as $data) {
                 // $percentage = 0.015; // Default 4% for prices >= 5000
@@ -189,8 +189,6 @@ class SuperController extends Controller
                     $percentage = 0.015; 
                     $selling_price_percentage = 0.03; 
                 }
-
-                dd($percentage, $selling_price_percentage, Data::all());
 
                 Data::create([
                     'user_id' => 0,
