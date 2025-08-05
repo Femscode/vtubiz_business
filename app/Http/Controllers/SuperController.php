@@ -169,6 +169,7 @@ class SuperController extends Controller
         $online_data = reset($response_json);
 
         if ($online_data && is_array($online_data) && count($online_data) > 0) {
+            dd($plan_type, $network);
             Data::where('type', $plan_type)->where('network', $network)->delete();
 
             foreach ($online_data as $data) {
