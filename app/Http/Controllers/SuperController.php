@@ -189,7 +189,7 @@ class SuperController extends Controller
                     $selling_price_percentage = 0.03; 
                 }
 
-                dd($percentage, $selling_price_percentage);
+                dd($percentage, $selling_price_percentage, Data::all());
 
                 Data::create([
                     'user_id' => 0,
