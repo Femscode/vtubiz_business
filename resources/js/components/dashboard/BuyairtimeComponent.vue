@@ -451,7 +451,7 @@ export default {
                       }).then((chatResult) => {
                         if (chatResult.isConfirmed) {
                           // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
-                          window.location.href = "https://wa.me/2348128722501";
+                          window.location.href = "https://wa.me/2349058744473";
                         }
                       });
                     }

@@ -1131,7 +1131,7 @@
             <h4 class="widget-title text-white mb-3">Get in Touch</h4>
             <address class="pe-xl-15 pe-xxl-17">No 1, Igbelowowa Street, Kobape, Ogun State</address>
             <a href="mailto:support@vtubiz.com"><span class="__cf_email__">hello@vtubiz.com</span></a>
-            <br /><a href='tel:+2348128722501'>+2348128722501</a>,
+            <br /><a href='tel:+2349058744473'>+2349058744473</a>,
             <a hret="tel:+2349058744473">+2349058744473</a>
           </div>
           <!-- /.widget -->
