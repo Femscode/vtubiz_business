@@ -1410,7 +1410,8 @@ class SubscriptionController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-        } elseif ($request->exam_type == 'neco') {
+        } 
+        elseif ($request->exam_type == 'neco') {
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -1432,7 +1433,54 @@ class SubscriptionController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-        } else {
+        } 
+        elseif ($request->exam_type == 'nabteb') {
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://easyaccessapi.com.ng/api/nabteb_v2.php",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => array(
+                    'no_of_pins' => $request->no_of_pins,
+                ),
+                CURLOPT_HTTPHEADER => array(
+                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                    "cache-control: no-cache"
+                ),
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+        } 
+        elseif ($request->exam_type == 'nbais') {
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://easyaccessapi.com.ng/api/nbais.php",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => array(
+                    'no_of_pins' => $request->no_of_pins,
+                ),
+                CURLOPT_HTTPHEADER => array(
+                    "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token
+                    "cache-control: no-cache"
+                ),
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+        } 
+        else {
             $response = [
                 'success' => false,
                 'message' => $request->exam_type . " currently not available.",
