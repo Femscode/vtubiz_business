@@ -465,8 +465,8 @@ class SuperController extends Controller
                     'plan_id' => $cable['plan_id'],
                     'plan_name' => $cable['name'],
                     'actual_price' => ceil($cable['price']),
-                    'real_price' => ceil($cable['price'] + (0.04 * $cable['price'])),
-                    'admin_price' => ceil($cable['price'] + (0.06 * $cable['price'])),
+                    'real_price' => ceil($cable['price'] + (0.015 * $cable['price'])),
+                    'admin_price' => ceil($cable['price'] + (0.03 * $cable['price'])),
                     'type' => $type,
                     // 'status' => 1
                 ]);
