@@ -2254,7 +2254,7 @@ class SubscriptionController extends Controller
                 'company' => $request->service_type,
                 'metertype' => $request->meter_type,
                 'meterno' => $request->meter_number,
-                'amount' => 1000,
+                'amount' => 2000,
             ),
             CURLOPT_HTTPHEADER => array(
                 "AuthorizationToken: " . env('EASY_ACCESS_AUTH'), //replace this with your authorization_token

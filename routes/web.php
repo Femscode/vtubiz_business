@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuperController;
 use App\Models\Data;
 use App\Models\User;
 use App\Models\Cable;
@@ -42,6 +43,7 @@ Route::any('removedouble/{id}', function($id) {
     echo "Duplicate data entries for plan_id $planId removed successfully.";
     
 });
+
 
 Route::any('runawoof', function() {
     
