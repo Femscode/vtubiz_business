@@ -150,13 +150,13 @@
                                     <td>MTN</td>
                                     <td>cg_lite</td>
                                     <td>
-                                        <span class="status-badge {{ $mtn_cg_lite->status == 1 ? 'status-active' : 'status-inactive' }}">
-                                            {{ $mtn_cg_lite->status == 1 ? 'Active' : 'Inactive' }}
+                                        <span class="status-badge {{ $mtn_cglite->status == 1 ? 'status-active' : 'status-inactive' }}">
+                                            {{ $mtn_cglite->status == 1 ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            @if($mtn_cg_lite->status == 0)
+                                            @if($mtn_cglite->status == 0)
                                             <a href="/plan_status/1/cg_lite" class='btn btn-sm btn-success action-btn' onclick='return confirm("Change the status of this plan?")'>
                                                 <i class="fas fa-check-circle"></i> Enable
                                             </a>
@@ -165,7 +165,7 @@
                                                 <i class="fas fa-times-circle"></i> Disable
                                             </a>
                                             @endif
-                                            <a href="/reset_data_price/mtn_cg_lite" class='btn btn-sm btn-warning action-btn' onclick='return confirm("Reset prices for this plan?")'>
+                                            <a href="/reset_data_price/mtn_cglite" class='btn btn-sm btn-warning action-btn' onclick='return confirm("Reset prices for this plan?")'>
                                                 <i class="fas fa-sync"></i> Reset Price
                                             </a>
                                         </div>

@@ -163,6 +163,7 @@ class SuperController extends Controller
             ),
         ));
         $response = curl_exec($curl);
+       
         curl_close($curl);
 
         $response_json = json_decode($response, true);
@@ -199,7 +200,7 @@ class SuperController extends Controller
                     'data_price' => ceil($data['price'] + ($percentage * $data['price'])),
                     'account_price' => ceil($data['price'] + ($percentage * $data['price'])),
                     'type' => $plan_type,
-                    'status' => 1,
+                    // 'status' => 1,
                     'admin_price' => ceil($data['price'] + ($selling_price_percentage * $data['price']))
                 ]);
             }
@@ -222,7 +223,7 @@ class SuperController extends Controller
             'mtn_sme',
             'mtn_awoof',
             'mtn_cg',
-            'mtn_cg_lite',
+            'mtn_cglite',
             'mtn_gifting',
             'glo_cg',
             'glo_gifting',
@@ -280,7 +281,7 @@ class SuperController extends Controller
         $data['mtn_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 1)->first();
         $data['mtn_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 1)->first();
         $data['mtn_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 1)->first();
-        $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
+        $data['mtn_cglite'] = Data::where('user_id', 0)->where('type', 'cglite')->where('network', 1)->first();
         $data['mtn_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 1)->first();
 
 

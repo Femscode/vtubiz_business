@@ -89,7 +89,7 @@ class ManagerController extends Controller
         $data['mtn_sme'] = Data::where('user_id', 0)->where('type', 'SME')->where('network', 1)->first();
         $data['mtn_awoof'] = Data::where('user_id', 0)->where('type', 'AWOOF')->where('network', 1)->first();
         $data['mtn_cg'] = Data::where('user_id', 0)->where('type', 'cg')->where('network', 1)->first();
-        $data['mtn_cg_lite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
+        $data['mtn_cglite'] = Data::where('user_id', 0)->where('type', 'cg_lite')->where('network', 1)->first();
         $data['mtn_gifting'] = Data::where('user_id', 0)->where('type', 'gifting')->where('network', 1)->first();
 
 
