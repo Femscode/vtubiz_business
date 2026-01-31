@@ -510,7 +510,7 @@ class MailPayController extends Controller
         curl_close($curl);
         $response_json = json_decode($response, true);
         $balance = $response_json['balance'];
-        if ($balance < 2000) {
+        if ($balance < 200) {
             try {
                 Mail::raw('Your account balance is less than NGN2,000. Please fund your account now.', function ($message) {
                     $message->to(['fasanyafemi@gmail.com','ogungbemioluwagbenga22@gmail.com'])
