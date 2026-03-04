@@ -703,7 +703,7 @@
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-6 text-center text-lg-start">
             <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
               Top Up,
-              <span style="color: #fb9129;">Pay Bills,</span> <br>
+              <span style="color: #fb9129;">Pay Bills,</span>
               Stay Connected Always.
             </h1>
             <!-- <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
