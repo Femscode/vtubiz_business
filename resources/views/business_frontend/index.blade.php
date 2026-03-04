@@ -249,6 +249,29 @@
         padding: 20px;
       }
     }
+
+    .ai-flash-text {
+      background: linear-gradient(
+        to right, 
+        #001f3f 20%, 
+        #fb9129 40%, 
+        #ffffff 50%, 
+        #fb9129 60%, 
+        #001f3f 80%
+      );
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 3s linear infinite;
+    }
+
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
+    }
+
     .product-card {
       background: #fff;
       border-radius: 24px;
@@ -704,7 +727,7 @@
             <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
               Top Up,
               <span style="color: #fb9129;">Pay Bills,</span>
-              Stay Connected Always.
+              Stay <span class="ai-flash-text">Connected.</span>
             </h1>
             <!-- <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
               Never run out of <br>
