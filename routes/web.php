@@ -374,7 +374,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/premium-group_transactions/{id}', [App\Http\Controllers\GroupController::class, 'group_transactions'])->name('group_transactions');
     Route::post('/deleteGroup/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteGroup'])->name('admin_deleteGroup');
     Route::get('/premium-data_recipient/{id}', [App\Http\Controllers\GroupController::class, 'data_recipient'])->name('data_recipient');
-    Route::post('/saveRecipient', [App\Http\Controllers\GroupController::class, 'admin_saveRecipient'])->name('admin_saveRecipient');
+    Route::any('/saveRecipient', [App\Http\Controllers\GroupController::class, 'admin_saveRecipient'])->name('saveRecipient');
     Route::get('/delete_recipient/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteRecipient'])->name('admin_deleteRecipient');
 
 
@@ -390,6 +390,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/delete_airtime_recipient/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteAirtimeRecipient'])->name('admin_deleteAirtimeRecipient');
 
     Route::post('/buydata', [App\Http\Controllers\SubscriptionController::class, 'buydata']);
+    Route::post('/bulk_buydata', [App\Http\Controllers\SubscriptionController::class, 'bulk_buydata']);
     Route::post('/buyairtime', [App\Http\Controllers\SubscriptionController::class, 'buyairtime']);
     Route::post('/buyCable', [App\Http\Controllers\SubscriptionController::class, 'buyCable']);
     Route::post('/buyElectricity', [App\Http\Controllers\SubscriptionController::class, 'buyElectricity']);
@@ -542,7 +543,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/group_transactions/{id}', [App\Http\Controllers\GroupController::class, 'admin_group_transactions'])->name('admin_group_transactions');
     Route::post('/deleteGroup/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteGroup'])->name('admin_deleteGroup');
     Route::get('/data_recipient/{id}', [App\Http\Controllers\GroupController::class, 'admin_data_recipient'])->name('admin_data_recipient');
-    Route::post('/saveRecipient', [App\Http\Controllers\GroupController::class, 'admin_saveRecipient'])->name('admin_saveRecipient');
+    Route::any('/saveRecipient', [App\Http\Controllers\GroupController::class, 'admin_saveRecipient'])->name('admin_saveRecipient');
     Route::get('/delete_recipient/{id}', [App\Http\Controllers\GroupController::class, 'admin_deleteRecipient'])->name('admin_deleteRecipient');
 
 
@@ -605,6 +606,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::group(['middleware' => 'auth'], function () {
         // Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
+        Route::any('/superadmin/dashboard', [App\Http\Controllers\SuperController::class, 'dashboard'])->name('superadmin.dashboard');
         Route::any('/alltransactions', [App\Http\Controllers\SuperController::class, 'alltransactions'])->name('alltransactions');
         Route::any('/superadmin', [App\Http\Controllers\SuperController::class, 'index'])->name('superadmin');
         Route::any('/schedule_accounts', [App\Http\Controllers\SuperController::class, 'schedule_accounts'])->name('schedule_accounts');
@@ -651,10 +653,11 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         // Route::any('/run_schedule_purchase', [App\Http\Controllers\SubscriptionController::class, 'run_schedule_purchase'])->name('run_schedule_purchase');
         Route::any('/manager', [App\Http\Controllers\ManagerController::class, 'index'])->name('manager');
+        Route::any('/manager/purchase_records', [App\Http\Controllers\ManagerController::class, 'purchase_records_list'])->name('purchase_records_list');
         Route::any('/manager/transactions', [App\Http\Controllers\ManagerController::class, 'alltransactions'])->name('alltransactions');
         Route::any('/manager/user_records_2024', [App\Http\Controllers\ManagerController::class, 'user_records_2024'])->name('alltransactions');
         Route::any('/manager/user_records', [App\Http\Controllers\ManagerController::class, 'user_records'])->name('alltransactions');
-        Route::any('/manager/purchase_records', [App\Http\Controllers\ManagerController::class, 'purchase_records'])->name('alltransactions');
+        Route::any('/manager/purchase_records_graph', [App\Http\Controllers\ManagerController::class, 'purchase_records'])->name('alltransactions');
         Route::any('/manager/purchase_records_2024', [App\Http\Controllers\ManagerController::class, 'purchase_records_2024'])->name('alltransactions');
         Route::any('/manager/admin_giveaway', [App\Http\Controllers\ManagerController::class, 'admin_giveaway'])->name('admin_giveaway');
         Route::any('/manager/payment_transactions', [App\Http\Controllers\ManagerController::class, 'payment_transactions'])->name('all_payment_transactions');

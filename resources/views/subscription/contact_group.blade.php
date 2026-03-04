@@ -1,118 +1,173 @@
 @extends('dashboard.master1')
 
 @section('header')
+<style>
+    .service-header {
+        margin-bottom: var(--space-lg);
+    }
+    .service-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .service-card-wrapper {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+        height: 100%;
+    }
+    .form-label-bold {
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+    }
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(0,0,0,0.08);
+        background: #F9F9F9;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.2s ease;
+        margin-bottom: 15px;
+    }
+    .form-control-custom:focus {
+        outline: none;
+        border-color: var(--primary-dark);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
+    }
+    .radio-group-custom {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    .radio-item-custom {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+    .radio-item-custom input {
+        accent-color: var(--primary-dark);
+    }
+    .radio-item-custom span {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .btn-create-group {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.1s;
+    }
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+    .modern-table thead th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        padding: 10px 20px;
+        font-weight: 700;
+    }
+    .modern-table tbody tr {
+        background: #FDFCF8;
+        transition: transform 0.2s;
+    }
+    .modern-table tbody td {
+        padding: 15px 20px;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
+    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+</style>
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div class="row">
-            <div class='col-md-4'>
-              <div class='card p-4 mt-4'>
-                <h4 class='text-center'><b>Create New Group</b></h4>
-                <form method='post' action='/saveAdminContact' enctype="multipart/form-data">@csrf
-                  <div class="form-row row">
-                    <div class="form-group col-md-12">
-                      <label for="inputEmail4">Group Name</label>
-                      <input type="text" name='name' class="form-control" placeholder="Name of Group">
-                    </div>
-      
-                  </div>
-                  <div class="form-group">
-                    <input type="radio" name="contact_type" id="manual_input" value="manual_input" checked>
-                    <label for="contact_type1"><b>
-                        Manual Input</b>
+<div class="service-header">
+    <h1>Contact Groups</h1>
+    <p class="text-muted">Manage your phone number lists for efficient bulk SMS delivery.</p>
+</div>
+
+<div class="row g-4">
+    <div class='col-lg-4'>
+        <div class="service-card-wrapper">
+            <h4 class="serif mb-4" style="color: var(--primary-dark);">Create Group</h4>
+            <form method='post' action='/saveAdminContact' enctype="multipart/form-data">@csrf
+                <label class="form-label-bold">Group Name</label>
+                <input type="text" name='name' class="form-control-custom" placeholder="e.g. Monthly Newsletter" required>
+
+                <label class="form-label-bold">Contact Source</label>
+                <div class="radio-group-custom">
+                    <label class="radio-item-custom">
+                        <input type="radio" name="contact_type" id="manual_input" value="manual_input" checked>
+                        <span>Manual</span>
                     </label>
-                    <input type="radio" name="contact_type" id="import_csv" value="import_file">
-                    <label for="contact_type2"><b>
-                        Import from file(csv)</b>
-                    </label><br>
-                    <label for="inputAddress">Contacts</label>
-                    <div id='manual_input_field'>
-                      <textarea type="text" name='contacts' class="form-control" id="contact_field"
-                        placeholder="Contacts"></textarea>
-      
-      
-                      <span class="shadow-input1"></span>
-                      <div id="output-container"></div>
-                    </div>
-                  </div>
-                  <div style='display:none' id='import_field' class="wrap-input1 validate-input"
-                    data-validate="Message is required">
-      
-      
-                    <div class="input-group mb-3">
-                      <input accept=".xls, .xlsx, .csv" type="file" class="form-control" name='import_file'>
-      
-                    </div>
-                  </div>
-      
-                  <div class='row form-group m-2'>
-                    <button type="submit" class="btn btn-success">Create</button>
-                  </div>
-      
-      
-                </form>
-      
-              </div>
-      
-      
-            </div>
-      
-      
-            <div class="col-md-8">
-              <!--begin::Card-->
-              <div class="card card-custom p-4 mt-4">
-                <h4 class='text-center p-2'><b>Bulk SMS Contact Groups List</b></h4>
-      
-      
-      
-      
-      
-      
-      
-                <table id='table' class="datatable table table-responsive mb-0 fixed-solution">
-                  <thead>
-                    <tr>
-                      <th scope="col">S/N</th>
-                    
-                      <th class='w-100' style='max-width:150px'  scope="col">Recipients</th>
-      
-                      <th class='w-25'  scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach($contacts as $key => $contact)
-                    <tr>
-                      <th scope="row">{{ ++$key }}</th>
-                    
-                      <td class='w-100'  style='max-width:150px'><span class='text-success'>{{ $contact->name }}</span><br> {{ $contact->contacts }}</td>
-      
-                      <td>
-      
-                        <a onclick='return confirm("Are you really sure you want to delete this group?")'
-                          class='btn btn-danger btn-sm' href='delete_group/{{ $contact->id }}'>Delete</a>
-                      </td>
-                    </tr>
-                    @endforeach
-      
-                  </tbody>
-                </table>
-      
-                <!-- Button trigger modal -->
-      
-      
-                <!-- Modal -->
-      
-              </div>
-            </div>
-            <!--end::Content-->
-          </div>
-        <!--end::Profile Account Information-->
+                    <label class="radio-item-custom">
+                        <input type="radio" name="contact_type" id="import_csv" value="import_file">
+                        <span>CSV Import</span>
+                    </label>
+                </div>
+
+                <div id='manual_input_field'>
+                    <label class="form-label-bold">Contacts</label>
+                    <textarea name='contacts' class="form-control-custom" id="contact_field" style="min-height: 120px;" placeholder="Enter numbers separated by comma..."></textarea>
+                </div>
+
+                <div id='import_field' style='display:none'>
+                    <label class="form-label-bold">Upload CSV/Excel</label>
+                    <input accept=".xls, .xlsx, .csv" type="file" class="form-control-custom" name='import_file'>
+                </div>
+
+                <button type="submit" class="btn-create-group mt-2">Save Group</button>
+            </form>
+        </div>
     </div>
-    <!--end::Container-->
+
+    <div class="col-lg-8">
+        <div class="service-card-wrapper">
+            <h4 class="serif mb-4" style="color: var(--primary-dark);">Saved Groups</h4>
+            <div class="table-responsive">
+                <table class="datatable modern-table">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Group Details</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($contacts as $key => $contact)
+                        <tr>
+                            <td class="fw-bold">{{ ++$key }}</td>
+                            <td>
+                                <div style="font-weight: 600; color: var(--primary-dark);">{{ $contact->name }}</div>
+                                <div class="text-xs text-muted text-truncate" style="max-width: 300px;">{{ $contact->contacts }}</div>
+                            </td>
+                            <td style="text-align: right;">
+                                <a onclick='return confirm("Delete this group?")' class='btn btn-sm' style="background: rgba(235, 87, 87, 0.1); color: var(--accent-pink); border-radius: 20px; font-weight: 600; padding: 5px 15px;" href='delete_group/{{ $contact->id }}'>Delete</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection 
 

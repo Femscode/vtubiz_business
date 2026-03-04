@@ -36,7 +36,12 @@ class BusinessController extends Controller
 
     public function index()
     {
-        return view('business_frontend.index');
+        $data['mtn'] = Data::where('network', 1)->where('user_id', 0)->where('status', 1)->orderBy('data_price', 'ASC')->get();
+        $data['glo'] = Data::where('network', 2)->where('user_id', 0)->where('status', 1)->orderBy('data_price', 'ASC')->get();
+        $data['airtel'] = Data::where('network', 3)->where('user_id', 0)->where('status', 1)->orderBy('data_price', 'ASC')->get();
+        $data['nmobile'] = Data::where('network', 4)->where('user_id', 0)->where('status', 1)->orderBy('data_price', 'ASC')->get();
+
+        return view('business_frontend.index', $data);
     }
     public function blogs()
     {

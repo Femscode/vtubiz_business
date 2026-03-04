@@ -1,158 +1,240 @@
 <template>
-  <div class="col-md-12">
-    <!--begin::Card-->
-    <div class="card card-custom">
-      <!--begin::Header-->
-
-      <!--end::Header-->
-      <!--begin::Form-->
-      <form class="form" @submit.prevent="buyElectricity()">
-        <div class="card-body">
-          <!--begin::Heading-->
-
-          <div class="row">
-            <label class="col-md-3"></label>
-            <div class="col">
-              <h4 class="font-weight-bold"><b>Pay Light Bills</b></h4>
+  <div class="purchase-page">
+    <div class="grid-layout">
+      <!-- Main Content Section -->
+      <div class="form-section">
+        <div class="card main-card border-0 shadow-sm">
+          <div class="card-header bg-transparent border-0 pt-8 px-10">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="font-weight-bolder text-dark mb-0">Electricity Bill</h2>
+              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6">
+                <i class="ki ki-long-arrow-back icon-sm"></i> Back
+              </a>
             </div>
-            <div class="col text-end">
-              <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
-            </div>
-          </div>
-          <!--begin::Form Group-->
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Service Type</h6>
-            <div class="col-md-6">
-              <select v-model="service_type" required class="form-control">
-                <option value="01">Eko Electricity - EKEDC(PHCN)</option>
-                <option value="02">Ikeja Electricity - IKEDC(PHCN)</option>
-                <option value="03">PortHarcourt Electricity - PHEDC</option>
-                <option value="04">Kaduna Electricity - KAEDC</option>
-                <option value="05">Abuja Electricity - AEDC</option>
-                <option value="06">Ibadan Electricity - IBEDC</option>
-                <option value="07">Kano Electricity - KEDC</option>
-                <option value="08">Jos Electricity - JEDC</option>
-                <option value="09">Enugu Electricity - EEDC</option>
-                <option value="10">Benin Electricity - BEDC</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Meter Type</h6>
-            <div class="col-md-6">
-              <select v-model="meter_type" class="form-control" required="">
-                <option value="">-- Select Meter Type --</option>
-                <option value="01">Prepaid</option>
-                <option value="02">Postpaid</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Meter Number</h6>
-            <div class="col-md-6">
-              <input class="form-control" type="number" min="1000" v-model="meter_number" />
-              <div class="col-md-12  text-end">
-                <a @click="selectFromBeneficiary()" class="btn btn-primary btn-sm">Select From Beneficiary</a>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <h6 class="col-md-3"></h6>
-            <div class="col-md-6">
-              <div class="form-check form-switch form-sm">
-                <input class="form-check-input" type="checkbox" id="save_ben" @change="saveBeneficiary" />
-                <label id="alr_saved" class="form-check-label">Save as beneficiary</label>
-              </div>
-            </div>
+            <p class="text-muted mt-2 font-weight-bold">Pay your electricity bills across all discos</p>
           </div>
 
-
-
-          <div v-if="show_details" class="form-group row m-2">
-            <h6 class="col-md-3">Meter Details</h6>
-            <div class="col-md-6">
-              <div class="flex align-items-center bg-light-info rounded p-5">
-                <!--begin::Icon-->
-                <span class="svg-icon svg-icon-info mr-5">
-                  <span class="svg-icon svg-icon-lg">
-                    <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/icons/General/Attachment2.svg-->
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24"></rect>
-                        <path
-                          d="M11.7573593,15.2426407 L8.75735931,15.2426407 C8.20507456,15.2426407 7.75735931,15.6903559 7.75735931,16.2426407 C7.75735931,16.7949254 8.20507456,17.2426407 8.75735931,17.2426407 L11.7573593,17.2426407 L11.7573593,18.2426407 C11.7573593,19.3472102 10.8619288,20.2426407 9.75735931,20.2426407 L5.75735931,20.2426407 C4.65278981,20.2426407 3.75735931,19.3472102 3.75735931,18.2426407 L3.75735931,14.2426407 C3.75735931,13.1380712 4.65278981,12.2426407 5.75735931,12.2426407 L9.75735931,12.2426407 C10.8619288,12.2426407 11.7573593,13.1380712 11.7573593,14.2426407 L11.7573593,15.2426407 Z"
-                          fill="#000000" opacity="0.3"
-                          transform="translate(7.757359, 16.242641) rotate(-45.000000) translate(-7.757359, -16.242641)">
-                        </path>
-                        <path
-                          d="M12.2426407,8.75735931 L15.2426407,8.75735931 C15.7949254,8.75735931 16.2426407,8.30964406 16.2426407,7.75735931 C16.2426407,7.20507456 15.7949254,6.75735931 15.2426407,6.75735931 L12.2426407,6.75735931 L12.2426407,5.75735931 C12.2426407,4.65278981 13.1380712,3.75735931 14.2426407,3.75735931 L18.2426407,3.75735931 C19.3472102,3.75735931 20.2426407,4.65278981 20.2426407,5.75735931 L20.2426407,9.75735931 C20.2426407,10.8619288 19.3472102,11.7573593 18.2426407,11.7573593 L14.2426407,11.7573593 C13.1380712,11.7573593 12.2426407,10.8619288 12.2426407,9.75735931 L12.2426407,8.75735931 Z"
-                          fill="#000000"
-                          transform="translate(16.242641, 7.757359) rotate(-45.000000) translate(-16.242641, -7.757359)">
-                        </path>
-                        <path
-                          d="M5.89339828,3.42893219 C6.44568303,3.42893219 6.89339828,3.87664744 6.89339828,4.42893219 L6.89339828,6.42893219 C6.89339828,6.98121694 6.44568303,7.42893219 5.89339828,7.42893219 C5.34111353,7.42893219 4.89339828,6.98121694 4.89339828,6.42893219 L4.89339828,4.42893219 C4.89339828,3.87664744 5.34111353,3.42893219 5.89339828,3.42893219 Z M11.4289322,5.13603897 C11.8194565,5.52656326 11.8194565,6.15972824 11.4289322,6.55025253 L10.0147186,7.96446609 C9.62419433,8.35499039 8.99102936,8.35499039 8.60050506,7.96446609 C8.20998077,7.5739418 8.20998077,6.94077682 8.60050506,6.55025253 L10.0147186,5.13603897 C10.4052429,4.74551468 11.0384079,4.74551468 11.4289322,5.13603897 Z M0.600505063,5.13603897 C0.991029355,4.74551468 1.62419433,4.74551468 2.01471863,5.13603897 L3.42893219,6.55025253 C3.81945648,6.94077682 3.81945648,7.5739418 3.42893219,7.96446609 C3.0384079,8.35499039 2.40524292,8.35499039 2.01471863,7.96446609 L0.600505063,6.55025253 C0.209980772,6.15972824 0.209980772,5.52656326 0.600505063,5.13603897 Z"
-                          fill="#000000" opacity="0.3"
-                          transform="translate(6.014719, 5.843146) rotate(-45.000000) translate(-6.014719, -5.843146)">
-                        </path>
-                        <path
-                          d="M17.9142136,15.4497475 C18.4664983,15.4497475 18.9142136,15.8974627 18.9142136,16.4497475 L18.9142136,18.4497475 C18.9142136,19.0020322 18.4664983,19.4497475 17.9142136,19.4497475 C17.3619288,19.4497475 16.9142136,19.0020322 16.9142136,18.4497475 L16.9142136,16.4497475 C16.9142136,15.8974627 17.3619288,15.4497475 17.9142136,15.4497475 Z M23.4497475,17.1568542 C23.8402718,17.5473785 23.8402718,18.1805435 23.4497475,18.5710678 L22.0355339,19.9852814 C21.6450096,20.3758057 21.0118446,20.3758057 20.6213203,19.9852814 C20.2307961,19.5947571 20.2307961,18.9615921 20.6213203,18.5710678 L22.0355339,17.1568542 C22.4260582,16.76633 23.0592232,16.76633 23.4497475,17.1568542 Z M12.6213203,17.1568542 C13.0118446,16.76633 13.6450096,16.76633 14.0355339,17.1568542 L15.4497475,18.5710678 C15.8402718,18.9615921 15.8402718,19.5947571 15.4497475,19.9852814 C15.0592232,20.3758057 14.4260582,20.3758057 14.0355339,19.9852814 L12.6213203,18.5710678 C12.2307961,18.1805435 12.2307961,17.5473785 12.6213203,17.1568542 Z"
-                          fill="#000000" opacity="0.3"
-                          transform="translate(18.035534, 17.863961) scale(1, -1) rotate(45.000000) translate(-18.035534, -17.863961)">
-                        </path>
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                </span>
-                <!--end::Icon-->
-                <!--begin::Title-->
-                <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Customer Name</span>
-                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
-                    {{ customer_name }}</a>
-                </div>
-                <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Customer Address</span>
-                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
-                    {{ customer_address }}
-                  </a>
-                </div>
-                <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Arrears Payment</span>
-                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
-                    {{ customer_arrears }}
-                  </a>
+          <div class="card-body px-10 pb-10">
+            <!-- Service Provider Selection -->
+            <div class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Provider</label>
+              <div class="provider-grid scrollable-x pb-4">
+                <div 
+                  v-for="disco in discos" 
+                  :key="disco.id"
+                  :class="['provider-card', { active: service_type === disco.id }]"
+                  @click="selectProvider(disco.id)"
+                >
+                  <div class="provider-logo-wrapper">
+                    <div class="brand-initials">{{ disco.shortName.charAt(0) }}</div>
+                  </div>
+                  <span class="provider-short-name">{{ disco.shortName }}</span>
+                  <div class="active-badge" v-if="service_type === disco.id">
+                    <i class="fa fa-check"></i>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div v-if="show_amount" class="form-group row m-2">
-            <h6 class="col-md-3">Amount</h6>
-            <div class="col-md-6">
-              <input class="form-control" type="number" placeholder="Amount" min="1000" v-model="amount" />
+
+            <!-- Meter Type Selection -->
+            <div class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Meter Type</label>
+              <div class="row g-4">
+                <div class="col-6">
+                  <div 
+                    :class="['type-card', { active: meter_type === '01' }]"
+                    @click="meter_type = '01'; resetValidation()"
+                  >
+                    <div class="d-flex align-items-center">
+                      <div class="type-icon me-4" style="background-color: rgba(46, 204, 113, 0.1); color: #2ecc71; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center">
+                        <i class="flaticon2-flash-symbol"></i>
+                      </div>
+                      <span class="font-weight-bolder font-size-lg">Prepaid</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div 
+                    :class="['type-card', { active: meter_type === '02' }]"
+                    @click="meter_type = '02'; resetValidation()"
+                  >
+                    <div class="d-flex align-items-center">
+                      <div class="type-icon me-4" style="background-color: rgba(251, 145, 41, 0.1); color: #fb9129; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center">
+                        <i class="flaticon2-list-1"></i>
+                      </div>
+                      <span class="font-weight-bolder font-size-lg">Postpaid</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div v-if="showpurchased_code" class="form-group row m-2">
-            <h6 class="col-md-3">Token</h6>
-            <div class="col-md-6">
-              {{ purchased_code }}
+
+            <!-- Meter Number Section -->
+            <div class="mb-10">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <label class="form-label font-weight-bolder text-dark-75 mb-0">Meter Number</label>
+              </div>
+
+              <!-- Beneficiary Quick Select -->
+              <div v-if="beneficiaries && beneficiaries.length > 0" class="beneficiary-scroll mb-6">
+                <div 
+                  v-for="ben in beneficiaries.filter(b => b.type === 'electricity')" 
+                  :key="ben.id"
+                  class="beneficiary-pill"
+                  @click="meter_number = ben.phone; resetValidation();"
+                >
+                  <div class="ben-avatar">{{ ben.name.charAt(0).toUpperCase() }}</div>
+                  <span class="ben-name">{{ ben.name }}</span>
+                </div>
+              </div>
+
+              <div class="input-group input-group-solid input-group-lg">
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  v-model="meter_number" 
+                  placeholder="Enter meter number"
+                  @input="resetValidation"
+                />
+              </div>
+              
+              <div class="mt-4 d-flex align-items-center">
+                <div class="checkbox-inline">
+                  <label class="checkbox checkbox-outline checkbox-success text-muted font-weight-bold">
+                    <input type="checkbox" id="save_ben" @change="saveBeneficiary" />
+                    <span></span>
+                    <small id="alr_saved">Save as beneficiary</small>
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-3"></div>
-            <button v-if="!confirmed" @click="confirmDetail" type="button" class="btn btn-success col-md-6">
-              Confirm Detail
-            </button>
-            <button v-else type="submit" class="btn btn-success">
-              Buy Token
-            </button>
+
+            <!-- Meter Details Info -->
+            <div v-if="show_details" class="alert alert-custom alert-light-success fade show mb-10 py-6 px-8 border-0" role="alert">
+              <div class="alert-icon">
+                <i class="flaticon2-check-mark text-success"></i>
+              </div>
+              <div class="alert-text">
+                <div class="d-flex flex-column mb-3">
+                  <span class="text-dark-75 font-weight-bolder font-size-lg">{{ customer_name }}</span>
+                  <span class="text-muted font-weight-bold">{{ customer_address }}</span>
+                </div>
+                <div v-if="customer_arrears" class="d-flex align-items-center">
+                  <span class="label label-light-danger label-inline font-weight-bold py-3">Arrears: {{ customer_arrears }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Amount Input -->
+            <div v-if="show_amount" class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Amount to Pay</label>
+              <div class="input-group input-group-solid input-group-lg">
+                <div class="input-group-prepend">
+                  <span class="input-group-text font-weight-bolder" style="background: #f3f6f9; border: none; font-size: 1.2rem">₦</span>
+                </div>
+                <input 
+                  type="number" 
+                  class="form-control font-weight-bolder" 
+                  v-model="amount" 
+                  placeholder="Enter amount (Min 1,000)"
+                  style="font-size: 1.2rem"
+                />
+              </div>
+              <span class="form-text text-muted mt-3">Minimum payment is ₦1,000</span>
+            </div>
+
+            <!-- Purchased Code Display -->
+            <div v-if="showpurchased_code" class="alert alert-custom alert-light-primary fade show mb-10 py-8 px-10 border-dashed border-primary" role="alert">
+              <div class="alert-text text-center">
+                <div class="text-dark-75 font-weight-bolder font-size-h4 mb-3">Your Token Code</div>
+                <div class="bg-white rounded-xl p-6 border text-primary font-weight-bolder font-size-h1 letter-spacing-5 mb-6 shadow-sm">
+                  {{ purchased_code }}
+                </div>
+                <button @click="copyToken" class="btn btn-primary font-weight-bolder px-10 py-3">
+                  <i class="flaticon2-copy"></i> Copy Token
+                </button>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-12">
+              <button 
+                v-if="!confirmed" 
+                @click="confirmDetail" 
+                type="button" 
+                class="btn btn-primary btn-lg w-100 font-weight-bolder text-uppercase py-5 shadow-sm btn-hover-scale"
+                :disabled="!service_type || !meter_type || !meter_number"
+              >
+                Validate Meter
+              </button>
+              <button 
+                v-else 
+                @click="buyElectricity"
+                type="button" 
+                class="btn btn-success btn-lg w-100 font-weight-bolder text-uppercase py-5 shadow-sm btn-hover-scale"
+                :disabled="!amount || amount < 1000"
+              >
+                Buy Token
+              </button>
+            </div>
           </div>
         </div>
-      </form>
-      <!--end::Form-->
+      </div>
+
+      <!-- Summary Sidebar Section -->
+      <div class="summary-section">
+        <div class="sticky-summary">
+          <div class="card summary-card border-0 shadow-lg mb-6">
+            <div class="card-body p-8">
+              <h3 class="font-weight-bolder mb-8 text-white opacity-95">Purchase Summary</h3>
+              
+              <div class="summary-items">
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Provider</span>
+                  <span class="font-weight-bolder text-white">{{ selectedDiscoName || '---' }}</span>
+                </div>
+                
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Meter Type</span>
+                  <span class="font-weight-bolder text-white">{{ meter_type === '01' ? 'Prepaid' : meter_type === '02' ? 'Postpaid' : '---' }}</span>
+                </div>
+
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Meter No.</span>
+                  <span class="font-weight-bolder text-white">{{ meter_number || '---' }}</span>
+                </div>
+
+                <div v-if="customer_name" class="summary-item mb-6 d-flex justify-content-between align-items-center border-top border-white border-opacity-10 pt-6">
+                  <span class="text-white opacity-75 font-weight-bold">Customer</span>
+                  <span class="font-weight-bolder text-end text-white ps-4" style="flex: 1; word-break: break-word;">{{ customer_name }}</span>
+                </div>
+              </div>
+
+              <div class="total-section mt-8">
+                <div class="d-flex justify-content-between align-items-end">
+                  <span class="text-white opacity-90 font-weight-bold">Total Amount</span>
+                  <h1 class="text-white font-weight-bolder mb-0" style="font-size: 2.2rem">₦{{ totalAmount }}</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Important Info Card -->
+          <div class="card border-0 shadow-sm bg-light-warning border-left border-3 border-warning">
+            <div class="card-body p-8">
+              <div class="d-flex align-items-center mb-4 text-warning">
+                <i class="flaticon-info icon-lg text-warning mr-3"></i>
+                <h5 class="mb-0 font-weight-bolder">Important Info</h5>
+              </div>
+              <ul class="text-dark-50 font-weight-bold font-size-sm mb-0 ps-4 line-height-lg">
+                <li class="mb-2">Ensure your meter number is correct before validating.</li>
+                <li>Token generation is instant after successful payment.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!--end::Card-->
   </div>
 </template>
 
@@ -167,32 +249,54 @@ export default {
       show_details: false,
       customer_name: "",
       customer_address: "",
-      customer_arreaars: "",
+      customer_arrears: "",
       transfer_status: false,
       confirmed: false,
       amount: "",
       show_amount: false,
       purchased_code: '',
-      showpurchased_code: false
-
+      showpurchased_code: false,
+      discos: [
+        { id: "01", name: "Eko Electricity - EKEDC", shortName: "EKEDC", logo: "/assets/media/logos/ekedc.png" },
+        { id: "02", name: "Ikeja Electricity - IKEDC", shortName: "IKEDC", logo: "/assets/media/logos/ikedc.png" },
+        { id: "03", name: "PortHarcourt Electricity - PHEDC", shortName: "PHEDC", logo: "/assets/media/logos/phedc.png" },
+        { id: "04", name: "Kaduna Electricity - KAEDC", shortName: "KAEDC", logo: "/assets/media/logos/kaedc.png" },
+        { id: "05", name: "Abuja Electricity - AEDC", shortName: "AEDC", logo: "/assets/media/logos/aedc.png" },
+        { id: "06", name: "Ibadan Electricity - IBEDC", shortName: "IBEDC", logo: "/assets/media/logos/ibedc.png" },
+        { id: "07", name: "Kano Electricity - KEDC", shortName: "KEDC", logo: "/assets/media/logos/kedc.png" },
+        { id: "08", name: "Jos Electricity - JEDC", shortName: "JEDC", logo: "/assets/media/logos/jedc.png" },
+        { id: "09", name: "Enugu Electricity - EEDC", shortName: "EEDC", logo: "/assets/media/logos/eedc.png" },
+        { id: "10", name: "Benin Electricity - BEDC", shortName: "BEDC", logo: "/assets/media/logos/bedc.png" },
+      ]
     };
   },
+  computed: {
+    selectedDiscoName() {
+      const disco = this.discos.find(d => d.id === this.service_type);
+      return disco ? disco.shortName : "";
+    },
+    totalAmount() {
+      return this.amount ? parseFloat(this.amount).toLocaleString() : "0.00";
+    }
+  },
   methods: {
-    fetchDiscount() {
-      if (this.amount.length >= 2) {
-        this.discountedAmount = this.amount - 0.02 * this.amount;
-      }
+    selectProvider(id) {
+      this.service_type = id;
+      this.resetValidation();
+    },
+    resetValidation() {
+      this.show_details = false;
+      this.confirmed = false;
+      this.show_amount = false;
+      this.customer_name = "";
+      this.customer_address = "";
+      this.customer_arrears = "";
+      this.showpurchased_code = false;
     },
     confirmDetail() {
-      if (
-        this.service_type.length >= 1 &&
-        this.meter_type.length >= 1 &&
-        this.meter_number.length >= 9
-      ) {
-        console.log(this.service_type, this.meter_number, this.meter_type);
+      if (this.service_type && this.meter_type && this.meter_number.length >= 9) {
         Swal.fire({
-          title: "Fetching meter details, please wait...",
-          // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
+          title: "Validating meter number...",
           showConfirmButton: false,
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -207,7 +311,6 @@ export default {
         axios
           .post("fetch_meter_details", fd)
           .then((response) => {
-            console.log(response.data);
             if (response.data.success == "true") {
               Swal.close();
               this.show_details = true;
@@ -215,23 +318,23 @@ export default {
               this.show_amount = true;
               this.customer_name = response.data.message.content.Customer_Name;
               this.customer_address = response.data.message.content.Address;
-              this.customer_arrears =
-                response.data.message.content.Customer_Arrears;
+              this.customer_arrears = response.data.message.content.Customer_Arrears;
             } else {
-              Swal.close();
-              Swal.fire("error", response.data.message, "error");
+              Swal.fire("Error", response.data.message || "Invalid meter number", "error");
             }
           })
           .catch((error) => {
-            Swal.close();
-            Swal.fire("An error eccoured, please try again later");
-            console.log(error.message);
+            Swal.fire("Error", "Validation failed. Please try again.", "error");
           });
       } else {
-        Swal.fire("Please fill all neccessary fields");
+        Swal.fire("Warning", "Please fill all required fields correctly", "warning");
       }
     },
     selectFromBeneficiary() {
+      if (!this.beneficiaries || this.beneficiaries.length === 0) {
+        Swal.fire("Info", "No beneficiaries found", "info");
+        return;
+      }
       const options = this.beneficiaries
         .map((beneficiary) => {
           return `<option value="${beneficiary.phone}">${beneficiary.name} (${beneficiary.phone})</option>`;
@@ -239,16 +342,17 @@ export default {
         .join("");
       Swal.fire({
         title: "Choose Beneficiary",
-        html: `<select  class='form-control' required id='beneficiary_choice'><option>--Choose Beneficiary--</option>${options}</select>`,
+        html: `<select class='form-control form-control-solid' id='beneficiary_choice'><option value="">--Select--</option>${options}</select>`,
         showCancelButton: true,
+        confirmButtonText: "Select",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.meter_number = $("#beneficiary_choice").val();
-          this.ben_name = $("#beneficiary_choice").find(":selected").text();
-          $("#save_ben").prop("checked", true);
-          $("#alr_saved").text(
-            "Already Saved, toggle to remove from beneficiary"
-          );
+          const selectedVal = $("#beneficiary_choice").val();
+          if (selectedVal) {
+            this.meter_number = selectedVal;
+            this.resetValidation();
+            $("#save_ben").prop("checked", true);
+          }
         }
       });
     },
@@ -259,220 +363,333 @@ export default {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
       });
 
       if (event.target.checked) {
-       
-          Swal.fire({
-            title: "Name Of Beneficiary",
-            html: `<input class='form-control' type='text' placeholder='Lekki House' required id='beneficiary_name'/>`,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.ben_name = $("#beneficiary_name").val();
-
-              let fd = new FormData();
-              fd.append("phone", this.meter_number);
-              fd.append("name", this.ben_name);
-              fd.append("type", 'electricity');
-              axios
-                .post("/saveBeneficiary", fd)
-                .then((response) => {
-                  console.log(response.data, "the data");
-                  $("#save_ben").prop("checked", true);
-                  $("#alr_saved").text(
-                    "Beneficiary Saved, toggle to save to beneficiary"
-                  );
-                  if (response.data.success == true) {
-                    Toast.fire({
-                      icon: "success",
-                      title: "Beneficiary Saved!",
-                    });
-                  } else {
-                    Toast.fire({
-                      icon: "info",
-                      title: "Beneficiary already exist",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  console.log(error.message);
-                  Swal.fire(error.message);
-                });
-            }
-          });
-       
-      } else {
+        if (!this.meter_number) {
+          event.target.checked = false;
+          Toast.fire({ icon: "warning", title: "Enter meter number first" });
+          return;
+        }
         Swal.fire({
-          title: "Remove Contact?",
-          text: `Are you sure you want to remove ${this.ben_name} from beneficiary`,
+          title: "Name Of Beneficiary",
+          input: "text",
+          inputPlaceholder: "e.g. My Apartment",
           showCancelButton: true,
-          confirmButtonText: "Yes, I'm Sure",
+          confirmButtonText: "Save",
         }).then((result) => {
-          if (result.isConfirmed) {
-            $("#save_ben").prop("checked", false);
-            $("#alr_saved").text(
-              "Removed from beneficiary, toggle to save to beneficiary"
-            );
+          if (result.isConfirmed && result.value) {
             let fd = new FormData();
             fd.append("phone", this.meter_number);
-            axios
-              .post("/removeBeneficiary", fd)
+            fd.append("name", result.value);
+            fd.append("type", 'electricity');
+            axios.post("/saveBeneficiary", fd)
               .then((response) => {
-                console.log(response.data, "the data");
                 if (response.data.success == true) {
-                  Toast.fire({
-                    icon: "success",
-                    title: "Beneficiary Removed!",
-                  });
+                  Toast.fire({ icon: "success", title: "Beneficiary Saved!" });
+                  $("#alr_saved").text("Saved as beneficiary");
                 } else {
-                  Toast.fire({
-                    icon: "info",
-                    title: "Beneficiary can't be removed",
-                  });
+                  Toast.fire({ icon: "info", title: "Already exists" });
                 }
-              })
-              .catch((error) => {
-                console.log(error.message);
-                Swal.fire(error.message);
               });
+          } else {
+            event.target.checked = false;
           }
         });
       }
     },
     buyElectricity() {
-      if (this.amount.length >= 3 && this.meter_type.length >= 1) {
+      if (this.amount >= 1000 && this.meter_type) {
         Swal.fire({
-          // title:
-          //   "You are about to purchase" +
-          //   this.selectedPlan.plan_name +
-          //   " of NGN " +
-          //   this.amount,
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
+          title: "Enter Transaction PIN",
+          text: `You are paying ₦${this.totalAmount} for electricity`,
           input: "password",
           inputAttributes: {
             inputmode: "numeric",
             maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
+            style: "text-align:center;font-size:24px;letter-spacing: 15px",
           },
           showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Proceed",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
+          confirmButtonText: "Pay Now",
+          showLoaderOnConfirm: true,
+          preConfirm: (pin) => {
+            if (!/^\d{4}$/.test(pin)) {
+              Swal.showValidationMessage("Please enter a 4-digit PIN");
+              return false;
             }
+            let fd = new FormData();
+            fd.append("company", this.service_type);
+            fd.append("meter_type", this.meter_type);
+            fd.append("meter_number", this.meter_number);
+            fd.append("amount", this.amount);
+            fd.append("pin", pin);
+            
+            return axios.post("/buyElectricity", fd)
+              .then(response => {
+                if (response.data.success !== "true") {
+                  throw new Error(response.data.message || "Transaction failed");
+                }
+                return response.data;
+              })
+              .catch(error => {
+                Swal.showValidationMessage(`Request failed: ${error}`);
+              });
           },
+          allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
-
-          }
-          Swal.fire({
-            title: "Purchasing electricity token, please wait...",
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          let fd = new FormData();
-          fd.append("company", this.service_type);
-          fd.append("meter_type", this.meter_type);
-          fd.append("meter_number", this.meter_number);
-          fd.append("amount", this.amount);
-          fd.append("pin", result.value);
-          axios
-            .post("/buyElectricity", fd)
-            .then((response) => {
-              console.log(response);
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Token Purchase successful!",
-                  text: response.data.message.purchased_code,
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    // location.reload();
-                    this.showpurchased_code = true
-                    this.purchased_code = response.data.message.purchased_code
-                  }
-                });
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: response.data.message,
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    // location.reload();
-                  }
-                });
-              }
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
+          if (result.isConfirmed) {
+            this.showpurchased_code = true;
+            this.purchased_code = result.value.message.purchased_code;
+            Swal.fire({
+              icon: "success",
+              title: "Success!",
+              text: "Token generated successfully",
             });
+          }
         });
       } else {
-        Swal.fire({
-          title: 'Insufficient balance!,',
-          icon: 'info',
-          html:
-            'Click ' +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            'to fund your wallet.',
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-
-        })
+        Swal.fire("Warning", "Minimum amount is ₦1,000", "warning");
       }
     },
+    copyToken() {
+      navigator.clipboard.writeText(this.purchased_code).then(() => {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Token copied!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      });
+    }
   },
 };
 </script>
+
+<style scoped>
+.purchase-page {
+  padding: 0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (min-width: 1400px) {
+  .grid-layout {
+    grid-template-columns: minmax(0, 1fr) 450px;
+    gap: 40px;
+  }
+}
+
+.main-card {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+#app .summary-card {
+  background: #001f3f !important;
+  color: white !important;
+  border-radius: 24px;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: 20px;
+}
+
+.beneficiary-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.beneficiary-pill {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid #ebedf3;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.beneficiary-pill:hover {
+  border-color: #fb9129;
+  background-color: rgba(251, 145, 41, 0.05);
+}
+
+.ben-avatar {
+  width: 28px;
+  height: 28px;
+  background: #fb9129;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.ben-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3f4254;
+}
+
+.provider-grid {
+  display: flex !important;
+  gap: 20px;
+  overflow-x: auto !important;
+  flex-wrap: nowrap !important;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.provider-card {
+  min-width: 120px;
+  padding: 20px;
+  border: 2px solid #f3f6f9;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  background: white;
+}
+
+.provider-card:hover {
+  border-color: #fb9129;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.provider-card.active {
+  border-color: #fb9129;
+  background-color: rgba(251, 145, 41, 0.05);
+}
+
+.provider-logo-wrapper {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #001f3f;
+  border-radius: 12px;
+}
+
+.brand-initials {
+  color: #fb9129;
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Fraunces', serif;
+}
+
+.provider-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.provider-short-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #3f4254;
+}
+
+.active-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #fb9129;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  box-shadow: 0 4px 8px rgba(251, 145, 41, 0.3);
+}
+
+.type-card {
+  padding: 1.5rem;
+  border: 2px solid #f3f6f9;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.type-card:hover {
+  border-color: #fb9129;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.type-card.active {
+  border-color: #fb9129;
+  background: rgba(251, 145, 41, 0.05);
+}
+
+.btn-hover-scale {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover-scale:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.scrollable-x::-webkit-scrollbar {
+  height: 5px;
+}
+
+.scrollable-x::-webkit-scrollbar-thumb {
+  background: #e4e6ef;
+  border-radius: 10px;
+}
+
+.letter-spacing-5 {
+  letter-spacing: 5px;
+}
+
+@media (max-width: 1200px) {
+  .grid-layout {
+    grid-template-columns: 1fr 350px;
+  }
+}
+
+@media (max-width: 991px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .summary-section {
+    order: 2;
+  }
+  .form-section {
+    order: 1;
+  }
+  .sticky-summary {
+    position: static;
+  }
+  .card-body {
+    padding: 1.5rem !important;
+  }
+}
+</style>
 

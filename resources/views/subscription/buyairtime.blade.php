@@ -4,30 +4,17 @@
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div id='app' class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-            <div class='col-md-12'>
-                <div class='card '>
-                    <div class='alert alert-primary'>
-                        <p style='font-weight:100;font-size:17px;'>You can now buy airtime in bulk, create custom recipient groups (like staff or
-                            family), and purchase airtime for every group member at once with a single click. Click <a
-                                style='color:red' href='/airtime_group'>here to try it out!</a></p>
-                    </div>
-                </div>
-            </div>
-         <buyairtime-component :user='{{ $user  }}' :beneficiaries='{{ $beneficiaries }}'></buyairtime-component>
-            <!--end::Content-->
+<div class="service-header">
+    <h1>Buy Airtime</h1>
+    <p class="text-muted">Instant top-up for all mobile networks.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="service-card-wrapper">
+            <buyairtime-component :user='{{ $user  }}' :beneficiaries='{{ $beneficiaries }}'></buyairtime-component>
         </div>
-        <!--end::Profile Account Information-->
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 

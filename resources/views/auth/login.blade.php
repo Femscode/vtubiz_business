@@ -131,8 +131,8 @@
                         src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/unitedpalms-1/20.png"
                         alt="">
 
-                      <h1 class="text-dark fw-bolder mb-3">Enter the <span style='color:#ebab21'>VT</span><span
-                          style='color:rgb(58, 58, 199)'>UW</span>orld</h1>
+                      <h1 class="text-dark fw-bolder mb-3">Login To <span style='color:#ebab21'>VTU</span><span
+                          style='color:rgb(58, 58, 199)'>Biz</span></h1>
                       <!--end::Title-->
 
                     

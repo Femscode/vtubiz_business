@@ -25,27 +25,512 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap">
 
   <meta name="google-adsense-account" content="ca-pub-9520357947525167">
-  
+
   <!-- //google ads -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
-     crossorigin="anonymous"></script>
-  <!--Start of Tawk.to Script-->
-  <!-- <script type="text/javascript">
-    var Tawk_API = Tawk_API || {},
-      Tawk_LoadStart = new Date();
-    (function() {
-      var s1 = document.createElement("script"),
-        s0 = document.getElementsByTagName("script")[0];
-      s1.async = true;
-      s1.src = 'https://embed.tawk.to/685c2015ee661a190cce90c3/1iujtqlpp';
-      s1.charset = 'UTF-8';
-      s1.setAttribute('crossorigin', '*');
-      s0.parentNode.insertBefore(s1, s0);
-    })();
-  </script> -->
-  <!--End of Tawk.to Script-->
-  {{-- <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@400&display=swap" rel="stylesheet"> --}}
+    crossorigin="anonymous"></script>
 
+  <style>
+    :root {
+      --bg-page: #FFFFFF; 
+      --bg-card: #F8F9FA; 
+      --text-primary: #000000; 
+      --text-secondary: #555555; 
+      --radius-xl: 32px; 
+      --radius-lg: 24px; 
+      --radius-md: 16px; 
+      --radius-sm: 8px; 
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+      --h1-weight: 800; 
+      --h1-tracking: -0.04em; 
+      --shadow-float: 0 20px 40px -5px rgba(0, 0, 0, 0.06), 0 8px 16px -8px rgba(0, 0, 0, 0.04); 
+      --shadow-hover: 0 30px 60px -10px rgba(0, 0, 0, 0.12), 0 12px 24px -8px rgba(0, 0, 0, 0.06); 
+      --color-data: #EDFCF2; 
+      --icon-data: #16A34A; 
+      --color-airtime: #FFF7ED; 
+      --icon-airtime: #EA580C; 
+      --color-tv: #F5F3FF; 
+      --icon-tv: #7C3AED; 
+      --color-power: #FEFCE8; 
+      --icon-power: #CA8A04; 
+      --color-accent: #000000; 
+      --h1-size: 3.5rem;
+    }
+
+    .pricing.card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      border-radius: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .pricing.card:hover {
+      transform: translateY(-10px);
+    }
+
+    .pricing .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-list-container {
+      height: 300px;
+      overflow-y: auto;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-right: 10px;
+    }
+
+    /* Custom Scrollbar */
+    .plan-list-container::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .plan-list-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .plan-list-container::-webkit-scrollbar-thumb {
+      background: #3f78e0;
+      border-radius: 10px;
+    }
+
+    .plan-list-container::-webkit-scrollbar-thumb:hover {
+      background: #3464bc;
+    }
+
+    .icon-list.bullet-soft-primary li {
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .icon-list.bullet-soft-primary i {
+      font-size: 1.1rem;
+      top: 0.2rem;
+    }
+
+    /* Avatar Group Styles */
+    .avatar-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .bg-soft-primary {
+      background-color: rgba(63, 120, 224, 0.1) !important;
+    }
+
+    .bg-soft-success {
+      background-color: rgba(68, 187, 164, 0.1) !important;
+    }
+
+    .bg-soft-info {
+      background-color: rgba(84, 168, 221, 0.1) !important;
+    }
+
+    .text-primary {
+      color: #3f78e0 !important;
+    }
+
+    .text-success {
+      color: #44bba4 !important;
+    }
+
+    .text-info {
+      color: #54a8dd !important;
+    }
+
+    .lift {
+      transition: all 0.2s ease-in-out;
+    }
+
+    .lift:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.5rem 1.5rem rgba(30, 34, 40, 0.1);
+    }
+
+    /* Floating Card Styles */
+    .hero-card-container {
+      position: relative;
+      height: 450px;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .hero-card {
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-card:hover {
+      z-index: 50 !important;
+      transform: scale(1.1) translateY(-10px) !important;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-card-wrapper {
+      position: absolute;
+    }
+
+    .wrapper-main {
+      width: 320px;
+      height: 400px;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .hero-card-main {
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 12px solid #fff;
+    }
+
+    .wrapper-success {
+      width: 250px;
+      top: 10%;
+      right: -15%;
+      z-index: 3;
+    }
+
+    .hero-card-success {
+      padding: 24px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .wrapper-wallet {
+      width: 260px;
+      bottom: -5%;
+      left: -15%;
+      z-index: 4;
+    }
+
+    .hero-card-wallet {
+      padding: 24px;
+      background: #000;
+      color: #fff;
+    }
+    /* Product Section Redesign */
+    .products-box {
+      background: #f6f7f9;
+      border-radius: 40px;
+      padding: 80px 60px;
+      margin: 0 auto;
+      max-width: 1100px;
+    }
+    @media (max-width: 768px) {
+      .products-box {
+        padding: 40px 20px;
+        border-radius: 24px;
+      }
+      .product-card {
+        padding: 20px;
+      }
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 30px;
+      height: 100%;
+      border: 1px solid rgba(0,0,0,0.02);
+      transition: all 0.3s ease;
+      text-align: left !important;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .product-icon-box {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+    }
+    .bg-soft-green { background: #eef9f6; color: #44bba4; }
+    .bg-soft-purple { background: #f3f0ff; color: #7048e8; }
+    .bg-soft-yellow { background: #fff9db; color: #fab005; }
+    .bg-soft-orange { background: #fff4e6; color: #fd7e14; }
+    .bg-soft-blue-alt { background: #e7f5ff; color: #228be6; }
+    
+    .product-card h4 {
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #000;
+    }
+    .product-card p {
+      color: #6c757d;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    /* Business Section Redesign */
+    .reseller-section {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      padding: 40px 0 80px 0;
+    }
+    .reseller-card {
+      background: #000;
+      color: #fff;
+      border-radius: var(--radius-xl);
+      padding: 64px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      font-family: var(--font-family);
+    }
+    .reseller-card .blob {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 1;
+    }
+    .blob-1 {
+      background: rgba(63, 120, 224, 0.25);
+      top: -100px;
+      right: -100px;
+    }
+    .blob-2 {
+      background: rgba(251, 145, 41, 0.15);
+      bottom: -100px;
+      left: -100px;
+    }
+    .reseller-content {
+      position: relative;
+      z-index: 2;
+    }
+    .reseller-content h2 {
+      font-size: 2.0rem;
+      font-weight: var(--h1-weight);
+      letter-spacing: var(--h1-tracking);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+    .reseller-content .price-tag {
+      background: rgba(255, 255, 255, 0.1);
+      color: #10B981;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    .reseller-content .btn {
+      background: white;
+      color: black;
+      align-self: flex-start;
+      border-radius: 50px;
+      padding: 14px 32px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+    .reseller-content .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .pricing-info {
+      flex: 0 0 400px;
+      padding: 20px;
+    }
+    .pricing-info .price-tag-large {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #000;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .pricing-info .price-sub {
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+    .pricing-info ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0;
+    }
+    .pricing-info li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    @media (max-width: 991px) {
+      .reseller-section { flex-direction: column; gap: 40px; }
+      .pricing-info { flex: 1; width: 100%; padding: 0; }
+      .reseller-card { padding: 40px; min-height: auto; }
+    }
+
+    .hero-card-wallet .token-badge {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .hero-card-wallet .amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .hero-card-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .success-icon {
+      width: 40px;
+      height: 40px;
+      background: #eef9f6;
+      color: #44bba4;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .text-gradient-1 {
+      color: #fb9129;
+    }
+
+    .text-gradient-2 {
+      color: #3f78e0;
+    }
+
+    .text-gradient-3 {
+      color: #44bba4;
+    }
+
+    .btn-dark-hero {
+      background: #000;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-dark-hero:hover {
+      background: #333;
+      color: #fff;
+    }
+
+    @media (max-width: 991px) {
+      .hero-card-container {
+        height: 350px;
+        margin-top: 3rem;
+        max-width: 260px;
+      }
+      .wrapper-main { 
+        width: 200px; 
+        height: 280px; 
+        left: 50%; 
+        margin-left: -100px;
+      }
+      .wrapper-success { 
+        width: 150px; 
+        top: 10%; 
+        right: -20%; 
+      }
+      .wrapper-wallet { 
+        width: 160px; 
+        bottom: 5%; 
+        left: -20%; 
+      }
+      /* Compact content for mobile cards */
+      .hero-card-success, .hero-card-wallet {
+        padding: 15px !important;
+      }
+      .hero-card h5 { font-size: 0.9rem !important; }
+      .hero-card p { font-size: 0.75rem !important; }
+      .hero-card .amount { font-size: 1.1rem !important; }
+      .hero-card .token-badge { padding: 2px 8px !important; font-size: 0.65rem !important; }
+      .success-icon { width: 30px !important; height: 30px !important; margin-bottom: 8px !important; }
+    }
+
+  /* Network Heading Styles */
+  .network-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .network-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .network-mtn { background: #ffcc00; color: #000 !important; }
+  .network-glo { background: #00853f; }
+  .network-airtel { background: #ff0000; }
+  .network-nmobile { background: #006666; }
+  
+  .network-info h4 {
+    margin-bottom: 2px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .network-info .badge {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+  }
+</style>
 </head>
 
 <body>
@@ -157,158 +642,7 @@
         </div>
         <!-- /.container -->
       </nav>
-      {{-- <nav class="navbar navbar-expand-lg center-nav transparent navbar-light">
-        <div class="container flex-lg-row flex-nowrap align-items-center">
-          <div class="navbar-brand w-100">
-            <a href="#">
-              <h1>VTUBIZ</h1>
-            </a>
-          </div>
-          <div class="navbar-collapse offcanvas offcanvas-nav offcanvas-start">
-            <div class="offcanvas-header d-lg-none">
-              <h3 class="text-black fs-30 mb-0">VTUBIZ</h3>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body ms-lg-auto d-flex flex-column h-100">
-              <ul class="navbar-nav">
 
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Business Account</a>
-                  <ul class="dropdown-menu">
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Our Products</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item">Airtime</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Data Subscription</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Cable(Tv) Subscription</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Electricity Subscription</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Exams Result Checkers</a></li>
-                        <li class="nav-item"><a class="dropdown-item">Bulk SMS</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Main Features</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="about.html">Automated Purchase</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Transaction Redo</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Bulk Purchases</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Schedule For Later Purchase</a>
-                        </li>
-                        <li class="nav-item"><a class="dropdown-item" href="about2.html">Add Up Beneficiaries</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">User Management</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="shop.html">Manage User Purchase
-                            Transactions</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="shop.html">Manage User Payment
-                            Transactions</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="shop2.html">Track Customer's Preference</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Price Management</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="contact.html">Set Your Own Price</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="contact3.html">Review Prices</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Theme Management</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="contact.html">Select Theme That Suite Your
-                            Brand</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="contact3.html">Customize Your Theme</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="contact2.html">Build Your Team From
-                            Scratch</a></li>
-                      </ul>
-                    </li>
-                    <li class="dropdown dropdown-submenu dropend"><a class="dropdown-item dropdown-toggle" href="#"
-                        data-bs-toggle="dropdown">Strategized Marketing</a>
-                      <ul class="dropdown-menu">
-                        <li class="nav-item"><a class="dropdown-item" href="career.html">Email Marketing</a></li>
-                        <li class="nav-item"><a class="dropdown-item" href="career-job.html">Social Media Marketing</a>
-                        </li>
-                      </ul>
-                    </li>
-
-                    <li class="nav-item"><a class="dropdown-item" href="pricing.html">About Us</a></li>
-
-                  </ul>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Personal Account.</a>
-                  <div class="dropdown-menu dropdown-lg">
-                    <div class="dropdown-lg-content">
-                      <div>
-                        <h6 class="dropdown-header">Free Subdomains</h6>
-                        <ul class="list-unstyled">
-                          <li><a class="dropdown-item" href="projects.html">Fully Customized</a></li>
-                          <li><a class="dropdown-item" href="projects2.html">Represent Your Brand</a></li>
-                      </div>
-                      <!-- /.column -->
-                      <div>
-                        <h6 class="dropdown-header">Paid Domain</h6>
-                        <ul class="list-unstyled">
-                          <li><a class="dropdown-item" href="single-project.html">Search For Available Domain Names</a>
-                          </li>
-                          <li><a class="dropdown-item" href="single-project2.html">Get Prices For Selected Domain
-                              Names</a></li>
-                          <li><a class="dropdown-item" href="single-project3.html">Choose Domain name</a></li>
-                          <li><a class="dropdown-item" href="single-project3.html">Make it Live in just six(6) Hours</a>
-                          </li>
-                        </ul>
-                      </div>
-                      <!-- /.column -->
-                    </div>
-                    <!-- /auto-column -->
-                  </div>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Login</a>
-                  <ul class="dropdown-menu">
-                    <li class="nav-item"><a class="dropdown-item" href="blog.html">Personal Account Login
-                        plans</a></li>
-                    <li class="nav-item"><a class="dropdown-item" href="blog2.html">Business Account Login
-                      </a></li>
-
-
-                  </ul>
-                </li>
-
-
-              </ul>
-              <!-- /.navbar-nav -->
-              <div class="offcanvas-footer d-lg-none">
-                <div>
-                  <a href="cdn-cgi/l/email-protection.html#15737c6766613b79746661557078747c793b767a78"
-                    class="link-inverse"><span class="__cf_email__"
-                      data-cfemail="fc95929a93bc99919d9590d29f9391">[email&#160;protected]</span></a>
-                  <br /> 00 (123) 456 78 90 <br />
-                  <nav class="nav social social-white mt-4">
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa fa-dribbble"></i></a>
-                    <a href="#"><i class="fa fa-instagram"></i></a>
-                    <a href="#"><i class="fa fa-youtube"></i></a>
-                  </nav>
-                  <!-- /.social -->
-                </div>
-              </div>
-              <!-- /.offcanvas-footer -->
-            </div>
-            <!-- /.offcanvas-body -->
-          </div>
-          <!-- /.navbar-collapse -->
-
-          <!-- /.navbar-other -->
-        </div>
-        <!-- /.container -->
-      </nav> --}}
-      <!-- /.navbar -->
       <div class="offcanvas offcanvas-end text-inverse" id="offcanvas-info" data-bs-scroll="true">
         <div class="offcanvas-header">
           <h3 class="text-white fs-30 mb-0">VTUBIZ</h3>
@@ -363,47 +697,59 @@
       <!-- /.offcanvas -->
     </header>
     <!-- /header -->
-    <section class="wrapper bg-gradient-primary">
-      <div class="container pt-10 pt-md-14 pb-8 text-center">
+    <section class="wrapper bg-light">
+      <div class="container pt-10 pt-md-14 pb-8 pb-md-10">
         <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
-          <div class="col-lg-7">
-            {{-- <figure>
-              <img class="w-auto"
-                src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
-                srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
-                alt="headin" />
-              </figure> --}}
-            <figure>
-              {{-- <h2 style="font-family: 'Dancing Script', cursive;color:#FF0000">Smart Champ, Welcome to 2024!</h2> --}}
-              {{-- <img class="w-auto"
-                src="{{ asset('assets/img/xmas.png') }}"
-              srcset="{{ asset('assets/img/xmas.png') }}"
-              alt="headin" /> --}}
-              {{-- <img class="w-auto"
-                src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
-                srcset="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/sigma-1/3.png"
-                alt="headin" /> --}}
-              <img class="w-auto" style='border-radius:20px'
-                src="{{ asset('assets/img/Work_7.jpg') }}"
-                srcset="{{ asset('assets/img/Work_7.jpg') }}"
-                alt="headin" />
-
-            </figure>
+          <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-6 text-center text-lg-start">
+            <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
+              Never run out of <br>
+              airtime, <span style="color: #fb9129;">data</span> or <br>
+              electricity again.
+            </h1>
+            <p class="lead fs-lg mb-7 pe-xxl-10 text-muted" style="max-width: 500px; line-height: 1.6;">
+              The smartest way to buy data, pay electricity bills, and renew subscriptions. Fast, secure, and instant.
+            </p>
+            <div class="d-flex justify-content-center justify-content-lg-start gap-3 flex-wrap">
+              <a href='/register' class="btn btn-lg btn-dark-hero rounded-pill px-6 lift">Get Started</a>
+              <a href='/login' class="btn btn-lg btn-outline-dark rounded-pill px-6 lift">Login</a>
+            </div>
           </div>
           <!-- /column -->
-          <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-5 text-center text-lg-start">
-            <h1 class="display-1 mb-5 mx-md-n5 mx-lg-0">Top Up, <span style='color:#fb9129'>Pay Bills, <br></span> Stay
-              Connected.</h1>
-            {{-- <p class="lead fs-lg mb-7" style="font-family: 'Grandstander', cursive;">Save more with VTUBIZ!</p> --}}
-            {{-- <p class="lead fs-lg mb-7">It's the festive period, make use of our fun giveaway feature to share happiness in an exciting way!</p> --}}
-            <span><a href='/login' class="btn btn-primary border-0 me-2">Login</a></span>
-            <span><a href='/register' style='background-color:#001f3f' class="btn btn-primary border-0  me-2">Create
-                Account</a></span><br>
-            <h4>
-              {{-- <a href='#free_vtu' style='color:#001f3f' class=" border-0  me-2 mt-2">Request A Free VTU Website
-                →</a> --}}
-            </h4>
 
+          <div class="col-lg-6">
+            <div class="hero-card-container">
+              <!-- Main Product Card -->
+              <div class="rellax hero-card-wrapper wrapper-main" data-rellax-speed="0.5">
+                <div class="hero-card hero-card-main shadow-xl">
+                  <img src="{{ asset('assets/img/Work_7.jpg') }}" alt="VTUBIZ App Interface">
+                </div>
+              </div>
+
+              <!-- Success Notification Card -->
+              <div class="rellax hero-card-wrapper wrapper-success" data-rellax-speed="1.2">
+                <div class="hero-card hero-card-success shadow-lg">
+                  <div class="success-icon">
+                    <i class="fa fa-lightbulb"></i>
+                  </div>
+                  <h5 class="mb-1 fw-bold">Electricity Token</h5>
+                  <p class="fs-14 mb-0 text-muted">Same money. More light. ⚡
+                     <!-- <br>Why your bank dey give you small units? -->
+                    </p>
+                </div>
+              </div>
+
+              <!-- Data Subscription Card -->
+              <div class="rellax hero-card-wrapper wrapper-wallet" data-rellax-speed="-0.5">
+                <div class="hero-card hero-card-wallet shadow-xl">
+                  <span class="token-badge"><i class="fa fa-mobile-alt me-1"></i> Special Offer On MTN</span>
+                  <div class="amount mb-1">11GB for ₦3,450</div>
+                  <p class="fs-13 mb-0 opacity-75">Enjoy 7 Days of connectivity.</p>
+                  <div class="mt-2 fs-12 text-success fw-bold">
+                    <i class="fa fa-clock me-1"></i> Delivered Instantly
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- /column -->
         </div>
@@ -413,245 +759,90 @@
     </section>
     <!-- /section -->
     <section class="wrapper bg-light">
-      <div class="container pt-14 pt-md-16">
-        <div class="row text-center">
-          <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-            {{-- <h2 class="fs-16 text-uppercase text-muted mb-3">What We Do?</h2> --}}
-            <h3 class="display-4 mb-10 px-xl-10">Our Products.</h3>
+      <div class="container pt-4 pt-md-6 pb-6 pb-md-8">
+        <div class="products-box">
+          <div class="row text-center mb-10">
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+              <h2 class="display-3 mb-4 fw-bold" style="color: #000; letter-spacing: -1px;">Everything you need.</h2>
+              <p class="lead fs-lg text-muted">One platform for all your daily digital utility payments.</p>
+            </div>
+            <!-- /column -->
           </div>
-          <!-- /column -->
-        </div>
-        <!-- /.row -->
-        <div class="position-relative">
-          <div class="shape rounded-circle bg-soft-blue rellax w-16 h-16" data-rellax-speed="1"
-            style="bottom: -0.5rem; right: -2.2rem; z-index: 0;"></div>
-          <div class="shape bg-dot primary rellax w-16 h-17" data-rellax-speed="1"
-            style="top: -0.5rem; left: -2.5rem; z-index: 0;"></div>
-          <div class="row gx-md-5 gy-5 text-center">
-            <div class="col-md-6 col-xl-4">
-              <div class="card shadow-lg" style='border-left:5px solid #fb9129;background-color: hsl(30, 90%, 95%);'>
-                <div class="card-body">
-                  <span class="svg-icon svg-icon-primary svg-icon-2x">
-                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Active-call.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <path
-                          d="M13.0799676,14.7839934 L15.2839934,12.5799676 C15.8927139,11.9712471 16.0436229,11.0413042 15.6586342,10.2713269 L15.5337539,10.0215663 C15.1487653,9.25158901 15.2996742,8.3216461 15.9083948,7.71292558 L18.6411989,4.98012149 C18.836461,4.78485934 19.1530435,4.78485934 19.3483056,4.98012149 C19.3863063,5.01812215 19.4179321,5.06200062 19.4419658,5.11006808 L20.5459415,7.31801948 C21.3904962,9.0071287 21.0594452,11.0471565 19.7240871,12.3825146 L13.7252616,18.3813401 C12.2717221,19.8348796 10.1217008,20.3424308 8.17157288,19.6923882 L5.75709327,18.8875616 C5.49512161,18.8002377 5.35354162,18.5170777 5.4408655,18.2551061 C5.46541191,18.1814669 5.50676633,18.114554 5.56165376,18.0596666 L8.21292558,15.4083948 C8.8216461,14.7996742 9.75158901,14.6487653 10.5215663,15.0337539 L10.7713269,15.1586342 C11.5413042,15.5436229 12.4712471,15.3927139 13.0799676,14.7839934 Z"
-                          fill="#000000" />
-                        <path
-                          d="M14.1480759,6.00715131 L13.9566988,7.99797396 C12.4781389,7.8558405 11.0097207,8.36895892 9.93933983,9.43933983 C8.8724631,10.5062166 8.35911588,11.9685602 8.49664195,13.4426352 L6.50528978,13.6284215 C6.31304559,11.5678496 7.03283934,9.51741319 8.52512627,8.02512627 C10.0223249,6.52792766 12.0812426,5.80846733 14.1480759,6.00715131 Z M14.4980938,2.02230302 L14.313049,4.01372424 C11.6618299,3.76737046 9.03000738,4.69181803 7.1109127,6.6109127 C5.19447112,8.52735429 4.26985715,11.1545872 4.51274152,13.802405 L2.52110319,13.985098 C2.22450978,10.7517681 3.35562581,7.53777247 5.69669914,5.19669914 C8.04101739,2.85238089 11.2606138,1.72147333 14.4980938,2.02230302 Z"
-                          fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <h4>Airtime Top-Up</h4>
-                  <p class="mb-2">Top Up your airtime at a discounted price and enjoy more call time.</p>
-
-                </div>
-                <!--/.card-body -->
-              </div>
-              <!--/.card -->
-            </div>
-            <!--/column -->
-            <div class="col-md-6 col-xl-4">
-              <div class="card shadow-lg" style='border-left:5px solid #001f3f;background-color: hsl(210, 90%, 95%);'>
-                <div class="card-body">
-                  <span class="svg-icon svg-icon-primary svg-icon-2x">
-                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Devices/LTE2.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <path
-                          d="M16.4508979,17.4029496 L15.1784978,15.8599014 C16.324501,14.9149052 17,13.5137472 17,12 C17,10.4912085 16.3289582,9.09418404 15.1893841,8.14910121 L16.466112,6.60963188 C18.0590936,7.93073905 19,9.88958759 19,12 C19,14.1173586 18.0528606,16.0819686 16.4508979,17.4029496 Z M19.0211112,20.4681628 L17.7438102,18.929169 C19.7927036,17.2286725 21,14.7140097 21,12 C21,9.28974232 19.7960666,6.77820732 17.7520315,5.07766256 L19.031149,3.54017812 C21.5271817,5.61676443 23,8.68922234 23,12 C23,15.3153667 21.523074,18.3916375 19.0211112,20.4681628 Z M7.54910207,17.4029496 C5.94713944,16.0819686 5,14.1173586 5,12 C5,9.88958759 5.94090645,7.93073905 7.53388797,6.60963188 L8.81061588,8.14910121 C7.67104182,9.09418404 7,10.4912085 7,12 C7,13.5137472 7.67549895,14.9149052 8.82150222,15.8599014 L7.54910207,17.4029496 Z M4.9788888,20.4681628 C2.47692603,18.3916375 1,15.3153667 1,12 C1,8.68922234 2.47281829,5.61676443 4.96885102,3.54017812 L6.24796852,5.07766256 C4.20393339,6.77820732 3,9.28974232 3,12 C3,14.7140097 4.20729644,17.2286725 6.25618985,18.929169 L4.9788888,20.4681628 Z"
-                          fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                        <path
-                          d="M11,14.2919782 C10.1170476,13.9061998 9.5,13.0251595 9.5,12 C9.5,10.6192881 10.6192881,9.5 12,9.5 C13.3807119,9.5 14.5,10.6192881 14.5,12 C14.5,13.0251595 13.8829524,13.9061998 13,14.2919782 L13,20 C13,20.5522847 12.5522847,21 12,21 C11.4477153,21 11,20.5522847 11,20 L11,14.2919782 Z"
-                          fill="#000000" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <h4>Affordable Data Plans</h4>
-                  <p class="mb-2">Enjoy the internet with our cheap data plans.
-
-                  </p>
-
-                </div>
-                <!--/.card-body -->
-              </div>
-              <!--/.card -->
-            </div>
-            <!--/column -->
-            <div class="col-md-6 col-xl-4">
-              <div class="card shadow-lg" style='border-left:5px solid #fb9129;background-color: hsl(30, 90%, 95%);'>
-                <div class="card-body">
-                  <span class="svg-icon svg-icon-primary svg-icon-2x">
-                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Devices/TV2.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <path
-                          d="M3,5 L21,5 C21.5522847,5 22,5.44771525 22,6 L22,17 C22,17.5522847 21.5522847,18 21,18 L3,18 C2.44771525,18 2,17.5522847 2,17 L2,6 C2,5.44771525 2.44771525,5 3,5 Z M9.632,10.066 L11.032,10.066 L11.032,9.044 L7.035,9.044 L7.035,10.066 L8.435,10.066 L8.435,14 L9.632,14 L9.632,10.066 Z M14.935,14 L16.846,9.044 L15.523,9.044 L14.382,12.558 L14.354,12.558 L13.206,9.044 L11.862,9.044 L13.738,14 L14.935,14 Z"
-                          fill="#000000" />
-                        <rect fill="#000000" opacity="0.3" x="3" y="19" width="18" height="1" rx="0.5" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <h4>Tv(Cable) Subscriptions </h4>
-                  <p class="mb-2">Streamline your entertainment with our cable subscription plans.
-
-                  </p>
-                </div>
-                <!--/.card-body -->
-              </div>
-              <!--/.card -->
-            </div>
-            <!--/column -->
-            <div class="col-md-6 col-xl-4">
-              <div class="card shadow-lg" style='border-left:5px solid #001f3f;background-color: hsl(210, 90%, 95%);'>
-                <div class="card-body">
-                  <span class="svg-icon svg-icon-primary svg-icon-4x">
-                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Bulb1.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <circle fill="#000000" opacity="0.3" cx="12" cy="9" r="8" />
-                        <path
-                          d="M14.5297296,11 L9.46184488,11 L11.9758349,17.4645458 L14.5297296,11 Z M10.5679953,19.3624463 L6.53815512,9 L17.4702704,9 L13.3744964,19.3674279 L11.9759405,18.814912 L10.5679953,19.3624463 Z"
-                          fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                        <path
-                          d="M10,22 L14,22 L14,22 C14,23.1045695 13.1045695,24 12,24 L12,24 C10.8954305,24 10,23.1045695 10,22 Z"
-                          fill="#000000" opacity="0.3" />
-                        <path
-                          d="M9,20 C8.44771525,20 8,19.5522847 8,19 C8,18.4477153 8.44771525,18 9,18 C8.44771525,18 8,17.5522847 8,17 C8,16.4477153 8.44771525,16 9,16 L15,16 C15.5522847,16 16,16.4477153 16,17 C16,17.5522847 15.5522847,18 15,18 C15.5522847,18 16,18.4477153 16,19 C16,19.5522847 15.5522847,20 15,20 C15.5522847,20 16,20.4477153 16,21 C16,21.5522847 15.5522847,22 15,22 L9,22 C8.44771525,22 8,21.5522847 8,21 C8,20.4477153 8.44771525,20 9,20 Z"
-                          fill="#000000" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <h4>Electricity Token</h4>
-                  <p class="mb-2">Light Up your building with effortless bill payments.
-
-                  </p>
-                </div>
-                <!--/.card-body -->
-              </div>
-              <!--/.card -->
-            </div>
-            <div class="col-md-6 col-xl-4">
-              <div class="card shadow-lg" style='border-left:5px solid #fb9129;background-color: hsl(30, 90%, 95%);'>
-                <div class="card-body">
-                  <span class="svg-icon svg-icon-primary svg-icon-2x">
-                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Layout/Layout-top-panel-6.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <rect fill="#000000" x="2" y="5" width="19" height="4" rx="1" />
-                        <rect fill="#000000" opacity="0.3" x="2" y="11" width="19" height="10" rx="1" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <h4>Exam Result Checkers</h4>
-                  <p class="mb-2">
-                    Easily access your exam results at a giveaway prices.
-                  </p>
-                </div>
-                <!--/.card-body -->
-              </div>
-              <!--/.card -->
-            </div>
-            <div class="col-md-6 col-xl-4">
-              <div class="card shadow-lg" style='border-left:5px solid #001f3f;background-color: hsl(210, 90%, 95%);'>
-                <div class="card-body">
-                  <span class="svg-icon svg-icon-primary svg-icon-4x">
-                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Group-chat.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <path
-                          d="M16,15.6315789 L16,12 C16,10.3431458 14.6568542,9 13,9 L6.16183229,9 L6.16183229,5.52631579 C6.16183229,4.13107011 7.29290239,3 8.68814808,3 L20.4776218,3 C21.8728674,3 23.0039375,4.13107011 23.0039375,5.52631579 L23.0039375,13.1052632 L23.0206157,17.786793 C23.0215995,18.0629336 22.7985408,18.2875874 22.5224001,18.2885711 C22.3891754,18.2890457 22.2612702,18.2363324 22.1670655,18.1421277 L19.6565168,15.6315789 L16,15.6315789 Z"
-                          fill="#000000" />
-                        <path
-                          d="M1.98505595,18 L1.98505595,13 C1.98505595,11.8954305 2.88048645,11 3.98505595,11 L11.9850559,11 C13.0896254,11 13.9850559,11.8954305 13.9850559,13 L13.9850559,18 C13.9850559,19.1045695 13.0896254,20 11.9850559,20 L4.10078614,20 L2.85693427,21.1905292 C2.65744295,21.3814685 2.34093638,21.3745358 2.14999706,21.1750444 C2.06092565,21.0819836 2.01120804,20.958136 2.01120804,20.8293182 L2.01120804,18.32426 C1.99400175,18.2187196 1.98505595,18.1104045 1.98505595,18 Z M6.5,14 C6.22385763,14 6,14.2238576 6,14.5 C6,14.7761424 6.22385763,15 6.5,15 L11.5,15 C11.7761424,15 12,14.7761424 12,14.5 C12,14.2238576 11.7761424,14 11.5,14 L6.5,14 Z M9.5,16 C9.22385763,16 9,16.2238576 9,16.5 C9,16.7761424 9.22385763,17 9.5,17 L11.5,17 C11.7761424,17 12,16.7761424 12,16.5 C12,16.2238576 11.7761424,16 11.5,16 L9.5,16 Z"
-                          fill="#000000" opacity="0.3" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <h4>Bulk SMS</h4>
-                  <p class="mb-2">
-
-                    Reach your audience seamlessly with our Bulk SMS packages.
-                  </p>
-                </div>
-                <!--/.card-body -->
-              </div>
-              <!--/.card -->
-            </div>
-            <!--/column -->
-          </div>
-          <!--/.row -->
-        </div>
-        <!-- /.position-relative -->
-      </div>
-      <!-- /.container -->
-    </section>
-    <!-- /section -->
-    {{-- <section class="wrapper bg-gradient-reverse-primary">
-      <div class="container py-16 py-md-18">
-        <div class="row gx-lg-8 gx-xl-12 gy-10 mb-8 align-items-center">
-          <div class="col-lg-7 order-lg-2">
-            <figure><img class="w-auto" src="assets/img/illustrations/i3.png"
-                srcset="./assets/img/illustrations/i3@2x.png 2x" alt="" /></figure>
-          </div>
-          <!--/column -->
-          <div class="col-lg-5">
-            <h2 class="fs-16 text-uppercase text-muted mb-3">Our Products</h2>
-            <h3 class="display-4 mb-5">Check Out Our Available Products.</h3>
-            <div class="row">
-              <div class="col-lg-9">
-                <form action="#">
-                  <div class="form-floating input-group">
-                    <input type="url" class="form-control" placeholder="Enter Website URL" id="seo-check">
-                    <label for="seo-check">Check A Product Price</label>
-                    <button class="btn btn-primary" type="button">Check</button>
+          <!-- /.row -->
+          <div class="position-relative">
+            <div class="row gx-md-5 gy-5 text-center justify-content-center">
+              <div class="col-md-6 col-xl-4">
+                <div class="product-card shadow-sm">
+                  <div class="product-icon-box bg-soft-green">
+                    <i class="fa fa-wifi"></i>
                   </div>
-                </form>
+                  <h4>Airtime Top-Up</h4>
+                  <p>Buy airtime and get more value for your money. Fast top-up, better rates, no dulling.</p>
+                </div>
               </div>
-              <!-- /column -->
+              <!--/column -->
+              <div class="col-md-6 col-xl-4">
+                <div class="product-card shadow-sm">
+                  <div class="product-icon-box bg-soft-blue-alt">
+                    <i class="fa fa-signal"></i>
+                  </div>
+                  <h4>Affordable Data Plans</h4>
+                  <p>Browse, stream, and chat with cheap data that lasts longer. Stay online without draining your pocket.</p>
+                </div>
+              </div>
+              <!--/column -->
+              <div class="col-md-6 col-xl-4">
+                <div class="product-card shadow-sm">
+                  <div class="product-icon-box bg-soft-purple">
+                    <i class="fa fa-tv"></i>
+                  </div>
+                  <h4>Tv(Cable) Subscriptions</h4>
+                  <p>Renew your cable in seconds and never miss your favorite shows. Easy payment. Instant activation.</p>
+                </div>
+              </div>
+              <!--/column -->
+              <div class="col-md-6 col-xl-4">
+                <div class="product-card shadow-sm">
+                  <div class="product-icon-box bg-soft-yellow">
+                    <i class="fa fa-bolt"></i>
+                  </div>
+                  <h4>Electricity Token</h4>
+                  <p>Pay for light and get more units for your money. Recharge your meter fast and enjoy longer power.</p>
+                </div>
+              </div>
+              <!--/column -->
+              <div class="col-md-6 col-xl-4">
+                <div class="product-card shadow-sm">
+                  <div class="product-icon-box bg-soft-orange">
+                    <i class="fa fa-graduation-cap"></i>
+                  </div>
+                  <h4>Exam Result Checkers</h4>
+                  <p>Check your results instantly at giveaway prices. No queues. No stress. Just results.</p>
+                </div>
+              </div>
+              <!--/column -->
+              <div class="col-md-6 col-xl-4">
+                <div class="product-card shadow-sm">
+                  <div class="product-icon-box bg-soft-green">
+                    <i class="fa fa-comment-dots"></i>
+                  </div>
+                  <h4>Bulk SMS</h4>
+                  <p>Send your message to thousands in one click. Perfect for business, promos, and announcements.</p>
+                </div>
+              </div>
+              <!--/column -->
             </div>
-            <!-- /.row -->
+            <!--/.row -->
           </div>
-          <!--/column -->
+          <!-- /.position-relative -->
         </div>
-        <!--/.row -->
-      </div>
-      <!-- /.container -->
-    </section> --}}
-    <!-- /section -->
-    <section id='free_vtu' class="wrapper bg-gradient-reverse-primary angled upper-start lower-start">
-      <div class="container py-14 pt-md-17 pb-md-15">
-
-
-        <!--/.row -->
       </div>
       <!-- /.container -->
     </section>
-    <br><br><br>
     <!-- /section -->
-    <section class="wrapper bg-gradient-primary mt-4">
-      <div class="container py-14 pt-md-16 pb-md-7">
-        <div class="position-relative mt-8 mt-lg-n23 mt-xl-n25">
+    <section class="wrapper bg-gradient-primary">
+      <div class="container pt-8 pb-4 pt-md-10 pb-md-6">
+        <div class="position-relative">
           <div class="row text-center">
             <div class="col-lg-8 col-xl-7 col-xxl-6 mx-auto">
               <h2 class="fs-16 text-uppercase text-muted mb-3">Our Features</h2>
@@ -736,117 +927,53 @@
       <!-- /.container -->
     </section>
 
-    <section id='free_vtu' class="wrapper bg-gradient-reverse-primary angled upper-start lower-start">
-      <div class="container py-14 pt-md-17 pb-md-15">
-        <div class="row gx-md-8 gx-xl-12 gy-10 mb-14 mb-md-18 align-items-center">
-          <div class="col-lg-6">
-            <h2 class="fs-16 text-uppercase text-muted mb-3">Be In Power</h2>
-            <h3 class="display-4 mb-5">Get Yourself A <span style='color:#fb9129'>VTU website</span> for a token of ₦45,000😊.</h3>
-            <p>Start selling all products like we do at your own price with our ready-made, easily customizable website.</p>
-            <a href="/business" class="btn btn-primary rounded-pill mb-0">Get Started</a>
+    <section id='free_vtu' class="wrapper bg-light">
+      <div class="container">
+        <div class="reseller-section">
+          <div class="reseller-card">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            
+            <div class="reseller-content">
+              <span class="price-tag">Best Value</span>
+              <h2>Start your own <br>VTU Business.</h2>
+              <p style="font-size: 1.25rem; opacity: 0.8; margin-bottom: 40px; max-width: 450px;">
+                Get a fully functional VTU portal with your own branding, domain, and admin panel. Automate your income today.
+              </p>
+              <a href="/business" class="btn">Get Started Now</a>
+            </div>
           </div>
-          <div class="col-lg-6 order-lg-2">
-            <div class="card shadow-lg me-lg-6">
-              <div class="card-body p-6">
-                <div class="d-flex flex-row">
-                  <div>
-                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
-                        class="number">01</span></span>
-                  </div>
-                  <div>
-                    <h4 class="mb-1">Register Your Brand/Business and upgrade to a business account.</h4>
-                    {{-- <p class="mb-0">You exclusively manage your user's purchases and payment transactions with
-                      ease.</p> --}}
-                  </div>
-                </div>
-              </div>
-              <!--/.card-body -->
-            </div>
-            <!--/.card -->
-            <div class="card shadow-lg ms-lg-13 mt-6">
-              <div class="card-body p-6">
-                <div class="d-flex flex-row">
-                  <div>
-                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
-                        class="number">02</span></span>
-                  </div>
-                  <div>
-                    <h4 class="mb-1">Choose Your Preferred Theme and Customize To Your Taste.</h4>
-                    {{-- <p class="mb-0">Fund your wallet to allow your customer's make purchases and withdraw your
-                      profit at
-                      any given time.</p> --}}
-                  </div>
-                </div>
-              </div>
-              <!--/.card-body -->
-            </div>
-            <!--/.card -->
-            <div class="card shadow-lg mx-lg-6 mt-6">
-              <div class="card-body p-6">
-                <div class="d-flex flex-row">
-                  <div>
-                    <span class="icon btn btn-circle btn-lg btn-soft-primary disabled me-4"><span
-                        class="number">03</span></span>
-                  </div>
-                  <div>
-                    <h4 class="mb-1">Set Prices For All Products.</h4>
-                    {{-- <p class="mb-0">Notify your customers about your brand in a unique and customized way.</p> --}}
-                  </div>
-                </div>
-              </div>
-              <!--/.card-body -->
-            </div>
-            <!--/.card -->
-          </div>
-          <!--/column -->
 
-          <!--/column -->
+          <div class="pricing-info">
+            <div class="price-tag-large">₦45,000</div>
+            <p class="price-sub">One-time setup fee.</p>
+            
+            <ul>
+              <li>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Custom Domain Name
+              </li>
+              <li>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Admin Dashboard
+              </li>
+              <li>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                API Access
+              </li>
+              <li>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Unlimited Transactions
+              </li>
+            </ul>
+          </div>
         </div>
-        <!--/.row -->
-
-        <!--/.row -->
       </div>
       <!-- /.container -->
     </section>
-    <!-- /section -->
-    {{-- <section class="wrapper bg-light">
-      <div class="container">
-        <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
-          <div class="col-lg-7 order-lg-2">
-            <figure><img class="w-auto" src="assets/img/illustrations/i8.png"
-                srcset="./assets/img/illustrations/i8@2x.png 2x" alt="" /></figure>
-          </div>
-          <!--/column -->
-          <div class="col-lg-5">
-            <h2 class="fs-16 text-uppercase text-muted mb-3">Our Solutions</h2>
-            <h3 class="display-4 mb-5">We also helps in marketing to boast your sales effectively.</h3>
-            <p class="mb-6">Enhance your marketing efforts with our integrated email marketing feature, enabling you to
-              easily send updates and promotions to your users, keeping them engaged and informed about your brand.</p>
-            <div class="row gy-3">
-              <div class="col-xl-6">
-                <ul class="icon-list bullet-bg bullet-soft-primary mb-0">
-                  <li><span><i class="fa fa-check"></i></span><span>Email Marketing.</span></li>
-                </ul>
-              </div>
-              <!--/column -->
-              <div class="col-xl-6">
-                <ul class="icon-list bullet-bg bullet-soft-primary mb-0">
-                  <li><span><i class="fa fa-check"></i></span><span>Social Media Marketing.</span></li>
-                </ul>
-              </div>
-              <!--/column -->
-            </div>
-            <!--/.row -->
-          </div>
-          <!--/column -->
-        </div>
-        <!--/.row -->
-      </div>
-      <!-- /.container -->
-    </section> --}}
-    <!-- /section -->
+
     <section class="wrapper bg-gradient-reverse-primary">
-      <div class="container py-14 py-md-8">
+      <div class="container pt-8 pb-4 pt-md-10 pb-md-6">
         <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
           <div class="col-lg-5">
             <h2 class="fs-16 text-uppercase text-muted mb-3 mt-lg-n6">Our Community</h2>
@@ -960,7 +1087,7 @@
     </section>
     <!-- /section -->
     <section class="wrapper bg-light angled upper-end lower-end">
-      <div class="container py-14 pt-md-14 pb-md-18">
+      <div class="container pt-8 pb-4 pt-md-10 pb-md-6">
         <div class="row gy-6 mb-14 mb-md-18">
 
           <!--/column -->
@@ -975,16 +1102,21 @@
                   <div class="card-body pb-12">
 
                     <!--/.prices -->
-                    <h4 class="card-title mt-2">MTN Data Plans</h4>
-                    <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦820</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,640</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦4,100</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦8,200</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦82,000</strong> ~ 100GB 30Days </span></li>
-                    </ul>
-                    <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
+                    <div class="network-header">
+                      <div class="network-icon network-mtn">M</div>
+                      <div class="network-info">
+                        <h4 class="card-title">MTN Data</h4>
+                        <span class="badge bg-soft-primary text-primary">Best Network</span>
+                      </div>
+                    </div>
+                    <div class="plan-list-container">
+                      <ul class="icon-list bullet-soft-primary mt-0 mb-0">
+                        @foreach($mtn as $data)
+                        <li><i class="fa fa-check fs-21"></i><span><strong>₦{{ number_format($data->data_price) }}</strong> ~ {{ $data->plan_name }} </span></li>
+                        @endforeach
+                      </ul>
+                    </div>
+                    <a href="/login" class="btn btn-primary rounded-pill mt-auto">Choose Plan</a>
                   </div>
                   <!--/.card-body -->
                 </div>
@@ -992,21 +1124,25 @@
               </div>
               <!--/column -->
               <div class="col-md-3 popular">
-                <div class="pricing card shadow-lg">
+                <div class="pricing card shadow-lg border-primary border-2">
                   <div class="card-body pb-12">
 
                     <!--/.prices -->
-                    <h4 class="card-title mt-2">Glo Data Plans</h4>
-                    <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦480</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦960</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦2,400</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦4,800</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦48,000</strong> ~ 100GB 30Days </span></li>
-
-                    </ul>
-                    <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
+                    <div class="network-header">
+                      <div class="network-icon network-glo">G</div>
+                      <div class="network-info">
+                        <h4 class="card-title">Glo Data</h4>
+                        <span class="badge bg-soft-success text-success">Most Popular</span>
+                      </div>
+                    </div>
+                    <div class="plan-list-container">
+                      <ul class="icon-list bullet-soft-primary mt-0 mb-0">
+                        @foreach($glo as $data)
+                        <li><i class="fa fa-check fs-21"></i><span><strong>₦{{ number_format($data->data_price) }}</strong> ~ {{ $data->plan_name }} </span></li>
+                        @endforeach
+                      </ul>
+                    </div>
+                    <a href="/login" class="btn btn-primary rounded-pill mt-auto">Choose Plan</a>
                   </div>
                   <!--/.card-body -->
                 </div>
@@ -1017,17 +1153,21 @@
                   <div class="card-body pb-12">
 
                     <!--/.prices -->
-                    <h4 class="card-title mt-2">Airtel Data Plans</h4>
-                    <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦940</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,880</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦4,700</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦9,400</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦94,000</strong> ~ 100GB 30Days </span></li>
-
-                    </ul>
-                    <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
+                    <div class="network-header">
+                      <div class="network-icon network-airtel">A</div>
+                      <div class="network-info">
+                        <h4 class="card-title">Airtel Data</h4>
+                        <span class="badge bg-soft-danger text-danger">Fast Speed</span>
+                      </div>
+                    </div>
+                    <div class="plan-list-container">
+                      <ul class="icon-list bullet-soft-primary mt-0 mb-0">
+                        @foreach($airtel as $data)
+                        <li><i class="fa fa-check fs-21"></i><span><strong>₦{{ number_format($data->data_price) }}</strong> ~ {{ $data->plan_name }} </span></li>
+                        @endforeach
+                      </ul>
+                    </div>
+                    <a href="/login" class="btn btn-primary rounded-pill mt-auto">Choose Plan</a>
                   </div>
                   <!--/.card-body -->
                 </div>
@@ -1039,16 +1179,21 @@
                   <div class="card-body pb-12">
 
                     <!--/.prices -->
-                    <h4 class="card-title mt-2">9Mobile Data Plans</h4>
-                    <ul class="icon-list bullet-soft-primary mt-8 mb-9">
-                      <!-- <li><i class="fa fa-check fs-21"></i><span><strong>₦135</strong> ~ 500MB 30Days </span></li> -->
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦310</strong> ~ 1GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦620</strong> ~ 2GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦1,550</strong> ~ 5GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦3,100</strong> ~ 10GB 30Days </span></li>
-                      <li><i class="fa fa-check fs-21"></i><span><strong>₦31,000</strong> ~ 100GB 30Days </span></li>
-                    </ul>
-                    <a href="#" class="btn btn-primary rounded-pill">Choose Plan</a>
+                    <div class="network-header">
+                      <div class="network-icon network-nmobile">9</div>
+                      <div class="network-info">
+                        <h4 class="card-title">9Mobile</h4>
+                        <span class="badge bg-soft-info text-info">Affordable</span>
+                      </div>
+                    </div>
+                    <div class="plan-list-container">
+                      <ul class="icon-list bullet-soft-primary mt-0 mb-0">
+                        @foreach($nmobile as $data)
+                        <li><i class="fa fa-check fs-21"></i><span><strong>₦{{ number_format($data->data_price) }}</strong> ~ {{ $data->plan_name }} </span></li>
+                        @endforeach
+                      </ul>
+                    </div>
+                    <a href="/login" class="btn btn-primary rounded-pill mt-auto">Choose Plan</a>
                   </div>
                   <!--/.card-body -->
                 </div>
@@ -1114,14 +1259,7 @@
               <?php echo Date('Y'); ?> VTUBIZ. <br class="d-none d-lg-block" />All rights reserved.
             </p>
             <a class='btn btn-secondary' href='https://www.instagram.com/vtubiz/'>Follow us on Instagram</a>
-            {{-- <nav class="nav social social-white">
-              <a href="#"><i class="fa fa-twitter"></i></a>
-              <a href="#"><i class="fa fa-facebook-f"></i></a>
-              <a href="#"><i class="fa fa-dribbble"></i></a>
-              <a href="#"><i class="fa fa-instagram"></i></a>
-              <a href="#"><i class="fa fa-youtube"></i></a>
-            </nav> --}}
-            <!-- /.social -->
+
           </div>
           <!-- /.widget -->
         </div>
@@ -1199,11 +1337,8 @@
   <script data-cfasync="false" src="frontpage/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="frontpage/assets/js/plugins.js"></script>
   <script src="frontpage/assets/js/theme.js"></script>
-  <script src='/assets/js/professionallocker.js'></script>
+  <!-- <script src='/assets/js/professionallocker.js'></script> -->
 
 </body>
-
-
-<!-- Mirrored from sandbox.elemisthemes.com/demo1.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 May 2022 20:49:01 GMT -->
 
 </html>

@@ -4,21 +4,17 @@
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div id='app' class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-         <electricity-component :user='{{ $user  }}' :beneficiaries = '{{$beneficiaries}}'></electricity-component>
-            <!--end::Content-->
+<div class="service-header">
+    <h1>Electricity</h1>
+    <p class="text-muted">Pay your electricity bills for all distribution companies nationwide.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="service-card-wrapper">
+            <electricity-component :user='{{ $user  }}' :beneficiaries = '{{$beneficiaries}}'></electricity-component>
         </div>
-        <!--end::Profile Account Information-->
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 

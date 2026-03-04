@@ -1,105 +1,132 @@
 @extends('manager.master')
 
 @section('header')
+<style>
+    .page-header h1 { font-family: 'Fraunces', serif; font-size: 2.2rem; color: var(--primary-dark); margin-bottom: 8px; }
+    .table-card { background: white; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-card); border: none; }
+    .modern-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+    .modern-table thead th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); padding: 10px 20px; border: none; font-weight: 700; }
+    .modern-table tbody tr { background: #FDFCF8; transition: transform 0.2s ease; }
+    .modern-table tbody tr:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    .modern-table tbody td { padding: 16px 20px; font-size: 0.9rem; border: none; vertical-align: middle; }
+    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
+    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+
+    .search-group { position: relative; max-width: 400px; }
+    .search-group input { 
+        width: 100%; padding: 12px 16px 12px 45px; border-radius: var(--radius-pill); 
+        border: 1px solid rgba(0,0,0,0.08); background: #F9F9F9; transition: all 0.2s; 
+    }
+    .search-group input:focus { outline: none; border-color: var(--primary-dark); background: white; box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05); }
+    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-light); }
+
+    .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .bg-success-light { background: rgba(39, 174, 96, 0.1); color: #27ae60; }
+    .bg-danger-light { background: rgba(235, 87, 87, 0.1); color: #eb5757; }
+</style>
 @endsection
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div class="row">
-           
-            <!--begin::Content-->
-            <div class="col-md-12">
-                <!--begin::Card-->
-                <div class="card card-custom">
-                    <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                        <div class="card-title">
-                            <h3 class="card-label">Purchase Transactions
-                            </h3>
-                            <a href="manager/purchase_records" class="btn btn-success">Purchase Records</a>
-                        </div>
-                     
-                    </div>
-                    <div class="card-body">
-                        <div class='col-md-6'>
-                            <input type="text" class="form-control" placeholder="Search..." id="searchTable">
-                            </div>
-                        <table class="datatable table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Reference</th>
-                                    <th scope="col">Details</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Before</th>
-                                    <th scope="col">After</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($transactions as $key => $tranx)
-
-                                <tr>
-
-                                    <td>{{ $tranx->reference }}<br><span class='text-danger'>{{ $tranx->user->name ?? ""}}</span><br><span class='text-success'>{{ $tranx->user->brand->brand_name ?? "Big Pel" }}</span></td>
-                                    <td>{{ $tranx->description }}</td>
-                                    <td>₦{{ number_format($tranx->amount) }}</td>
-                                    <td>₦{{ number_format($tranx->before) }}</td>
-                                    <td>₦{{ number_format($tranx->after) }}</td>
-                                    <td>{{ $tranx->type }}</td>
-                                    <td>
-                                        {{ Date('d-m-Y H:i',strtotime($tranx->created_at)) }}
-                                        @if($tranx->status == 1)
-                                        <span class='badge badge-light-success'>Success</span>
-                                        @else
-                                        <span class='badge badge-light-danger'>Failed</span>
-                                        @endif
-                                    
-                                    </td>
-                                    <td>
-                                        @if(substr($tranx->reference,0,7) == 'data_pu' && $tranx->refund_status == 0 || substr($tranx->reference,0,7) == 'resolve' && $tranx->refund_status == 0 )
-                                        <a href='/refund/{{ $tranx->id ?? "" }}' class='btn btn-warning btn-sm'>Refund </a>
-                                        @endif
-                                        <a href='https://wa.me/{{ substr($tranx->user->phone ?? "09058744473", 1) }}' class='btn btn-success btn-sm'>Message</a>
-                                        <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-info btn-sm'>Print</a>
-                                    </td>
-                                </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                        <!--end: Datatable-->
-                    </div>
-                </div>
-                <!--end::Card-->
-            </div>
-            <!--end::Content-->
-        </div>
-        <!--end::Profile Account Information-->
+<div class="page-header mb-5 d-flex justify-content-between align-items-end">
+    <div>
+        <h1>Transactions</h1>
+        <p class="text-muted">Reviewing system-wide purchase and activity records.</p>
     </div>
-    <!--end::Container-->
+    @if(Request::is('manager/purchase_records'))
+    <a href="/manager/purchase_records_graph" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">
+        <i class="fa-solid fa-chart-line me-2"></i> View Analytics
+    </a>
+    @endif
+</div>
+
+<div class="table-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="search-group">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchTable" placeholder="Search transactions...">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="datatable modern-table">
+            <thead>
+                <tr>
+                    <th>Reference & User</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Wallet B/A</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($transactions as $tranx)
+                <tr>
+                    <td>
+                        <div class="fw-bold text-dark small">{{ $tranx->reference }}</div>
+                        <div class="text-xs text-primary fw-medium">{{ $tranx->user->name ?? "System" }}</div>
+                        <div class="text-xs text-muted">{{ $tranx->user->brand->brand_name ?? "VTUBIZ" }}</div>
+                    </td>
+                    <td class="small text-muted" style="max-width: 250px;">{{ $tranx->description }}</td>
+                    <td class="fw-bold">₦{{ number_format($tranx->amount, 2) }}</td>
+                    <td class="text-xs">
+                        <div class="text-muted">₦{{ number_format($tranx->before, 2) }}</div>
+                        <div class="fw-medium text-dark">₦{{ number_format($tranx->after, 2) }}</div>
+                    </td>
+                    <td>
+                        <div class="text-xs text-muted mb-1">{{ date('d M, H:i', strtotime($tranx->created_at)) }}</div>
+                        @if($tranx->status == 1)
+                            <span class="badge-status bg-success-light">Success</span>
+                        @else
+                            <span class="badge-status bg-danger-light">Failed</span>
+                        @endif
+                    </td>
+                    <td class="text-end">
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                @if((str_starts_with($tranx->reference, 'data_pu') || str_starts_with($tranx->reference, 'resolve')) && $tranx->refund_status == 0)
+                                    <li><a class="dropdown-item py-2 text-warning" href="/refund/{{ $tranx->id }}"><i class="fa-solid fa-rotate-left me-2"></i> Refund</a></li>
+                                @endif
+                                <li><a class="dropdown-item py-2" href="https://wa.me/{{ substr($tranx->user->phone ?? '09058744473', 1) }}" target="_blank"><i class="fa-brands fa-whatsapp me-2 text-success"></i> Message User</a></li>
+                                <li><a class="dropdown-item py-2" href="/print_transaction_receipt/{{ $tranx->id }}"><i class="fa-solid fa-print me-2"></i> Print Receipt</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection
 
 @section('script')
 <script>
     $(document).ready(function() {
-        var oTable = $('.datatable').DataTable({
+        const oTable = $('.datatable').DataTable({
             ordering: false,
-            searching: true
-            });   
-            $('#searchTable').on('keyup', function() {
-              oTable.search(this.value).draw();
-            });
+            searching: true,
+            paging: true,
+            pageLength: 25,
+            dom: 'lrtip',
+            language: {
+                paginate: {
+                    previous: "<i class='fa-solid fa-chevron-left'></i>",
+                    next: "<i class='fa-solid fa-chevron-right'></i>"
+                }
+            }
+        });
 
-        @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-        
-    })
+        $('#searchTable').on('keyup', function() {
+            oTable.search(this.value).draw();
+        });
 
+        @if(session('message'))
+            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('message') }}", confirmButtonColor: '#0F3548' });
+        @endif
+    });
 </script>
 @endsection

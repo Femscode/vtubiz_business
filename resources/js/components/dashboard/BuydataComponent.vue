@@ -1,95 +1,184 @@
 <template>
-  <div class="col-md-12">
-    <!--begin::Card-->
-    <div class="card card-custom">
-      <!--begin::Header-->
+  <div class="purchase-page">
+    <!-- Purchase Type Toggle -->
+    <div class="tabs-container">
+      <button 
+        @click="purchaseType = 'single'" 
+        :class="['tab', { active: purchaseType === 'single' }]"
+      >Single Purchase</button>
+      <button 
+        @click="purchaseType = 'group'" 
+        :class="['tab', { active: purchaseType === 'group' }]"
+      >Group Purchase</button>
+    </div>
 
-      <!--end::Header-->
-      <!--begin::Form-->
-      <form class="form" @submit.prevent="buyData()">
-        <div class="card-body">
-          <!--begin::Heading-->
-
-          <div class="row">
-            <label class="col-md-3"></label>
-
-            <div class="col">
-              <h4 class="font-weight-bold"><b>Buy Data</b></h4>
-            </div>
-            <div class="col text-end">
-              <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
-            </div>
-          </div>
-          <!--begin::Form Group-->
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Phone Number</h6>
-            <div class="col-md-6">
-              <input required @input="fetchNetwork()" v-model="phone_number"
-                class="form-control form-control-lg form-control-solid" type="text" placeholder="08000000000" />
-              <div class="col-md-12 text-end">
-                <a @click="selectFromBeneficiary()" class="btn btn-primary btn-sm">Select From Beneficiary</a>
+    <div class="grid-layout">
+      <!-- Main Form Section -->
+      <div class="form-section">
+        
+        <!-- Network Selection (Single Purchase Only) -->
+        <div class="section-group" v-if="purchaseType === 'single'">
+          <h3 class="section-label">SELECT NETWORK</h3>
+          <div class="network-grid">
+            <div 
+              v-for="net in networks" 
+              :key="net.id"
+              :class="['network-card', net.name.toLowerCase(), { active: network == net.id }]"
+              @click="selectNetwork(net.id)"
+            >
+              <div class="network-icon">
+                {{ net.name.charAt(0) }}
               </div>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Network</h6>
-            <div class="col-md-6">
-              <select required @change="fetchPlan()" v-model="network" class="form-control">
-                <option value="1">MTN</option>
-                <option value="2">GLO</option>
-                <option value="3">AIRTEL</option>
-                <option value="4">9MOBILE</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Plan</h6>
-            <div class="col-md-6">
-              <select required v-model="selectedPlan" class="form-control">
-                <!-- <option value="">Select Plan</option> -->
-                <option :data-price="plan.actual_price" :key="plan.id" v-for="plan in plans" :value="plan.plan_id">
-                  {{ plan.plan_name }} - (₦{{ plan.admin_price }})
-                </option>
-              </select>
-              <div class="form-check form-switch form-sm">
-                <input class="form-check-input" type="checkbox" id="save_ben" @change="saveBeneficiary" />
-                <label id="alr_saved" class="form-check-label">Save as beneficiary</label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-3"></div>
-            <div class="btn-group btn-group-example mb-3 col-md-6" role="group">
-              <button :disabled="!transfer_status" type="submit" class="btn btn-primary col-md-3">
-                Buy Now
-              </button>
-              <button :disabled="!transfer_status" type="button" @click="scheduleBuy" class="btn btn-success col-md-3">
-                Buy For Later
-              </button>
-            </div>
-          </div>
-
-          <div class="form-group row m-2">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-              <ul>
-                <li>Universal Code (For All Networks) >> *323# or *323*4#</li>
-                <li>
-                  MTN (CG) >> #460*260# | MTN (SME) >> *461*4# OR *323*3# | MTN
-                  (Direct & DATACARD) >> *323*4#
-                </li>
-
-                <li>GLO (CG & Direct) >> *127*0#</li>
-                <li>Airtel (CG & Direct) >> *140#</li>
-                <li>9mobile (Direct & SME) >> *228#</li>
-              </ul>
+              <span class="network-name">{{ net.name }}</span>
             </div>
           </div>
         </div>
-      </form>
-      <!--end::Form-->
+
+        <!-- Plan Selection (Single Purchase Only) -->
+        <div class="section-group" v-if="purchaseType === 'single' && plans.length > 0">
+          <h3 class="section-label">SELECT PLAN</h3>
+          <div class="plan-grid-scroll">
+            <div class="plan-grid">
+              <div 
+                v-for="plan in plans" 
+                :key="plan.id"
+                :class="['plan-card', { active: selectedPlan == plan.id }]"
+                @click="selectedPlan = plan.id"
+              >
+                <span class="plan-data">{{ plan.plan_name }}</span>
+                <span class="plan-price">₦{{ numberFormat(plan.admin_price) }}</span>
+                <span class="plan-validity">{{ plan.month_validate || '30 Days' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone Number / Beneficiaries (Single Purchase) -->
+        <div class="section-group" v-if="purchaseType === 'single'">
+          <h3 class="section-label">RECIPIENT</h3>
+          
+          <div v-if="beneficiaries.length > 0" class="beneficiary-section">
+            <label class="input-label">Saved Beneficiaries</label>
+            <div class="beneficiary-scroll">
+              <div 
+                v-for="ben in beneficiaries" 
+                :key="ben.id" 
+                class="beneficiary-pill"
+                @click="useBeneficiary(ben)"
+              >
+                <div class="b-avatar">{{ ben.name.substring(0,2).toUpperCase() }}</div>
+                <span class="b-name">{{ ben.name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Phone Number</label>
+            <input 
+              type="tel" 
+              v-model="phone_number" 
+              @input="fetchNetwork()"
+              placeholder="0803 000 0000"
+              class="input-field"
+            >
+          </div>
+          
+          <div class="save-beneficiary-check">
+            <input type="checkbox" id="save-bene" @change="saveBeneficiary">
+            <label for="save-bene">Save as beneficiary</label>
+          </div>
+        </div>
+
+        <!-- Group Recipients (Group Purchase) -->
+        <div class="section-group" v-if="purchaseType === 'group'">
+          <h3 class="section-label">MULTI-NETWORK RECIPIENTS</h3>
+          <div class="recipient-list-scroll">
+            <div class="recipient-list">
+              <div class="recipient-header d-none d-md-grid">
+                <div>PHONE NUMBER</div>
+                <div>NETWORK</div>
+                <div>SELECT PLAN</div>
+                <div></div>
+              </div>
+              <div v-for="(rec, index) in groupRecipients" :key="index" class="recipient-row stacked-mobile">
+                <div class="mobile-label d-md-none">RECIPIENT {{ index + 1 }}</div>
+                <div class="input-wrapper">
+                  <span class="field-icon d-md-none">📱</span>
+                  <input 
+                    type="tel" 
+                    v-model="rec.phone" 
+                    class="table-input" 
+                    placeholder="Phone Number"
+                    @input="autoDetectNetworkForRow(index)"
+                  >
+                </div>
+                <div class="input-wrapper">
+                  <span class="field-icon d-md-none">🌐</span>
+                  <select v-model="rec.network_id" class="table-select" @change="fetchPlansForRow(index)">
+                    <option value="">Network</option>
+                    <option v-for="net in networks" :key="net.id" :value="net.id">{{ net.name }}</option>
+                  </select>
+                </div>
+                <div class="input-wrapper">
+                  <span class="field-icon d-md-none">📦</span>
+                  <select v-model="rec.plan_id" class="table-select" :disabled="!rec.network_id">
+                    <option value="">-- Select Plan --</option>
+                    <option v-for="plan in (cachedPlans[rec.network_id] || [])" :key="plan.id" :value="plan.id">
+                      {{ plan.plan_name }} (₦{{ numberFormat(plan.admin_price) }})
+                    </option>
+                  </select>
+                </div>
+                <div @click="removeRecipient(index)" class="remove-icon">
+                  <span class="d-md-none mr-2">Remove Recipient</span> ×
+                </div>
+              </div>
+            </div>
+          </div>
+          <button @click="addRecipient" class="add-row-btn">+ Add another recipient</button>
+        </div>
+      </div>
+
+      <!-- Summary Sidebar -->
+      <div class="summary-column">
+        <div class="summary-card">
+          <h3 class="section-label">Purchase Summary</h3>
+          
+          <div class="summary-row">
+            <span>Network</span>
+            <span class="summary-value">{{ getNetworkName(network) }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Plan</span>
+            <span class="summary-value">{{ getSelectedPlanName() }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Recipient</span>
+            <span class="summary-value">{{ phone_number || '---' }}</span>
+          </div>
+
+          <div class="total-section">
+            <span class="total-label">Total Pay</span>
+            <span class="total-amount">₦{{ numberFormat(calculateTotal()) }}</span>
+          </div>
+
+          <button 
+            class="btn-primary" 
+            :disabled="!isReady"
+            @click="buyData()"
+          >
+            Buy Now
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          
+         
+        </div>
+      </div>
     </div>
-    <!--end::Card-->
   </div>
 </template>
 
@@ -98,21 +187,114 @@ export default {
   props: ["user", "company", "beneficiaries"],
   data() {
     return {
+      purchaseType: 'single',
       phone_number: "",
       network: "",
       selectedPlan: "",
       plans: [],
+      cachedPlans: {},
       ben_name: "",
       transfer_status: false,
+      groupRecipients: [{ phone: '', network_id: '', plan_id: '' }],
+      networks: [
+        { id: "1", name: "MTN" },
+        { id: "2", name: "GLO" },
+        { id: "3", name: "Airtel" },
+        { id: "4", name: "9Mobile" }
+      ]
     };
   },
+  computed: {
+    isReady() {
+      if (this.purchaseType === 'single') {
+        return this.network && this.selectedPlan && this.phone_number.length >= 10;
+      }
+      return this.groupRecipients.length > 0 && 
+             this.groupRecipients.every(r => r.phone.length >= 10 && r.network_id && r.plan_id);
+    }
+  },
   methods: {
+    selectNetwork(id) {
+      this.network = id;
+      this.fetchPlan();
+    },
+    autoDetectNetworkForRow(index) {
+      const rec = this.groupRecipients[index];
+      if (rec.phone.length >= 10 && rec.phone.length <= 12) {
+        axios.get("/fetchnetwork/" + rec.phone)
+          .then((response) => {
+            if (response.data !== 0) {
+              rec.network_id = response.data.toString();
+              this.fetchPlansForRow(index);
+            }
+          });
+      }
+    },
+    fetchPlansForRow(index) {
+      const netId = this.groupRecipients[index].network_id;
+      if (netId && !this.cachedPlans[netId]) {
+        axios.get("/fetchplan/" + netId)
+          .then((response) => {
+            if (response.data !== false) {
+              this.$set(this.cachedPlans, netId, response.data);
+            }
+          });
+      }
+    },
+    useBeneficiary(ben) {
+      this.phone_number = ben.phone;
+      this.fetchNetwork();
+    },
+    getNetworkName(id) {
+      const net = this.networks.find(n => n.id == id);
+      return net ? net.name : '---';
+    },
+    getPlanName(id, netId = null) {
+      if (!id) return '';
+      const plans = netId ? (this.cachedPlans[netId] || []) : this.plans;
+      const plan = plans.find(p => p.id == id);
+      return plan ? plan.plan_name : '';
+    },
+    getSelectedPlanName() {
+      if (this.purchaseType === 'single') {
+        const plan = this.plans.find(p => p.id == this.selectedPlan);
+        return plan ? plan.plan_name : '---';
+      }
+      const selectedCount = this.groupRecipients.filter(r => r.plan_id).length;
+      return `${selectedCount} Item(s) in Group`;
+    },
+    calculateTotal() {
+      if (this.purchaseType === 'single') {
+        const plan = this.plans.find(p => p.id == this.selectedPlan);
+        return plan ? Number(plan.admin_price) : 0;
+      } else {
+        return this.groupRecipients.reduce((total, r) => {
+          if (!r.network_id || !r.plan_id) return total;
+          const plans = this.cachedPlans[r.network_id] || [];
+          const plan = plans.find(p => p.id == r.plan_id);
+          return total + (plan ? Number(plan.admin_price) : 0);
+        }, 0);
+      }
+    },
+    numberFormat(val) {
+      return new Intl.NumberFormat().format(val || 0);
+    },
+    addRecipient() {
+      this.groupRecipients.push({ phone: '', network_id: '', plan_id: '' });
+    },
+    removeRecipient(index) {
+      if (this.groupRecipients.length > 1) {
+        this.groupRecipients.splice(index, 1);
+      } else {
+        this.groupRecipients[0].phone = '';
+        this.groupRecipients[0].network_id = '';
+        this.groupRecipients[0].plan_id = '';
+      }
+    },
     fetchNetwork() {
       if (this.phone_number.length >= 10 && this.phone_number.length <= 12) {
-        axios
-          .get("/fetchnetwork/" + this.phone_number)
+        axios.get("/fetchnetwork/" + this.phone_number)
           .then((response) => {
-            console.log(response);
             if (response.data !== 0) {
               this.network = response.data;
               this.fetchPlan();
@@ -121,735 +303,559 @@ export default {
           })
           .catch((error) => {
             this.transfer_status = false;
-            console.log(error.message);
           });
       } else {
-        (this.selectedPlan = null), (this.plans = []);
+        this.selectedPlan = null;
+        this.plans = [];
         this.network = null;
         this.transfer_status = false;
-        // this.network = "";
       }
     },
     fetchPlan() {
-      if (this.phone_number.length >= 10) {
-        console.log(this.network, "this one");
-        axios
-          .get("/fetchplan/" + this.network)
+      if (this.network) {
+        axios.get("/fetchplan/" + this.network)
           .then((response) => {
-            console.log(response);
             if (response.data !== false) {
-              this.selectedPlan = response.data[0].plan_id;
               this.plans = response.data;
+              if (!this.selectedPlan) this.selectedPlan = response.data[0].id;
               this.transfer_status = true;
             }
           })
           .catch((error) => {
             this.transfer_status = false;
-            console.log(error.message);
           });
-      } else {
-        // this.transfer_status = false;
-        // this.network = "";
       }
     },
-    scheduleBuy() {
+    buyData() {
+      if (!this.isReady) return;
+      
+      const totalAmount = this.calculateTotal();
+      const planName = this.getSelectedPlanName();
+      const recipientsCount = this.purchaseType === 'single' ? 1 : this.groupRecipients.length;
+      
       Swal.fire({
-        title: "Select To Schedule Purchase",
-        html:
-          "<input id='sweet_alert_date' class='form-control form-input' min='" +
-          new Date().toISOString().split("T")[0] +
-          "' type='date'/><br><input id='sweet_alert_time' class='form-control form-input' type='time' />",
-        showCancelButton: true,
-        preConfirm: () => {
-          // Get the selected date from the date picker
-          const selectedDate =
-            document.getElementById("sweet_alert_date").value;
-          const selectedTime =
-            document.getElementById("sweet_alert_time").value;
-          this.buyData(
-            selectedDate,
-            selectedTime,
-            "Scheduling your purchase, please wait"
-          );
-          // Do something with the selected date
-          console.log("Selected Date:", selectedDate, selectedTime);
-        },
-      });
-    },
-    selectFromBeneficiary() {
-      const options = this.beneficiaries
-        .map((beneficiary) => {
-          return `<option value="${beneficiary.phone}">${beneficiary.name} (${beneficiary.phone})</option>`;
-        })
-        .join("");
-      Swal.fire({
-        title: "Choose Beneficiary",
-        html: `<select  class='form-control' required id='beneficiary_choice'><option>--Choose Beneficiary--</option>${options}</select>`,
-        showCancelButton: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.phone_number = $("#beneficiary_choice").val();
-          this.ben_name = $("#beneficiary_choice").find(":selected").text();
-          $("#save_ben").prop("checked", true);
-          $("#alr_saved").text(
-            "Already Saved, toggle to remove from beneficiary"
-          );
-          this.fetchNetwork();
-        }
-      });
-    },
-    saveBeneficiary(event) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
-
-      if (event.target.checked) {
-        if (this.transfer_status) {
-          Swal.fire({
-            title: "Name Of Beneficiary",
-            html: `<input class='form-control' type='text' placeholder='My Sweetheart 🥰❤️' required id='beneficiary_name'/>`,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.ben_name = $("#beneficiary_name").val();
-
-              let fd = new FormData();
-              fd.append("phone", this.phone_number);
-              fd.append("name", this.ben_name);
-              axios
-                .post("/saveBeneficiary", fd)
-                .then((response) => {
-                  console.log(response.data, "the data");
-                  $("#save_ben").prop("checked", true);
-                  $("#alr_saved").text(
-                    "Beneficiary Saved, toggle to save to beneficiary"
-                  );
-                  if (response.data.success == true) {
-                    Toast.fire({
-                      icon: "success",
-                      title: "Beneficiary Saved!",
-                    });
-                  } else {
-                    Toast.fire({
-                      icon: "info",
-                      title: "Beneficiary already exist",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  console.log(error.message);
-                  Swal.fire(error.message);
-                });
-            }
-          });
-        } else {
-          Toast.fire({
-            icon: "info",
-            title: "Invalid Phone Number",
-          });
-        }
-      } else {
-        Swal.fire({
-          title: "Remove Contact?",
-          text: `Are you sure you want to remove ${this.ben_name} from beneficiary`,
-          showCancelButton: true,
-          confirmButtonText: "Yes, I'm Sure",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $("#save_ben").prop("checked", false);
-            $("#alr_saved").text(
-              "Removed from beneficiary, toggle to save to beneficiary"
-            );
-            let fd = new FormData();
-            fd.append("phone", this.phone_number);
-            axios
-              .post("/removeBeneficiary", fd)
-              .then((response) => {
-                console.log(response.data, "the data");
-                if (response.data.success == true) {
-                  Toast.fire({
-                    icon: "success",
-                    title: "Beneficiary Removed!",
-                  });
-                } else {
-                  Toast.fire({
-                    icon: "info",
-                    title: "Beneficiary can't be removed",
-                  });
-                }
-              })
-              .catch((error) => {
-                console.log(error.message);
-                Swal.fire(error.message);
-              });
-          }
-        });
-      }
-    },
-    newbuyData(selectedDate = null, selectedTime = null, SwalContent = null) {
-      if (this.transfer_status) {
-        Swal.fire({
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Buy Data",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
-          }
-          const swalMessage =
-            SwalContent !== null
-              ? SwalContent
-              : "Purchasing data, please wait...";
-          Swal.fire({
-            title: swalMessage,
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          let fd = new FormData();
-          fd.append("phone_number", this.phone_number);
-          fd.append("network", this.network);
-          fd.append("plan", this.selectedPlan);
-          fd.append("pin", result.value);
-          if (selectedDate !== null) {
-            fd.append("selectedDate", selectedDate);
-            fd.append("selectedTime", selectedTime);
-          }
-          axios
-            .post("/buydata", fd)
-            .then((response) => {
-              console.log(response, "the res");
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Purchase successful!",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else if (response.data == "schedule_saved") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Data Purchase Scheduled For Later Successfully!",
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else {
-                if (response.data.type == 'duplicate') {
-                  Swal.fire({
-                    icon: "error",
-                    title: response.data.message,
-                    showCancelButton: true,
-                    cancelButtonColor: "#d33",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, Data Received!",
-                    cancelButtonText: "No, Data Not Received!",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                      actions: 'custom-actions-class' // add a custom class to actions for styling
-                    },
-                    showCloseButton: true, // show a close button to dismiss the modal
-                    showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
-                    preConfirm: () => {
-                      return new Promise((resolve) => {
-                        setTimeout(() => {
-                          resolve();
-                        }, 2000); // Add a delay (2 seconds) to simulate a process
-                      });
-                    },
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      axios
-                        .get("/user_delete_duplicate")
-                        .then((response) => {
-                          console.log(response);
-                          if (response.data == true) {
-                            Swal.fire({
-                              icon: "success",
-                              title: "Previous Transaction Verified! You can now proceed with the current transaction",
-                              showConfirmButton: true,
-                              confirmButtonColor: "#3085d6",
-                              confirmButtonText: "Ok"
-                            });
-                          }
-                        })
-                        .catch((error) => {
-
-                          console.log(error.message);
-                        });
-                      // This code block is executed when the "Confirm" button is clicked.
-
-                    } else {
-                      // This code block is executed when the "Deny" button is clicked.
-                      Swal.fire({
-                        title: "Please reach out to the admin to sort out this issue",
-                        showCloseButton: true,
-                        customClass: {
-                          actions: 'custom-actions-class' // add the same custom class for styling
-                        },
-                        showCancelButton: true,
-                        cancelButtonColor: "#3085d6",
-                        confirmButtonColor: "#25d366",
-                        confirmButtonText: "Chat with Admin",
-                        cancelButtonText: "Not Now"
-                      }).then((chatResult) => {
-                        if (chatResult.isConfirmed) {
-                          // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
-                          window.location.href = "https://wa.me/2349058744473";
-                        }
-                      });
-                    }
-                  });
-
-
-                }
-                else {
-                  Swal.fire({
-                    icon: "error",
-                    // title: response.data.message,
-                    title: response.data.message,
-                    // text: "Updating...",
-                    showConfirmButton: true, // updated
-                    confirmButtonColor: "#3085d6", // added
-                    confirmButtonText: "Ok", // added
-                    allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                    allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      // location.reload();
-                    }
-                  });
-
-                }
-
-              }
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
-            });
-        });
-      } else {
-        Swal.fire({
-          title: "Insufficient balance!,",
-          icon: "info",
-          html:
-            "Click " +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            "to fund your wallet.",
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-        });
-      }
-    },
-
-    buyData(selectedDate = null, selectedTime = null, SwalContent = null) {
-      if (this.transfer_status) {
-        Swal.fire({
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Buy Data",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
-          }
-          const swalMessage =
-            SwalContent !== null
-              ? SwalContent
-              : "Purchasing data, please wait...";
-          Swal.fire({
-            title: swalMessage,
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          let fd = new FormData();
-          fd.append("phone_number", this.phone_number);
-          fd.append("network", this.network);
-          fd.append("plan", this.selectedPlan);
-          fd.append("pin", result.value);
-          if (selectedDate !== null) {
-            fd.append("selectedDate", selectedDate);
-            fd.append("selectedTime", selectedTime);
-          }
-          axios
-            .post("/buydata", fd)
-            .then((response) => {
-              console.log(response, "the res");
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Purchase successful!",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else if (response.data == "schedule_saved") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Data Purchase Scheduled For Later Successfully!",
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else {
-                if (response.data.type == 'duplicate') {
-                  Swal.fire({
-                    icon: "error",
-                    title: response.data.message,
-                    showCancelButton: true,
-                    cancelButtonColor: "#d33",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, Data Received!",
-                    cancelButtonText: "No, Data Not Received!",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                      actions: 'custom-actions-class' // add a custom class to actions for styling
-                    },
-                    showCloseButton: true, // show a close button to dismiss the modal
-                    showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
-                    preConfirm: () => {
-                      return new Promise((resolve) => {
-                        setTimeout(() => {
-                          resolve();
-                        }, 2000); // Add a delay (2 seconds) to simulate a process
-                      });
-                    },
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      axios
-                        .get("/user_delete_duplicate")
-                        .then((response) => {
-                          console.log(response);
-                          if (response.data == true) {
-                            Swal.fire({
-                              icon: "success",
-                              title: "Previous Transaction Verified! You can now proceed with the current transaction",
-                              showConfirmButton: true,
-                              confirmButtonColor: "#3085d6",
-                              confirmButtonText: "Ok"
-                            });
-                          }
-                        })
-                        .catch((error) => {
-
-                          console.log(error.message);
-                        });
-                      // This code block is executed when the "Confirm" button is clicked.
-
-                    } else {
-                      // This code block is executed when the "Deny" button is clicked.
-                      Swal.fire({
-                        title: "Please reach out to the admin to sort out this issue",
-                        showCloseButton: true,
-                        customClass: {
-                          actions: 'custom-actions-class' // add the same custom class for styling
-                        },
-                        showCancelButton: true,
-                        cancelButtonColor: "#3085d6",
-                        confirmButtonColor: "#25d366",
-                        confirmButtonText: "Chat with Admin",
-                        cancelButtonText: "Not Now"
-                      }).then((chatResult) => {
-                        if (chatResult.isConfirmed) {
-                          // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
-                          window.location.href = "https://wa.me/2349058744473";
-                        }
-                      });
-                    }
-                  });
-
-
-                }
-                else {
-                  Swal.fire({
-                    icon: "error",
-                    // title: response.data.message,
-                    title: response.data.message,
-                    // text: "Updating...",
-                    showConfirmButton: true, // updated
-                    confirmButtonColor: "#3085d6", // added
-                    confirmButtonText: "Ok", // added
-                    allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                    allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      // location.reload();
-                    }
-                  });
-
-                }
-
-              }
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
-            });
-        });
-      } else {
-        Swal.fire({
-          title: "Insufficient balance!,",
-          icon: "info",
-          html:
-            "Click " +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            "to fund your wallet.",
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-        });
-      }
-    },
-
-    oldbuyData(selectedDate = null, selectedTime = null, SwalContent = null) {
-      if (this.transfer_status) {
-        if (this.user.pin_status === 0) {
-          // If pin_status is 0, proceed directly without prompt
-          this.showProcessingAlert(SwalContent || "Purchasing data, please wait...");
-          const formData = this.buildFormData(null, selectedDate, selectedTime);
-          axios.post("/buydata", formData)
-            .then((response) => this.handlePurchaseResponse(response))
-            .catch((error) => Swal.fire(error.message));
-        } else {
-          // Otherwise, prompt for PIN
-          this.promptUserPin()
-            .then(result => {
-              if (result.isConfirmed) {
-                this.showProcessingAlert(SwalContent || "Purchasing data, please wait...");
-                const formData = this.buildFormData(result.value, selectedDate, selectedTime);
-                return axios.post("/buydata", formData);
-              }
-            })
-            .then((response) => {
-              if (response) this.handlePurchaseResponse(response);
-            })
-            .catch((error) => Swal.fire(error.message));
-        }
-      } else {
-        Swal.fire({
-          title: "Insufficient balance!",
-          icon: "info",
-          html: 'Click <a href="https://vtubiz.com/fundwallet">here</a> to fund your wallet.',
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-        });
-      }
-    },
-
-    // Separate function for prompting the user for PIN
-    promptUserPin() {
-      return Swal.fire({
-        title: "Input your four(4) digit pin to proceed",
+        title: "Confirm Purchase",
+        text: this.purchaseType === 'single' 
+          ? `You are about to buy ${planName} for ${this.phone_number}. Total: ₦${this.numberFormat(totalAmount)}. Enter PIN to proceed.`
+          : `You are about to buy ${this.getSelectedPlanName()} for ${recipientsCount} recipients. Total: ₦${this.numberFormat(totalAmount)}. Enter PIN to proceed.`,
         icon: "warning",
         input: "password",
         inputAttributes: {
           inputmode: "numeric",
           maxlength: 4,
-          autocomplete: "new-password",
-          name: "my-pin",
-          autocapitalize: "off",
-          pattern: "[0-9]*",
           style: "text-align:center;font-size:24px;letter-spacing: 20px",
         },
         showCancelButton: true,
-        confirmButtonColor: "#ebab21",
-        cancelButtonColor: "grey",
-        confirmButtonText: "Buy Data",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
+        confirmButtonColor: "#0F3548",
+        confirmButtonText: "Buy Now",
         inputValidator: (text) => {
-          if (!/^\d{4}$/.test(text)) {
-            return "Please enter a four-digit PIN";
+          if (!/^\d{4}$/.test(text)) return "Please enter a 4-digit PIN";
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({ title: "Processing...", didOpen: () => { Swal.showLoading(); } });
+          
+          let fd = new FormData();
+          
+          if (this.purchaseType === 'single') {
+            const actualPlan = this.plans.find(p => p.id == this.selectedPlan);
+            fd.append("network", this.network);
+            fd.append("plan", actualPlan ? actualPlan.plan_id : this.selectedPlan);
+            fd.append("phone_number", this.phone_number);
+          } else {
+            const recipientsWithDetails = this.groupRecipients.map(r => {
+              const plans = this.cachedPlans[r.network_id] || [];
+              const actualPlan = plans.find(p => p.id == r.plan_id);
+              return {
+                phone: r.phone,
+                network: r.network_id,
+                plan: actualPlan ? actualPlan.plan_id : r.plan_id
+              };
+            });
+            fd.append("recipients", JSON.stringify(recipientsWithDetails));
           }
-        },
+          
+          fd.append("pin", result.value);
+          fd.append("purchase_type", this.purchaseType);
+
+          const endpoint = this.purchaseType === 'single' ? "/buydata" : "/bulk_buydata";
+
+          axios.post(endpoint, fd).then((response) => {
+            if (response.data.success == "true" || response.data.status == "success") {
+              Swal.fire("Success", response.data.message || "Purchase successful!", "success").then(() => location.reload());
+            } else {
+              Swal.fire("Error", response.data.message, "error");
+            }
+          }).catch(err => Swal.fire("Error", err.message, "error"));
+        }
       });
     },
-
-    // Separate function to handle the processing alert
-    showProcessingAlert(message) {
-      Swal.fire({
-        title: message,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-    },
-
-    // Separate function to build form data
-    buildFormData(pin, selectedDate, selectedTime) {
-      let fd = new FormData();
-      fd.append("phone_number", this.phone_number);
-      fd.append("network", this.network);
-      fd.append("plan", this.selectedPlan);
-      fd.append("pin", pin || ""); // Use empty string if no pin required
-      if (selectedDate) fd.append("selectedDate", selectedDate);
-      if (selectedTime) fd.append("selectedTime", selectedTime);
-      return fd;
-    },
-
-    // Separate function to handle purchase response
-    handlePurchaseResponse(response) {
-      if (response.data.success === "true") {
+    saveBeneficiary(event) {
+      if (event.target.checked && this.phone_number.length >= 10) {
         Swal.fire({
-          icon: "success",
-          title: "Purchase successful!",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Ok",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-        }).then(() => location.reload());
-      } else if (response.data === "schedule_saved") {
-        Swal.fire({
-          icon: "success",
-          title: "Data Purchase Scheduled For Later Successfully!",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Ok",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-        }).then(() => location.reload());
-      } else if (response.data.type === "duplicate") {
-        // Handle duplicate response as necessary
-        // (you could add here your duplicate handling logic)
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: response.data.message,
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Ok",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: "Beneficiary Name",
+          input: "text",
+          inputPlaceholder: "e.g. My Main Sim",
+          showCancelButton: true,
+        }).then(result => {
+          if (result.isConfirmed && result.value) {
+            let fd = new FormData();
+            fd.append("phone", this.phone_number);
+            fd.append("name", result.value);
+            axios.post("/saveBeneficiary", fd).then(res => {
+              if (res.data.success) Swal.fire("Saved!", "", "success");
+            });
+          }
         });
       }
     }
-
-  },
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.purchase-page {
+  --c-text-main: #0F172A;
+  --c-text-sec: #64748B;
+  --c-border: #E2E8F0;
+  --c-orange: #E85D04; 
+  --c-orange-light: #FFF1EB;
+  --c-green: #00BFA5; 
+  --c-green-light: #E0F2F1;
+  --c-yellow: #F7DC6F; 
+  --c-yellow-light: #FEF9E7;
+  --c-purple: #7D79D0; 
+  --c-purple-light: #EEEDF9;
+  --r-pill: 999px;
+  --r-card: 24px;
+  --r-input: 16px;
+  
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--c-text-main);
+}
+
+.tabs-container {
+  background: white;
+  padding: 6px;
+  border-radius: var(--r-pill);
+  display: inline-flex;
+  border: 1px solid var(--c-border);
+  margin-bottom: 32px;
+}
+
+.tab {
+  padding: 10px 24px;
+  border-radius: var(--r-pill);
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--c-text-sec);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: var(--c-text-main);
+  color: white;
+}
+
+.tab.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.coming-soon {
+  background: rgba(251, 145, 41, 0.1);
+  color: #fb9129;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+  margin-left: 8px;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 30px;
+  align-items: start;
+}
+
+.form-section {
+  min-width: 0; /* Allow the form section to shrink correctly if needed */
+}
+
+.summary-column {
+  width: 380px;
+}
+
+.section-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-text-sec);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.network-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+}
+
+.network-card {
+  background: white;
+  border: 2px solid var(--c-border);
+  border-radius: 20px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 110px;
+}
+
+.network-card:hover { border-color: #CBD5E1; transform: translateY(-2px); }
+.network-card.mtn.active { border-color: var(--c-yellow); background: var(--c-yellow-light); }
+.network-card.glo.active { border-color: var(--c-green); background: var(--c-green-light); }
+.network-card.airtel.active { border-color: var(--c-orange); background: var(--c-orange-light); }
+.network-card.9mobile.active { border-color: var(--c-purple); background: var(--c-purple-light); }
+
+.network-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+  color: white;
+
+}
+
+.network-card.mtn .network-icon { background: var(--c-yellow); color: #856404; }
+.network-card.glo .network-icon { background: var(--c-green); }
+.network-card.airtel .network-icon { background: var(--c-orange); }
+.network-card.9mobile .network-icon { background: black; }
+
+.network-name { font-weight: 700; font-size: 14px; }
+
+.plan-grid-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.plan-card {
+  background: white;
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.plan-card:hover { border-color: var(--c-orange); }
+.plan-card.active { border: 2px solid var(--c-orange); background: var(--c-orange-light); }
+
+.plan-data { font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block; }
+.plan-price { font-size: 13px; color: var(--c-text-sec); font-weight: 500; }
+.plan-validity {
+  font-size: 11px;
+  background: #F1F5F9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--c-text-sec);
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.input-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--c-text-main); }
+
+.beneficiary-section { margin-bottom: 20px; }
+.beneficiary-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.beneficiary-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 8px;
+  background: white;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.beneficiary-pill:hover { border-color: #5DADE2; transform: translateY(-1px); }
+.b-avatar {
+  width: 28px;
+  height: 28px;
+  background: #F1F5F9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-text-sec);
+}
+.b-name { font-size: 13px; font-weight: 600; }
+
+.input-field {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-input);
+  background: white;
+  transition: border-color 0.2s;
+  font-weight: 500;
+  color: var(--c-text-main);
+}
+.input-field:focus { outline: none; border-color: var(--c-orange); }
+
+.save-beneficiary-check {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.save-beneficiary-check input { accent-color: var(--c-orange); width: 16px; height: 16px; }
+.save-beneficiary-check label { font-size: 14px; font-weight: 500; color: var(--c-text-sec); cursor: pointer; }
+
+.recipient-list-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--c-border);
+  border-radius: 20px;
+  background: white;
+}
+
+.recipient-list { overflow: hidden; }
+.recipient-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 40px;
+  gap: 16px;
+  padding: 12px 24px;
+  background: #F8FAFC;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-text-sec);
+}
+
+.recipient-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 40px;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--c-border);
+  align-items: center;
+}
+.recipient-row:last-child { border-bottom: none; }
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mobile-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-orange);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.field-icon {
+  font-size: 14px;
+  width: 24px;
+  text-align: center;
+}
+
+.table-input { border:none; background:transparent; font-weight:600; font-size:14px; width:100%; outline: none; }
+.table-select {
+  border: 1px solid var(--c-border);
+  background: #F8FAFC;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-main);
+  outline: none;
+  width: 100%;
+}
+.table-select:focus { border-color: var(--c-orange); background: white; }
+.accent-text { font-size:14px; font-weight:600; color:var(--c-orange); }
+.remove-icon { color: #EF4444; cursor: pointer; text-align: center; font-size: 20px; font-weight: 800; display: flex; align-items: center; justify-content: flex-end; }
+
+@media (max-width: 768px) {
+  .recipient-header { display: none !important; }
+  .recipient-row.stacked-mobile {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 20px;
+    background: #fcfcfd;
+    margin-bottom: 10px;
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+  }
+  .table-select, .table-input {
+    background: white;
+    border: 1px solid var(--c-border);
+    padding: 12px;
+    border-radius: 10px;
+  }
+  .remove-icon {
+    justify-content: center;
+    padding-top: 10px;
+    border-top: 1px dashed var(--c-border);
+    font-size: 14px;
+    margin-top: 5px;
+  }
+}
+
+.add-row-btn {
+  background: none;
+  border: 1px dashed var(--c-border);
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--r-pill);
+  color: var(--c-text-sec);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s;
+}
+.add-row-btn:hover { border-color: var(--c-green); color: var(--c-green); }
+
+#app .summary-card {
+  background: #001f3f !important;
+  color: #fff !important;
+  padding: 32px;
+  border-radius: 32px;
+  position: sticky;
+  top: 40px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--c-text-sec);
+}
+.summary-value { font-weight: 700; color: #fff; }
+
+.total-section {
+  background: rgba(251, 145, 41, 0.1);
+  padding: 24px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.total-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fb9129;
+}
+
+.total-amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fb9129;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 18px;
+  background-color: var(--c-orange) !important;
+  color: white;
+  border: none;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover:not(:disabled) { background-color: #D35400; transform: scale(1.02); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.secure-text { text-align: center; margin-top: 16px; font-size: 12px; color: var(--c-text-sec); }
+
+@media (max-width: 1024px) {
+  .grid-layout { 
+    grid-template-columns: 1fr; 
+  }
+  .summary-column {
+    width: 100%;
+    order: 1; /* Show summary at bottom on mobile */
+  }
+  .summary-card {
+    position: relative;
+    top: 0;
+    margin-bottom: 30px;
+  }
+  .network-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .plan-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .tabs-container {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .tab {
+    flex: 1;
+    white-space: nowrap;
+    padding: 10px 15px;
+  }
+  .network-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .purchase-page {
+    padding: 0;
+  }
+  .summary-card, .form-section {
+    padding: 15px;
+  }
+}
+</style>

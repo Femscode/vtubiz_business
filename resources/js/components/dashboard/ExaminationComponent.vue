@@ -1,319 +1,451 @@
 <template>
-  <div class="col-md-12">
-    <!--begin::Card-->
-    <div class="card card-custom">
-      <!--begin::Header-->
-
-      <!--end::Header-->
-      <!--begin::Form-->
-      <form class="form" @submit.prevent="buyExamination()">
-        <div class="card-body">
-          <!--begin::Heading-->
-
-          <div class="row">
-            <label class="col-md-3"></label>
-            <div class="col">
-              <h4 class="font-weight-bold">
-                <b>Examination Result Checker</b>
-              </h4>
+  <div class="purchase-page">
+    <div class="grid-layout">
+      <!-- Main Content Section -->
+      <div class="form-section">
+        <div class="card main-card border-0 shadow-sm">
+          <div class="card-header bg-transparent border-0 pt-8 px-10">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="font-weight-bolder text-dark mb-0">Exam Result Checker</h2>
+              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6">
+                <i class="ki ki-long-arrow-back icon-sm"></i> Back
+              </a>
             </div>
-            <div class="col text-end">
-              <a
-                onclick="window.history.back()"
-                class="btn-sm btn btn-secondary"
-                >Back</a
-              >
-            </div>
+            <p class="text-muted mt-2 font-weight-bold">Get WAEC, NECO, JAMB, and NABTEB pins instantly</p>
           </div>
-          <!--begin::Form Group-->
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Exam Type</h6>
-            <div class="col-md-6">
-              <select
-                id="examinations_type"
-                @change="getAmount()"
-                required
-                class="form-control"
-                v-model="exam_type"
-              >
-                <option>--Select Exam Type--</option>
-                <option
-                  v-for="examination in examinations"
-                  :data-amount="examination.real_amount"
-                  :key="examination.id"
-                  :value="examination.real_amount"
+
+          <div class="card-body px-10 pb-10">
+            <!-- Exam Type Selection -->
+            <div class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Exam Type</label>
+              <div class="exam-grid">
+                <div 
+                  v-for="exam in examinations" 
+                  :key="exam.id"
+                  :class="['exam-card', { active: selectedExamId === exam.id }]"
+                  @click="selectExam(exam)"
                 >
-                  {{ examination.exam_type }}
-                </option>
-              </select>
+                  <div class="exam-icon-wrapper">
+                    <div class="brand-initials">{{ exam.exam_type.charAt(0) }}</div>
+                  </div>
+                  <div class="exam-details">
+                    <span class="exam-name">{{ exam.exam_type }}</span>
+                    <span class="exam-price text-primary">₦{{ exam.real_amount }}</span>
+                  </div>
+                  <div class="active-badge" v-if="selectedExamId === exam.id">
+                    <i class="fa fa-check"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">No. Of Pins</h6>
-            <div class="col-md-6">
-              <select @change="changeNoPin"
-                class="form-control"
-                type="number"
-                v-model="no_of_pins"
+            <!-- Number of Pins Selection -->
+            <div class="mb-10" v-if="selectedExamId">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Quantity (No. of Pins)</label>
+              <div class="quantity-selector d-flex align-items-center bg-light rounded p-2" style="max-width: 200px">
+                <button type="button" @click="decrementPins" class="btn btn-icon btn-white btn-sm shadow-sm rounded-circle">
+                  <i class="fa fa-minus text-primary"></i>
+                </button>
+                <div class="flex-grow-1 text-center font-weight-bolder font-size-h4 px-4">
+                  {{ no_of_pins }}
+                </div>
+                <button type="button" @click="incrementPins" class="btn btn-icon btn-white btn-sm shadow-sm rounded-circle">
+                  <i class="fa fa-plus text-primary"></i>
+                </button>
+              </div>
+              <span class="form-text text-muted mt-3">Maximum of 10 pins per transaction</span>
+            </div>
+
+            <!-- Purchased Token Display -->
+            <div v-if="showpurchased_code" class="alert alert-custom alert-light-primary fade show mb-10 py-8 px-10 border-dashed border-primary" role="alert">
+              <div class="alert-text">
+                <div class="text-center mb-6">
+                  <div class="text-dark-75 font-weight-bolder font-size-h4 mb-2">Pin(s) Generated Successfully</div>
+                  <div class="text-muted font-weight-bold">Copy and use for your result checking</div>
+                </div>
+                <div class="bg-white rounded-xl p-6 border text-primary font-weight-bolder font-size-lg text-center mb-6 overflow-auto shadow-sm" style="max-height: 250px">
+                  <div v-for="(pin, index) in pinsList" :key="index" class="pin-item py-3 border-bottom border-light">
+                    {{ pin }}
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button @click="copyAllPins" class="btn btn-primary font-weight-bolder px-10 py-3 shadow-sm">
+                    <i class="flaticon2-copy"></i> Copy All Pins
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Buy Button -->
+            <div class="mt-12">
+              <button 
+                @click="buyExamination"
+                type="button" 
+                class="btn btn-success btn-lg w-100 font-weight-bolder text-uppercase py-5 shadow-sm btn-hover-scale"
+                :disabled="!selectedExamId || !amount"
               >
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-              <option value='5'>5</option>
-              <option value='6'>6</option>
-              <option value='7'>7</option>
-              <option value='8'>8</option>
-              <option value='9'>9</option>
-              <option value='10'>10</option>
-              </select>
+                Buy Result Checker
+              </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Amount</h6>
-            <div class="col-md-6">
-              <input readonly disabled
-                class="form-control"
-                type="number"
-                min="1000"
-                v-model="amount"
-              />
-            </div>
-          </div>
-          <div v-if="show_details" class="form-group row m-2">
-            <h6 class="col-md-3">Pin Details</h6>
-            <div class="col-md-6">
-              <div class="flex align-items-center bg-light-info rounded p-5">
-                <!--begin::Icon-->
-                <span class="svg-icon svg-icon-info mr-5">
-                  <span class="svg-icon svg-icon-lg">
-                    <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/icons/General/Attachment2.svg-->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      version="1.1"
-                    >
-                      <g
-                        stroke="none"
-                        stroke-width="1"
-                        fill="none"
-                        fill-rule="evenodd"
-                      >
-                        <rect x="0" y="0" width="24" height="24"></rect>
-                        <path
-                          d="M11.7573593,15.2426407 L8.75735931,15.2426407 C8.20507456,15.2426407 7.75735931,15.6903559 7.75735931,16.2426407 C7.75735931,16.7949254 8.20507456,17.2426407 8.75735931,17.2426407 L11.7573593,17.2426407 L11.7573593,18.2426407 C11.7573593,19.3472102 10.8619288,20.2426407 9.75735931,20.2426407 L5.75735931,20.2426407 C4.65278981,20.2426407 3.75735931,19.3472102 3.75735931,18.2426407 L3.75735931,14.2426407 C3.75735931,13.1380712 4.65278981,12.2426407 5.75735931,12.2426407 L9.75735931,12.2426407 C10.8619288,12.2426407 11.7573593,13.1380712 11.7573593,14.2426407 L11.7573593,15.2426407 Z"
-                          fill="#000000"
-                          opacity="0.3"
-                          transform="translate(7.757359, 16.242641) rotate(-45.000000) translate(-7.757359, -16.242641)"
-                        ></path>
-                        <path
-                          d="M12.2426407,8.75735931 L15.2426407,8.75735931 C15.7949254,8.75735931 16.2426407,8.30964406 16.2426407,7.75735931 C16.2426407,7.20507456 15.7949254,6.75735931 15.2426407,6.75735931 L12.2426407,6.75735931 L12.2426407,5.75735931 C12.2426407,4.65278981 13.1380712,3.75735931 14.2426407,3.75735931 L18.2426407,3.75735931 C19.3472102,3.75735931 20.2426407,4.65278981 20.2426407,5.75735931 L20.2426407,9.75735931 C20.2426407,10.8619288 19.3472102,11.7573593 18.2426407,11.7573593 L14.2426407,11.7573593 C13.1380712,11.7573593 12.2426407,10.8619288 12.2426407,9.75735931 L12.2426407,8.75735931 Z"
-                          fill="#000000"
-                          transform="translate(16.242641, 7.757359) rotate(-45.000000) translate(-16.242641, -7.757359)"
-                        ></path>
-                        <path
-                          d="M5.89339828,3.42893219 C6.44568303,3.42893219 6.89339828,3.87664744 6.89339828,4.42893219 L6.89339828,6.42893219 C6.89339828,6.98121694 6.44568303,7.42893219 5.89339828,7.42893219 C5.34111353,7.42893219 4.89339828,6.98121694 4.89339828,6.42893219 L4.89339828,4.42893219 C4.89339828,3.87664744 5.34111353,3.42893219 5.89339828,3.42893219 Z M11.4289322,5.13603897 C11.8194565,5.52656326 11.8194565,6.15972824 11.4289322,6.55025253 L10.0147186,7.96446609 C9.62419433,8.35499039 8.99102936,8.35499039 8.60050506,7.96446609 C8.20998077,7.5739418 8.20998077,6.94077682 8.60050506,6.55025253 L10.0147186,5.13603897 C10.4052429,4.74551468 11.0384079,4.74551468 11.4289322,5.13603897 Z M0.600505063,5.13603897 C0.991029355,4.74551468 1.62419433,4.74551468 2.01471863,5.13603897 L3.42893219,6.55025253 C3.81945648,6.94077682 3.81945648,7.5739418 3.42893219,7.96446609 C3.0384079,8.35499039 2.40524292,8.35499039 2.01471863,7.96446609 L0.600505063,6.55025253 C0.209980772,6.15972824 0.209980772,5.52656326 0.600505063,5.13603897 Z"
-                          fill="#000000"
-                          opacity="0.3"
-                          transform="translate(6.014719, 5.843146) rotate(-45.000000) translate(-6.014719, -5.843146)"
-                        ></path>
-                        <path
-                          d="M17.9142136,15.4497475 C18.4664983,15.4497475 18.9142136,15.8974627 18.9142136,16.4497475 L18.9142136,18.4497475 C18.9142136,19.0020322 18.4664983,19.4497475 17.9142136,19.4497475 C17.3619288,19.4497475 16.9142136,19.0020322 16.9142136,18.4497475 L16.9142136,16.4497475 C16.9142136,15.8974627 17.3619288,15.4497475 17.9142136,15.4497475 Z M23.4497475,17.1568542 C23.8402718,17.5473785 23.8402718,18.1805435 23.4497475,18.5710678 L22.0355339,19.9852814 C21.6450096,20.3758057 21.0118446,20.3758057 20.6213203,19.9852814 C20.2307961,19.5947571 20.2307961,18.9615921 20.6213203,18.5710678 L22.0355339,17.1568542 C22.4260582,16.76633 23.0592232,16.76633 23.4497475,17.1568542 Z M12.6213203,17.1568542 C13.0118446,16.76633 13.6450096,16.76633 14.0355339,17.1568542 L15.4497475,18.5710678 C15.8402718,18.9615921 15.8402718,19.5947571 15.4497475,19.9852814 C15.0592232,20.3758057 14.4260582,20.3758057 14.0355339,19.9852814 L12.6213203,18.5710678 C12.2307961,18.1805435 12.2307961,17.5473785 12.6213203,17.1568542 Z"
-                          fill="#000000"
-                          opacity="0.3"
-                          transform="translate(18.035534, 17.863961) scale(1, -1) rotate(45.000000) translate(-18.035534, -17.863961)"
-                        ></path>
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                </span>
-                <!--end::Icon-->
-                <!--begin::Title-->
+      <!-- Summary Sidebar Section -->
+      <div class="summary-section">
+        <div class="sticky-summary">
+          <div class="card summary-card border-0 shadow-lg mb-6">
+            <div class="card-body p-8">
+              <h3 class="font-weight-bolder mb-8 text-white opacity-95">Purchase Summary</h3>
               
+              <div class="summary-items">
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Exam</span>
+                  <span class="font-weight-bolder text-end text-white ps-4" style="flex: 1; word-break: break-word;">{{ selectedExamName || '---' }}</span>
+                </div>
+                
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Price Per Pin</span>
+                  <span class="font-weight-bolder text-white ps-4">₦{{ unitPrice }}</span>
+                </div>
+
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Quantity</span>
+                  <span class="font-weight-bolder text-white ps-4">{{ no_of_pins }} Pin(s)</span>
+                </div>
+              </div>
+
+              <div class="total-section mt-8">
+                <div class="d-flex justify-content-between align-items-end">
+                  <span class="text-white opacity-90 font-weight-bold">Total Amount</span>
+                  <h1 class="text-white font-weight-bolder mb-0" style="font-size: 2.2rem">₦{{ formattedTotal }}</h1>
+                </div>
               </div>
             </div>
           </div>
-         
-          
-          <div v-if="showpurchased_code" class="form-group row m-2">
-            <h6 class="col-md-3">Token</h6>
-            <div class="col-md-6">
-              {{ purchased_code }}
+
+          <!-- Helpful Info Card -->
+          <div class="card border-0 shadow-sm bg-light-info border-left border-3 border-info">
+            <div class="card-body p-8">
+              <div class="d-flex align-items-center mb-4 text-info">
+                <i class="flaticon-questions-wheel icon-lg text-info mr-3"></i>
+                <h5 class="mb-0 font-weight-bolder">How to check?</h5>
+              </div>
+              <p class="text-dark-50 font-weight-bold font-size-sm mb-0 line-height-lg">
+                After purchase, copy the pin and visit the official examination portal to check your results.
+              </p>
             </div>
           </div>
-          <div class="form-group row m-2">
-            <div class="col-md-3"></div>
-           
-            <button type="submit" class="btn btn-success col-md-6">
-              Buy Token
-            </button>
-          </div>
         </div>
-      </form>
-      <!--end::Form-->
+      </div>
     </div>
-    <!--end::Card-->
   </div>
 </template>
-    
-    <script>
+
+<script>
 export default {
-  props: ["user", "examinations",'company'],
+  props: ["user", "examinations", "company"],
   data() {
     return {
-      exam_type: "",
+      selectedExamId: null,
+      selectedExamName: "",
+      unitPrice: 0,
       no_of_pins: 1,
-      transfer_status: false,
-      confirmed: false,
-      show_details: false,
-      amount: "",
+      amount: 0,
       purchased_code: "",
       showpurchased_code: false,
     };
   },
+  computed: {
+    formattedTotal() {
+      return this.amount ? parseFloat(this.amount).toLocaleString() : "0.00";
+    },
+    pinsList() {
+      if (!this.purchased_code) return [];
+      return this.purchased_code.split(',').map(p => p.trim());
+    }
+  },
   methods: {
-    getAmount() {
-    
-        this.amount = $("#examinations_type").val();
-        this.no_of_pins = 1
-    
+    getExamLogo(type) {
+      const exam = type.toLowerCase();
+      if (exam.includes('waec')) return '/assets/media/logos/waec.png';
+      if (exam.includes('neco')) return '/assets/media/logos/neco.png';
+      if (exam.includes('jamb')) return '/assets/media/logos/jamb.png';
+      if (exam.includes('nabteb')) return '/assets/media/logos/nabteb.png';
+      return '/assets/media/logos/exam-default.png';
     },
-    changeNoPin() {
-        this.amount = $("#examinations_type").val() * this.no_of_pins
-    
-      
-    
+    selectExam(exam) {
+      this.selectedExamId = exam.id;
+      this.selectedExamName = exam.exam_type;
+      this.unitPrice = exam.real_amount;
+      this.updateTotal();
     },
-
-    buyExamination() {
-      if (this.amount.length >= 3) {
-        Swal.fire({
-         
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Proceed",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
-          }
-          Swal.fire({
-            title: "Purchasing examination token, please wait...",
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          let fd = new FormData();
-          fd.append("exam_type", $("#examinations_type").find(":selected").text());
-          fd.append("no_of_pins", this.no_of_pins);
-          fd.append("amount", this.amount);
-          fd.append("pin", result.value);
-          axios
-            .post("/buyExamination", fd)
-            .then((response) => {
-              console.log(response);
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Token Purchase successful!",
-                  text: response.data.pin,
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    // location.reload();
-                    this.showpurchased_code = true;
-                    this.purchased_code = response.data.pin;
-                  }
-                });
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: response.data.message,
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    // location.reload();
-                  }
-                });
-              }
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
-            });
-        });
-      } else {
-        Swal.fire({
-          title: "Insufficient balance!,",
-          icon: "info",
-          html:
-            "Click " +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            "to fund your wallet.",
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-        });
+    incrementPins() {
+      if (this.no_of_pins < 10) {
+        this.no_of_pins++;
+        this.updateTotal();
       }
     },
-  },
+    decrementPins() {
+      if (this.no_of_pins > 1) {
+        this.no_of_pins--;
+        this.updateTotal();
+      }
+    },
+    updateTotal() {
+      this.amount = this.unitPrice * this.no_of_pins;
+    },
+    buyExamination() {
+      if (!this.amount) return;
+      
+      Swal.fire({
+        title: "Enter Transaction PIN",
+        text: `You are paying ₦${this.formattedTotal} for ${this.no_of_pins} ${this.selectedExamName} pin(s)`,
+        input: "password",
+        inputAttributes: {
+          inputmode: "numeric",
+          maxlength: 4,
+          style: "text-align:center;font-size:24px;letter-spacing: 15px",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Pay Now",
+        showLoaderOnConfirm: true,
+        preConfirm: (pin) => {
+          if (!/^\d{4}$/.test(pin)) {
+            Swal.showValidationMessage("Please enter a 4-digit PIN");
+            return false;
+          }
+          let fd = new FormData();
+          fd.append("exam_type", this.selectedExamName);
+          fd.append("no_of_pins", this.no_of_pins);
+          fd.append("amount", this.amount);
+          fd.append("pin", pin);
+          
+          return axios.post("/buyExamination", fd)
+            .then(response => {
+              if (response.data.success !== "true") {
+                throw new Error(response.data.message || "Transaction failed");
+              }
+              return response.data;
+            })
+            .catch(error => {
+              Swal.showValidationMessage(`Request failed: ${error}`);
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.showpurchased_code = true;
+          this.purchased_code = result.value.pin;
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Pins generated successfully",
+          });
+        }
+      });
+    },
+    copyAllPins() {
+      navigator.clipboard.writeText(this.purchased_code).then(() => {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'All pins copied!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      });
+    }
+  }
 };
 </script>
+
+<style scoped>
+.purchase-page {
+  padding: 0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (min-width: 1400px) {
+  .grid-layout {
+    grid-template-columns: minmax(0, 1fr) 450px;
+    gap: 40px;
+  }
+}
+
+.main-card {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+#app .summary-card {
+  background: #001f3f !important;
+  color: white !important;
+  border-radius: 24px;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: 20px;
+}
+
+.exam-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+  width: 100%;
+}
+
+.exam-card {
+  padding: 20px;
+  border: 1px solid #ebedf3;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  background: #fcfcfd;
+  display: flex;
+  align-items: center;
+}
+
+.exam-card:hover {
+  border-color: #fb9129;
+  background: white;
+  transform: translateY(-2px);
+}
+
+.exam-card.active {
+  border-color: #fb9129;
+  background-color: rgba(251, 145, 41, 0.05);
+  box-shadow: 0 4px 12px rgba(251, 145, 41, 0.08);
+}
+
+.exam-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #001f3f;
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.brand-initials {
+  color: #fb9129;
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: 'Fraunces', serif;
+}
+
+.exam-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.exam-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #3f4254;
+}
+
+.exam-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fb9129 !important;
+}
+
+.active-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #fb9129;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  box-shadow: 0 4px 8px rgba(251, 145, 41, 0.3);
+}
+
+.quantity-selector button {
+  transition: all 0.2s ease;
+}
+
+.quantity-selector button:hover {
+  background-color: #fb9129 !important;
+  color: white !important;
+}
+
+.quantity-selector button:hover i {
+  color: white !important;
+}
+
+.btn-hover-scale {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover-scale:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.pin-item {
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 2px;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.pin-item:last-child {
+  border-bottom: none !important;
+}
+
+@media (max-width: 1200px) {
+  .grid-layout {
+    grid-template-columns: 1fr 350px;
+  }
+}
+
+@media (max-width: 991px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .summary-section {
+    order: 2;
+  }
+  .form-section {
+    order: 1;
+  }
+  .sticky-summary {
+    position: static;
+  }
+  .card-body {
+    padding: 1.5rem !important;
+  }
+}
+</style>
     
     <style>
 </style>

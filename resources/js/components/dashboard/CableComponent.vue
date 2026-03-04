@@ -1,159 +1,201 @@
 <template>
-  <div class="col-md-12">
-    <!--begin::Card-->
-    <div class="card card-custom">
-      <!--begin::Header-->
-
-      <!--end::Header-->
-      <!--begin::Form-->
-      <form class="form" @submit.prevent="buyCable()">
-        <div class="card-body">
-          <!--begin::Heading-->
-
-          <div class="row">
-            <label class="col-md-3"></label>
-            <div class="col">
-              <h4 class="font-weight-bold"><b>Cable Subscription</b></h4>
+  <div class="purchase-page">
+    <div class="grid-layout">
+      <!-- Main Content Section -->
+      <div class="form-section">
+        <div class="card main-card border-0 shadow-sm">
+          <div class="card-header bg-transparent border-0 pt-8 px-10">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="font-weight-bolder text-dark mb-0">Cable Subscription</h2>
+              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6">
+                <i class="ki ki-long-arrow-back icon-sm"></i> Back
+              </a>
             </div>
-            <div class="col text-end">
-              <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
-            </div>
-          </div>
-          <!--begin::Form Group-->
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Cable Type</h6>
-            <div class="col-md-6">
-              <select @change="changePlan" required v-model="cable_type" class="form-control">
-                <option value="">-- Select Cable Type --</option>
-                <option value="01">DSTV</option>
-                <option value="02">GOTV</option>
-                <option value="03">STARTIMES</option>
-              </select>
-            </div>
+            <p class="text-muted mt-2 font-weight-bold">Pay for your TV subscriptions instantly</p>
           </div>
 
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Decoder Number</h6>
-            <div class="col-md-6">
-              <input class="form-control" type="number" min="1000" v-model="decoder_number" />
-              <div class="col-md-12  text-end">
-                <a @click="selectFromBeneficiary()" class="btn btn-primary btn-sm">Select From Beneficiary</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group row m-2">
-            <h6 class="col-md-3"></h6>
-            <div class="col-md-6">
-              <div class="form-check form-switch form-sm">
-                <input class="form-check-input" type="checkbox" id="save_ben" @change="saveBeneficiary" />
-                <label id="alr_saved" class="form-check-label">Save as beneficiary</label>
-              </div>
-            </div>
-          </div>
-          <div v-if="show_decoder" class="form-group row m-2">
-            <h6 class="col-md-3">Decoder Details</h6>
-            <div class="col-md-6">
-              <div class="d-flex align-items-center bg-light-info rounded p-5">
-                <!--begin::Icon-->
-                <span class="svg-icon svg-icon-info mr-5">
-                  <span class="svg-icon svg-icon-lg">
-                    <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/icons/General/Attachment2.svg-->
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24"></rect>
-                        <path
-                          d="M11.7573593,15.2426407 L8.75735931,15.2426407 C8.20507456,15.2426407 7.75735931,15.6903559 7.75735931,16.2426407 C7.75735931,16.7949254 8.20507456,17.2426407 8.75735931,17.2426407 L11.7573593,17.2426407 L11.7573593,18.2426407 C11.7573593,19.3472102 10.8619288,20.2426407 9.75735931,20.2426407 L5.75735931,20.2426407 C4.65278981,20.2426407 3.75735931,19.3472102 3.75735931,18.2426407 L3.75735931,14.2426407 C3.75735931,13.1380712 4.65278981,12.2426407 5.75735931,12.2426407 L9.75735931,12.2426407 C10.8619288,12.2426407 11.7573593,13.1380712 11.7573593,14.2426407 L11.7573593,15.2426407 Z"
-                          fill="#000000" opacity="0.3"
-                          transform="translate(7.757359, 16.242641) rotate(-45.000000) translate(-7.757359, -16.242641)">
-                        </path>
-                        <path
-                          d="M12.2426407,8.75735931 L15.2426407,8.75735931 C15.7949254,8.75735931 16.2426407,8.30964406 16.2426407,7.75735931 C16.2426407,7.20507456 15.7949254,6.75735931 15.2426407,6.75735931 L12.2426407,6.75735931 L12.2426407,5.75735931 C12.2426407,4.65278981 13.1380712,3.75735931 14.2426407,3.75735931 L18.2426407,3.75735931 C19.3472102,3.75735931 20.2426407,4.65278981 20.2426407,5.75735931 L20.2426407,9.75735931 C20.2426407,10.8619288 19.3472102,11.7573593 18.2426407,11.7573593 L14.2426407,11.7573593 C13.1380712,11.7573593 12.2426407,10.8619288 12.2426407,9.75735931 L12.2426407,8.75735931 Z"
-                          fill="#000000"
-                          transform="translate(16.242641, 7.757359) rotate(-45.000000) translate(-16.242641, -7.757359)">
-                        </path>
-                        <path
-                          d="M5.89339828,3.42893219 C6.44568303,3.42893219 6.89339828,3.87664744 6.89339828,4.42893219 L6.89339828,6.42893219 C6.89339828,6.98121694 6.44568303,7.42893219 5.89339828,7.42893219 C5.34111353,7.42893219 4.89339828,6.98121694 4.89339828,6.42893219 L4.89339828,4.42893219 C4.89339828,3.87664744 5.34111353,3.42893219 5.89339828,3.42893219 Z M11.4289322,5.13603897 C11.8194565,5.52656326 11.8194565,6.15972824 11.4289322,6.55025253 L10.0147186,7.96446609 C9.62419433,8.35499039 8.99102936,8.35499039 8.60050506,7.96446609 C8.20998077,7.5739418 8.20998077,6.94077682 8.60050506,6.55025253 L10.0147186,5.13603897 C10.4052429,4.74551468 11.0384079,4.74551468 11.4289322,5.13603897 Z M0.600505063,5.13603897 C0.991029355,4.74551468 1.62419433,4.74551468 2.01471863,5.13603897 L3.42893219,6.55025253 C3.81945648,6.94077682 3.81945648,7.5739418 3.42893219,7.96446609 C3.0384079,8.35499039 2.40524292,8.35499039 2.01471863,7.96446609 L0.600505063,6.55025253 C0.209980772,6.15972824 0.209980772,5.52656326 0.600505063,5.13603897 Z"
-                          fill="#000000" opacity="0.3"
-                          transform="translate(6.014719, 5.843146) rotate(-45.000000) translate(-6.014719, -5.843146)">
-                        </path>
-                        <path
-                          d="M17.9142136,15.4497475 C18.4664983,15.4497475 18.9142136,15.8974627 18.9142136,16.4497475 L18.9142136,18.4497475 C18.9142136,19.0020322 18.4664983,19.4497475 17.9142136,19.4497475 C17.3619288,19.4497475 16.9142136,19.0020322 16.9142136,18.4497475 L16.9142136,16.4497475 C16.9142136,15.8974627 17.3619288,15.4497475 17.9142136,15.4497475 Z M23.4497475,17.1568542 C23.8402718,17.5473785 23.8402718,18.1805435 23.4497475,18.5710678 L22.0355339,19.9852814 C21.6450096,20.3758057 21.0118446,20.3758057 20.6213203,19.9852814 C20.2307961,19.5947571 20.2307961,18.9615921 20.6213203,18.5710678 L22.0355339,17.1568542 C22.4260582,16.76633 23.0592232,16.76633 23.4497475,17.1568542 Z M12.6213203,17.1568542 C13.0118446,16.76633 13.6450096,16.76633 14.0355339,17.1568542 L15.4497475,18.5710678 C15.8402718,18.9615921 15.8402718,19.5947571 15.4497475,19.9852814 C15.0592232,20.3758057 14.4260582,20.3758057 14.0355339,19.9852814 L12.6213203,18.5710678 C12.2307961,18.1805435 12.2307961,17.5473785 12.6213203,17.1568542 Z"
-                          fill="#000000" opacity="0.3"
-                          transform="translate(18.035534, 17.863961) scale(1, -1) rotate(45.000000) translate(-18.035534, -17.863961)">
-                        </path>
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                </span>
-                <!--end::Icon-->
-                <!--begin::Title-->
-                <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Customer Name</span>
-                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
-                    {{ customer_name }}</a>
+          <div class="card-body px-10 pb-10">
+            <!-- Cable Type Selection -->
+            <div class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Cable Type</label>
+              <div class="network-grid scrollable-x pb-4">
+                <div 
+                  v-for="type in cableTypes" 
+                  :key="type.id"
+                  :class="['network-card', { active: cable_type === type.id }]"
+                  @click="selectCableType(type.id)"
+                >
+                  <div class="network-icon-wrapper">
+                    <div class="brand-initials">{{ type.name.charAt(0) }}</div>
+                  </div>
+                  <span class="network-name">{{ type.name }}</span>
+                  <div class="active-badge" v-if="cable_type === type.id">
+                    <i class="fa fa-check"></i>
+                  </div>
                 </div>
-                <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Current Plan</span>
-                  <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
-                    {{ current_plan }}
-                    <span style="color: red">({{ plan_status }})</span></a>
-                </div>
-                <!-- <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Due Date</span>
-                  <a
-                    href="#"
-                    class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
-                  >
-                    {{ due_date }}</a
-                  >
-                </div> -->
-                <!-- <div class="d-flex flex-column flex-grow-1 mr-2">
-                  <span class="text-info font-weight-bold">Decoder Status</span>
-                  <a
-                    href="#"
-                    class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
-                  >
-                    {{ plan_status }}</a
-                  >
-                </div> -->
-                <!--end::Title-->
-                <!--begin::Lable-->
-
-                <!--end::Lable-->
               </div>
             </div>
-          </div>
 
-          <div v-if="show_decoder" class="form-group row m-2">
-            <h6 class="col-md-3">Select Package</h6>
-            <div class="col-md-6">
-              <select required v-model="selectedPlan" class="form-control">
-                <!-- <option value="">Select Plan</option> -->
-                <option :data-price="plan.actual_price" :key="plan.id" v-for="plan in plans" :value="plan.plan_id">
-                  {{ plan.plan_name }} - NGN{{ plan.admin_price }}
-                </option>
-              </select>
+            <!-- Decoder Number Section -->
+            <div class="mb-10">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <label class="form-label font-weight-bolder text-dark-75 mb-0">Decoder Number</label>
+              </div>
+
+              <!-- Beneficiary Quick Select -->
+              <div v-if="beneficiaries && beneficiaries.length > 0" class="beneficiary-scroll mb-6">
+                <div 
+                  v-for="ben in beneficiaries.filter(b => b.type === 'cable')" 
+                  :key="ben.id"
+                  class="beneficiary-pill"
+                  @click="decoder_number = ben.phone; resetValidation();"
+                >
+                  <div class="ben-avatar">{{ ben.name.charAt(0).toUpperCase() }}</div>
+                  <span class="ben-name">{{ ben.name }}</span>
+                </div>
+              </div>
+
+              <div class="input-group input-group-solid input-group-lg">
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  v-model="decoder_number" 
+                  placeholder="Enter decoder/smartcard number"
+                  @input="resetValidation"
+                />
+              </div>
+              
+              <div class="mt-4 d-flex align-items-center">
+                <div class="checkbox-inline">
+                  <label class="checkbox checkbox-outline checkbox-success text-muted font-weight-bold">
+                    <input type="checkbox" id="save_ben" @change="saveBeneficiary" />
+                    <span></span>
+                    <small id="alr_saved">Save as beneficiary</small>
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-3"></div>
 
-            <button v-if="showConfirm" @click="confirmDecoder" type="button" class="btn btn-success col-md-6">
-              Confirm Detail
-            </button>
+            <!-- Decoder Info Alert -->
+            <div v-if="show_decoder" class="alert alert-custom alert-light-primary fade show mb-10 py-6 px-8 border-0" role="alert">
+              <div class="alert-icon">
+                <i class="flaticon2-information text-primary"></i>
+              </div>
+              <div class="alert-text d-flex flex-wrap justify-content-between align-items-center">
+                <div class="me-4">
+                  <div class="text-dark-75 font-weight-bolder font-size-lg">{{ customer_name }}</div>
+                  <div class="text-muted font-weight-bold">Current Plan: <span class="text-primary">{{ current_plan }}</span> ({{ plan_status }})</div>
+                </div>
+                <span class="label label-light-primary label-inline font-weight-bold py-3 px-4">Validated</span>
+              </div>
+            </div>
 
-            <button v-else :disabled="!transfer_status" type="submit" class="btn btn-success col-md-6">
-              Subscribe
-            </button>
+            <!-- Package Selection -->
+            <div v-if="show_decoder" class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Package</label>
+              <div class="plan-container scrollable-y">
+                <div class="plan-grid">
+                  <div 
+                    v-for="plan in plans" 
+                    :key="plan.id"
+                    :class="['plan-card', { active: selectedPlanId === plan.id }]"
+                    @click="selectPlan(plan)"
+                  >
+                    <div class="plan-info">
+                      <span class="plan-name">{{ plan.plan_name }}</span>
+                      <span class="plan-price text-primary font-weight-bolder">₦{{ plan.admin_price }}</span>
+                    </div>
+                    <div class="plan-check" v-if="selectedPlanId === plan.id">
+                      <i class="fa fa-check-circle text-primary"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-12">
+              <button 
+                v-if="showConfirm" 
+                @click="confirmDecoder" 
+                type="button" 
+                class="btn btn-primary btn-lg w-100 font-weight-bolder text-uppercase py-5 shadow-sm btn-hover-scale"
+                :disabled="!cable_type || !decoder_number"
+              >
+                Validate Decoder
+              </button>
+              <button 
+                v-else 
+                @click="buyCable"
+                type="button" 
+                class="btn btn-success btn-lg w-100 font-weight-bolder text-uppercase py-5 shadow-sm btn-hover-scale"
+                :disabled="!selectedPlanId"
+              >
+                Proceed to Pay
+              </button>
+            </div>
           </div>
         </div>
-      </form>
-      <!--end::Form-->
+      </div>
+
+      <!-- Summary Sidebar Section -->
+      <div class="summary-section">
+        <div class="sticky-summary">
+          <div class="card summary-card border-0 shadow-lg mb-6">
+            <div class="card-body p-8">
+              <h3 class="font-weight-bolder mb-8 text-white opacity-95">Purchase Summary</h3>
+              
+              <div class="summary-items">
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Service</span>
+                  <span class="font-weight-bolder text-white">Cable TV</span>
+                </div>
+                
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Type</span>
+                  <span class="font-weight-bolder text-white">{{ selectedCableName || '---' }}</span>
+                </div>
+
+                <div class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Decoder No.</span>
+                  <span class="font-weight-bolder text-white">{{ decoder_number || '---' }}</span>
+                </div>
+
+                <div v-if="customer_name" class="summary-item mb-6 d-flex justify-content-between align-items-center border-top border-white border-opacity-10 pt-6">
+                  <span class="text-white opacity-75 font-weight-bold">Customer</span>
+                  <span class="font-weight-bolder text-end text-white ps-4" style="flex: 1; word-break: break-word;">{{ customer_name }}</span>
+                </div>
+
+                <div v-if="selectedPlanName" class="summary-item mb-6 d-flex justify-content-between align-items-center">
+                  <span class="text-white opacity-75 font-weight-bold">Package</span>
+                  <span class="font-weight-bolder text-end text-white ps-4" style="flex: 1; word-break: break-word;">{{ selectedPlanName }}</span>
+                </div>
+              </div>
+
+              <div class="total-section mt-8">
+                <div class="d-flex justify-content-between align-items-end">
+                  <span class="text-white opacity-90 font-weight-bold">Total Amount</span>
+                  <h1 class="text-white font-weight-bolder mb-0" style="font-size: 2.2rem">₦{{ totalAmount }}</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Tip Card -->
+          <div class="card border-0 shadow-sm bg-light-info border-left border-3 border-info">
+            <div class="card-body p-8">
+              <div class="d-flex align-items-center mb-4 text-info">
+                <i class="flaticon-light icon-lg text-info mr-3"></i>
+                <h5 class="mb-0 font-weight-bolder">Quick Tip</h5>
+              </div>
+              <p class="text-dark-50 font-weight-bold font-size-sm mb-0 line-height-lg">
+                Ensure your decoder is switched on while making payment to allow for instant reconnection.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!--end::Card-->
   </div>
 </template>
 
@@ -163,44 +205,72 @@ export default {
   data() {
     return {
       cable_type: "",
-      meter_type: "",
       customer_name: "",
       current_plan: "",
       plan_status: "",
       showConfirm: true,
-      due_data: "",
+      due_date: "",
       decoder_number: "",
       transfer_status: false,
       showPlan: false,
       show_decoder: false,
       selectedPlan: null,
+      selectedPlanId: null,
+      selectedPlanName: "",
       amount: 0,
       plans: [],
+      cableTypes: [
+        { id: "01", name: "DSTV", logo: "/assets/media/logos/dstv.png" },
+        { id: "02", name: "GOTV", logo: "/assets/media/logos/gotv.png" },
+        { id: "03", name: "STARTIMES", logo: "/assets/media/logos/startimes.png" },
+      ]
     };
   },
+  computed: {
+    selectedCableName() {
+      const cable = this.cableTypes.find(t => t.id === this.cable_type);
+      return cable ? cable.name : "";
+    },
+    totalAmount() {
+      return this.amount ? parseFloat(this.amount).toLocaleString() : "0.00";
+    }
+  },
   methods: {
+    selectCableType(id) {
+      this.cable_type = id;
+      this.resetValidation();
+      this.fetchPlan();
+    },
+    selectPlan(plan) {
+      this.selectedPlanId = plan.id;
+      this.selectedPlan = plan.plan_id;
+      this.selectedPlanName = plan.plan_name;
+      this.amount = plan.admin_price;
+    },
+    resetValidation() {
+      this.show_decoder = false;
+      this.showConfirm = true;
+      this.customer_name = "";
+      this.selectedPlanId = null;
+      this.selectedPlan = null;
+      this.selectedPlanName = "";
+      this.amount = 0;
+    },
     fetchPlan() {
-      this.showPlan = true;
+      if (!this.cable_type) return;
       axios
         .get("fetch_cable_plan/" + this.cable_type)
         .then((response) => {
-          console.log(response.data);
           this.plans = response.data;
-          this.selectedPlan = response.data[0].plan_id;
         })
         .catch((error) => {
           console.log(error.message);
         });
     },
-
-    changePlan() {
-      this.fetchPlan;
-    },
     confirmDecoder() {
-      console.log(this.cable_type, this.decoder_number);
       if (this.cable_type !== "" && this.decoder_number.length >= 10) {
         Swal.fire({
-          title: "Fetching decoder details, please wait...",
+          title: "Fetching decoder details...",
           showConfirmButton: false,
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -214,11 +284,6 @@ export default {
         axios
           .post("fetch_decoder_details", fd)
           .then((response) => {
-            console.log(
-              response.data,
-              response.data.success,
-              response.data["success"]
-            );
             if (response.data.success == "true") {
               Swal.close();
               this.show_decoder = true;
@@ -227,20 +292,28 @@ export default {
               this.current_plan = response.data.message.content.Current_Bouquet;
               this.plan_status = response.data.message.content.Status;
               this.due_date = response.data.message.content.Due_Date;
-
               this.transfer_status = true;
               this.fetchPlan();
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Invalid Decoder",
+                text: response.data.message || "Could not validate decoder number"
+              });
             }
           })
           .catch((error) => {
-            console.log(error.message);
+            Swal.fire("Error", "Validation failed. Please try again.", "error");
           });
       } else {
-        Swal.fire("Fill the neccessary field correctly");
+        Swal.fire("Error", "Please select cable type and enter valid decoder number", "warning");
       }
     },
-
     selectFromBeneficiary() {
+      if (!this.beneficiaries || this.beneficiaries.length === 0) {
+        Swal.fire("Info", "No beneficiaries found", "info");
+        return;
+      }
       const options = this.beneficiaries
         .map((beneficiary) => {
           return `<option value="${beneficiary.phone}">${beneficiary.name} (${beneficiary.phone})</option>`;
@@ -248,16 +321,17 @@ export default {
         .join("");
       Swal.fire({
         title: "Choose Beneficiary",
-        html: `<select  class='form-control' required id='beneficiary_choice'><option>--Choose Beneficiary--</option>${options}</select>`,
+        html: `<select class='form-control form-control-solid' id='beneficiary_choice'><option value="">--Select--</option>${options}</select>`,
         showCancelButton: true,
+        confirmButtonText: "Select",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.decoder_number = $("#beneficiary_choice").val();
-          this.ben_name = $("#beneficiary_choice").find(":selected").text();
-          $("#save_ben").prop("checked", true);
-          $("#alr_saved").text(
-            "Already Saved, toggle to remove from beneficiary"
-          );
+          const selectedVal = $("#beneficiary_choice").val();
+          if (selectedVal) {
+            this.decoder_number = selectedVal;
+            this.resetValidation();
+            $("#save_ben").prop("checked", true);
+          }
         }
       });
     },
@@ -268,218 +342,354 @@ export default {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
       });
 
       if (event.target.checked) {
-       
-          Swal.fire({
-            title: "Name Of Beneficiary",
-            html: `<input class='form-control' type='text' placeholder='My DSTV' required id='beneficiary_name'/>`,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.ben_name = $("#beneficiary_name").val();
-
-              let fd = new FormData();
-              fd.append("phone", this.decoder_number);
-              fd.append("name", this.ben_name);
-              fd.append("type", 'cable');
-              axios
-                .post("/saveBeneficiary", fd)
-                .then((response) => {
-                  console.log(response.data, "the data");
-                  $("#save_ben").prop("checked", true);
-                  $("#alr_saved").text(
-                    "Beneficiary Saved, toggle to save to beneficiary"
-                  );
-                  if (response.data.success == true) {
-                    Toast.fire({
-                      icon: "success",
-                      title: "Beneficiary Saved!",
-                    });
-                  } else {
-                    Toast.fire({
-                      icon: "info",
-                      title: "Beneficiary already exist",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  console.log(error.message);
-                  Swal.fire(error.message);
-                });
-            }
-          });
-       
-      } else {
+        if (!this.decoder_number) {
+          event.target.checked = false;
+          Toast.fire({ icon: "warning", title: "Enter decoder number first" });
+          return;
+        }
         Swal.fire({
-          title: "Remove Contact?",
-          text: `Are you sure you want to remove ${this.ben_name} from beneficiary`,
+          title: "Name Of Beneficiary",
+          input: "text",
+          inputPlaceholder: "e.g. Home Decoder",
           showCancelButton: true,
-          confirmButtonText: "Yes, I'm Sure",
+          confirmButtonText: "Save",
         }).then((result) => {
-          if (result.isConfirmed) {
-            $("#save_ben").prop("checked", false);
-            $("#alr_saved").text(
-              "Removed from beneficiary, toggle to save to beneficiary"
-            );
+          if (result.isConfirmed && result.value) {
             let fd = new FormData();
-            fd.append("phone", this.meter_number);
-            axios
-              .post("/removeBeneficiary", fd)
+            fd.append("phone", this.decoder_number);
+            fd.append("name", result.value);
+            fd.append("type", 'cable');
+            axios.post("/saveBeneficiary", fd)
               .then((response) => {
-                console.log(response.data, "the data");
                 if (response.data.success == true) {
-                  Toast.fire({
-                    icon: "success",
-                    title: "Beneficiary Removed!",
-                  });
+                  Toast.fire({ icon: "success", title: "Beneficiary Saved!" });
+                  $("#alr_saved").text("Saved as beneficiary");
                 } else {
-                  Toast.fire({
-                    icon: "info",
-                    title: "Beneficiary can't be removed",
-                  });
+                  Toast.fire({ icon: "info", title: "Already exists" });
                 }
-              })
-              .catch((error) => {
-                console.log(error.message);
-                Swal.fire(error.message);
               });
+          } else {
+            event.target.checked = false;
           }
         });
       }
     },
     buyCable() {
-      if (this.transfer_status) {
-        Swal.fire({
-          // title:
-          //   "You are about to purchase" +
-          //   this.selectedPlan.plan_name +
-          //   " of NGN " +
-          //   this.amount,
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Proceed",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
+      if (!this.transfer_status) return;
+      
+      Swal.fire({
+        title: "Enter Transaction PIN",
+        text: `You are paying ₦${this.totalAmount} for ${this.selectedPlanName}`,
+        input: "password",
+        inputAttributes: {
+          inputmode: "numeric",
+          maxlength: 4,
+          style: "text-align:center;font-size:24px;letter-spacing: 15px",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Pay Now",
+        showLoaderOnConfirm: true,
+        preConfirm: (pin) => {
+          if (!/^\d{4}$/.test(pin)) {
+            Swal.showValidationMessage("Please enter a 4-digit PIN");
+            return false;
           }
-          Swal.fire({
-            title: "Making subscription, please wait...",
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
           let fd = new FormData();
           fd.append("cable_type", this.cable_type);
-
           fd.append("plan", this.selectedPlan);
-
           fd.append("decoder_number", this.decoder_number);
-          fd.append("pin", result.value);
-          axios
-            .post("/buyCable", fd)
-            .then((response) => {
-              console.log(response.data);
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Purchase successful!",
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: response.data.message,
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    // location.reload();
-                  }
-                });
+          fd.append("pin", pin);
+          
+          return axios.post("/buyCable", fd)
+            .then(response => {
+              if (response.data.success !== "true") {
+                throw new Error(response.data.message || "Transaction failed");
               }
+              return response.data;
             })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
+            .catch(error => {
+              Swal.showValidationMessage(`Request failed: ${error}`);
             });
-        });
-      } else {
-        Swal.fire({
-          title: "Insufficient balance!,",
-          icon: "info",
-          html:
-            "Click " +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            "to fund your wallet.",
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-        });
-      }
-    },
-  },
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Subscription successful",
+          }).then(() => location.reload());
+        }
+      });
+    }
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+.purchase-page {
+  padding: 0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (min-width: 1400px) {
+  .grid-layout {
+    grid-template-columns: minmax(0, 1fr) 450px;
+    gap: 40px;
+  }
+}
+
+.main-card {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+#app .summary-card {
+  background: #001f3f !important;
+  color: white !important;
+  border-radius: 24px;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: 20px;
+}
+
+.beneficiary-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.beneficiary-pill {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid #ebedf3;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.beneficiary-pill:hover {
+  border-color: #fb9129;
+  background-color: rgba(251, 145, 41, 0.05);
+}
+
+.ben-avatar {
+  width: 28px;
+  height: 28px;
+  background: #fb9129;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.ben-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3f4254;
+}
+
+.network-grid {
+  display: flex !important;
+  gap: 20px;
+  overflow-x: auto !important;
+  flex-wrap: nowrap !important;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.network-card {
+  min-width: 120px;
+  padding: 20px;
+  border: 2px solid #f3f6f9;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  background: white;
+}
+
+.network-card:hover {
+  border-color: #fb9129;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.network-card.active {
+  border-color: #fb9129;
+  background-color: rgba(251, 145, 41, 0.05);
+}
+
+.network-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #001f3f;
+  border-radius: 12px;
+}
+
+.brand-initials {
+  color: #fb9129;
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Fraunces', serif;
+}
+
+.network-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.network-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #3f4254;
+}
+
+.active-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #fb9129;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  box-shadow: 0 4px 8px rgba(251, 145, 41, 0.3);
+}
+
+.plan-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.plan-card {
+  padding: 20px;
+  border: 1px solid #ebedf3;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fcfcfd;
+}
+
+.plan-card:hover {
+  border-color: #fb9129;
+  background: white;
+}
+
+.plan-card.active {
+  border-color: #fb9129;
+  background: rgba(251, 145, 41, 0.05);
+  box-shadow: 0 4px 12px rgba(251, 145, 41, 0.08);
+}
+
+.plan-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #3f4254;
+  margin-bottom: 4px;
+}
+
+.plan-check i {
+  color: #fb9129 !important;
+  font-size: 1.2rem;
+}
+
+.btn-hover-scale {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover-scale:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.scrollable-x::-webkit-scrollbar {
+  height: 5px;
+}
+
+.scrollable-x::-webkit-scrollbar-thumb {
+  background: #e4e6ef;
+  border-radius: 10px;
+}
+
+.scrollable-y::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollable-y::-webkit-scrollbar-thumb {
+  background: #e4e6ef;
+  border-radius: 10px;
+}
+
+@media (max-width: 1200px) {
+  .grid-layout {
+    grid-template-columns: 1fr 350px;
+  }
+}
+
+@media (max-width: 991px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .summary-section {
+    order: 2;
+  }
+  .form-section {
+    order: 1;
+  }
+  .sticky-summary {
+    position: static;
+  }
+  .card-body {
+    padding: 1.5rem !important;
+  }
+}
+</style>

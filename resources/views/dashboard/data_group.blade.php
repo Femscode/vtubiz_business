@@ -1,228 +1,221 @@
 @extends('dashboard.master1')
+
 @section('header')
+<style>
+    .group-header {
+        margin-bottom: var(--space-lg);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .group-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .group-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+    }
+    .btn-create {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+    .btn-create:hover { color: white; opacity: 0.9; }
+    
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+    .modern-table thead th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        padding: 10px 20px;
+        font-weight: 700;
+    }
+    .modern-table tbody tr {
+        background: #FDFCF8;
+        transition: transform 0.2s;
+    }
+    .modern-table tbody td {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
+    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+
+    .btn-action-sm {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 4px;
+        border: none;
+    }
+    .btn-primary-sm { background: rgba(47, 128, 237, 0.1); color: var(--accent-blue); }
+    .btn-success-sm { background: rgba(39, 174, 96, 0.1); color: var(--accent-green); }
+    .btn-info-sm { background: rgba(15, 53, 72, 0.05); color: var(--primary-dark); }
+    .btn-danger-sm { background: rgba(235, 87, 87, 0.1); color: var(--accent-pink); }
+</style>
 @endsection
+
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div id="kt_app_content" class="app-content  flex-column-fluid ">
-      <!--begin::Profile Account Information-->
-   
-
-    <!-- start page title -->
-  
-    <!-- end page title -->
-
-    <div class="row">
-        <div class="col-xl-12">
-
-            <!-- end row -->
-
-            <div class="card">
-                <div class='col-xl-12'>
-                    <div class="p-2 m-2 page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Data Group</h4>
-                        <a class='btn btn-success text-end' data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Group</a>
-                    </div>
-        
-        
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-        
-                                <div class="modal-body">
-                                    <h4>Create Group</h4>
-                                    <form method='post' action='/createGroup'>@csrf
-                                        <input type='text' class='form-control' name='name' placeholder='e.g My Family' />
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Create</button>
-        
-                                </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <table class='table m-0'>
-                        <tr>
-                            <th>Name</th>
-                            <th>Total Recipient</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                        </tr>
-                        @foreach($data_groups as $group)
-                        <tr>
-                            <td>{{ $group->name }}</td>
-                            <td>{{ count($group->recipient) }}</td>
-                            <td>NGN{{ number_format($group->recipient->sum('amount')) }}</td>
-                            <td>
-                                <a href='/premium-data_recipient/{{ $group->uid }}' class='btn btn-sm btn-primary'>Add/View Recipients</a>
-                                <a data-group_id='{{ $group->uid }}' data-total_amount="{{ number_format($group->recipient->sum('amount')) }}" class='recharge btn btn-sm btn-success'>Recharge Group</a>
-                                <a href='/premium-group_transactions/{{ $group->uid }}' class='btn btn-sm btn-info'>Transactions</a>
-                                <a onclick="return confirm('Are you sure you want to delete this group?')" href='/delete_group/{{ $group->uid }}' class='btn btn-sm btn-danger'>Delete Group</a>
-                            
-                            </td>
-                        </tr>
-                        @endforeach
-                       
-
-                    </table>
-                </div>
-                <!-- end card body -->
-            </div>
-        </div>
-
-
+<div class="group-header">
+    <div>
+        <h1>Data Group</h1>
+        <p class="text-muted">Data groups let you buy data for multiple recipients at once and recharge them anytime you want.</p>
     </div>
-    <!-- end row -->
-
-
-    <!-- end row -->
+    <button class='btn-create' data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i class="fa-solid fa-plus me-2"></i> Create Group
+    </button>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="exampleModalLabel">Create New Group</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method='post' action='/createGroup'>@csrf
+                <div class="modal-body">
+                    <label>Group Name</label>
+                    <input type='text' class='form-control' name='name' placeholder='e.g. My Family, Office Team' required />
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" style="border-radius: 20px;" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-create">Create Group</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<div class="group-card">
+    <div class="table-responsive">
+        <table class='modern-table'>
+            <thead>
+                <tr>
+                    <th>Group Name</th>
+                    <th>Recipients</th>
+                    <th>Total Amount</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($data_groups as $group)
+                <tr>
+                    <td style="font-weight: 600; color: var(--primary-dark);">{{ $group->name }}</td>
+                    <td>
+                        <span class="badge" style="background: rgba(15, 53, 72, 0.05); color: var(--primary-dark); border-radius: 10px; padding: 4px 10px;">
+                            {{ count($group->recipient) }} Users
+                        </span>
+                    </td>
+                    <td style="font-family: 'Fraunces', serif; font-weight: 600;">₦{{ number_format($group->recipient->sum('amount')) }}</td>
+                    <td>
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href='/premium-data_recipient/{{ $group->uid }}' class='btn-action-sm btn-primary-sm'>Recipients</a>
+                            <a data-group_id='{{ $group->uid }}' data-total_amount="{{ number_format($group->recipient->sum('amount')) }}" class='recharge btn-action-sm btn-success-sm' style="cursor: pointer;">Recharge</a>
+                            <a href='/premium-group_transactions/{{ $group->uid }}' class='btn-action-sm btn-info-sm'>History</a>
+                            <a onclick="return confirm('Are you sure you want to delete this group?')" href='/delete_group/{{ $group->uid }}' class='btn-action-sm btn-danger-sm'>Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
+
 @section('script')
 <script>
- 
-
-
     $(document).ready(function() {
         $(".recharge").click(function() {
-            return Swal.fire({
-    title: 'Input your four(4) digit pin to confirm purchase!',
-    text: 'Total Price: NGN'+$(this).data('total_amount'),
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Proceed',
-    cancelButtonText: 'Cancel',
-    input :"password",
-    inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
+            const totalAmount = $(this).data('total_amount');
+            const groupId = $(this).data('group_id');
+            
+            Swal.fire({
+                title: 'Confirm Bulk Recharge',
+                text: 'Total Amount: ₦' + totalAmount,
+                icon: 'question',
+                input: "password",
+                inputPlaceholder: "Enter 4-digit PIN",
+                inputAttributes: {
+                    inputmode: "numeric",
+                    maxlength: 4,
+                    style: "text-align:center; font-size:24px; letter-spacing: 15px",
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Proceed',
+                confirmButtonColor: '#0F3548',
+                cancelButtonColor: '#EB5757',
+                inputValidator: (value) => {
+                    if (!/^\d{4}$/.test(value)) {
+                        return "Please enter a 4-digit PIN";
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Processing bulk purchase...",
+                        didOpen: () => { Swal.showLoading(); },
+                        allowOutsideClick: false
+                    });
+
+                    let fd = new FormData();
+                    fd.append("group_id", groupId);
+                    fd.append("pin", result.value);
+                    
+                    axios.post("/recharge_group", fd)
+                        .then((response) => {
+                            if (response.data.success == true || response.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Purchase Successful!",
+                                    text: "Check group transactions for confirmation."
+                                }).then(() => { location.reload(); });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: response.data.message
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire("Error", error.message, "error");
+                        });
+                }
             });
-          },
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-  }).then((result) => {
-    if (result.isConfirmed == false) {
-        return Swal.fire('Transaction Declined', '', 'error');
-    } else {
-           
-        Swal.fire({
-          title: "Making bulk purchase, please wait...",
-          // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
         });
 
-        let fd = new FormData();
-        fd.append("group_id", $(this).data('group_id'));
-      
-        fd.append("pin", result.value);
-        axios
-          .post("/recharge_group", fd)
-          .then((response) => {
-            console.log(response, 'the res')
-            if (response.data.success == true || response.success == true) {
-              Swal.fire({
-                icon: "success",
-                title: "Purchase successful! Check the group transactions to confirm.",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  location.reload();
-                }
-              });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: response.data.message,
-                // title: "Opps, service currently not available and we are currently working on it, try again in 30Min time😢🙏",
-                // text: "Updating...",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  // location.reload();
-                }
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error.message);
-            Swal.fire(error.message);
-          });
-        // window.location.href = '/recharge_group/'+$(this).data('group_id')
-      return true; // User clicked "Yes"
-    
-    }
-  });
-        })
-        $("#type").on('change',function() {
-            $("#show_notify").show()
-            $("#title").val($("#type").find(':selected').data('title'))
-            $("#description").val($("#type").find(':selected').data('description'))
-            $("#notf_id").val($("#type").find(':selected').val())
-        })
-        const Toast = Swal.mixin({
+        @if (session('success'))
+            Swal.fire({
                 toast: true,
                 position: 'top-end',
+                icon: 'success',
+                title: "{{ session('success') }}",
                 showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-                })
-
-                @if (session('success'))
-        Toast.fire({
-                        icon: 'success',
-                        title: '{{ session("success") }}'
-                        }) 
-           
+                timer: 3000
+            });
         @endif
-                    })
+    });
 </script>
-
-@endsection
-
 @endsection

@@ -22,22 +22,135 @@ use Illuminate\Support\Str;
 
 class ManagerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $data['user'] = $user =  Auth::user();
         if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
             return redirect('dashboard');
         }
         $data['active'] = 'manager';
-        $data['transactions'] = Transaction::where('title', 'Data Purchase')
-            ->orWhere('title', 'Airtime Purchase')
-            ->orWhere('title', 'Cable Subscription')
-            ->orWhere('title', 'Electricity Payment')
-            ->orWhere('title', 'Bulk SMS')
-            ->orWhere('title', 'Examination Result Payment')
-            ->latest()->take(100)->get();
+
+        // Filter Logic
+        $filter = $request->get('filter', 'this_year');
+        $start_date = null;
+        $end_date = null;
+
+        switch ($filter) {
+            case 'this_week':
+                $start_date = Carbon::now()->startOfWeek();
+                $end_date = Carbon::now()->endOfWeek();
+                break;
+            case 'last_week':
+                $start_date = Carbon::now()->subWeek()->startOfWeek();
+                $end_date = Carbon::now()->subWeek()->endOfWeek();
+                break;
+            case 'this_month':
+                $start_date = Carbon::now()->startOfMonth();
+                $end_date = Carbon::now()->endOfMonth();
+                break;
+            case 'last_month':
+                $start_date = Carbon::now()->subMonth()->startOfMonth();
+                $end_date = Carbon::now()->subMonth()->endOfMonth();
+                break;
+            case 'custom':
+                $start_date = Carbon::parse($request->get('start_date'))->startOfDay();
+                $end_date = Carbon::parse($request->get('end_date'))->endOfDay();
+                break;
+            case 'this_year':
+            default:
+                $start_date = Carbon::now()->startOfYear();
+                $end_date = Carbon::now()->endOfYear();
+                break;
+        }
+
+        $data['current_filter'] = $filter;
+        $data['start_date'] = $request->get('start_date');
+        $data['end_date'] = $request->get('end_date');
+        
+        // Base Query Closures
+        $dateFilter = function($query) use ($start_date, $end_date) {
+            return $query->whereBetween('created_at', [$start_date, $end_date]);
+        };
+
+        // Dashboard Stats
+        $data['total_users'] = User::whereBetween('created_at', [$start_date, $end_date])->count();
+        $data['total_spent'] = User::whereBetween('created_at', [$start_date, $end_date])->sum('total_spent');
+        $data['total_balance'] = User::sum('balance'); // Wallet balance is usually real-time, not filtered by date
+        
+        // Purchase Titles
+        $purchase_titles = [
+            'Data Purchase', 'Airtime Purchase', 'Cable Subscription', 
+            'Electricity Payment', 'Bulk SMS', 'Examination Result Payment'
+        ];
+        
+        $data['total_purchases'] = Transaction::whereIn('title', $purchase_titles)
+            ->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->count();
+            
+        $data['total_purchases_amount'] = Transaction::whereIn('title', $purchase_titles)
+            ->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->sum('amount');
+        
+        // Funding Titles
+        $funding_titles = [
+            'Account Funding', 'Account Funded Through Transfer', 'Fund Transfer', 'Payment Received'
+        ];
+        $data['total_funding'] = Transaction::whereIn('title', $funding_titles)
+            ->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->sum('amount');
+
+        // Profit Calculations
+        $data['data_profit'] = Transaction::where('title', 'Data Purchase')->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
+            
+        $data['cable_profit'] = Transaction::where('title', 'Cable Subscription')->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
+            
+        $data['electricity_profit'] = Transaction::where('title', 'Electricity Payment')->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
+            
+        $data['exam_profit'] = Transaction::where('title', 'Examination Result Payment')->where('status', 1)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
+            
+        $data['total_profit'] = $data['data_profit'] + $data['cable_profit'] + $data['electricity_profit'] + $data['exam_profit'];
+
+        // Recent Transactions for Dashboard
+        $data['transactions'] = Transaction::whereBetween('created_at', [$start_date, $end_date])
+            ->latest()
+            ->take(10)
+            ->get();
+        
+        return view('manager.dashboard', $data);
+    }
+
+    public function purchase_records_list()
+    {
+        $data['user'] = $user =  Auth::user();
+        if (!in_array($user->email, ['fasanyafemi@gmail.com', 'manager@gmail.com'])) {
+            return redirect('dashboard');
+        }
+        $data['active'] = 'purchase_records';
+        
+        $purchase_titles = [
+            'Data Purchase', 'Airtime Purchase', 'Cable Subscription', 
+            'Electricity Payment', 'Bulk SMS', 'Examination Result Payment'
+        ];
+        
+        $data['transactions'] = Transaction::whereIn('title', $purchase_titles)
+            ->latest()
+            ->take(500)
+            ->get();
+
         return view('manager.index', $data);
     }
+
     public function alltransactions()
     {
         $data['user'] = $user =  Auth::user();

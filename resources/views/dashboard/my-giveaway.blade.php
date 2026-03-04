@@ -1,308 +1,202 @@
 @extends('dashboard.master1')
+
 @section('header')
+<style>
+    .giveaway-header {
+        margin-bottom: var(--space-lg);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .giveaway-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .giveaway-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+    }
+    .btn-create-giveaway {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-create-giveaway:hover { color: white; opacity: 0.9; }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+    }
+    .modern-table tbody tr {
+        background: #FDFCF8;
+        transition: transform 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .modern-table tbody tr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+    }
+    .modern-table tbody td {
+        padding: 20px;
+        border: none;
+    }
+    .modern-table tbody td:first-child { border-radius: 16px 0 0 16px; border-left: 4px solid var(--accent-yellow); }
+    .modern-table tbody td:last-child { border-radius: 0 16px 16px 0; }
+
+    .copy-link-group {
+        display: flex;
+        background: white;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 12px;
+        overflow: hidden;
+        max-width: 400px;
+        margin-top: 10px;
+    }
+    .copy-link-input {
+        border: none;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        flex: 1;
+        background: transparent;
+        color: var(--text-secondary);
+        outline: none;
+    }
+    .btn-copy-sm {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-size: 0.8rem;
+    }
+
+    .btn-action-sm {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        border: none;
+        transition: all 0.2s;
+    }
+    .btn-primary-sm { background: rgba(47, 128, 237, 0.1); color: var(--accent-blue); }
+    .btn-info-sm { background: rgba(15, 53, 72, 0.05); color: var(--primary-dark); }
+    .btn-danger-sm { background: rgba(235, 87, 87, 0.1); color: var(--accent-pink); }
+</style>
 @endsection
+
 @section('content')
-
-
-<div class="container-fluid">
-
-
-    <!-- end page title -->
-
-    <div class="row">
-
-
-        <div class="card mb-xl-12">
-            <div class="card-header flex-wrap border-0 pt-6 pb-0">
-
-                <div class="card-title">
-                    <div class="page-title-box align-items-center justify-content-between">
-
-                        <div class='col'>
-                            <h4 class="mb-sm-0 font-size-18">My Giveaways</h4>
-                        </div>
-                        <div class='col text-end'>
-                            <a href='/create-giveaway' class="btn-sm btn btn-success">Create Giveaway</a>
-                            <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-                <!-- end card body -->
-            </div>
-
-            <div class="card-body pt-1">
-
-                <!--begin::Table-->
-                <div id="kt_widget_table_3_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="table-responsive">
-                        <table
-                            class="table datatable table-row-dashed align-middle fs-6 gy-4 my-0 pb-3"
-                            data-kt-table-widget-3="all">
-                            <thead class="d-none">
-                                <tr>
-                                    <th class="sorting" tabindex="0" aria-controls="kt_widget_table_3" rowspan="1"
-                                        colspan="1" aria-label="Campaign: activate to sort column ascending"
-                                        style="width: 0px;">Details</th>
-
-
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @foreach($giveaway as $group)
-
-
-
-
-                                <tr class="even">
-                                    <td class="min-w-175px">
-                                        <div class="position-relative ps-6 pe-3 py-2">
-                                            <div
-                                                class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-warning">
-                                            </div>
-                                            <a href="#" class="mb-1 text-gray-900 text-hover-primary fw-bold"> <b>{{
-                                                    $group->name }} (NGN{{ number_format($group->estimated_amount)
-                                                    }})</b><br>
-                                            </a>
-                                            <div class="fs-7 text-muted fw-bold">
-                                              
-                                                @if($group->type == "question_data" || $group->type=='question_airtime'
-                                                ||
-                                                $group->type ==
-                                                'question_cash')
-                                                @if(count($group->all_questions->all()) == 0)
-
-                                                <span class='text-danger'>Kindly add questions to display the giveaway
-                                                    live
-                                                    link!</span><br>
-                                                @else
-                                                <div class="d-flex">
-                                                    <input id="copy_content_{{ $loop->iteration }}" type="text"
-                                                        class="form-control form-control-solid me-3 flex-grow-1"
-                                                        name="search"
-                                                        value="https://vtubiz.com/{{ $group->slug }}">
-
-                                                    <button id="copy_btn"
-                                                        class="btn btn-light btn-light-primary fw-bold flex-shrink-0 copy-btn"
-                                                        data-clipboard-target="#copy_content_{{ $loop->iteration }}"><i class='fa fa-copy'></i></button>
-                                                </div>
-                                               
-                                                @endif
-                                                @else
-                                                <div class="d-flex">
-                                                    <input id="copy_content_{{ $loop->iteration }}" type="text"
-                                                        class="form-control form-control-solid me-3 flex-grow-1"
-                                                        name="search"
-                                                        value="https://vtubiz.com/{{ $group->slug }}">
-
-                                                    <button id="copy_btn"
-                                                        class="btn btn-light btn-light-primary fw-bold flex-shrink-0 copy-btn"
-                                                        data-clipboard-target="#copy_content_{{ $loop->iteration }}"><i class='fa fa-copy'></i></button>
-                                                </div>
-                                                
-                                                @endif
-
-                                            </div>
-
-
-                                            @if($group->type == 'question_data' || $group->type == 'question_airtime' ||
-                                            $group->type ==
-                                            'question_cash')
-                                            <a href='/add_question/{{ $group->slug }}'
-                                                class='btn btn-sm btn-primary'>Add
-                                                Questions</a>
-                                            @endif
-                                            {{-- <a href='https://vtubiz.com/{{ $group->slug }}'
-                                                class='btn btn-sm btn-primary'>Copy Link</a> --}}
-
-                                            <a href='/giveaway_participant/{{ $group->slug }}'
-                                                data-total_amount="{{ number_format($group->estimated_amount) }}"
-                                                class='btn btn-sm btn-info'>More Info</a>
-                                            <a onclick="return confirm('Are you sure you want to delete this giveaway?')"
-                                                href='/delete_giveaway/{{ $group->slug }}'
-                                                class='btn btn-sm btn-danger'><i class='fa fa-trash'></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                @endforeach
-                            </tbody>
-                            <!--end::Table-->
-                        </table>
-                    </div>
-                  
-                </div>
-                <!--end::Table-->
-            </div>
-          
-        </div>
-        <!-- end row -->
-
-
-        <!-- end row -->
+<div class="giveaway-header">
+    <div>
+        <h1>My Giveaways</h1>
+        <p class="text-muted">Manage your active giveaways and track winners.</p>
     </div>
-    @section('script')
-    <script>
-        $(document).ready(function() {
-    var oTable = $('.datatable').DataTable({
+    <div class="d-flex gap-2">
+        <a href='/create-giveaway' class="btn-create-giveaway">
+            <i class="fa-solid fa-gift"></i> Create Giveaway
+        </a>
+    </div>
+</div>
+
+<div class="giveaway-card">
+    <div class="table-responsive">
+        <table class="modern-table datatable">
+            <thead class="d-none">
+                <tr><th>Details</th></tr>
+            </thead>
+            <tbody>
+                @foreach($giveaway as $group)
+                <tr>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                            <div style="flex: 1; min-width: 300px;">
+                                <h4 class="serif mb-1" style="color: var(--primary-dark);">{{ $group->name }}</h4>
+                                <div class="text-sm font-weight-bold" style="color: var(--accent-green);">
+                                    Value: ₦{{ number_format($group->estimated_amount) }}
+                                </div>
+                                
+                                <div class="mt-3">
+                                    @if(($group->type == "question_data" || $group->type=='question_airtime' || $group->type == 'question_cash') && count($group->all_questions->all()) == 0)
+                                        <div class="alert alert-warning py-2 px-3 text-xs" style="border-radius: 10px; border: 1px dashed #D4A017; background: rgba(242, 201, 76, 0.05);">
+                                            <i class="fa-solid fa-circle-info me-1"></i> Add questions to activate this giveaway link.
+                                        </div>
+                                    @else
+                                        <div class="copy-link-group">
+                                            <input id="copy_content_{{ $loop->iteration }}" type="text" class="copy-link-input" readonly value="https://vtubiz.com/{{ $group->slug }}">
+                                            <button class="btn-copy-sm copy-btn" data-clipboard-target="#copy_content_{{ $loop->iteration }}">
+                                                <i class='fa fa-copy'></i>
+                                            </button>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 align-items-center">
+                                @if($group->type == 'question_data' || $group->type == 'question_airtime' || $group->type == 'question_cash')
+                                    <a href='/add_question/{{ $group->slug }}' class='btn-action-sm btn-primary-sm'>Add Questions</a>
+                                @endif
+                                <a href='/giveaway_participant/{{ $group->slug }}' class='btn-action-sm btn-info-sm'>More Info</a>
+                                <a onclick="return confirm('Are you sure you want to delete this giveaway?')" href='/delete_giveaway/{{ $group->slug }}' class='btn-action-sm btn-danger-sm'>
+                                    <i class='fa fa-trash'></i>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
+
+@section('script')
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var oTable = $('.datatable').DataTable({
             ordering: false,
-            searching: true
-            });   
-
-            var clipboard = new ClipboardJS('.copy-btn');
-
-clipboard.on('success', function (e) {
-    e.clearSelection();
-    var btn = e.trigger;
-    btn.innerHTML = 'Copied!';
-            setTimeout(function () {
-                btn.innerHTML = '<i class="fa fa-copy"></i>';
-            }, 2000); // Reset to 'Copy' after 2 seconds
-});
-
-clipboard.on('error', function (e) {
-    console.error('Action:', e.action);
-    console.error('Trigger:', e.trigger);
-});
-        $(".recharge").click(function() {
-            return Swal.fire({
-    title: 'Input your four(4) digit pin to confirm purchase!',
-    text: 'Total Price: NGN'+$(this).data('total_amount'),
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Proceed',
-    cancelButtonText: 'Cancel',
-    input :"password",
-    inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-  }).then((result) => {
-    if (result.isConfirmed == false) {
-        return Swal.fire('Transaction Declined', '', 'error');
-    } else {
-           
-        Swal.fire({
-          title: "Making bulk purchase, please wait...",
-          // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
+            searching: true,
+            dom: 'lrtip'
         });
 
-        let fd = new FormData();
-        fd.append("group_id", $(this).data('group_id'));
-      
-        fd.append("pin", result.value);
-        axios
-          .post("/recharge_group", fd)
-          .then((response) => {
-            console.log(response, 'the res')
-            if (response.data.success == "true") {
-              Swal.fire({
-                icon: "success",
-                title: "Purchase successful! Check group transaction table to confirm.",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                //   location.reload();
-                }
-              });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: response.data.message,
-                // title: "Opps, service currently not available and we are currently working on it, try again in 30Min time😢🙏",
-                // text: "Updating...",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  // location.reload();
-                }
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error.message);
-            Swal.fire(error.message);
-          });
-        // window.location.href = '/recharge_group/'+$(this).data('group_id')
-      return true; // User clicked "Yes"
-    
-    }
-  });
-        })
-        $("#type").on('change',function() {
-            $("#show_notify").show()
-            $("#title").val($("#type").find(':selected').data('title'))
-            $("#description").val($("#type").find(':selected').data('description'))
-            $("#notf_id").val($("#type").find(':selected').val())
-        })
-        const Toast = Swal.mixin({
+        var clipboard = new ClipboardJS('.copy-btn');
+        clipboard.on('success', function (e) {
+            e.clearSelection();
+            var btn = $(e.trigger);
+            btn.html('Copied!');
+            btn.css('background', 'var(--accent-green)');
+            setTimeout(function () {
+                btn.html('<i class="fa fa-copy"></i>');
+                btn.css('background', 'var(--primary-dark)');
+            }, 2000);
+        });
+
+        @if (session('success'))
+            Swal.fire({
                 toast: true,
                 position: 'top-end',
+                icon: 'success',
+                title: "{{ session('success') }}",
                 showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-                })
-
-                @if (session('success'))
-        Toast.fire({
-                        icon: 'success',
-                        title: '{{ session("success") }}'
-                        }) 
-           
+                timer: 3000
+            });
         @endif
-                    })
-    </script>
-
-    @endsection
-
-    @endsection
+    });
+</script>
+@endsection

@@ -1,52 +1,38 @@
 @extends('dashboard.master1')
 
 @section('header')
+<style>
+    .analysis-header {
+        margin-bottom: var(--space-lg);
+    }
+    .analysis-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+</style>
 @endsection 
 
 @section('content')
+<div class="analysis-header">
+    <h1>Transaction Analysis</h1>
+    <p class="text-muted">Gain insights into your spending habits and transaction volume.</p>
+</div>
 
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div id='app' class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-         <my-analysis :this_year='{{ $this_year }}' :this_month='{{ $this_month }}' :phone="{{ $phone }}" :total_price_by_restaurant='{{ $total_price_by_restaurant }}' :total_price='{{ $total_price }}' :user='{{ $user  }}'></my-analysis>
-            <!--end::Content-->
-        </div>
-        <!--end::Profile Account Information-->
+<div id='app' class="row">
+    <div class="col-12">
+        <my-analysis :this_year='{{ $this_year }}' :this_month='{{ $this_month }}' :phone="{{ $phone }}" :total_price_by_restaurant='{{ $total_price_by_restaurant }}' :total_price='{{ $total_price }}' :user='{{ $user  }}'></my-analysis>
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 
 @section('script')
 <script>
     $(document).ready(function() {
-
         @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-        $("#u_amount").on('input',function() {
-        var amount = parseInt($("#u_amount").val()) * 100;
-      
-       
-        if(parseInt($("#u_amount").val()) < 2500) {
-            $("#amount").val((amount) + (0.05 * amount));
-          
-        }
-        else {
-            $("#amount").val((amount) + (0.05 * amount) +10000);
-          
-          
-        }
-        
-        // alert($("#u_amount").val() * 100)
-    })
-    })
-
+            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('message') }}", confirmButtonColor: '#0F3548' });
+        @endif
+    });
 </script>
 @endsection

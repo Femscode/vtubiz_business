@@ -1,222 +1,176 @@
 @extends('dashboard.master1')
+
+@section('header')
+<style>
+    .security-header {
+        margin-bottom: var(--space-lg);
+    }
+    .security-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .security-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+    }
+    .form-label {
+        font-weight: 600;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+    }
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(0,0,0,0.08);
+        background: #F9F9F9;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.2s ease;
+        text-align: center;
+        font-size: 1.5rem;
+        letter-spacing: 10px;
+    }
+    .form-control-custom:focus {
+        outline: none;
+        border-color: var(--primary-dark);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
+    }
+    .btn-save {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .btn-save:active { transform: scale(0.98); }
+    
+    .status-card {
+        background: #FDFCF8;
+        border: 1px solid rgba(0,0,0,0.03);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        text-align: center;
+    }
+    .status-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+</style>
+@endsection
+
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
+<div class="security-header">
+    <h1>Transaction PIN</h1>
+    <p class="text-muted">Secure your transactions with a 4-digit security PIN.</p>
+</div>
 
-
-    <!--begin::Content-->
-    <div id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Row-->
-        <div class="row g-5 g-xl-8">
-            <!--begin::Col-->
-            <div class="col-xl-4">
-
-                <!--begin::Misc Widget 1-->
-                <div class="row mb-5 mb-xl-8 g-5 g-xl-8">
-
-                <form action='{{ route("change_pin_status") }}' method='post'> @csrf
-                        <div class="widget-content col-md-12 card p-4 m-4">
-                            <h1>Disable/Enable Pin Validation</h1>
-                            <p class="">Current Pin</p>
-                            <div class="input-group mb-4">
-
-                                <input placeholder="****" maxlength="4" required type="password"
-                                    name='current_pin' class="form-control"
-                                    aria-label="Current Password">
-
-                            </div>
-                         
-
-                            @if($user->pin_status == 1)
-                            <div class='mb-4 p-2'>
-                                <button id='sub_btn' type="submit"
-                                    class="btn btn-danger float-right">
-                                    Disable
-                                </button>
-                            </div>
-                            @else 
-                            <div class='mb-4 p-2'>
-                                <button id='sub_btn' type="submit"
-                                    class="btn btn-primary float-right">
-                                    Enable
-                                </button>
-                            </div>
-                            @endif
-
-
-
-
-                        </div>
-                    </form>
-              
-
-                </div>
-
-
+<div class="row g-5">
+    <div class="col-lg-4">
+        <div class="status-card">
+            <div class="status-icon">
+                @if($user->pin_status == 1)
+                    <i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i>
+                @else
+                    <i class="fa-solid fa-circle-xmark" style="color: var(--accent-pink);"></i>
+                @endif
             </div>
-            <!--end::Col-->
-
-            <!--begin::Col-->
-            <div class="col-xl-8 ps-xl-12">
-                <div class='card p-4 mb-4'>
-
-                    <form action='{{ route("resetpin") }}' method='post'> @csrf
-                        <div class="widget-content col-md-12">
-
-                            <p class="">Current Pin</p>
-                            <div class="input-group mb-4">
-
-                                <input placeholder="****" maxlength="4" required type="password"
-                                    name='current_pin' class="form-control"
-                                    aria-label="Current Password">
-
-                            </div>
-                            <p class="">New Pin</p>
-                            <div class="input-group mb-4">
-
-                                <input required type="password" maxlength="4" name='new_pin'
-                                    id='new_password' class="form-control" placeholder="****"
-                                    aria-label="New Password">
-
-
-                            </div>
-                            <p class="">Confirm New Pin</p>
-                            <div class="input-group mb-4">
-
-                                <input required type="password" maxlength="4" name='confirm_pin'
-                                    id='new_password' class="form-control" placeholder="****"
-                                    aria-label="New Password">
-
-
-                            </div>
-
-
-                            <p>Forgot your pin? click <a style='color:red;cursor:pointer'
-                                    id='reset_pin'>here</a> to reset pin.</p>
-
-
-
-                            <div class='mb-4 p-2'>
-                                <button id='sub_btn' type="submit"
-                                    class="btn btn-primary float-right">
-                                    Change
-                                </button>
-                            </div>
-
-
-
-
-                        </div>
-                    </form>
+            <h4 class="serif" style="color: var(--primary-dark);">PIN Validation</h4>
+            <p class="text-sm text-muted mb-4">Currently {{ $user->pin_status == 1 ? 'Enabled' : 'Disabled' }}</p>
+            
+            <form action='{{ route("change_pin_status") }}' method='post'> @csrf
+                <div class="mb-3">
+                    <label class="form-label">Current PIN</label>
+                    <input placeholder="****" maxlength="4" required type="password" name='current_pin' class="form-control-custom">
                 </div>
-
-                <!--begin::Engage widget 1-->
-                <div class="card bgi-position-y-bottom bgi-position-x-end bgi-no-repeat bgi-size-cover min-h-250px bg-body mb-5 mb-xl-8"
-                    style="background-position: 100% 50px;background-size: 500px auto;background-image:url('assets/media/misc/city.png')"
-                    dir="ltr">
-                    <!--begin::Body-->
-                    <div class="card-body d-flex flex-column justify-content-center ps-lg-12">
-                        <!--begin::Title-->
-                        <h3 class="text-dark fs-2qx fw-bold mb-7">
-                            Kindly follow our <br />
-                            social media pages.
-                        </h3>
-                        <!--end::Title-->
-
-                        <!--begin::Action-->
-                        <div class="m-0">
-                            <!-- Facebook -->
-                            <a class="btn btn-primary btn-sm" style="background-color: #3b5998;"
-                                href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
-
-                            <!-- Twitter -->
-                            <a class="btn btn-primary btn-sm" style="background-color: #55acee;"
-                                href="#!" role="button"><i class="fab fa-twitter"></i></a>
-
-                            <!-- Instagram -->
-                            <a class="btn btn-primary btn-sm" style="background-color: #ac2bac;"
-                                href="#!" role="button"><i class="fab fa-instagram"></i></a>
-
-                            <!-- Linkedin -->
-                            <a class="btn btn-primary btn-sm" style="background-color: #0082ca;"
-                                href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
-
-                            <!-- Youtube -->
-                            <a class="btn btn-primary btn-sm" style="background-color: #ed302f;"
-                                href="#!" role="button"><i class="fab fa-youtube"></i></a>
-
-                            <!-- Whatsapp -->
-                            <a class="btn btn-primary btn-sm" style="background-color: #25d366;"
-                                href="#!" role="button"><i class="fab fa-whatsapp"></i></a>
-                        </div>
-                        <!--begin::Action-->
-                    </div>
-                    <!--end::Body-->
-                </div>
-                <!--end::Engage widget 1-->
-                <!--begin::Row-->
-
-                <!--end::Row-->
-
-
-                <!--begin::Tables Widget 5-->
-
-                <!--end::Tables Widget 5-->
-                <!--begin::Row-->
-
-            </div>
-            <!--end::Col-->
+                
+                <button type="submit" class="btn-save {{ $user->pin_status == 1 ? 'bg-danger' : '' }}" style="background: {{ $user->pin_status == 1 ? 'var(--accent-pink)' : 'var(--primary-dark)' }}">
+                    {{ $user->pin_status == 1 ? 'Disable PIN' : 'Enable PIN' }}
+                </button>
+            </form>
         </div>
-        <!--end::Row-->
     </div>
-    <!--end::Content-->
+
+    <div class="col-lg-8">
+        <div class="security-card">
+            <h4 class="serif mb-4" style="color: var(--primary-dark);">Change Transaction PIN</h4>
+            
+            <form action='{{ route("resetpin") }}' method='post'> @csrf
+                <div class="row g-4">
+                    <div class="col-12">
+                        <label class="form-label">Current PIN</label>
+                        <input placeholder="****" maxlength="4" required type="password" name='current_pin' class="form-control-custom">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">New PIN</label>
+                        <input required type="password" maxlength="4" name='new_pin' class="form-control-custom" placeholder="****">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm New PIN</label>
+                        <input required type="password" maxlength="4" name='confirm_pin' class="form-control-custom" placeholder="****">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <p class="text-sm">Forgot your PIN? <a id='reset_pin' style="color: var(--accent-pink); font-weight: 600; cursor: pointer;">Reset it here</a></p>
+                </div>
+
+                <button type="submit" class="btn-save">Update PIN</button>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection
+
 @section('script')
 <script>
     $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         @if(session('message'))
-        Swal.fire('Success!', "{{ session('message') }}", 'success');
+            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('message') }}", confirmButtonColor: '#0F3548' });
         @endif
         @if(session('error'))
-        Swal.fire('Incorrect Pin!', "{{ session('error') }}", 'error');
+            Swal.fire({ icon: 'error', title: 'Error', text: "{{ session('error') }}", confirmButtonColor: '#0F3548' });
         @endif
+
         $("#reset_pin").click(function() {
             Swal.fire({
-                title: 'You are about to reset your pin?',
-                text: 'A token will be sent to your email, copy the token to reset your pin!',
+                title: 'Reset Transaction PIN?',
+                text: 'A reset token will be sent to your email address.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, reset',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: 'Yes, Send Token',
+                confirmButtonColor: '#0F3548',
+                cancelButtonColor: '#EB5757'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('Sending your token, please wait...')
+                    Swal.fire({ title: 'Sending token...', didOpen: () => { Swal.showLoading(); } });
                     $.ajax({
                         type: 'POST',
                         url: "{{route('forgot-pin')}}",
-
-                        cache: false,
-                        contentType: false,
-                        processData: false,
+                        data: { _token: "{{ csrf_token() }}" },
                         success: function(data) {
-                            console.log(data)
                             location.href = 'https://vtubiz.com/reset-pin-with-token';
                         },
-                        error: function(data) {
-                            console.log(data)
-                            Swal.close()
-
-                            Swal.fire('Opps!', 'Something went wrong, please try again later', 'error')
+                        error: function() {
+                            Swal.fire('Error', 'Failed to send reset token. Please try again.', 'error');
                         }
-                    })
+                    });
                 }
-            })
-        })
-    })
+            });
+        });
+    });
 </script>
 @endsection

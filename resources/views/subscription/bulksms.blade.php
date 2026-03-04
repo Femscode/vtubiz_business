@@ -1,137 +1,185 @@
 @extends('dashboard.master1')
 
 @section('header')
+<style>
+    .service-header {
+        margin-bottom: var(--space-lg);
+    }
+    .service-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .service-card-wrapper {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+    }
+    .form-label-bold {
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+    }
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(0,0,0,0.08);
+        background: #F9F9F9;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.2s ease;
+        margin-bottom: 15px;
+    }
+    .form-control-custom:focus {
+        outline: none;
+        border-color: var(--primary-dark);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
+    }
+    .radio-group-custom {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .radio-item-custom {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+    .radio-item-custom input {
+        accent-color: var(--primary-dark);
+        width: 18px;
+        height: 18px;
+    }
+    .radio-item-custom span {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-main);
+    }
+    .btn-send {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+    .btn-schedule {
+        background: rgba(39, 174, 96, 0.1);
+        color: var(--accent-green);
+        border: none;
+        padding: 14px 28px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+    .char-count-box {
+        font-size: 0.8rem;
+        margin-top: 5px;
+        color: var(--text-secondary);
+    }
+</style>
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-            <div class="col-md-12">
-                <!--begin::Card-->
-                <div class="card card-custom">
-                    <h1 class='text-center p-2 mt-4'>Bulk SMS</h1>
-                    <form method='post' class="myForm" enctype="multipart/form-data">@csrf
-                        <div class="form-group p-4 m-5">
+<div class="service-header">
+    <h1>Bulk SMS</h1>
+    <p class="text-muted">Reach thousands of people instantly with our reliable SMS gateway.</p>
+</div>
 
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="service-card-wrapper">
+            <form method='post' class="myForm" enctype="multipart/form-data">@csrf
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label-bold">Sender's Name</label>
+                        <input required name='sender_name' id='sender_name' class="form-control-custom" type="text" maxlength="11" placeholder="Max 11 characters">
+                    </div>
 
-                            <div class="wrap-form-control validate-input" data-validate="Sender Name is required">
-                                <label>Sender's Name</label>
-                                <input required name='sender_name' id='sender_name' class="form-control" type="text"
-                                    maxlength="10" name="name" placeholder="Sender's Name">
-                                <span class="shadow-form-control"></span>
-                            </div>
-                            <label><b>Choose Contact Type</b></label>
-                            <div class="wrap-form-control validate-input">
+                    <div class="col-md-6">
+                        <label class="form-label-bold">Message Type</label>
+                        <select id='message_type' required class="form-control-custom" name="message_type">
+                            <option value='Normal SMS'>Normal SMS</option>
+                            <option value='Flash SMS'>Flash SMS</option>
+                            <option value='Unicode SMS'>Unicode SMS</option>
+                        </select>
+                    </div>
 
-                                <input class='contact_type' type="radio" name="contact_type" id="manual_input"
-                                    value="manual_input" checked>
-                                <label for="contact_type1"><b>
-                                        Manual Input</b>
-                                </label>
-                                <input class='contact_type' type="radio" name="contact_type" id="import_csv"
-                                    value="import_file">
-                                <label for="contact_type2"><b>
-                                        Import from file(csv)</b>
-                                </label>
-                                <input class='contact_type' type="radio" name="contact_type" id="select_group"
-                                    value="select_group">
-                                <label for="contact_type2"><b>
-                                        Select From Group</b>
-                                </label>
+                    <div class="col-12">
+                        <label class="form-label-bold">Choose Contact Method</label>
+                        <div class="radio-group-custom">
+                            <label class="radio-item-custom">
+                                <input class='contact_type' type="radio" name="contact_type" id="manual_input" value="manual_input" checked>
+                                <span>Manual Input</span>
+                            </label>
+                            <label class="radio-item-custom">
+                                <input class='contact_type' type="radio" name="contact_type" id="import_csv" value="import_file">
+                                <span>Import CSV/Excel</span>
+                            </label>
+                            <label class="radio-item-custom">
+                                <input class='contact_type' type="radio" name="contact_type" id="select_group" value="select_group">
+                                <span>Select Group</span>
+                            </label>
+                        </div>
+                    </div>
 
+                    <input type='hidden' id='schedule_date' name='schedule_date' />
+                    <input type='hidden' id='schedule_time' name='schedule_time' />
 
-                                <span class="shadow-form-control"></span>
-                            </div>
-                            <input type='hidden' id='schedule_date' name='schedule_date' />
-                            <input type='hidden' id='schedule_time' name='schedule_time' />
+                    <div class="col-12">
+                        <div id='import_field' style='display:none'>
+                            <label class="form-label-bold">Upload File</label>
+                            <input accept=".xls, .xlsx, .csv" type="file" class="form-control-custom" name='import_file' id='import_file'>
+                        </div>
 
+                        <div id='select_group_field' style='display:none'>
+                            <label class="form-label-bold">Select Contact Group</label>
+                            <select id='selected_group' class="form-control-custom" name='selected_group'>
+                                <option value=''>-- Choose a group --</option>
+                                @foreach($contacts as $contact)
+                                <option value='{{ $contact->id }}'>{{ $contact->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-
-                            <div style='display:none' id='import_field' class="wrap-form-control validate-input"
-                                data-validate="Message is required">
-
-
-                                <div class="input-group mb-3">
-                                    <input accept=".xls, .xlsx, .csv" type="file" class="form-control form-control"
-                                        name='import_file' id='import_file'>
-
-                                </div>
-                            </div>
-                            <div style='display:none' id='select_group_field' class="wrap-form-control validate-input"
-                                data-validate="Message is required">
-
-
-                                <div class="input-group mb-3">
-                                    <select id='selected_group' class="form-control" name='selected_group'>
-                                        <option value=''>--Select From Group--</option>
-                                        @foreach($contacts as $contact)
-                                        <option value='{{ $contact->id }}'>{{ $contact->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id='manual_input_field' class="wrap-form-control validate-input"
-                                data-validate="Message is required">
-                                <label>Recipients</label><br>
-                              
-                                <textarea class="form-control" name="manual_contact" id='contact_field'
-                                    placeholder="Type Contact, seperate by comma or space"></textarea>
-                                {{-- <input type="hidden" name="manual_contact" id="appendedNumbersInput"> --}}
-
-                                <span class="shadow-form-control"></span>
-                                Total phone numbers: <span id='no_of_recipients'></span><br>
-                                <input type='hidden' name='amount' id='amount_field' />
-                              
-                                <div id="output-container"></div>
-
-                            </div><br>
-
-                            <div class="wrap-form-control validate-input" data-validate="Message is required">
-                                <label>Message</label><br>
-                                <textarea required class="form-control" name="message" id='sms'
-                                    placeholder="Type SMS Message Here..."></textarea>
-                                <span id='pages'>0</span> pages
-                                <span id='max_char'><b class='text-danger'>Total typed characters <span
-                                            id='character'>160</span>.</b></span>
-                            </div><br>
-
-
-                            <div class="wrap-form-control validate-input" data-validate="Sender Name is required">
-                                <label>Message Type</label><br>
-                                <select id='message_type' required class="form-control form-control" type="text"
-                                    name="message_type">
-                                    <option value='Normal SMS'>Normal SMS</option>
-                                    <option value='Flash SMS'>Flash SMS</option>
-                                    <option value='Unicode SMS'>Unicode SMS</option>
-                                </select>
-                                <span class="shadow-form-control"></span>
-                            </div><br>
-
-
-                            <div class="form-group row ">
-                                <div class="btn-group btn-group-example mb-3" role="group">
-                                    <button type="submit" class="btn btn-primary w-xs">Send Now</button>
-                                    <button id='scheduleSend' type="button" class="btn btn-success w-xs">Schedule For
-                                        Later</button>
-                                </div>
+                        <div id='manual_input_field'>
+                            <label class="form-label-bold">Recipients</label>
+                            <textarea class="form-control-custom" style="min-height: 100px;" name="manual_contact" id='contact_field' placeholder="Type numbers separated by comma or space..."></textarea>
+                            <div class="char-count-box">
+                                <i class="fa-solid fa-users me-1"></i> Total Recipients: <span id='no_of_recipients' class="fw-bold">0</span>
                             </div>
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label-bold">Message Content</label>
+                        <textarea required class="form-control-custom" style="min-height: 150px;" name="message" id='sms' placeholder="Type your message here..."></textarea>
+                        <div class="d-flex justify-content-between char-count-box">
+                            <span><span id='pages' class="fw-bold">0</span> Page(s)</span>
+                            <span class='text-danger'>Remaining: <span id='character' class="fw-bold">160</span> characters</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn-send flex-grow-1">Send SMS Now</button>
+                            <button id='scheduleSend' type="button" class="btn-schedule">Schedule Later</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <!--end::Content-->
+            </form>
         </div>
-        <!--end::Profile Account Information-->
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 

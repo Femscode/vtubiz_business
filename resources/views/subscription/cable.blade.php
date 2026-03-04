@@ -4,21 +4,17 @@
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div id='app' class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-         <cable-component :user='{{ $user  }}' :beneficiaries='{{$beneficiaries}}'></cable-component>
-            <!--end::Content-->
+<div class="service-header">
+    <h1>Cable TV</h1>
+    <p class="text-muted">Renew your DSTV, GOTV, and Startimes subscriptions instantly.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="service-card-wrapper">
+            <cable-component :user='{{ $user  }}' :beneficiaries='{{$beneficiaries}}'></cable-component>
         </div>
-        <!--end::Profile Account Information-->
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 

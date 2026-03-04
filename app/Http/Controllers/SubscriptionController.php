@@ -31,63 +31,6 @@ class SubscriptionController extends Controller
 {
     use TransactionTrait;
 
-    public function olddata()
-    {
-        $data['user'] = $user = Auth::user();
-        $datas = Data::where('user_id', 0)->get();
-        $data['earnings'] = User::where('referred_by', $user->brand_name)->sum('earnings');
-
-        $check_data = Data::where('user_id', $user->id)->first();
-        // Data::where('user_id', $user->id)->delete();
-        // dd($check_data,$datas[0]);
-        if ($user->upgrade == 0) {
-            if (!$check_data) {
-                foreach ($datas as $data) {
-                    Data::create([
-                        'user_id' => $user->id,
-                        'network' => $data->network,
-                        'plan_id' => $data->plan_id,
-                        'plan_name' => $data->plan_name,
-                        'actual_price' => $data->actual_price,
-                        'data_price' => $data->account_price,
-                        'account_price' => $data->account_price,
-                        'admin_price' => $data->account_price
-                    ]);
-                }
-            }
-        } else {
-            if (!$check_data) {
-                foreach ($datas as $data) {
-                    Data::create([
-                        'user_id' => $user->id,
-                        'network' => $data->network,
-                        'plan_id' => $data->plan_id,
-                        'plan_name' => $data->plan_name,
-                        'actual_price' => $data->actual_price,
-                        'data_price' => $data->data_price,
-                        'account_price' => $data->data_price,
-                        'admin_price' => $data->data_price
-                    ]);
-                }
-            }
-        }
-
-
-        $data['user'] = $user = Auth::user();
-        $data['active'] = 'data';
-        $data['company'] = User::where('id', $user->company_id)->first();
-        $data['beneficiaries'] = Beneficiary::where('user_id', $user->id)->where('type', 'data')->latest()->get();
-        $notification = Notification::where('user_id', 1)->where('type', 'Data Notification')->first();
-        if ($notification && $notification->title !== null) {
-            $data['notification'] = $notification;
-        }
-        $dod = Notification::where('user_id', 1)->where('type', 'General Notification')->first();
-        if ($dod && $dod->title !== null) {
-            $data['dod'] = $dod;
-        }
-
-        return response()->view('subscription.buydata', $data);
-    }
     public function data()
     {
         $data['user'] = $user = Auth::user();
@@ -386,6 +329,73 @@ class SubscriptionController extends Controller
 
         curl_close($curl);
         return $response;
+    }
+
+    public function bulk_buydata(Request $request)
+    {
+        $user = Auth::user();
+        $recipients = json_decode($request->recipients, true);
+
+        if (!$recipients || count($recipients) == 0) {
+            return response()->json(['success' => false, 'message' => 'No recipients found']);
+        }
+
+        // Pin Check
+        $hashed_pin = hash('sha256', $request->pin);
+        if ($user->pin !== $hashed_pin) {
+            return response()->json(['success' => false, 'message' => 'Incorrect Pin!']);
+        }
+
+        // Calculate total cost and validate all plans first
+        $total_cost = 0;
+        foreach ($recipients as $recipient) {
+            $plan_id = $recipient['plan'];
+            $network = $recipient['network'];
+            if ($user->upgrade == 1) {
+                $data = Data::where('user_id', $user->company_id)->where('plan_id', $plan_id)->where('network', $network)->first();
+            } else {
+                $data = Data::where('user_id', 0)->where('plan_id', $plan_id)->where('network', $network)->first();
+            }
+
+            if (!$data) {
+                return response()->json(['success' => false, 'message' => "Invalid Plan or Network selected for one or more recipients!"]);
+            }
+            $total_cost += $data->admin_price;
+        }
+
+        // Balance Check
+        if ($user->balance < $total_cost) {
+            return response()->json(['success' => false, 'message' => 'Insufficient balance for this bulk purchase!']);
+        }
+
+        $success_count = 0;
+        $failed_count = 0;
+        $results = [];
+
+        foreach ($recipients as $recipient) {
+            $phone = $recipient['phone'];
+            $plan_id = $recipient['plan'];
+            $network = $recipient['network'];
+            
+            $res = $this->handle_bulk_data($phone, $network, $plan_id);
+            if (isset($res['success']) && ($res['success'] == "true" || $res['success'] === true)) {
+                $success_count++;
+            } else {
+                $failed_count++;
+            }
+            $results[] = [
+                'phone' => $phone,
+                'status' => (isset($res['success']) && ($res['success'] == "true" || $res['success'] === true)) ? 'success' : 'failed',
+                'message' => $res['message'] ?? 'Transaction failed'
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'status' => 'success',
+            'message' => "Bulk purchase completed. Success: $success_count, Failed: $failed_count",
+            'results' => $results
+        ]);
     }
 
     private function handle_buy_data($phone, $network, $plan_id, $group_id = null)
@@ -1410,8 +1420,7 @@ class SubscriptionController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-        } 
-        elseif ($request->exam_type == 'neco') {
+        } elseif ($request->exam_type == 'neco') {
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -1433,8 +1442,7 @@ class SubscriptionController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-        } 
-        elseif ($request->exam_type == 'nabteb') {
+        } elseif ($request->exam_type == 'nabteb') {
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -1456,8 +1464,7 @@ class SubscriptionController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-        } 
-        elseif ($request->exam_type == 'nbais') {
+        } elseif ($request->exam_type == 'nbais') {
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -1479,8 +1486,7 @@ class SubscriptionController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-        } 
-        else {
+        } else {
             $response = [
                 'success' => false,
                 'message' => $request->exam_type . " currently not available.",
@@ -2213,17 +2219,8 @@ class SubscriptionController extends Controller
             $network = $subdomain;
         }
         $user = Auth::user();
-        // return true;
-        // dd($user);
-        // if ($user->upgrade == 1) {
 
-        //     $data = Data::where('network', $network)->where('user_id', $user->company_id)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-        // } else {
-        //     $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-        // }
         $data = Data::where('network', $network)->where('user_id', 0)->where('status', 1)->orderBy('admin_price', 'ASC')->get();
-      
-
         return $data;
     }
     public function fetch_cable_plan($subdomain = null, $company = null)

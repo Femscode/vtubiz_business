@@ -18,7 +18,7 @@ class GroupController extends Controller
     public function admin_data_group()
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             return redirect('/premium-data_group');
         }
         $data['data_groups'] = DataGroup::where('user_id', $user->id)->latest()->get();
@@ -35,7 +35,7 @@ class GroupController extends Controller
     {
         $data['active'] = 'airtime_group';
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             return redirect('/premium-airtime_group');
         }
         $data['airtime_groups'] = AirtimeGroup::where('user_id', $user->id)->latest()->get();
@@ -75,32 +75,36 @@ class GroupController extends Controller
 
         return redirect()->back()->with('message', 'Group Created Successfully!');
     }
-   public function admin_group_transactions($id) {
-    $data['user'] = Auth::user();
-    $data['transactions'] = Transaction::where('group_id',$id)->latest()->get();
-    $data['group'] = DataGroup::where('uid',$id)->firstOrFail();
-    return view('business_backend.group_transactions',$data);
-   }
-   public function admin_group_airtime_transactions($id) {
-    $data['user'] = Auth::user();
-    $data['transactions'] = Transaction::where('group_id',$id)->latest()->get();
-    $data['group'] = AirtimeGroup::where('uid',$id)->firstOrFail();
-    return view('business_backend.group_airtime_transactions',$data);
-   }
-   public function group_airtime_transactions($id) {
-    $data['active'] = 'airtime_group';
-    $data['user'] = Auth::user();
-    $data['transactions'] = Transaction::where('group_id',$id)->latest()->get();
-    $data['group'] = AirtimeGroup::where('uid',$id)->firstOrFail();
-    return view('dashboard.group_airtime_transactions',$data);
-   }
-   public function group_transactions($id) {
-    $data['active'] = 'data_group';
-    $data['user'] = Auth::user();
-    $data['transactions'] = Transaction::where('group_id',$id)->latest()->get();
-    $data['group'] = DataGroup::where('uid',$id)->firstOrFail();
-    return view('dashboard.group_transactions',$data);
-   }
+    public function admin_group_transactions($id)
+    {
+        $data['user'] = Auth::user();
+        $data['transactions'] = Transaction::where('group_id', $id)->latest()->get();
+        $data['group'] = DataGroup::where('uid', $id)->firstOrFail();
+        return view('business_backend.group_transactions', $data);
+    }
+    public function admin_group_airtime_transactions($id)
+    {
+        $data['user'] = Auth::user();
+        $data['transactions'] = Transaction::where('group_id', $id)->latest()->get();
+        $data['group'] = AirtimeGroup::where('uid', $id)->firstOrFail();
+        return view('business_backend.group_airtime_transactions', $data);
+    }
+    public function group_airtime_transactions($id)
+    {
+        $data['active'] = 'airtime_group';
+        $data['user'] = Auth::user();
+        $data['transactions'] = Transaction::where('group_id', $id)->latest()->get();
+        $data['group'] = AirtimeGroup::where('uid', $id)->firstOrFail();
+        return view('dashboard.group_airtime_transactions', $data);
+    }
+    public function group_transactions($id)
+    {
+        $data['active'] = 'data_group';
+        $data['user'] = Auth::user();
+        $data['transactions'] = Transaction::where('group_id', $id)->latest()->get();
+        $data['group'] = DataGroup::where('uid', $id)->firstOrFail();
+        return view('dashboard.group_transactions', $data);
+    }
     public function deleteGroup($id)
     {
         $group = DataGroup::where('uid', $id)->firstOrFail();
@@ -108,7 +112,7 @@ class GroupController extends Controller
         $group->delete();
         return redirect()->back()->with('message', 'Group Deleted Successfully!');
     }
-    public function admin_deleteAirtimeGroup($subdomain=null,$id)
+    public function admin_deleteAirtimeGroup($subdomain = null, $id)
     {
         $group = AirtimeGroup::where('uid', $id)->firstOrFail();
         $recipient = AirtimeRecipient::where('group_id', $group->id)->delete();
@@ -125,10 +129,10 @@ class GroupController extends Controller
     public function admin_airtime_recipient($id)
     {
         $data['user'] = $user = Auth::user();
-        if($user->user_type == 'customer' || $user->user_type == 'client_customer') {
+        if ($user->user_type == 'customer' || $user->user_type == 'client_customer') {
             // dd('here');
 
-            return redirect('/premium-airtime_recipients/'.$id);
+            return redirect('/premium-airtime_recipients/' . $id);
         }
         $data['group'] = $group = AirtimeGroup::where('uid', $id)->firstOrFail();
         $data['recipients'] = AirtimeRecipient::where('group_id', $group->id)->latest()->get();
@@ -147,7 +151,7 @@ class GroupController extends Controller
         // dd('here',$id);
         $data['active'] = 'data_group';
         $data['user'] = $user = Auth::user();
-      
+
         $data['group'] = $group = DataGroup::where('uid', $id)->firstOrFail();
         $data['recipients'] = DataRecipient::where('group_id', $group->id)->latest()->get();
         return view('dashboard.data_recipient', $data);
@@ -161,13 +165,13 @@ class GroupController extends Controller
             'phone' => 'required',
             'plan_id' => 'required'
         ]);
-        if($user->upgrade == 1) {
-            $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan)->where('network', $request->network)->first();
-            
-        } else {
-            $data = Data::where('user_id', 0)->where('plan_id', $request->plan)->where('network', $request->network)->first();
+        // if($user->upgrade == 1) {
+        //     $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan_id)->where('network', $request->network)->first();
 
-        }
+        // } else {
+        $data = Data::where('user_id', 0)->where('plan_id', $request->plan_id)->where('network', $request->network)->first();
+
+        // }
         // $data = Data::where('user_id', $user->company_id)->where('plan_id', $request->plan_id)->where('network', $request->network)->first();
         $amount =  $data->admin_price;
         $data = $request->all();
@@ -193,15 +197,17 @@ class GroupController extends Controller
         $saved_recipient = AirtimeRecipient::create($data);
         return $saved_recipient;
     }
-    
-    public function admin_deleteRecipient($id) {
-        $recipient = DataRecipient::where('uid',$id)->firstOrFail();
+
+    public function admin_deleteRecipient($id)
+    {
+        $recipient = DataRecipient::where('uid', $id)->firstOrFail();
         // dd($recipient);
         $recipient->delete();
         return redirect()->back()->with('message', 'Recipient Deleted Successfully!');
     }
-    public function admin_deleteAirtimeRecipient($id) {
-        $recipient = AirtimeRecipient::where('uid',$id)->firstOrFail();
+    public function admin_deleteAirtimeRecipient($id)
+    {
+        $recipient = AirtimeRecipient::where('uid', $id)->firstOrFail();
         // dd($recipient);
         $recipient->delete();
         return redirect()->back()->with('message', 'Recipient Deleted Successfully!');

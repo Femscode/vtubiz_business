@@ -159,6 +159,9 @@ class HomeController extends Controller
             if ($notification2 && $notification2->title !== null) {
                 $data['notification2'] = $notification2;
             }
+
+            $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->take(5)->get();
+
             // dd($data);
             return response()->view('dashboard.index', $data);
         }

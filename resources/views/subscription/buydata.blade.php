@@ -4,31 +4,17 @@
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div id='app' class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-            {{-- <div class='col-md-12'>
-                <div class='card '>
-                    <div class='alert alert-primary'>
-                        <p style='font-weight:100;font-size:17px;'>You can now buy data in bulk, create custom recipient groups (like staff or
-                            family),
-                            and purchase data for every group member at once with a single click. Click <a
-                                style='color:red' href='/data_group'>here to try it out!</a></p>
-                    </div>
-                </div>
-            </div> --}}
-         <buydata-component :user='{{ $user  }}' :company='{{ $company }}' :beneficiaries='{{ $beneficiaries }}'></buydata-component>
-            <!--end::Content-->
+<div class="service-header">
+    <h1>Buy Data</h1>
+    <p class="text-muted">Fast and affordable data plans for all networks.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="service-card-wrapper">
+            <buydata-component :user='{{ $user  }}' :company='{{ $company }}' :beneficiaries='{{ $beneficiaries }}'></buydata-component>
         </div>
-        <!--end::Profile Account Information-->
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 

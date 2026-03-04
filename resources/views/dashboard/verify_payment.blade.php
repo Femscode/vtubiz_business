@@ -1,90 +1,143 @@
 @extends('dashboard.master1')
 
 @section('header')
+<style>
+    .verify-header {
+        margin-bottom: var(--space-lg);
+    }
+    .verify-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .verify-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+    }
+    .form-control-custom {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(0,0,0,0.08);
+        background: #F9F9F9;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.2s ease;
+    }
+    .form-control-custom:focus {
+        outline: none;
+        border-color: var(--primary-dark);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
+    }
+    .btn-verify {
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+    .btn-verify:active { transform: scale(0.98); }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+    .modern-table thead th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        padding: 10px 20px;
+        font-weight: 700;
+    }
+    .modern-table tbody tr {
+        background: #FDFCF8;
+    }
+    .modern-table tbody td {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
+    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+</style>
 @endsection
 
 @section('content')
+<div class="verify-header">
+    <h1>Verify Payment</h1>
+    <p class="text-muted">Track and verify the status of your funding transactions using their reference numbers.</p>
+</div>
 
-<div class="d-flex flex-column flex-column-fluid">
-  <!--begin::Container-->
-  <div id="kt_app_content" class="app-content  flex-column-fluid ">
-    <!--begin::Profile Account Information-->
-    <div class="row">
-
-        <div class="col-xl-12">
-
-            <!-- end row -->
-
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">Verify Payment</h4>
-                    <div>
-                        <form method='post' action='{{ route("admin_check_verify_payment") ?? '' }}'
-                            enctype='multipart/form-data'>
-                            @csrf
-
-                            <div class="mb-3">
-                                <label for="heading" class="form-label">Reference</label>
-                                <input type="text"  value='{{ $ref ?? "" }}' id='reference' class="form-control" name="reference" value=""
-                                    placeholder="Enter transaction reference">
-
-                            </div>
-
-
-
-
-                            <div class='text-right'>
-                                <button type="submit" name='submit_type' value='save'
-                                    class="btn btn-primary w-md ">Verify</button>
-                            </div>
-                        </form>
-                    </div>
-                    @if(isset($response))
-                    <div style='overflow-x:auto;max-width: 100%'>
-                        <table style='width:100%' class="table">
-                            <thead>
-                                <tr>
-
-                                    <th scope="col">S/N</th>
-                                    <th scope="col">Reference</th>
-
-                                    <th scope="col">Details</th>
-                                    <th scope="col">Message</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Status</th>
-                                   
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>{{ $response['id'] ?? '' }}</td>
-                                    <td>Amount : NGN{{ number_format($response['amount']) ?? '' }}, Channel : {{ $response['payment_type'] }}</td>
-                                    <td>{{ $response['meta']['originatorname'] ?? '' }}, Account Name : {{ $response['meta']['bankname'] ?? '' }}, Account No: {{ $response['meta']['originatoraccountnumber'] ?? '' }}</td>
-
-                                  
-                                    <td>{{ $response['created_at'] ?? '' }}</td>
-                                    <td>{{ $response['status'] ?? '' }}</td>
-                                    <td>
-                                        <a class='btn btn-success'>Print</a>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    @endif
-                </div>
-                <!-- end card body -->
+<div class="verify-card">
+    <form method='post' action='{{ route("admin_check_verify_payment") ?? "" }}'>
+        @csrf
+        <div class="row align-items-end g-3">
+            <div class="col-md-9">
+                <label class="form-label font-weight-bold mb-2" style="font-size: 0.9rem; color: var(--primary-dark);">Transaction Reference</label>
+                <input type="text" value='{{ $ref ?? "" }}' id='reference' class="form-control-custom" name="reference" placeholder="Enter transaction reference">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn-verify w-100">Verify Now</button>
             </div>
         </div>
+    </form>
 
-
+    @if(isset($response))
+    <div class="mt-5 pt-4 border-top">
+        <h4 class="serif mb-4" style="color: var(--primary-dark);">Verification Result</h4>
+        <div class="table-responsive">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Details</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 500;">{{ $response['id'] ?? '' }}</td>
+                        <td>
+                            <div class="text-xs">
+                                <strong>Amount:</strong> ₦{{ number_format($response['amount'] ?? 0, 2) }}<br>
+                                <strong>Channel:</strong> {{ $response['payment_type'] ?? 'N/A' }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-xs">
+                                <strong>Originator:</strong> {{ $response['meta']['originatorname'] ?? 'N/A' }}<br>
+                                <strong>Bank:</strong> {{ $response['meta']['bankname'] ?? 'N/A' }}<br>
+                                <strong>Account:</strong> {{ $response['meta']['originatoraccountnumber'] ?? 'N/A' }}
+                            </div>
+                        </td>
+                        <td class="text-xs text-muted">
+                            {{ $response['created_at'] ?? '' }}
+                        </td>
+                        <td>
+                            <span class="badge" style="background: rgba(39, 174, 96, 0.1); color: var(--accent-green); border-radius: 20px; padding: 6px 12px;">
+                                {{ $response['status'] ?? '' }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href='#' class="btn btn-sm" style="background: var(--primary-dark); color: white; border-radius: 20px; padding: 5px 15px;">Print</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <!--end::Profile Account Information-->
-  </div>
-  <!--end::Container-->
+    @endif
 </div>
 @endsection
 

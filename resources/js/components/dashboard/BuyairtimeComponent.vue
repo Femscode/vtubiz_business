@@ -1,77 +1,140 @@
 <template>
-  <div class="col-md-12">
-    <!--begin::Card-->
-    <div class="card card-custom">
-      <!--begin::Header-->
+  <div class="purchase-page">
+    <!-- Purchase Type Toggle -->
+    <div class="tabs-container">
+      <button 
+        @click="purchaseType = 'single'" 
+        :class="['tab', { active: purchaseType === 'single' }]"
+      >Single Purchase</button>
+      <button 
+        class="tab disabled"
+        disabled
+      >Group Purchase <span class="coming-soon">Coming Soon</span></button>
+    </div>
 
-      <!--end::Header-->
-      <!--begin::Form-->
-      <form class="form" @submit.prevent="buyAirtime()">
-        <div class="card-body">
-          <!--begin::Heading-->
-
-          <div class="row">
-            <label class="col-md-3"></label>
-
-            <div class="col">
-              <h4 class="font-weight-bold"><b>Buy Airtime</b></h4>
-            </div>
-            <div class="col text-end">
-              <a onclick="window.history.back()" class="btn-sm btn btn-secondary">Back</a>
-            </div>
-          </div>
-          <!--begin::Form Group-->
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Phone Number</h6>
-            <div class="col-md-6">
-              <input required @input="fetchNetwork()" v-model="phone_number"
-                class="form-control form-control-lg form-control-solid" type="number" minlength="10" maxlength="11"
-                placeholder="08000000000" />
-              <div class="col-md-12 text-end">
-                <a @click="selectFromBeneficiary()" class="btn btn-primary btn-sm">Select From Beneficiaries</a>
+    <div class="grid-layout">
+      <!-- Main Form Section -->
+      <div class="form-section">
+        
+        <!-- Network Selection -->
+        <div class="section-group">
+          <h3 class="section-label">SELECT NETWORK</h3>
+          <div class="network-grid">
+            <div 
+              v-for="net in networks" 
+              :key="net.id"
+              :class="['network-card', net.name.toLowerCase(), { active: network == net.id }]"
+              @click="selectNetwork(net.id)"
+            >
+              <div class="network-icon">
+                {{ net.name.charAt(0) }}
               </div>
-            </div>
-          </div>
-
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Network</h6>
-            <div class="col-md-6">
-              <select @change="fetchDiscount()" v-model="network" class="form-control">
-                <option value="1">MTN</option>
-                <option value="2">GLO</option>
-                <option value="3">AIRTEL</option>
-                <option value="4">9MOBILE</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <h6 class="col-md-3">Amount</h6>
-            <div class="col-md-6">
-              <input required @input="fetchDiscount" class="form-control" v-model="amount" placeholder="Amount" />
-
-              You will be charged : NGN{{ discountedAmount }}
-              <div class="form-check form-switch form-sm">
-                <input class="form-check-input" type="checkbox" id="save_ben" @change="saveBeneficiary" />
-                <label id="alr_saved" class="form-check-label">Save as beneficiary</label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-3"></div>
-            <div class="btn-group btn-group-example mb-3 col-md-6" role="group">
-              <button :disabled="!transfer_status" type="submit" class="btn btn-primary col-md-3">
-                Buy Now
-              </button>
-              <button :disabled="!transfer_status" type="button" @click="scheduleBuy" class="btn btn-success col-md-3">
-                Buy For Later
-              </button>
+              <span class="network-name">{{ net.name }}</span>
             </div>
           </div>
         </div>
-      </form>
-      <!--end::Form-->
+
+        <!-- Amount Input -->
+        <div class="section-group">
+          <h3 class="section-label">AMOUNT</h3>
+          <div class="input-group">
+            <label class="input-label">Enter Amount (₦)</label>
+            <input 
+              type="number" 
+              v-model="amount" 
+              @input="fetchDiscount"
+              placeholder="Min ₦50"
+              class="input-field"
+            >
+            <div class="charge-hint" v-if="amount >= 50">
+              <i class="fa-solid fa-circle-info me-1"></i> You will be charged: ₦{{ numberFormat(discountedAmount) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone Number / Beneficiaries -->
+        <div class="section-group">
+          <h3 class="section-label">RECIPIENT</h3>
+          
+          <div v-if="beneficiaries.length > 0" class="beneficiary-section">
+            <label class="input-label">Saved Beneficiaries</label>
+            <div class="beneficiary-scroll">
+              <div 
+                v-for="ben in beneficiaries" 
+                :key="ben.id" 
+                class="beneficiary-pill"
+                @click="useBeneficiary(ben)"
+              >
+                <div class="b-avatar">{{ ben.name.substring(0,2).toUpperCase() }}</div>
+                <span class="b-name">{{ ben.name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Phone Number</label>
+            <input 
+              type="tel" 
+              v-model="phone_number" 
+              @input="fetchNetwork()"
+              placeholder="0803 000 0000"
+              class="input-field"
+            >
+          </div>
+          
+          <div class="save-beneficiary-check">
+            <input type="checkbox" id="save-bene" @change="saveBeneficiary">
+            <label for="save-bene">Save as beneficiary</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Sidebar -->
+      <div class="summary-column">
+        <div class="summary-card">
+          <h3 class="section-label">Purchase Summary</h3>
+          
+          <div class="summary-row">
+            <span>Service</span>
+            <span class="summary-value">Airtime Top-up</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Network</span>
+            <span class="summary-value">{{ getNetworkName(network) }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Amount</span>
+            <span class="summary-value">₦{{ numberFormat(amount) }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Recipient</span>
+            <span class="summary-value">{{ phone_number || '---' }}</span>
+          </div>
+
+          <div class="total-section">
+            <span class="total-label">Total Pay</span>
+            <span class="total-amount">₦{{ numberFormat(discountedAmount) }}</span>
+          </div>
+
+          <button 
+            class="btn-primary" 
+            :disabled="!isReady"
+            @click="buyAirtime()"
+          >
+            Buy Now
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          
+         
+        </div>
+      </div>
     </div>
-    <!--end::Card-->
   </div>
 </template>
 
@@ -80,423 +143,433 @@ export default {
   props: ["user", "beneficiaries"],
   data() {
     return {
+      purchaseType: 'single',
       phone_number: "",
       network: "",
       amount: "",
       ben_name: "",
       discountedAmount: 0,
-
       transfer_status: false,
+      networks: [
+        { id: "1", name: "MTN" },
+        { id: "2", name: "GLO" },
+        { id: "3", name: "Airtel" },
+        { id: "4", name: "9Mobile" }
+      ]
     };
   },
-  mounted() { },
+  computed: {
+    isReady() {
+      return this.network && this.amount >= 50 && this.phone_number.length >= 10;
+    }
+  },
   methods: {
+    selectNetwork(id) {
+      this.network = id;
+      this.fetchDiscount();
+    },
+    useBeneficiary(ben) {
+      this.phone_number = ben.phone;
+      this.fetchNetwork();
+    },
+    getNetworkName(id) {
+      const net = this.networks.find(n => n.id == id);
+      return net ? net.name : '---';
+    },
+    numberFormat(val) {
+      return new Intl.NumberFormat().format(val || 0);
+    },
     fetchNetwork() {
       if (this.phone_number.length >= 10 && this.phone_number.length <= 12) {
-        axios
-          .get("/fetchnetwork/" + this.phone_number)
+        axios.get("/fetchnetwork/" + this.phone_number)
           .then((response) => {
-            console.log(response);
             if (response.data !== 0) {
               this.network = response.data;
-
+              this.fetchDiscount();
               this.transfer_status = true;
             }
-          })
-          .catch((error) => {
-            this.transfer_status = false;
-            console.log(error.message);
           });
       } else {
-        (this.amount = null), (this.plans = []);
         this.network = null;
         this.transfer_status = false;
-        // this.network = "";
       }
     },
     fetchDiscount() {
-      if (this.amount.length >= 2) {
-        axios
-          .get(
-            "/fetch_airtime_rate/" + this.network + "/" + this.user.company_id
-          )
+      if (this.amount >= 50 && this.network) {
+        axios.get("/fetch_airtime_rate/" + this.network + "/" + this.user.company_id)
           .then((response) => {
-            console.log(this.user.company_id);
-
             var rate = response.data;
-            this.discountedAmount =
-              this.amount - (parseFloat(rate) / 100) * this.amount;
-          })
-          .catch((error) => {
-            console.error("Error fetching airtime data:", error);
+            this.discountedAmount = this.amount - (parseFloat(rate) / 100) * this.amount;
           });
+      } else {
+        this.discountedAmount = this.amount;
       }
     },
-    scheduleBuy() {
+    buyAirtime() {
+      if (!this.isReady) return;
+      
       Swal.fire({
-        title: "Select To Schedule Purchase",
-        html:
-          "<input id='sweet_alert_date' class='form-control form-input' min='" +
-          new Date().toISOString().split("T")[0] +
-          "' type='date'/><br><input id='sweet_alert_time' class='form-control form-input' type='time' />",
-        showCancelButton: true,
-        preConfirm: () => {
-          // Get the selected date from the date picker
-          const selectedDate =
-            document.getElementById("sweet_alert_date").value;
-          const selectedTime =
-            document.getElementById("sweet_alert_time").value;
-          this.buyAirtime(
-            selectedDate,
-            selectedTime,
-            "Scheduling your purchase, please wait"
-          );
-          // Do something with the selected date
-          console.log("Selected Date:", selectedDate, selectedTime);
+        title: "Confirm Purchase",
+        text: `You are about to buy ₦${this.numberFormat(this.amount)} airtime for ${this.phone_number}. Enter PIN to proceed.`,
+        icon: "warning",
+        input: "password",
+        inputAttributes: {
+          inputmode: "numeric",
+          maxlength: 4,
+          style: "text-align:center;font-size:24px;letter-spacing: 20px",
         },
-      });
-    },
-    selectFromBeneficiary() {
-      const options = this.beneficiaries
-        .map((beneficiary) => {
-          return `<option value="${beneficiary.phone}">${beneficiary.name}</option>`;
-        })
-        .join("");
-      Swal.fire({
-        title: "Choose Beneficiary",
-        html: `<select  class='form-control' required id='beneficiary_choice'><option>--Choose Beneficiary--</option>${options}</select>`,
         showCancelButton: true,
+        confirmButtonColor: "#0F3548",
+        confirmButtonText: "Buy Now",
+        inputValidator: (text) => {
+          if (!/^\d{4}$/.test(text)) return "Please enter a 4-digit PIN";
+        },
       }).then((result) => {
         if (result.isConfirmed) {
-          this.phone_number = $("#beneficiary_choice").val();
-          this.ben_name = $("#beneficiary_choice").find(":selected").text();
-          $("#save_ben").prop("checked", true);
-          $("#alr_saved").text(
-            "Already Saved, toggle to remove from beneficiary"
-          );
-          this.fetchNetwork();
-        }
-      });
-    },
-    saveBeneficiary(event) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
-
-      if (event.target.checked) {
-        if (this.transfer_status) {
-          Swal.fire({
-            title: "Name Of Beneficiary",
-            html: `<input class='form-control' type='text' placeholder='My Sweetheart 🥰❤️' required id='beneficiary_name'/>`,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.ben_name = $("#beneficiary_name").val();
-
-              let fd = new FormData();
-              fd.append("phone", this.phone_number);
-              fd.append("name", this.ben_name);
-              axios
-                .post("/saveBeneficiary", fd)
-                .then((response) => {
-                  console.log(response.data, "the data");
-                  $("#save_ben").prop("checked", true);
-                  $("#alr_saved").text(
-                    "Beneficiary Saved, toggle to save to beneficiary"
-                  );
-                  if (response.data.success == true) {
-                    Toast.fire({
-                      icon: "success",
-                      title: "Beneficiary Saved!",
-                    });
-                  } else {
-                    Toast.fire({
-                      icon: "info",
-                      title: "Beneficiary already exist",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  console.log(error.message);
-                  Swal.fire(error.message);
-                });
-            }
-          });
-        } else {
-          Toast.fire({
-            icon: "info",
-            title: "Invalid Phone Number",
-          });
-        }
-      } else {
-        Swal.fire({
-          title: "Remove Contact?",
-          text: `Are you sure you want to remove ${this.ben_name} from beneficiary`,
-          showCancelButton: true,
-          confirmButtonText: "Yes, I'm Sure",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $("#save_ben").prop("checked", false);
-            $("#alr_saved").text(
-              "Removed from beneficiary, toggle to save to beneficiary"
-            );
-            let fd = new FormData();
-            fd.append("phone", this.phone_number);
-            axios
-              .post("/removeBeneficiary", fd)
-              .then((response) => {
-                console.log(response.data, "the data");
-                if (response.data.success == true) {
-                  Toast.fire({
-                    icon: "success",
-                    title: "Beneficiary Removed!",
-                  });
-                } else {
-                  Toast.fire({
-                    icon: "info",
-                    title: "Beneficiary can't be removed",
-                  });
-                }
-              })
-              .catch((error) => {
-                console.log(error.message);
-                Swal.fire(error.message);
-              });
-          }
-        });
-      }
-    },
-    buyAirtime(selectedDate = null, selectedTime = null, SwalContent = null) {
-      if (this.transfer_status && this.amount.length > 2) {
-        Swal.fire({
-          // title:
-          //   "You are about to purchase" +
-          //   this.selectedPlan.plan_name +
-          //   " of NGN " +
-          //   this.amount,
-          title: "Input your four(4) digit pin to proceed",
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Buy Airtime",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if (result.isConfirmed == false) {
-            return;
-          }
-          const swalMessage =
-            SwalContent !== null
-              ? SwalContent
-              : "Purchasing airtime, please wait...";
-
-          Swal.fire({
-            title: swalMessage,
-            // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
+          Swal.fire({ title: "Processing...", didOpen: () => { Swal.showLoading(); } });
+          
           let fd = new FormData();
           fd.append("phone_number", this.phone_number);
           fd.append("network", this.network);
           fd.append("amount", this.amount);
           fd.append("discounted_amount", this.discountedAmount);
           fd.append("pin", result.value);
-          if (selectedDate !== null) {
-            fd.append("selectedDate", selectedDate);
-            fd.append("selectedTime", selectedTime);
-          }
 
-          axios
-            .post("/buyairtime", fd)
-            .then((response) => {
-              console.log(response.data);
-              if (response.data.success == "true") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Purchase successful!",
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else if (response.data == "schedule_saved") {
-                Swal.fire({
-                  icon: "success",
-                  title: "Airtime Purchase Scheduled For Later Successfully!",
-                  // text: "Updating...",
-                  showConfirmButton: true, // updated
-                  confirmButtonColor: "#3085d6", // added
-                  confirmButtonText: "Ok", // added
-                  allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                  allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              } else {
-
-                //pelumio
-                if (response.data.type == 'duplicate') {
-                  Swal.fire({
-                    icon: "error",
-                    title: response.data.message,
-                    showCancelButton: true,
-                    cancelButtonColor: "#d33",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, Data Received!",
-                    cancelButtonText: "No, Data Not Received!",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                      actions: 'custom-actions-class' // add a custom class to actions for styling
-                    },
-                    showCloseButton: true, // show a close button to dismiss the modal
-                    showLoaderOnConfirm: true, // display a loader animation when Confirm is clicked
-                    preConfirm: () => {
-                      return new Promise((resolve) => {
-                        setTimeout(() => {
-                          resolve();
-                        }, 2000); // Add a delay (2 seconds) to simulate a process
-                      });
-                    },
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      axios
-                        .get("/user_delete_duplicate")
-                        .then((response) => {
-                          console.log(response);
-                          if (response.data == true) {
-                            Swal.fire({
-                              icon: "success",
-                              title: "Previous Transaction Verified! You can now proceed with the current transaction",
-                              showConfirmButton: true,
-                              confirmButtonColor: "#3085d6",
-                              confirmButtonText: "Ok"
-                            });
-                          }
-                        })
-                        .catch((error) => {
-
-                          console.log(error.message);
-                        });
-                      // This code block is executed when the "Confirm" button is clicked.
-
-                    } else {
-                      // This code block is executed when the "Deny" button is clicked.
-                      Swal.fire({
-                        title: "Please reach out to the admin to sort out this issue",
-                        showCloseButton: true,
-                        customClass: {
-                          actions: 'custom-actions-class' // add the same custom class for styling
-                        },
-                        showCancelButton: true,
-                        cancelButtonColor: "#3085d6",
-                        confirmButtonColor: "#25d366",
-                        confirmButtonText: "Chat with Admin",
-                        cancelButtonText: "Not Now"
-                      }).then((chatResult) => {
-                        if (chatResult.isConfirmed) {
-                          // Add your code to open a chat with the admin (e.g., redirect to WhatsApp)
-                          window.location.href = "https://wa.me/2349058744473";
-                        }
-                      });
-                    }
-                  });
-
-
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: response.data.message,
-                    // text: "Updating...",
-                    showConfirmButton: true, // updated
-                    confirmButtonColor: "#3085d6", // added
-                    confirmButtonText: "Ok", // added
-                    allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                    allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      // location.reload();
-                    }
-                  });
-                }
-              }
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Swal.fire(error.message);
-            });
-        });
-      } else {
+          axios.post("/buyairtime", fd).then((response) => {
+            if (response.data.success == "true") {
+              Swal.fire("Success", "Airtime purchase successful!", "success").then(() => location.reload());
+            } else {
+              Swal.fire("Error", response.data.message, "error");
+            }
+          }).catch(err => Swal.fire("Error", err.message, "error"));
+        }
+      });
+    },
+    saveBeneficiary(event) {
+      if (event.target.checked && this.phone_number.length >= 10) {
         Swal.fire({
-          title: "Insufficient balance!,",
-          icon: "info",
-          html:
-            "Click " +
-            '<a href="https://vtubiz.com/fundwallet">here</a> ' +
-            "to fund your wallet.",
-          showCloseButton: true,
+          title: "Beneficiary Name",
+          input: "text",
+          inputPlaceholder: "e.g. My Second Line",
           showCancelButton: true,
-          focusConfirm: false,
+        }).then(result => {
+          if (result.isConfirmed && result.value) {
+            let fd = new FormData();
+            fd.append("phone", this.phone_number);
+            fd.append("name", result.value);
+            axios.post("/saveBeneficiary", fd).then(res => {
+              if (res.data.success) Swal.fire("Saved!", "", "success");
+            });
+          }
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.purchase-page {
+  --c-text-main: #0F172A;
+  --c-text-sec: #64748B;
+  --c-border: #E2E8F0;
+  --c-orange: #E85D04; 
+  --c-orange-light: #FFF1EB;
+  --c-green: #00BFA5; 
+  --c-green-light: #E0F2F1;
+  --c-yellow: #F7DC6F; 
+  --c-yellow-light: #FEF9E7;
+  --c-purple: #7D79D0; 
+  --c-purple-light: #EEEDF9;
+  --r-pill: 999px;
+  --r-card: 24px;
+  --r-input: 16px;
+  
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--c-text-main);
+}
+
+.tabs-container {
+  background: white;
+  padding: 6px;
+  border-radius: var(--r-pill);
+  display: inline-flex;
+  border: 1px solid var(--c-border);
+  margin-bottom: 32px;
+}
+
+.tab {
+  padding: 10px 24px;
+  border-radius: var(--r-pill);
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--c-text-sec);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: var(--c-text-main);
+  color: white;
+}
+
+.tab.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.coming-soon {
+  font-size: 10px;
+  background: var(--c-orange-light);
+  color: var(--c-orange);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 30px;
+  align-items: start;
+}
+
+.form-section {
+  min-width: 0;
+}
+
+.summary-column {
+  width: 380px;
+}
+
+.section-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-text-sec);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.network-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+}
+
+.network-card {
+  background: white;
+  border: 2px solid var(--c-border);
+  border-radius: 20px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 110px;
+}
+
+.network-card:hover { border-color: #CBD5E1; transform: translateY(-2px); }
+.network-card.mtn.active { border-color: var(--c-yellow); background: var(--c-yellow-light); }
+.network-card.glo.active { border-color: var(--c-green); background: var(--c-green-light); }
+.network-card.airtel.active { border-color: var(--c-orange); background: var(--c-orange-light); }
+.network-card.9mobile.active { border-color: var(--c-purple); background: var(--c-purple-light); }
+
+.network-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+  color: white;
+}
+
+.network-card.mtn .network-icon { background: var(--c-yellow); color: #856404; }
+.network-card.glo .network-icon { background: var(--c-green); }
+.network-card.airtel .network-icon { background: var(--c-orange); }
+.network-card.9mobile .network-icon { background: var(--c-purple); }
+
+.network-name { font-weight: 700; font-size: 14px; }
+
+.input-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--c-text-main); }
+
+.beneficiary-section { margin-bottom: 20px; }
+.beneficiary-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.beneficiary-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 8px;
+  background: white;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.beneficiary-pill:hover { border-color: #5DADE2; transform: translateY(-1px); }
+.b-avatar {
+  width: 28px;
+  height: 28px;
+  background: #F1F5F9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-text-sec);
+}
+.b-name { font-size: 13px; font-weight: 600; }
+
+.input-field {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-input);
+  background: white;
+  transition: border-color 0.2s;
+  font-weight: 500;
+  color: var(--c-text-main);
+}
+.input-field:focus { outline: none; border-color: var(--c-orange); }
+
+.charge-hint {
+  font-size: 0.85rem;
+  color: #27AE60;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.save-beneficiary-check {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.save-beneficiary-check input { accent-color: var(--c-orange); width: 16px; height: 16px; }
+.save-beneficiary-check label { font-size: 14px; font-weight: 500; color: var(--c-text-sec); cursor: pointer; }
+
+#app .summary-card {
+  background: #001f3f !important;
+  color: white !important;
+  padding: 32px;
+  border-radius: 32px;
+  position: sticky;
+  top: 40px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--c-text-sec);
+}
+.summary-value { font-weight: 700; color: var(--c-text-main); }
+
+.total-section {
+  background: rgba(251, 145, 41, 0.1);
+  padding: 24px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.total-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fb9129;
+}
+
+.total-amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fb9129;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 18px;
+  background: var(--c-orange);
+  color: white;
+  border: none;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover:not(:disabled) { background-color: #D35400; transform: scale(1.02); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.secure-text { text-align: center; margin-top: 16px; font-size: 12px; color: var(--c-text-sec); }
+
+@media (max-width: 1024px) {
+  .grid-layout { 
+    grid-template-columns: 1fr; 
+  }
+  .summary-column {
+    width: 100%;
+    order: 1; /* Show summary at bottom on mobile */
+  }
+  .summary-card {
+    position: relative;
+    top: 0;
+    margin-bottom: 30px;
+  }
+  .network-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .tabs-container {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .tab {
+    flex: 1;
+    white-space: nowrap;
+    padding: 10px 15px;
+  }
+  .network-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .purchase-page {
+    padding: 0;
+  }
+  .summary-card, .form-section {
+    padding: 15px;
+  }
+}
+</style>

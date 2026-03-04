@@ -4,21 +4,17 @@
 @endsection 
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!--begin::Container-->
-    <div  id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Profile Account Information-->
-        <div id='app' class="row">
-            <!--begin::Aside-->
-          
-            <!--end::Aside-->
-            <!--begin::Content-->
-         <examination-component :user='{{ $user  }}' :examinations='{{ $examinations }}' :company='{{ $company }}'></examination-component>
-            <!--end::Content-->
+<div class="service-header">
+    <h1>Exam Pins</h1>
+    <p class="text-muted">Purchase WAEC, NECO, and NABTEB result checker pins instantly.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="service-card-wrapper">
+            <examination-component :user='{{ $user  }}' :examinations='{{ $examinations }}' :company='{{ $company }}'></examination-component>
         </div>
-        <!--end::Profile Account Information-->
     </div>
-    <!--end::Container-->
 </div>
 @endsection 
 

@@ -1,351 +1,351 @@
 @extends('dashboard.master1')
 
 @section('header')
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+<style>
+    .transactions-header {
+        margin-bottom: var(--space-lg);
+    }
+    .transactions-header h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+    .transactions-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-card);
+    }
+    .stat-card-modern {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 20px;
+        box-shadow: var(--shadow-card);
+        border: 1px solid rgba(0,0,0,0.03);
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .stat-icon-wrap {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    .bg-light-success { background: rgba(39, 174, 96, 0.1); color: #27ae60; }
+    .bg-light-danger { background: rgba(235, 87, 87, 0.1); color: #eb5757; }
+    .stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-amount { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 600; color: var(--primary-dark); }
+    
+    .search-input-group {
+        position: relative;
+        max-width: 400px;
+        margin-bottom: var(--space-md);
+    }
+    .search-input-group input {
+        width: 100%;
+        padding: 12px 16px 12px 45px;
+        border-radius: var(--radius-pill);
+        border: 1px solid rgba(0,0,0,0.08);
+        background: #F9F9F9;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.2s ease;
+    }
+    .search-input-group input:focus {
+        outline: none;
+        border-color: var(--primary-dark);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
+    }
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-light);
+    }
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+    .modern-table thead th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        padding: 10px 20px;
+        font-weight: 700;
+        border: none;
+    }
+    .modern-table tbody tr {
+        background: #FDFCF8;
+        transition: transform 0.2s ease;
+    }
+    .modern-table tbody tr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .modern-table tbody td {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        vertical-align: middle;
+        border: none;
+    }
+    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
+    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+    
+    .badge-modern {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    .badge-success { background: rgba(39, 174, 96, 0.1); color: var(--accent-green); }
+    .badge-warning { background: rgba(242, 201, 76, 0.15); color: #D4A017; }
+    .badge-danger { background: rgba(235, 87, 87, 0.1); color: var(--accent-pink); }
+    
+    .amount-val { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1rem; }
+    .amount-credit { color: var(--accent-green); }
+    .amount-debit { color: var(--text-main); }
+    
+    .btn-action-modern {
+        padding: 8px 16px;
+        border-radius: var(--radius-pill);
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    .btn-verify { background: rgba(47, 128, 237, 0.1); color: var(--accent-blue); }
+    .btn-print { background: rgba(39, 174, 96, 0.1); color: var(--accent-green); }
+    
+    @media (max-width: 991px) {
+        .modern-table thead { display: none; }
+        .modern-table tbody td { display: block; padding: 10px 20px; text-align: right; border-bottom: 1px solid rgba(0,0,0,0.02); }
+        .modern-table tbody td:last-child { border-bottom: none; }
+        .modern-table tbody td::before { content: attr(data-label); float: left; font-weight: 700; color: var(--text-light); }
+    }
+</style>
 @endsection
 
 @section('content')
+<div class="transactions-header">
+    <h1>My Transactions</h1>
+    <p class="text-muted">A complete history of all your platform activities.</p>
+</div>
 
-<div class="d-flex flex-column flex-column-fluid">
-  <!--begin::Container-->
-  <div id="kt_app_content" class="app-content  flex-column-fluid ">
-    <!--begin::Profile Account Information-->
-    <div class="row">
+@php
+    $total_funding = $transactions->where('type', 'credit')->where('status', 1)->sum('amount');
+    $total_spent = $transactions->where('type', 'debit')->where('status', 1)->sum('amount');
+@endphp
 
-      <!--begin::Content-->
-      <div class="col-md-12">
-        <!--begin::Card-->
-        <div class="card card-custom">
-          <div class="card-header flex-wrap border-0 pt-6 pb-0">
-            <div class="card-title">
-              <h3 class="card-label">My Transactions
-                <span class="text-muted pt-2 font-size-sm d-block">{{ $user->email }}</span>
-              </h3>
-
-
+<div class="row g-4 mb-5">
+    <div class="col-md-6">
+        <div class="stat-card-modern">
+            <div class="stat-icon-wrap bg-light-success">
+                <i class="fa-solid fa-arrow-down"></i>
             </div>
-
-          </div>
-          <div class="card-body">
-            <div class='col-md-6'>
-              <input type="text" class="form-control" placeholder="Search..." id="searchTable">
+            <div>
+                <div class="stat-label">Total Funding</div>
+                <div class="stat-amount">₦{{ number_format($total_funding, 2) }}</div>
             </div>
-
-
-            <table class="datatable table">
-              <thead>
-                <tr>
-
-                  <th scope="col">Title</th>
-                  <th scope="col">Reference</th>
-                  <th scope="col">Details</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Previous Balance</th>
-                  <th scope="col">Later Balance</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <input style='visibility:hidden' value='{{ $user->balance }}' id='user_amount' />
-                @foreach($transactions as $key => $tranx)
-                @if($tranx->status == 2)
-                <tr class='bg bg-light-warning'>
-
-
-                  <td>{{ $tranx->title }}<br>
-                    @if($tranx->title == "Data Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title ==
-                    "Airtime Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title == "Electricity
-                    Payment" && $tranx->status == 1 && $tranx->redo == 1 )
-                    {{-- @if($tranx->title == "Data Purchase" && $tranx->status == 1 || $tranx->title == "Airtime
-                    Purchase" && $tranx->status == 1 || $tranx->title =='Electricity Payment' && $tranx->status == 1 ||
-                    $tranx->title == 'Cable Subscription' && $tranx->status == 1 ) --}}
-                    <a data-transaction_id="{{ $tranx->id }}" data-title="{{ $tranx->title }}"
-                      data-amount="{{ $tranx->amount }}" data-description='{{ $tranx->description }}'
-                      data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
-                    @endif
-                  </td>
-                  <td>{{ $tranx->reference }}</td>
-                  <td>{{ $tranx->description }}</td>
-                  <td>₦{{ number_format($tranx->amount,2) }}</td>
-                  <td>₦{{ number_format($tranx->before,2) }}</td>
-                  <td>₦{{ number_format($tranx->after,2) }}</td>
-                  <td>Pending Schedule Purchase</td>
-                  <td>
-                    <span class='badge badge-light-warning'>Pending</span>
-
-
-                  </td>
-                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
-                  <td>
-                    <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
-
-                    <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
-                  </td>
-                </tr>
-                @elseif($tranx->status == 3)
-
-                <tr class='alert alert-warning'>
-                  <td>{{ $tranx->user->name }}<br>
-                    <a href='https://wa.me/234{{ substr($tranx->user->phone,1) }}'>{{
-                      $tranx->user->phone }}</a>
-                  </td>
-                  <td>{{ $tranx->reference }}</td>
-                  <td>{{ $tranx->description }}</td>
-                  <td>₦{{ number_format($tranx->amount,2) }}</td>
-                  <td>>₦{{ number_format($tranx->before) }} </td>
-                  <td>₦{{
-                    number_format($tranx->after) }}</td>
-                  <td>{{ $tranx->type }}</td>
-                  <td>
-
-                    <span class='btn-sm btn btn-warning'>Pending / Failed</span>
-
-                  </td>
-                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
-                 
-                  <td><a href='/verify_purchase/{{ $tranx->reference }}' class='btn btn-success'>Verify</td>
-                </tr>
-                @elseif($tranx->status == 1)
-                <tr class='bg bg-light-success'>
-
-
-                  <td>{{ $tranx->title }}<br>
-                    @if($tranx->title == "Data Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title ==
-                    "Airtime Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title == "Electricity
-                    Payment" && $tranx->status == 1 && $tranx->redo == 1 )
-                    {{-- @if($tranx->title == "Data Purchase" && $tranx->status == 1 || $tranx->title == "Airtime
-                    Purchase" && $tranx->status == 1 || $tranx->title =='Electricity Payment' && $tranx->status == 1 ||
-                    $tranx->title == 'Cable Subscription' && $tranx->status == 1 ) --}}
-                    <a data-transaction_id="{{ $tranx->id }}" data-title="{{ $tranx->title }}"
-                      data-amount="{{ $tranx->amount }}" data-description='{{ $tranx->description }}'
-                      data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
-                    @endif
-                  </td>
-                  <td>{{ $tranx->reference }}</td>
-                  <td>{{ $tranx->description }}</td>
-                  <td>₦{{ number_format($tranx->amount,2) }}</td>
-                  <td>₦{{ number_format($tranx->before,2) }}</td>
-                  <td>₦{{ number_format($tranx->after,2) }}</td>
-                  <td>{{ $tranx->type }}</td>
-                  <td>@if($tranx->status == 1)
-                    <span class='badge badge-light-success'>Success</span>
-                    @else
-                    <span class='badge badge-light-danger'>Failed</span>
-                    @endif
-
-                  </td>
-                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
-                 
-                  <td>
-                    <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
-
-                    <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
-                  </td>
-                </tr>
-                @else
-                <tr class='bg bg-light-danger'>
-
-
-                  <td>{{ $tranx->title }}<br>
-                    @if($tranx->title == "Data Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title ==
-                    "Airtime Purchase" && $tranx->status == 1 && $tranx->redo == 1 || $tranx->title == "Electricity
-                    Payment" && $tranx->status == 1 && $tranx->redo == 1 )
-                    {{-- @if($tranx->title == "Data Purchase" && $tranx->status == 1 || $tranx->title == "Airtime
-                    Purchase" && $tranx->status == 1 || $tranx->title =='Electricity Payment' && $tranx->status == 1 ||
-                    $tranx->title == 'Cable Subscription' && $tranx->status == 1 ) --}}
-                    <a data-transaction_id="{{ $tranx->id }}" data-title="{{ $tranx->title }}"
-                      data-amount="{{ $tranx->amount }}" data-description='{{ $tranx->description }}'
-                      data-id='{{ $tranx->id }}' class='redo btn btn-secondary btn-sm'>Redo</a>
-                    @endif
-                  </td>
-                  <td>{{ $tranx->reference }}</td>
-                  <td>{{ $tranx->description }}</td>
-                  <td>₦{{ number_format($tranx->amount,2) }}</td>
-                  <td>₦{{ number_format($tranx->before,2) }}</td>
-                  <td>₦{{ number_format($tranx->after,2) }}</td>
-                  <td>{{ $tranx->type }}</td>
-                  <td>@if($tranx->status == 1)
-                    <span class='badge badge-light-success'>Success</span>
-                    @else
-                    <span class='badge badge-light-danger'>Failed</span>
-                    @endif
-
-                  </td>
-                  <td> {{ Date('d-m-Y h:i',strtotime($tranx->created_at)) }}</td>
-                 
-                  <td>
-                    <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn btn-primary btn-sm'>Verify</a>
-                    <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
-                  </td>
-                </tr>
-                @endif
-                @endforeach
-
-              </tbody>
-            </table>
-            <!--end: Datatable-->
-          </div>
         </div>
-        <!--end::Card-->
-      </div>
-      <!--end::Content-->
     </div>
-    <!--end::Profile Account Information-->
-  </div>
-  <!--end::Container-->
+    <div class="col-md-6">
+        <div class="stat-card-modern">
+            <div class="stat-icon-wrap bg-light-danger">
+                <i class="fa-solid fa-arrow-up"></i>
+            </div>
+            <div>
+                <div class="stat-label">Total Spent</div>
+                <div class="stat-amount">₦{{ number_format($total_spent, 2) }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="transactions-card">
+    <div class="search-input-group">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchTable" placeholder="Search by title, reference, or description...">
+    </div>
+
+    <div class="table-responsive">
+        <table class="datatable modern-table">
+            <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Reference</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <input style='visibility:hidden; display:none;' value='{{ $user->balance }}' id='user_amount' />
+                @foreach($transactions as $tranx)
+                <tr>
+                    <td data-label="Details">
+                        <div style="font-weight: 600; color: var(--primary-dark);">{{ $tranx->title }}</div>
+                        <div class="text-xs text-muted">{{ $tranx->description }}</div>
+                        @if(($tranx->title == "Data Purchase" || $tranx->title == "Airtime Purchase" || $tranx->title == "Electricity Payment") && $tranx->status == 1 && $tranx->redo == 1)
+                            <a data-transaction_id="{{ $tranx->id }}" data-title="{{ $tranx->title }}"
+                               data-amount="{{ $tranx->amount }}" data-description='{{ $tranx->description }}'
+                               class='redo text-xs mt-1 d-inline-block' style="color: var(--accent-blue); cursor: pointer; text-decoration: underline;">Redo Transaction</a>
+                        @endif
+                    </td>
+                    <td data-label="Reference" class="text-xs text-muted">{{ $tranx->reference }}</td>
+                    <td data-label="Amount">
+                        <span class="amount-val {{ $tranx->type == 'credit' ? 'amount-credit' : 'amount-debit' }}">
+                            {{ $tranx->type == 'credit' ? '+' : '-' }} ₦{{ number_format($tranx->amount, 2) }}
+                        </span>
+                    </td>
+                    <td data-label="Balance" class="text-xs">
+                        <div class="text-muted">Prev: ₦{{ number_format($tranx->before, 2) }}</div>
+                        <div style="font-weight: 500;">Later: ₦{{ number_format($tranx->after, 2) }}</div>
+                    </td>
+                    <td data-label="Status">
+                        @if($tranx->status == 1)
+                            <span class='badge-modern badge-success'>Success</span>
+                        @elseif($tranx->status == 2)
+                            <span class='badge-modern badge-warning'>Pending</span>
+                        @else
+                            <span class='badge-modern badge-danger'>Failed</span>
+                        @endif
+                    </td>
+                    <td data-label="Date" class="text-xs text-muted">
+                        {{ Date('M d, Y', strtotime($tranx->created_at)) }}<br>
+                        {{ Date('h:i A', strtotime($tranx->created_at)) }}
+                    </td>
+                    <td data-label="Action">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href='/premium-verify_purchase/{{ $tranx->reference }}' class='btn-action-modern btn-verify'>Verify</a>
+                            <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn-action-modern btn-print'>Print</a>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection
 
 @section('script')
+<!-- DataTables JS -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
         var oTable = $('.datatable').DataTable({
             ordering: false,
-            searching: true
-            });   
+            searching: true,
+            paging: true,
+            pageLength: 25,
+            lengthChange: true,
+            info: true,
+            dom: '<"top"f>rt<"bottom"ip><"clear">', // Added default search back but hidden via CSS if needed
+            language: {
+                search: "",
+                searchPlaceholder: "Search transactions..."
+            }
+        });
 
+        // Hide the default search box created by DataTable since we have a custom one
+        $('.dataTables_filter').hide();
 
-            $('#searchTable').on('keyup', function() {
-              oTable.search(this.value).draw();
-            });
+        $('#searchTable').on('keyup', function() {
+            oTable.search(this.value).draw();
+        });
 
         @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-    $("body").on('click','.redo', function() {
-        var description = $(this).data('description')
-        var title = $(this).data('title')
-        var transaction_id = $(this).data('transaction_id')
-        console.log($(this).data('amount'),  $("#user_amount").val(), 'price different' )
-       if(parseInt( $("#user_amount").val()) > parseInt($(this).data('amount'))) {
-       
-        Swal.fire({
-          title: "You are about to redo " + description,
-          html: " <span class='text-warning'>Input your four(4) digit pin to proceed</span> " ,
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Proceed",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('message') }}",
+                confirmButtonColor: '#0F3548'
             });
-          },
+        @endif
 
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if(result.isConfirmed == false) {
-          return;
+        $("body").on('click', '.redo', function() {
+            var description = $(this).data('description');
+            var transaction_id = $(this).data('transaction_id');
+            var amount = $(this).data('amount');
+            var user_balance = $("#user_amount").val();
 
-          }
-          console.log(result, 'the result')
-        
-        Swal.fire({
-          title: "Processing transaction, please wait...",
-          // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        let fd = new FormData();
-        fd.append("transaction_id", transaction_id);
-        fd.append("pin", result.value);
-       
-      
-        axios
-          .post("/redo_transaction", fd)
-          .then((response) => {
-            console.log(response, 'the res')
-            if (response.data.success == "true") {
-              Swal.fire({
-                icon: "success",
-                title: "Purchase successful!",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  location.reload();
-                }
-              });
+            if (parseFloat(user_balance) >= parseFloat(amount)) {
+                Swal.fire({
+                    title: "Redo Transaction",
+                    text: "You are about to redo: " + description,
+                    icon: "warning",
+                    input: "password",
+                    inputPlaceholder: "Enter your 4-digit PIN",
+                    inputAttributes: {
+                        inputmode: "numeric",
+                        maxlength: 4,
+                        style: "text-align:center; font-size:24px; letter-spacing: 15px",
+                    },
+                    showCancelButton: true,
+                    confirmButtonColor: "#0F3548",
+                    confirmButtonText: "Confirm",
+                    inputValidator: (value) => {
+                        if (!/^\d{4}$/.test(value)) {
+                            return "Please enter a 4-digit PIN";
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            didOpen: () => { Swal.showLoading(); },
+                            allowOutsideClick: false
+                        });
+
+                        let fd = new FormData();
+                        fd.append("transaction_id", transaction_id);
+                        fd.append("pin", result.value);
+
+                        axios.post("/redo_transaction", fd)
+                            .then((response) => {
+                                if (response.data.success == "true") {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Success!",
+                                        text: "Transaction processed successfully."
+                                    }).then(() => { location.reload(); });
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Error",
+                                        text: response.data.message
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                Swal.fire("Error", error.message, "error");
+                            });
+                    }
+                });
             } else {
-              Swal.fire({
-                icon: "error",
-                title: response.data.message,
-                // text: "Updating...",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  // location.reload();
-                }
-              });
+                Swal.fire({
+                    title: 'Insufficient Balance',
+                    icon: 'info',
+                    html: 'You need to fund your wallet to redo this transaction. <br><br><a href="/fundwallet" class="btn btn-primary" style="background:#0F3548; border:none; padding:10px 20px; border-radius:20px; color:white; text-decoration:none;">Fund Wallet</a>',
+                    showConfirmButton: false
+                });
             }
-          })
-          .catch((error) => {
-            console.log(error.message);
-            Swal.fire(error.message);
-          });
-        }) 
-      } else {
-        Swal.fire({
-                title: 'Insufficient balance!,',
-                icon: 'info',
-                html:
-                    'Click ' +
-                    '<a href="https://fastpay.cttaste.com/fundwallet">here</a> ' +
-                    'to fund your wallet.',
-                showCloseButton: true,
-                showCancelButton: true,
-                focusConfirm: false,
-              
-                })
-            
-
-            }
-     
-    })
-  
-        
-    })
-
+        });
+    });
 </script>
 @endsection
