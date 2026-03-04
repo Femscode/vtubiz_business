@@ -702,11 +702,16 @@
         <div class="row gx-lg-8 gx-xl-12 gy-10 align-items-center">
           <div class="col-md-10 offset-md-1 offset-lg-0 col-lg-6 text-center text-lg-start">
             <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
+              Top Up,
+              <span style="color: #fb9129;">Pay Bills,</span> <br>
+              Stay Connected Always.
+            </h1>
+            <!-- <h1 class="display-1 mb-4 mx-md-n5 mx-lg-0 fw-bolder" style="font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.05; color: #001f3f; letter-spacing: -2px;">
               Never run out of <br>
               airtime, <span style="color: #fb9129;">data</span> or <br>
               electricity again.
-            </h1>
-            <p class="lead fs-lg mb-7 pe-xxl-10 text-muted" style="max-width: 500px; line-height: 1.6;">
+            </h1> -->
+            <p class="lead fs-lg mb-7 pe-xxl-10" style="max-width: 500px; line-height: 1.6;">
               The smartest way to buy data, pay electricity bills, and renew subscriptions. Fast, secure, and instant.
             </p>
             <div class="d-flex justify-content-center justify-content-lg-start gap-3 flex-wrap">
