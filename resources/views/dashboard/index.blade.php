@@ -434,7 +434,7 @@
             </div>
             @endif
 
-            @if($user->user_type == 'customer' || $user->user_type =='user')
+            <!-- @if($user->user_type == 'customer' || $user->user_type =='user')
             <div class="upgrade-card">
                 <h4>Get your own VTU Website today!</h4>
                 <p style="opacity: 0.9; margin-bottom: var(--space-md);">Get yourself a VTU website and sell all products like we do, all for NGN45,000.</p>
@@ -442,7 +442,7 @@
                     Upgrade Now
                 </a>
             </div>
-            @endif
+            @endif -->
 
             <div class="dashboard-grid">
                 <!-- Left Column -->

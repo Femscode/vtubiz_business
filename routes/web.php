@@ -45,6 +45,17 @@ Route::any('removedouble/{id}', function($id) {
 });
 
 
+Route::any('give_brand_name', function() {
+    $users = User::all();
+    foreach($users as $user) {
+        if ($user->brand_name == null) {
+            $brand_name = str_replace(' ', '-', $user->name);
+            $user->brand_name = $brand_name;
+            $user->save();
+        }
+    }
+});
+
 Route::any('runawoof', function() {
     
     // Data::create([
