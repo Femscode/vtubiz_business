@@ -436,8 +436,8 @@
 
             @if($user->user_type == 'customer' || $user->user_type =='user')
             <div class="upgrade-card">
-                <h4>Upgrade to a business account</h4>
-                <p style="opacity: 0.9; margin-bottom: var(--space-md);">Get yourself a free VTU website and discount in all data plan prices.</p>
+                <h4>Get your own VTU Website today!</h4>
+                <p style="opacity: 0.9; margin-bottom: var(--space-md);">Get yourself a VTU website and sell all products like we do, all for NGN45,000.</p>
                 <a onclick='return confirmUpgrade()' href="/upgrade/{{ $user->id }}" class="btn btn-success btn-sm font-weight-bold px-6 py-3">
                     Upgrade Now
                 </a>
@@ -587,12 +587,12 @@
                 <div style="text-align: left;">
                     <p>Business account benefits:</p>
                     <ul style="margin-bottom: 15px;">
-                        <li>A free VTU website</li>
-                        <li>Discount in all data plan prices</li>
+                        <li>A VTU website</li>
+                        <li>Sell all products like we do</li>
                         <li>Customizing your own data prices</li>
                         <li>Email marketing tools</li>
                     </ul>
-                    <p style="color: #EB5757; font-weight: 600;">Upgrade Fee: ₦3,500</p>
+                    <p style="color: #EB5757; font-weight: 600;">Upgrade Fee: ₦45,000</p>
                 </div>
             `,
             icon: 'info',

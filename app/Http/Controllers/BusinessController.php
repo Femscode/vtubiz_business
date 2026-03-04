@@ -78,7 +78,7 @@ class BusinessController extends Controller
         // dd($user);
         if ($user->user_type == 'customer') {
 
-            if ($user->balance < 3500) {
+            if ($user->balance < 45000) {
 
                 return redirect('/dashboard')->with('message', 'Insufficient balance for upgrading account!');
             }
@@ -86,8 +86,8 @@ class BusinessController extends Controller
             $user->user_type = 'admin';
             $user->save();
             $client_reference = "Upgrade_" . Str::random(5);
-            $details = "Account Upgrade ~ Amount:NGN3,500 ";
-            $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'debit', 3500, $user->id, 1);
+            $details = "Account Upgrade ~ Amount:NGN45,000 ";
+            $trans_id = $this->create_transaction('Account Upgrade', $client_reference, $details, 'debit', 45000, $user->id, 1);
             $datas = Data::where('user_id', $user->company_id)->get();
             $real_data = Data::where('user_id', 0)->get();
             foreach ($datas as $data) {
