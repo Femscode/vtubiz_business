@@ -135,9 +135,9 @@ class FundingController extends Controller
             $data['account_no'] = $responseData['data']['account_number'];
             $data['amount'] = $responseData['data']['amount'];
             $data['expiry_date'] = $responseData['data']['expiry_date'];
-            if ($user->user_type == 'admin') {
-                return view('business_backend.direct_transfer', $data);
-            }
+            // if ($user->user_type == 'admin') {
+            //     return view('business_backend.direct_transfer', $data);
+            // }
 
             return view('dashboard.direct_transfer', $data);
         }

@@ -1,233 +1,220 @@
 @extends('dashboard.master1')
 
 @section('header')
-
 <style>
-    .credit-card {
-        
- background: linear-gradient(to right, #fb9129, #155724);
- border-radius: 10px;
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
- overflow: hidden;
- width: 300px;
- margin: 20px;
- color: black;
-}
+    .transfer-container {
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    .guideline-card {
+        background: #fff;
+        border-radius: var(--radius-lg);
+        padding: 30px;
+        box-shadow: var(--shadow-card);
+        border-left: 5px solid var(--accent-orange);
+        margin-bottom: 30px;
+    }
+    .guideline-title {
+        font-family: 'Fraunces', serif;
+        font-size: 1.4rem;
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .guideline-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .guideline-list li {
+        margin-bottom: 10px;
+        color: var(--text-secondary);
+        display: flex;
+        gap: 10px;
+        font-size: 0.95rem;
+    }
+    .guideline-list li::before {
+        content: "\f058";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        color: var(--accent-green);
+    }
 
-.card {
- border: none;
- 
- color:black;
-}
+    .bank-card {
+        background: var(--primary-dark);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(15, 53, 72, 0.2);
+    }
+    .bank-card::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(251, 145, 41, 0.1);
+        border-radius: 50%;
+        z-index: 1;
+    }
+    .bank-details {
+        position: relative;
+        z-index: 2;
+    }
+    .detail-item {
+        margin-bottom: 24px;
+    }
+    .detail-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255,255,255,0.6);
+        margin-bottom: 4px;
+    }
+    .detail-value {
+        font-family: 'Fraunces', serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .copy-btn {
+        background: rgba(255,255,255,0.1);
+        border: none;
+        color: white;
+        padding: 5px 12px;
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'DM Sans', sans-serif;
+    }
+    .copy-btn:hover {
+        background: var(--accent-orange);
+        color: var(--primary-dark);
+    }
 
-.countdown-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 50px auto;
-    border-radius: 50%;
-    border: 8px solid #ccc;
-}
-
-.countdown-timer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    width: 100%;
-}
-
-.countdown-timer h2 {
-    margin: 0;
-    font-size: 24px;
-}
+    .timer-badge {
+        background: rgba(235, 87, 87, 0.1);
+        color: #eb5757;
+        padding: 8px 16px;
+        border-radius: var(--radius-pill);
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+    .amount-highlight {
+        color: var(--accent-orange);
+        font-size: 2rem;
+    }
 </style>
-
-
 @endsection
 
 @section('content')
+<div class="transfer-container">
+    <div class="guideline-card">
+        <h3 class="guideline-title">
+            <i class="fa-solid fa-circle-info"></i>
+            Bank Transfer Guidelines
+        </h3>
+        <ul class="guideline-list">
+            <li>Transfer only the exact amount stated below.</li>
+            <li>This is a temporary account that expires in 
+                <span class="fw-bold text-danger"><span id="min">30</span>m <span id="secs">0</span>s</span>.
+            </li>
+            <li>The account name must begin with <strong>VTUBIZ</strong>.</li>
+        </ul>
+    </div>
 
-<!--end::Subheader-->
-<!--begin::Entry-->
-<div class="d-flex flex-column flex-column-fluid">
-    <div id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Container-->
-        <div class="row">
-            <!--begin::Profile Account Information-->
-
-            <!--begin::Content-->
-            <div class="col-md-12">
-                <!--begin::Card-->
-                <div style='border:1px dashed #3c763d;background-color:#fff;'class="card card-custom">
-                    <!--begin::Header-->
-               
-                    <!--end::Header-->
-                    <!--begin::Form-->
-
-                    <div class="card-body">
-                        <!--begin::Heading-->
-
-
-                       
-                        <div class="alert bg-light-success alert-custom alert-light-success fade show mb-2"
-                            role="alert">
-                          
-                            <input type='hidden' id='expire' value='30'/>
-                            <H3>Bank Transfer Guildline</H3>
-                            <ul>
-                                <li>Transfer only the exact amount stated below.</li>
-                                <li>Take note that account details below is a temporary account, and it expires in  <span class='text-danger'><b><span id='min'>30</span>Mins <span id='secs'>0</span>Secs</b></span> time.</li>
-                                <li>Take note of the account name during transfer, it must begin with VTUBIZ.</li>
-                            </ul>
-                          
-
-
+    <div class="bank-card">
+        <div class="bank-details">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="detail-item">
+                        <div class="detail-label">Account Number</div>
+                        <div class="detail-value">
+                            <span id="acctNo">{{ $account_no ?? "Generating..." }}</span>
+                            <button class="copy-btn" id="copyAcct">
+                                <i class="fa-regular fa-copy me-1"></i> Copy
+                            </button>
                         </div>
-                        <div class="card card-dashed bg-light-secondary flex-row flex-stack flex-wrap p-6 m-2">
-                            <!--begin::Info-->
-                            <div class="d-flex flex-column p-2 m-2">
-                                <!--begin::Owner-->
-
-                                <!--end::Owner-->
-
-                                <!--begin::Wrapper-->
-                                <div class="d-flex align-items-center">
-                                    <!--begin::Icon-->
-
-
-
-                                    <!--end::Icon-->
-
-                                    <!--begin::Details-->
-                                    <div>
-                                        <div class="fs-6 fw-semibold text-gray-600">
-                                            Acct. No :</div>
-                                        <div class="fs-4 fw-bold">
-                                            <strong id='acctNo'>{{$account_no ?? "No account generated yet!" }}</strong>
-                                          
-                                            <a style='cursor:pointer' id='copyAcct'>
-                                                <i class='bi-clipboard m-2'>
-                                                </i>
-                                            </a>
-                                        </div>
-                                        <div class="fs-6 fw-semibold text-gray-600">Bank Name :</div>
-                                        <div class="fs-4 fw-bold"><strong>{{ $bank_name ?? "No
-                                                account generated yet!" }}</strong></div>
-                                        <div class="fs-6 fw-semibold text-gray-600">
-                                            Amount :</div>
-                                        <div class="fs-4 fw-bold"><strong>NGN{{ number_format($amount) ?? "No account
-                                                generated
-                                                yet!" }}</strong></div>
-                                        <span class='text-danger'>Please transfer only the exact amount above!</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Wrapper-->
-                            </div>
-                            <!--end::Info-->
-
-
-
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Bank Name</div>
+                        <div class="detail-value">{{ $bank_name ?? "Generating..." }}</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-5 text-md-end">
+                    <div class="detail-item">
+                        <div class="detail-label">Amount to Pay</div>
+                        <div class="detail-value justify-content-md-end amount-highlight">
+                            ₦{{ number_format($amount) }}
                         </div>
-
+                        <div class="text-white-50 small mt-1">Please transfer the exact amount</div>
                     </div>
 
-
-
-                    <!--end::Form-->
+                    <div class="timer-badge mt-3">
+                        <i class="fa-solid fa-clock"></i>
+                        Expires in <span id="min2">30</span>:<span id="secs2">00</span>
+                    </div>
                 </div>
-
-                <!--end::Card-->
             </div>
-            <!--end::Content-->
-
-            <!--end::Profile Account Information-->
         </div>
-        <!--end::Container-->
     </div>
-</div>
 
+    <input type="hidden" id="expire" value="30"/>
+</div>
 @endsection
 
 @section('script')
 <script>
     $(document).ready(function() {
-       
-
         @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-        $("#u_amount").on('input',function() {
-        var amount = parseInt($("#u_amount").val()) * 100;
-        // var charges = 0.02 * amount
-        var charges = 0
-      
-       
-        if(parseInt($("#u_amount").val()) < 2500) {
-            $("#amount").val(amount + charges);
-        }
-        else {
-            $("#amount").val(amount + (0.05 * amount) +10000);    
-            // var charges =   0.02 * amount + 10000
-            var charges =   0
-            
-        }
-        $("#charges").text('Charges : '+ (charges/100).toLocaleString('en-US', { style: 'currency', currency: 'NGN' }))          
-        $("#total_payment").text('Total payment : '+ (amount/100 + charges/100).toLocaleString('en-US', { style: 'currency', currency: 'NGN' }))          
-        
-        // alert($("#u_amount").val() * 100)
-    })
-    $('#copyAcct').click(function() {
-      // Select the input field content
-      var tempTextarea = $('<textarea>');
-            
-            // Set its value to the content of acctNo
+            Swal.fire('Success!', "{{ session('message') }}", 'success');
+        @endif
+
+        $('#copyAcct').click(function() {
+            var tempTextarea = $('<textarea>');
             tempTextarea.val($('#acctNo').text());
-            
-            // Append it to the body and select its content
             $('body').append(tempTextarea);
             tempTextarea.select();
-            
-            // Copy the selected text to the clipboard
             document.execCommand('copy');
-            
-            // Remove the temporary textarea
             tempTextarea.remove();
 
-      // You can add a visual feedback if needed, for example, change the icon color or show a tooltip
-     
-      $("#copyAcct").text('Copied')
+            $(this).html('<i class="fa-solid fa-check me-1"></i> Copied').addClass('bg-success');
+            setTimeout(() => {
+                $(this).html('<i class="fa-regular fa-copy me-1"></i> Copy').removeClass('bg-success');
+            }, 2000);
+        });
 
-      // Optionally, revert the icon color after a short delay
-      setTimeout(function() {
-        $('#copyAcct').html('<i class="bi-clipboard"></i>'); // Revert to the original color (empty string removes inline style)
-      }, 1000); // Adjust the delay as needed
-    });
         var minutes = $("#expire").val();
         var seconds = 0;
 
-        // Update countdown every second
         var countdownInterval = setInterval(function () {
-            // Update seconds
             seconds--;
             if (seconds < 0) {
                 seconds = 59;
-                // Update minutes when seconds reach 0
                 minutes--;
                 if (minutes < 0) {
-                    // Countdown finished, clear interval
                     clearInterval(countdownInterval);
-                    // You can add any additional actions here when the countdown reaches 0
+                    return;
                 }
-                // Update minutes element
                 $('#min').text(minutes);
+                $('#min2').text(minutes);
             }
-
-            // Update seconds element
             $('#secs').text(seconds);
-        }, 1000); // Update every second
-    })
+            $('#secs2').text(seconds < 10 ? '0' + seconds : seconds);
+        }, 1000);
+    });
 </script>
 @endsection

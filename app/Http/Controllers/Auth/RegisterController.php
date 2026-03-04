@@ -79,9 +79,11 @@ class RegisterController extends Controller
             if(strlen($data['phone']) == 10) {
                 $data['phone'] = "0".$data['phone'];
             }     
-
+ $brand_name = str_replace(' ', '-', $data['name']);
+           
             $user = User::create([
-                'name' => $data['name'],               
+                'name' => $data['name'],   
+                'brand_name' => $brand_name,            
                 'company_id' => $data['company_id'],
                 'referred_by' => $data['referred_by'],
                 'email' => $data['email'],

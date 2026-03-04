@@ -546,7 +546,7 @@
                         <div style="font-size:0.72rem; opacity:0.6; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:4px;">Refer &amp; Earn</div>
                         <p style="font-size:0.8rem; opacity:0.7; margin-bottom: var(--space-sm);">Share your code and earn when friends on every purchase they make.</p>
                         <div class="referral-code-box">
-                            <span class="referral-code" id="refCode">{{ $user->brand_name }}</span>
+                            <span class="referral-code" id="refCode">https://vtubiz.com/register?referral_code={{ $user->brand_name }}</span>
                             <button class="copy-btn" onclick="copyRefCode()">Copy</button>
                         </div>
                         <div class="referral-stats">
