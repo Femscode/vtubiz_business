@@ -4,88 +4,58 @@
       <!-- Main Content Section -->
       <div class="form-section">
         <div class="card main-card border-0 shadow-sm">
-          <div class="card-header bg-transparent border-0 pt-8 px-10">
+          <div class="card-header bg-transparent border-0 pt-8 px-md-10 px-4">
             <div class="d-flex align-items-center justify-content-between">
               <h2 class="font-weight-bolder text-dark mb-0">Electricity Bill</h2>
-              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6">
+              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6 d-none d-md-inline-block">
                 <i class="ki ki-long-arrow-back icon-sm"></i> Back
               </a>
             </div>
             <p class="text-muted mt-2 font-weight-bold">Pay your electricity bills across all discos</p>
           </div>
 
-          <div class="card-body px-10 pb-10">
-            <!-- Service Provider Selection -->
-            <div class="mb-10">
-              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Provider</label>
-              <div class="provider-grid scrollable-x pb-4">
-                <div 
-                  v-for="disco in discos" 
-                  :key="disco.id"
-                  :class="['provider-card', { active: service_type === disco.id }]"
-                  @click="selectProvider(disco.id)"
-                >
-                  <div class="provider-logo-wrapper">
-                    <div class="brand-initials">{{ disco.shortName.charAt(0) }}</div>
-                  </div>
-                  <span class="provider-short-name">{{ disco.shortName }}</span>
-                  <div class="active-badge" v-if="service_type === disco.id">
-                    <i class="fa fa-check"></i>
+          <div class="card-body px-md-10 px-4 pb-10">
+            <!-- Beneficiary Quick Select -->
+            <div v-if="beneficiaries && beneficiaries.length > 0" class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Beneficiary</label>
+              <div class="beneficiary-scroll">
+                <div class="beneficiary-pills-container">
+                  <div 
+                    v-for="ben in beneficiaries.filter(b => b.type === 'electricity')" 
+                    :key="ben.id"
+                    class="beneficiary-pill"
+                    @click="meter_number = ben.phone; resetValidation();"
+                  >
+                    <div class="ben-avatar">{{ ben.name.charAt(0).toUpperCase() }}</div>
+                    <span class="ben-name">{{ ben.name }}</span>
                   </div>
                 </div>
               </div>
             </div>
 
+            <!-- Service Provider Selection -->
+            <div class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Provider</label>
+              <select v-model="service_type" @change="resetValidation" class="form-control form-control-solid form-control-lg">
+                <option value="">-- Select Disco --</option>
+                <option v-for="disco in discos" :key="disco.id" :value="disco.id">{{ disco.name }}</option>
+              </select>
+            </div>
+
             <!-- Meter Type Selection -->
             <div class="mb-10">
               <label class="form-label font-weight-bolder text-dark-75 mb-4">Meter Type</label>
-              <div class="row g-4">
-                <div class="col-6">
-                  <div 
-                    :class="['type-card', { active: meter_type === '01' }]"
-                    @click="meter_type = '01'; resetValidation()"
-                  >
-                    <div class="d-flex align-items-center">
-                      <div class="type-icon me-4" style="background-color: rgba(46, 204, 113, 0.1); color: #2ecc71; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center">
-                        <i class="flaticon2-flash-symbol"></i>
-                      </div>
-                      <span class="font-weight-bolder font-size-lg">Prepaid</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div 
-                    :class="['type-card', { active: meter_type === '02' }]"
-                    @click="meter_type = '02'; resetValidation()"
-                  >
-                    <div class="d-flex align-items-center">
-                      <div class="type-icon me-4" style="background-color: rgba(251, 145, 41, 0.1); color: #fb9129; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center">
-                        <i class="flaticon2-list-1"></i>
-                      </div>
-                      <span class="font-weight-bolder font-size-lg">Postpaid</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <select v-model="meter_type" @change="resetValidation" class="form-control form-control-solid form-control-lg">
+                <option value="">-- Select Meter Type --</option>
+                <option value="01">Prepaid</option>
+                <option value="02">Postpaid</option>
+              </select>
             </div>
 
             <!-- Meter Number Section -->
             <div class="mb-10">
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <label class="form-label font-weight-bolder text-dark-75 mb-0">Meter Number</label>
-              </div>
-
-              <!-- Beneficiary Quick Select -->
-              <div v-if="beneficiaries && beneficiaries.length > 0" class="beneficiary-scroll mb-6">
-                <div 
-                  v-for="ben in beneficiaries.filter(b => b.type === 'electricity')" 
-                  :key="ben.id"
-                  class="beneficiary-pill"
-                  @click="meter_number = ben.phone; resetValidation();"
-                >
-                  <div class="ben-avatar">{{ ben.name.charAt(0).toUpperCase() }}</div>
-                  <span class="ben-name">{{ ben.name }}</span>
-                </div>
               </div>
 
               <div class="input-group input-group-solid input-group-lg">
@@ -280,10 +250,6 @@ export default {
     }
   },
   methods: {
-    selectProvider(id) {
-      this.service_type = id;
-      this.resetValidation();
-    },
     resetValidation() {
       this.show_details = false;
       this.confirmed = false;
@@ -473,6 +439,7 @@ export default {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .grid-layout {
@@ -480,6 +447,7 @@ export default {
   grid-template-columns: minmax(0, 1fr) 400px;
   gap: 30px;
   align-items: start;
+  width: 100%;
 }
 
 @media (min-width: 1400px) {
@@ -506,11 +474,17 @@ export default {
 }
 
 .beneficiary-scroll {
-  display: flex;
+  width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.beneficiary-pills-container {
+  display: inline-flex;
   gap: 12px;
   padding: 4px 0;
-  -webkit-overflow-scrolling: touch;
+  min-width: 100%;
 }
 
 .beneficiary-pill {
@@ -550,101 +524,7 @@ export default {
   color: #3f4254;
 }
 
-.provider-grid {
-  display: flex !important;
-  gap: 20px;
-  overflow-x: auto !important;
-  flex-wrap: nowrap !important;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-}
 
-.provider-card {
-  min-width: 120px;
-  padding: 20px;
-  border: 2px solid #f3f6f9;
-  border-radius: 20px;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.3s ease;
-  position: relative;
-  background: white;
-}
-
-.provider-card:hover {
-  border-color: #fb9129;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-
-.provider-card.active {
-  border-color: #fb9129;
-  background-color: rgba(251, 145, 41, 0.05);
-}
-
-.provider-logo-wrapper {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #001f3f;
-  border-radius: 12px;
-}
-
-.brand-initials {
-  color: #fb9129;
-  font-size: 1.8rem;
-  font-weight: 800;
-  font-family: 'Fraunces', serif;
-}
-
-.provider-logo {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.provider-short-name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #3f4254;
-}
-
-.active-badge {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: #fb9129;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  box-shadow: 0 4px 8px rgba(251, 145, 41, 0.3);
-}
-
-.type-card {
-  padding: 1.5rem;
-  border: 2px solid #f3f6f9;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.type-card:hover {
-  border-color: #fb9129;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-.type-card.active {
-  border-color: #fb9129;
-  background: rgba(251, 145, 41, 0.05);
-}
 
 .btn-hover-scale {
   transition: all 0.2s ease-in-out;
@@ -668,15 +548,10 @@ export default {
   letter-spacing: 5px;
 }
 
-@media (max-width: 1200px) {
-  .grid-layout {
-    grid-template-columns: 1fr 350px;
-  }
-}
-
 @media (max-width: 991px) {
   .grid-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
+    gap: 20px;
   }
   .summary-section {
     order: 2;
@@ -689,6 +564,9 @@ export default {
   }
   .card-body {
     padding: 1.5rem !important;
+  }
+  .main-card {
+    border-radius: 16px;
   }
 }
 </style>

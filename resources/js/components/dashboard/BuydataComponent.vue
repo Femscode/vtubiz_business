@@ -16,77 +16,81 @@
       <!-- Main Form Section -->
       <div class="form-section">
         
-        <!-- Network Selection (Single Purchase Only) -->
-        <div class="section-group" v-if="purchaseType === 'single'">
-          <h3 class="section-label">SELECT NETWORK</h3>
-          <div class="network-grid">
-            <div 
-              v-for="net in networks" 
-              :key="net.id"
-              :class="['network-card', net.name.toLowerCase(), { active: network == net.id }]"
-              @click="selectNetwork(net.id)"
-            >
-              <div class="network-icon">
-                {{ net.name.charAt(0) }}
-              </div>
-              <span class="network-name">{{ net.name }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plan Selection (Single Purchase Only) -->
-        <div class="section-group" v-if="purchaseType === 'single' && plans.length > 0">
-          <h3 class="section-label">SELECT PLAN</h3>
-          <div class="plan-grid-scroll">
-            <div class="plan-grid">
-              <div 
-                v-for="plan in plans" 
-                :key="plan.id"
-                :class="['plan-card', { active: selectedPlan == plan.id }]"
-                @click="selectedPlan = plan.id"
-              >
-                <span class="plan-data">{{ plan.plan_name }}</span>
-                <span class="plan-price">₦{{ numberFormat(plan.admin_price) }}</span>
-                <span class="plan-validity">{{ plan.month_validate || '30 Days' }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Phone Number / Beneficiaries (Single Purchase) -->
-        <div class="section-group" v-if="purchaseType === 'single'">
-          <h3 class="section-label">RECIPIENT</h3>
+        <!-- Single Purchase Flow -->
+        <div v-if="purchaseType === 'single'">
           
-          <div v-if="beneficiaries.length > 0" class="beneficiary-section">
-            <label class="input-label">Saved Beneficiaries</label>
+          <!-- 1. Beneficiary list first -->
+          <div class="section-group" v-if="beneficiaries.length > 0">
+            <h3 class="section-label">SAVED BENEFICIARIES</h3>
             <div class="beneficiary-scroll">
-              <div 
-                v-for="ben in beneficiaries" 
-                :key="ben.id" 
-                class="beneficiary-pill"
-                @click="useBeneficiary(ben)"
-              >
-                <div class="b-avatar">{{ ben.name.substring(0,2).toUpperCase() }}</div>
-                <span class="b-name">{{ ben.name }}</span>
+              <div class="beneficiary-pills-container">
+                <div 
+                  v-for="ben in beneficiaries" 
+                  :key="ben.id" 
+                  class="beneficiary-pill"
+                  @click="useBeneficiary(ben)"
+                >
+                  <div class="b-avatar">{{ ben.name.substring(0,2).toUpperCase() }}</div>
+                  <span class="b-name">{{ ben.name }}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="input-group">
-            <label class="input-label">Phone Number</label>
-            <input 
-              type="tel" 
-              v-model="phone_number" 
-              @input="fetchNetwork()"
-              placeholder="0803 000 0000"
-              class="input-field"
-            >
+          <!-- 2. Network select field second -->
+          <div class="section-group">
+            <h3 class="section-label">SELECT NETWORK</h3>
+            <div class="input-group">
+              <select 
+                v-model="network" 
+                @change="fetchPlan()"
+                class="input-field"
+              >
+                <option value="">-- Choose Network --</option>
+                <option v-for="net in networks" :key="net.id" :value="net.id">
+                  {{ net.name }}
+                </option>
+              </select>
+            </div>
           </div>
-          
-          <div class="save-beneficiary-check">
-            <input type="checkbox" id="save-bene" @change="saveBeneficiary">
-            <label for="save-bene">Save as beneficiary</label>
+
+          <!-- 3. Plan select field third -->
+          <div class="section-group" v-if="network">
+            <h3 class="section-label">SELECT PLAN</h3>
+            <div class="input-group">
+              <select 
+                v-model="selectedPlan" 
+                class="input-field"
+                :disabled="plans.length === 0"
+              >
+                <option value="">-- Choose Plan --</option>
+                <option v-for="plan in plans" :key="plan.id" :value="plan.id">
+                  {{ plan.plan_name }} (₦{{ numberFormat(plan.admin_price) }})
+                </option>
+              </select>
+            </div>
           </div>
+
+          <!-- 4. Phone number fourth -->
+          <div class="section-group">
+            <h3 class="section-label">RECIPIENT</h3>
+            <div class="input-group">
+              <label class="input-label">Phone Number</label>
+              <input 
+                type="tel" 
+                v-model="phone_number" 
+                @input="fetchNetwork()"
+                placeholder="0803 000 0000"
+                class="input-field"
+              >
+            </div>
+            
+            <div class="save-beneficiary-check">
+              <input type="checkbox" id="save-bene" @change="saveBeneficiary">
+              <label for="save-bene">Save as beneficiary</label>
+            </div>
+          </div>
+
         </div>
 
         <!-- Group Recipients (Group Purchase) -->
@@ -214,10 +218,6 @@ export default {
     }
   },
   methods: {
-    selectNetwork(id) {
-      this.network = id;
-      this.fetchPlan();
-    },
     autoDetectNetworkForRow(index) {
       const rec = this.groupRecipients[index];
       if (rec.phone.length >= 10 && rec.phone.length <= 12) {
@@ -313,17 +313,20 @@ export default {
     },
     fetchPlan() {
       if (this.network) {
+        this.selectedPlan = ""; // Reset selected plan on network change
         axios.get("/fetchplan/" + this.network)
           .then((response) => {
             if (response.data !== false) {
               this.plans = response.data;
-              if (!this.selectedPlan) this.selectedPlan = response.data[0].id;
               this.transfer_status = true;
             }
           })
           .catch((error) => {
             this.transfer_status = false;
           });
+      } else {
+        this.plans = [];
+        this.selectedPlan = "";
       }
     },
     buyData() {
@@ -417,6 +420,11 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 .purchase-page {
+  padding: 0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow-x: hidden;
   --c-text-main: #0F172A;
   --c-text-sec: #64748B;
   --c-border: #E2E8F0;
@@ -482,9 +490,10 @@ export default {
 
 .grid-layout {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 30px;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 40px;
   align-items: start;
+  width: 100%;
 }
 
 .form-section {
@@ -504,97 +513,21 @@ export default {
   margin-bottom: 16px;
 }
 
-.network-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 16px;
-}
-
-.network-card {
-  background: white;
-  border: 2px solid var(--c-border);
-  border-radius: 20px;
-  padding: 20px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  height: 110px;
-}
-
-.network-card:hover { border-color: #CBD5E1; transform: translateY(-2px); }
-.network-card.mtn.active { border-color: var(--c-yellow); background: var(--c-yellow-light); }
-.network-card.glo.active { border-color: var(--c-green); background: var(--c-green-light); }
-.network-card.airtel.active { border-color: var(--c-orange); background: var(--c-orange-light); }
-.network-card.9mobile.active { border-color: var(--c-purple); background: var(--c-purple-light); }
-
-.network-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 12px;
-  color: white;
-
-}
-
-.network-card.mtn .network-icon { background: var(--c-yellow); color: #856404; }
-.network-card.glo .network-icon { background: var(--c-green); }
-.network-card.airtel .network-icon { background: var(--c-orange); }
-.network-card.9mobile .network-icon { background: black; }
-
-.network-name { font-weight: 700; font-size: 14px; }
-
-.plan-grid-scroll {
-  max-height: 380px;
-  overflow-y: auto;
-  padding-right: 8px;
-}
-
-.plan-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
-}
-
-.plan-card {
-  background: white;
-  border: 1px solid var(--c-border);
-  border-radius: 16px;
-  padding: 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.plan-card:hover { border-color: var(--c-orange); }
-.plan-card.active { border: 2px solid var(--c-orange); background: var(--c-orange-light); }
-
-.plan-data { font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block; }
-.plan-price { font-size: 13px; color: var(--c-text-sec); font-weight: 500; }
-.plan-validity {
-  font-size: 11px;
-  background: #F1F5F9;
-  padding: 2px 8px;
-  border-radius: 4px;
-  color: var(--c-text-sec);
-  margin-top: 8px;
-  display: inline-block;
-}
-
 .input-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--c-text-main); }
 
 .beneficiary-section { margin-bottom: 20px; }
 .beneficiary-scroll {
-  display: flex;
-  gap: 12px;
+  width: 100%;
   overflow-x: auto;
-  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.beneficiary-pills-container {
+  display: inline-flex;
+  gap: 12px;
+  padding: 4px 0;
+  min-width: 100%;
 }
 
 .beneficiary-pill {
@@ -768,7 +701,7 @@ export default {
   justify-content: space-between;
   margin-bottom: 16px;
   font-size: 14px;
-  color: var(--c-text-sec);
+  color: rgba(255, 255, 255, 0.7);
 }
 .summary-value { font-weight: 700; color: #fff; }
 
@@ -818,7 +751,8 @@ export default {
 
 @media (max-width: 1024px) {
   .grid-layout { 
-    grid-template-columns: 1fr; 
+    grid-template-columns: 100%; 
+    gap: 20px;
   }
   .summary-column {
     width: 100%;
@@ -828,12 +762,6 @@ export default {
     position: relative;
     top: 0;
     margin-bottom: 30px;
-  }
-  .network-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .plan-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -847,9 +775,6 @@ export default {
     flex: 1;
     white-space: nowrap;
     padding: 10px 15px;
-  }
-  .network-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
   .purchase-page {
     padding: 0;

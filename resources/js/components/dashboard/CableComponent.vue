@@ -4,55 +4,59 @@
       <!-- Main Content Section -->
       <div class="form-section">
         <div class="card main-card border-0 shadow-sm">
-          <div class="card-header bg-transparent border-0 pt-8 px-10">
+          <div class="card-header bg-transparent border-0 pt-8 px-md-10 px-4">
             <div class="d-flex align-items-center justify-content-between">
               <h2 class="font-weight-bolder text-dark mb-0">Cable Subscription</h2>
-              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6">
+              <a onclick="window.history.back()" class="btn btn-light-primary btn-sm font-weight-bolder px-6 d-none d-md-inline-block">
                 <i class="ki ki-long-arrow-back icon-sm"></i> Back
               </a>
             </div>
             <p class="text-muted mt-2 font-weight-bold">Pay for your TV subscriptions instantly</p>
           </div>
 
-          <div class="card-body px-10 pb-10">
-            <!-- Cable Type Selection -->
-            <div class="mb-10">
-              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Cable Type</label>
-              <div class="network-grid scrollable-x pb-4">
-                <div 
-                  v-for="type in cableTypes" 
-                  :key="type.id"
-                  :class="['network-card', { active: cable_type === type.id }]"
-                  @click="selectCableType(type.id)"
-                >
-                  <div class="network-icon-wrapper">
-                    <div class="brand-initials">{{ type.name.charAt(0) }}</div>
-                  </div>
-                  <span class="network-name">{{ type.name }}</span>
-                  <div class="active-badge" v-if="cable_type === type.id">
-                    <i class="fa fa-check"></i>
+          <div class="card-body px-md-10 px-4 pb-10">
+            <!-- Beneficiary Quick Select -->
+            <div v-if="beneficiaries && beneficiaries.length > 0" class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Beneficiary</label>
+              <div class="beneficiary-scroll">
+                <div class="beneficiary-pills-container">
+                  <div 
+                    v-for="ben in beneficiaries.filter(b => b.type === 'cable')" 
+                    :key="ben.id"
+                    class="beneficiary-pill"
+                    @click="decoder_number = ben.phone; resetValidation();"
+                  >
+                    <div class="ben-avatar">{{ ben.name.charAt(0).toUpperCase() }}</div>
+                    <span class="ben-name">{{ ben.name }}</span>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Cable Type Selection -->
+            <div class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Cable Type</label>
+              <select v-model="cable_type" @change="fetchPlan" class="form-control form-control-solid form-control-lg">
+                <option value="">-- Select Provider --</option>
+                <option v-for="type in cableTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+              </select>
+            </div>
+
+            <!-- Package Selection -->
+            <div v-if="cable_type" class="mb-10">
+              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Package</label>
+              <select v-model="selectedPlanId" @change="handlePlanSelect" class="form-control form-control-solid form-control-lg">
+                <option value="null">-- Select Plan --</option>
+                <option v-for="plan in plans" :key="plan.id" :value="plan.id">
+                  {{ plan.plan_name }} (₦{{ plan.admin_price }})
+                </option>
+              </select>
             </div>
 
             <!-- Decoder Number Section -->
             <div class="mb-10">
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <label class="form-label font-weight-bolder text-dark-75 mb-0">Decoder Number</label>
-              </div>
-
-              <!-- Beneficiary Quick Select -->
-              <div v-if="beneficiaries && beneficiaries.length > 0" class="beneficiary-scroll mb-6">
-                <div 
-                  v-for="ben in beneficiaries.filter(b => b.type === 'cable')" 
-                  :key="ben.id"
-                  class="beneficiary-pill"
-                  @click="decoder_number = ben.phone; resetValidation();"
-                >
-                  <div class="ben-avatar">{{ ben.name.charAt(0).toUpperCase() }}</div>
-                  <span class="ben-name">{{ ben.name }}</span>
-                </div>
               </div>
 
               <div class="input-group input-group-solid input-group-lg">
@@ -87,29 +91,6 @@
                   <div class="text-muted font-weight-bold">Current Plan: <span class="text-primary">{{ current_plan }}</span> ({{ plan_status }})</div>
                 </div>
                 <span class="label label-light-primary label-inline font-weight-bold py-3 px-4">Validated</span>
-              </div>
-            </div>
-
-            <!-- Package Selection -->
-            <div v-if="show_decoder" class="mb-10">
-              <label class="form-label font-weight-bolder text-dark-75 mb-4">Select Package</label>
-              <div class="plan-container scrollable-y">
-                <div class="plan-grid">
-                  <div 
-                    v-for="plan in plans" 
-                    :key="plan.id"
-                    :class="['plan-card', { active: selectedPlanId === plan.id }]"
-                    @click="selectPlan(plan)"
-                  >
-                    <div class="plan-info">
-                      <span class="plan-name">{{ plan.plan_name }}</span>
-                      <span class="plan-price text-primary font-weight-bolder">₦{{ plan.admin_price }}</span>
-                    </div>
-                    <div class="plan-check" v-if="selectedPlanId === plan.id">
-                      <i class="fa fa-check-circle text-primary"></i>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -236,10 +217,12 @@ export default {
     }
   },
   methods: {
-    selectCableType(id) {
-      this.cable_type = id;
-      this.resetValidation();
-      this.fetchPlan();
+    handlePlanSelect(event) {
+      const planId = event.target.value;
+      const selected = this.plans.find(p => p.id == planId);
+      if (selected) {
+        this.selectPlan(selected);
+      }
     },
     selectPlan(plan) {
       this.selectedPlanId = plan.id;
@@ -435,6 +418,7 @@ export default {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .grid-layout {
@@ -442,6 +426,7 @@ export default {
   grid-template-columns: minmax(0, 1fr) 400px;
   gap: 30px;
   align-items: start;
+  width: 100%;
 }
 
 @media (min-width: 1400px) {
@@ -468,11 +453,17 @@ export default {
 }
 
 .beneficiary-scroll {
-  display: flex;
+  width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.beneficiary-pills-container {
+  display: inline-flex;
   gap: 12px;
   padding: 4px 0;
-  -webkit-overflow-scrolling: touch;
+  min-width: 100%;
 }
 
 .beneficiary-pill {
@@ -512,135 +503,6 @@ export default {
   color: #3f4254;
 }
 
-.network-grid {
-  display: flex !important;
-  gap: 20px;
-  overflow-x: auto !important;
-  flex-wrap: nowrap !important;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-}
-
-.network-card {
-  min-width: 120px;
-  padding: 20px;
-  border: 2px solid #f3f6f9;
-  border-radius: 20px;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.3s ease;
-  position: relative;
-  background: white;
-}
-
-.network-card:hover {
-  border-color: #fb9129;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-
-.network-card.active {
-  border-color: #fb9129;
-  background-color: rgba(251, 145, 41, 0.05);
-}
-
-.network-icon-wrapper {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #001f3f;
-  border-radius: 12px;
-}
-
-.brand-initials {
-  color: #fb9129;
-  font-size: 1.8rem;
-  font-weight: 800;
-  font-family: 'Fraunces', serif;
-}
-
-.network-logo {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.network-name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #3f4254;
-}
-
-.active-badge {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: #fb9129;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  box-shadow: 0 4px 8px rgba(251, 145, 41, 0.3);
-}
-
-.plan-container {
-  max-height: 400px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-.plan-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
-}
-
-.plan-card {
-  padding: 20px;
-  border: 1px solid #ebedf3;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fcfcfd;
-}
-
-.plan-card:hover {
-  border-color: #fb9129;
-  background: white;
-}
-
-.plan-card.active {
-  border-color: #fb9129;
-  background: rgba(251, 145, 41, 0.05);
-  box-shadow: 0 4px 12px rgba(251, 145, 41, 0.08);
-}
-
-.plan-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.plan-name {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #3f4254;
-  margin-bottom: 4px;
-}
-
-.plan-check i {
-  color: #fb9129 !important;
-  font-size: 1.2rem;
-}
 
 .btn-hover-scale {
   transition: all 0.2s ease-in-out;
@@ -669,15 +531,10 @@ export default {
   border-radius: 10px;
 }
 
-@media (max-width: 1200px) {
-  .grid-layout {
-    grid-template-columns: 1fr 350px;
-  }
-}
-
 @media (max-width: 991px) {
   .grid-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
+    gap: 20px;
   }
   .summary-section {
     order: 2;
@@ -690,6 +547,9 @@ export default {
   }
   .card-body {
     padding: 1.5rem !important;
+  }
+  .main-card {
+    border-radius: 16px;
   }
 }
 </style>
