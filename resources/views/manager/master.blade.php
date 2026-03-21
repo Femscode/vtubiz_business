@@ -178,6 +178,10 @@
             <i class="fa-solid fa-list-ul"></i>
             <span>All Transactions</span>
         </a>
+        <a href="/manager/duplicate_transactions" class="nav-item {{ Request::is('manager/transactions') || Request::is('manager/user_transaction/*') ? 'active' : '' }}">
+            <i class="fa-solid fa-list-ul"></i>
+            <span>Pending Transactions</span>
+        </a>
         <a href="/manager/payment_transactions" class="nav-item {{ Request::is('manager/payment_transactions') ? 'active' : '' }}">
             <i class="fa-solid fa-tags"></i>    
             <span>Payment/Funding</span>
