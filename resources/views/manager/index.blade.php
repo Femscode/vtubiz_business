@@ -87,7 +87,7 @@
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                                @if((str_starts_with($tranx->reference, 'data_pu') || str_starts_with($tranx->reference, 'resolve')) && $tranx->refund_status == 0)
+                                @if((str_starts_with($tranx->reference, 'data_pu') || str_starts_with($tranx->reference, 'buy_dat')  || str_starts_with($tranx->reference, 'resolve')) && $tranx->refund_status == 0)
                                     <li><a class="dropdown-item py-2 text-warning" href="/refund/{{ $tranx->id }}"><i class="fa-solid fa-rotate-left me-2"></i> Refund</a></li>
                                 @endif
                                 <li><a class="dropdown-item py-2" href="https://wa.me/{{ substr($tranx->user->phone ?? '09058744473', 1) }}" target="_blank"><i class="fa-brands fa-whatsapp me-2 text-success"></i> Message User</a></li>
