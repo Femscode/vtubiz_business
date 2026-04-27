@@ -1286,11 +1286,31 @@ class SuperController extends Controller
         try {
             foreach ($recipients as $recipient) {
                 if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-                    Mail::send([], [], function ($message) use ($recipient, $subject, $content, $is_html, $attachments) {
-                        $message->to($recipient)
-                            ->subject($subject);
+                    $user_data = User::where('email', $recipient)->first();
 
-                        $message->setBody($content, $is_html ? 'text/html' : 'text/plain');
+                    $personalized_subject = $subject;
+                    $personalized_content = $content;
+
+                    if ($user_data) {
+                        $placeholders = [
+                            '{name}' => $user_data->name,
+                            '{email}' => $user_data->email,
+                            '{phone}' => $user_data->phone,
+                            '{balance}' => number_format($user_data->balance, 2),
+                            '{brand_name}' => $user_data->brand_name ?? 'VTUBIZ',
+                        ];
+
+                        foreach ($placeholders as $key => $value) {
+                            $personalized_subject = str_replace($key, (string)$value, $personalized_subject);
+                            $personalized_content = str_replace($key, (string)$value, $personalized_content);
+                        }
+                    }
+
+                    Mail::send([], [], function ($message) use ($recipient, $personalized_subject, $personalized_content, $is_html, $attachments) {
+                        $message->to($recipient)
+                            ->subject($personalized_subject);
+
+                        $message->setBody($personalized_content, $is_html ? 'text/html' : 'text/plain');
 
                         foreach ($attachments as $attachment) {
                             $message->attach($attachment['path'], [
