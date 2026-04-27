@@ -655,6 +655,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/changeblogstatus/{id}', [App\Http\Controllers\SuperController::class, 'changeblogstatus'])->name('changeblogstatus');
         Route::any('/deleteblog/{id}', [App\Http\Controllers\SuperController::class, 'deleteblog'])->name('deleteblog');
         Route::any('/delete_user/{id}', [App\Http\Controllers\SuperController::class, 'deleteuser'])->name('deleteuser');
+        Route::any('/email_marketing', [App\Http\Controllers\SuperController::class, 'email_marketing'])->name('superadmin.email_marketing');
+        Route::post('/send_marketing_email', [App\Http\Controllers\SuperController::class, 'send_marketing_email'])->name('superadmin.send_marketing_email');
+        Route::get('/fetch_recipients/{filter}', [App\Http\Controllers\SuperController::class, 'fetch_recipients'])->name('superadmin.fetch_recipients');
     
         Route::any('/downloadCSV/', [App\Http\Controllers\SuperController::class, 'downloadCSV'])->name('downloadCSV');
         Route::any('/admin_delete_duplicate/{type}/{id}', [App\Http\Controllers\SubscriptionController::class, 'admin_delete_duplicate'])->name('admin_delete_duplicate');

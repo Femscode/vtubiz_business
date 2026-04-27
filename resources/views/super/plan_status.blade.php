@@ -147,6 +147,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @if(!empty($mtn_cglite))
                                 <tr class="text-center">
                                     <td>MTN</td>
                                     <td>cg_lite</td>
@@ -172,6 +173,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                                 <tr class="text-center">
                                     <td>MTN</td>
                                     <td>direct</td>

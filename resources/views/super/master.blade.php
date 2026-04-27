@@ -232,6 +232,10 @@
             <i class="fa-solid fa-address-book"></i>
             <span>Contact Gain</span>
         </a>
+        <a href="/email_marketing" class="nav-item {{ Request::is('email_marketing') ? 'active' : '' }}">
+            <i class="fa-solid fa-envelope-circle-check"></i>
+            <span>Email Marketing</span>
+        </a>
         <a href="/manager/mailpay_dashboard" class="nav-item {{ Request::is('manager/mailpay_dashboard') ? 'active' : '' }}">
             <i class="fa-solid fa-envelope-open-text"></i>
             <span>Mailpay</span>

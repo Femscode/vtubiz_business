@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class SuperController extends Controller
@@ -64,31 +65,38 @@ class SuperController extends Controller
         $data['current_filter'] = $filter;
         $data['start_date'] = $request->get('start_date');
         $data['end_date'] = $request->get('end_date');
-        
+
         // Dashboard Stats
         $data['total_users'] = User::whereBetween('created_at', [$start_date, $end_date])->count();
         $data['total_spent'] = User::whereBetween('created_at', [$start_date, $end_date])->sum('total_spent');
-        $data['total_balance'] = User::sum('balance'); 
-        
+        $data['total_balance'] = User::sum('balance');
+
         // Purchase Titles
         $purchase_titles = [
-            'Data Purchase', 'Airtime Purchase', 'Cable Subscription', 
-            'Electricity Payment', 'Bulk SMS', 'Examination Result Payment'
+            'Data Purchase',
+            'Airtime Purchase',
+            'Cable Subscription',
+            'Electricity Payment',
+            'Bulk SMS',
+            'Examination Result Payment'
         ];
-        
+
         $data['total_purchases'] = Transaction::whereIn('title', $purchase_titles)
             ->where('status', 1)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->count();
-            
+
         $data['total_purchases_amount'] = Transaction::whereIn('title', $purchase_titles)
             ->where('status', 1)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->sum('amount');
-        
+
         // Funding Titles
         $funding_titles = [
-            'Account Funding', 'Account Funded Through Transfer', 'Fund Transfer', 'Payment Received'
+            'Account Funding',
+            'Account Funded Through Transfer',
+            'Fund Transfer',
+            'Payment Received'
         ];
         $data['total_funding'] = Transaction::whereIn('title', $funding_titles)
             ->where('status', 1)
@@ -99,19 +107,19 @@ class SuperController extends Controller
         $data['data_profit'] = Transaction::where('title', 'Data Purchase')->where('status', 1)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
-            
+
         $data['cable_profit'] = Transaction::where('title', 'Cable Subscription')->where('status', 1)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
-            
+
         $data['electricity_profit'] = Transaction::where('title', 'Electricity Payment')->where('status', 1)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
-            
+
         $data['exam_profit'] = Transaction::where('title', 'Examination Result Payment')->where('status', 1)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->selectRaw('SUM(amount - COALESCE(real_amount, 0)) as profit')->value('profit') ?? 0;
-            
+
         $data['total_profit'] = $data['data_profit'] + $data['cable_profit'] + $data['electricity_profit'] + $data['exam_profit'];
 
         // Recent Transactions for Dashboard
@@ -119,7 +127,7 @@ class SuperController extends Controller
             ->latest()
             ->take(10)
             ->get();
-        
+
         return view('super.dashboard', $data);
     }
 
@@ -131,8 +139,12 @@ class SuperController extends Controller
         }
         $data['active'] = 'super';
         $data['transactions'] = Transaction::whereIn('title', [
-            'Data Purchase', 'Airtime Purchase', 'Cable Subscription', 
-            'Electricity Payment', 'Bulk SMS', 'Examination Result Payment'
+            'Data Purchase',
+            'Airtime Purchase',
+            'Cable Subscription',
+            'Electricity Payment',
+            'Bulk SMS',
+            'Examination Result Payment'
         ])->latest()->take(500)->get();
 
         return view('super.index', $data);
@@ -204,14 +216,16 @@ class SuperController extends Controller
         curl_close($curl);
 
         $response_json = json_decode($response, true);
-        $online_data = reset($response_json);
+        // $online_data = reset($response_json);
+        // dd($response_json);
         // dd($network, $online_data, $network_prefix);
 
-        if ($online_data && is_array($online_data) && count($online_data) > 0) {
+        if ($response_json && is_array($response_json) && count($response_json) > 0) {
             // Delete previous data only if we have valid response
             Data::where('type', $plan_type)->where('network', $network)->delete();
 
-            foreach ($online_data as $data) {
+
+            foreach ($response_json[strtoupper($network_name)] as $data) {
                 Data::create([
                     'user_id' => 0,
                     'network' => $network,
@@ -263,47 +277,51 @@ class SuperController extends Controller
             ),
         ));
         $response = curl_exec($curl);
-       
+
         curl_close($curl);
 
         $response_json = json_decode($response, true);
-        $online_data = reset($response_json);
+        // dd($response_json, strtoupper($network_name));
 
-        if ($online_data && is_array($online_data) && count($online_data) > 0) {
-           
+
+        if ($response_json && is_array($response_json) && count($response_json) > 0) {
+
             Data::where('type', $plan_type)->where('network', $network)->delete();
 
-            foreach ($online_data as $data) {
-                // $percentage = 0.015; // Default 4% for prices >= 5000
-                // $selling_price_percentage = 0.07; 
-                
-                $percentage = 0.01; // Default 4% for prices >= 5000
-                $selling_price_percentage = 0.03; 
-                // Default 4% for prices >= 5000
-                if ($data['price'] < 1000) {
-                    $percentage = 0.01; 
-                    $selling_price_percentage = 0.018; 
-                } elseif ($data['price'] < 3000) {
-                    $percentage = 0.013; 
-                    $selling_price_percentage = 0.025; 
-                } elseif ($data['price'] < 5000) {
-                    $percentage = 0.015; 
-                    $selling_price_percentage = 0.03; 
-                }
+            if (isset($response_json[strtoupper($network_name)])) {
+                foreach ($response_json[strtoupper($network_name)] as $data) {
+                    // $percentage = 0.015; // Default 4% for prices >= 5000
+                    // $selling_price_percentage = 0.07; 
 
-                Data::create([
-                    'user_id' => 0,
-                    'network' => $network,
-                    'plan_id' => $data['plan_id'],
-                    'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
-                    'actual_price' => ceil($data['price']),
-                    'data_price' => ceil($data['price'] + ($percentage * $data['price'])),
-                    'account_price' => ceil($data['price'] + ($percentage * $data['price'])),
-                    'type' => $plan_type,
-                    'status' => 1,
-                    'admin_price' => ceil($data['price'] + ($selling_price_percentage * $data['price']))
-                ]);
+                    $percentage = 0.01; // Default 4% for prices >= 5000
+                    $selling_price_percentage = 0.03;
+                    // Default 4% for prices >= 5000
+                    if ($data['price'] < 1000) {
+                        $percentage = 0.01;
+                        $selling_price_percentage = 0.018;
+                    } elseif ($data['price'] < 3000) {
+                        $percentage = 0.013;
+                        $selling_price_percentage = 0.025;
+                    } elseif ($data['price'] < 5000) {
+                        $percentage = 0.015;
+                        $selling_price_percentage = 0.03;
+                    }
+
+                    Data::create([
+                        'user_id' => 0,
+                        'network' => $network,
+                        'plan_id' => $data['plan_id'],
+                        'plan_name' => $network_prefix . ' ' . $data['name'] . ' ' . $data['validity'],
+                        'actual_price' => ceil($data['price']),
+                        'data_price' => ceil($data['price'] + ($percentage * $data['price'])),
+                        'account_price' => ceil($data['price'] + ($percentage * $data['price'])),
+                        'type' => $plan_type,
+                        'status' => 1,
+                        'admin_price' => ceil($data['price'] + ($selling_price_percentage * $data['price']))
+                    ]);
+                }
             }
+
 
             return ['success' => true];
         }
@@ -1191,5 +1209,101 @@ class SuperController extends Controller
         }
     }
 
-    
+    public function email_marketing()
+    {
+        $data['user'] = $user = Auth::user();
+        if ($user->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $data['active'] = 'email_marketing';
+        return view('super.email_marketing', $data);
+    }
+
+    public function fetch_recipients($filter)
+    {
+        if (Auth::user()->email !== 'fasanyafemi@gmail.com') {
+            return response()->json(['emails' => '']);
+        }
+        $query = User::query();
+
+        switch ($filter) {
+            case 'this_week':
+                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'this_month':
+                $query->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year);
+                break;
+            case 'last_month':
+                $query->whereMonth('created_at', Carbon::now()->subMonth()->month)->whereYear('created_at', Carbon::now()->subMonth()->year);
+                break;
+            case 'last_3_months':
+                $query->where('created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+            case 'last_6_months':
+                $query->where('created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+            case 'this_year':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+            case 'last_year':
+                $query->whereYear('created_at', Carbon::now()->subYear()->year);
+                break;
+            case 'all':
+                break;
+        }
+
+        $emails = $query->pluck('email')->toArray();
+        return response()->json(['emails' => implode(', ', $emails)]);
+    }
+
+    public function send_marketing_email(Request $request)
+    {
+        if (Auth::user()->email !== 'fasanyafemi@gmail.com') {
+            return redirect()->route('dashboard');
+        }
+        $request->validate([
+            'subject' => 'required',
+            'content' => 'required',
+            'recipients' => 'required',
+        ]);
+
+        $recipients = array_map('trim', explode(',', $request->recipients));
+        $subject = $request->subject;
+        $content = $request->content;
+        $is_html = $request->has('is_html');
+
+        $attachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $attachments[] = [
+                    'path' => $file->getRealPath(),
+                    'name' => $file->getClientOriginalName(),
+                    'mime' => $file->getClientMimeType(),
+                ];
+            }
+        }
+
+        try {
+            foreach ($recipients as $recipient) {
+                if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+                    Mail::send([], [], function ($message) use ($recipient, $subject, $content, $is_html, $attachments) {
+                        $message->to($recipient)
+                            ->subject($subject);
+
+                        $message->setBody($content, $is_html ? 'text/html' : 'text/plain');
+
+                        foreach ($attachments as $attachment) {
+                            $message->attach($attachment['path'], [
+                                'as' => $attachment['name'],
+                                'mime' => $attachment['mime'],
+                            ]);
+                        }
+                    });
+                }
+            }
+            return redirect()->back()->with('message', 'Marketing emails sent successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error sending emails: ' . $e->getMessage());
+        }
+    }
 }
