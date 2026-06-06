@@ -32,28 +32,28 @@
 
   <style>
     :root {
-      --bg-page: #FFFFFF; 
-      --bg-card: #F8F9FA; 
-      --text-primary: #000000; 
-      --text-secondary: #555555; 
-      --radius-xl: 32px; 
-      --radius-lg: 24px; 
-      --radius-md: 16px; 
-      --radius-sm: 8px; 
-      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-      --h1-weight: 800; 
-      --h1-tracking: -0.04em; 
-      --shadow-float: 0 20px 40px -5px rgba(0, 0, 0, 0.06), 0 8px 16px -8px rgba(0, 0, 0, 0.04); 
-      --shadow-hover: 0 30px 60px -10px rgba(0, 0, 0, 0.12), 0 12px 24px -8px rgba(0, 0, 0, 0.06); 
-      --color-data: #EDFCF2; 
-      --icon-data: #16A34A; 
-      --color-airtime: #FFF7ED; 
-      --icon-airtime: #EA580C; 
-      --color-tv: #F5F3FF; 
-      --icon-tv: #7C3AED; 
-      --color-power: #FEFCE8; 
-      --icon-power: #CA8A04; 
-      --color-accent: #000000; 
+      --bg-page: #FFFFFF;
+      --bg-card: #F8F9FA;
+      --text-primary: #000000;
+      --text-secondary: #555555;
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --h1-weight: 800;
+      --h1-tracking: -0.04em;
+      --shadow-float: 0 20px 40px -5px rgba(0, 0, 0, 0.06), 0 8px 16px -8px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 30px 60px -10px rgba(0, 0, 0, 0.12), 0 12px 24px -8px rgba(0, 0, 0, 0.06);
+      --color-data: #EDFCF2;
+      --icon-data: #16A34A;
+      --color-airtime: #FFF7ED;
+      --icon-airtime: #EA580C;
+      --color-tv: #F5F3FF;
+      --icon-tv: #7C3AED;
+      --color-power: #FEFCE8;
+      --icon-power: #CA8A04;
+      --color-accent: #000000;
       --h1-size: 3.5rem;
     }
 
@@ -232,6 +232,7 @@
       background: #000;
       color: #fff;
     }
+
     /* Product Section Redesign */
     .products-box {
       background: #f6f7f9;
@@ -240,25 +241,25 @@
       margin: 0 auto;
       max-width: 1100px;
     }
+
     @media (max-width: 768px) {
       .products-box {
         padding: 40px 20px;
         border-radius: 24px;
       }
+
       .product-card {
         padding: 20px;
       }
     }
 
     .ai-flash-text {
-      background: linear-gradient(
-        to right, 
-        #001f3f 20%, 
-        #fb9129 40%, 
-        #ffffff 50%, 
-        #fb9129 60%, 
-        #001f3f 80%
-      );
+      background: linear-gradient(to right,
+          #001f3f 20%,
+          #fb9129 40%,
+          #ffffff 50%,
+          #fb9129 60%,
+          #001f3f 80%);
       background-size: 200% auto;
       background-clip: text;
       -webkit-background-clip: text;
@@ -277,14 +278,16 @@
       border-radius: 24px;
       padding: 30px;
       height: 100%;
-      border: 1px solid rgba(0,0,0,0.02);
+      border: 1px solid rgba(0, 0, 0, 0.02);
       transition: all 0.3s ease;
       text-align: left !important;
     }
+
     .product-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
+
     .product-icon-box {
       width: 50px;
       height: 50px;
@@ -295,23 +298,44 @@
       margin-bottom: 25px;
       font-size: 1.5rem;
     }
-    .bg-soft-green { background: #eef9f6; color: #44bba4; }
-    .bg-soft-purple { background: #f3f0ff; color: #7048e8; }
-    .bg-soft-yellow { background: #fff9db; color: #fab005; }
-    .bg-soft-orange { background: #fff4e6; color: #fd7e14; }
-    .bg-soft-blue-alt { background: #e7f5ff; color: #228be6; }
-    
+
+    .bg-soft-green {
+      background: #eef9f6;
+      color: #44bba4;
+    }
+
+    .bg-soft-purple {
+      background: #f3f0ff;
+      color: #7048e8;
+    }
+
+    .bg-soft-yellow {
+      background: #fff9db;
+      color: #fab005;
+    }
+
+    .bg-soft-orange {
+      background: #fff4e6;
+      color: #fd7e14;
+    }
+
+    .bg-soft-blue-alt {
+      background: #e7f5ff;
+      color: #228be6;
+    }
+
     .product-card h4 {
       font-weight: 700;
       margin-bottom: 12px;
       color: #000;
     }
+
     .product-card p {
       color: #6c757d;
       font-size: 0.95rem;
       line-height: 1.6;
     }
-    
+
     /* Business Section Redesign */
     .reseller-section {
       display: flex;
@@ -319,6 +343,7 @@
       gap: 60px;
       padding: 40px 0 80px 0;
     }
+
     .reseller-card {
       background: #000;
       color: #fff;
@@ -333,6 +358,7 @@
       flex: 1;
       font-family: var(--font-family);
     }
+
     .reseller-card .blob {
       position: absolute;
       width: 300px;
@@ -341,20 +367,24 @@
       filter: blur(80px);
       z-index: 1;
     }
+
     .blob-1 {
       background: rgba(63, 120, 224, 0.25);
       top: -100px;
       right: -100px;
     }
+
     .blob-2 {
       background: rgba(251, 145, 41, 0.15);
       bottom: -100px;
       left: -100px;
     }
+
     .reseller-content {
       position: relative;
       z-index: 2;
     }
+
     .reseller-content h2 {
       font-size: 2.0rem;
       font-weight: var(--h1-weight);
@@ -363,6 +393,7 @@
       margin-bottom: 24px;
       color: #fff;
     }
+
     .reseller-content .price-tag {
       background: rgba(255, 255, 255, 0.1);
       color: #10B981;
@@ -373,6 +404,7 @@
       display: inline-block;
       margin-bottom: 24px;
     }
+
     .reseller-content .btn {
       background: white;
       color: black;
@@ -383,14 +415,16 @@
       text-decoration: none;
       transition: transform 0.2s ease;
     }
+
     .reseller-content .btn:hover {
       transform: translateY(-2px);
     }
-    
+
     .pricing-info {
       flex: 0 0 400px;
       padding: 20px;
     }
+
     .pricing-info .price-tag-large {
       font-size: 64px;
       font-weight: 800;
@@ -399,11 +433,13 @@
       line-height: 1;
       margin-bottom: 8px;
     }
+
     .pricing-info .price-sub {
       font-size: 20px;
       color: var(--text-secondary);
       margin-bottom: 32px;
     }
+
     .pricing-info ul {
       list-style: none;
       display: flex;
@@ -411,6 +447,7 @@
       gap: 16px;
       padding: 0;
     }
+
     .pricing-info li {
       display: flex;
       align-items: center;
@@ -420,9 +457,21 @@
     }
 
     @media (max-width: 991px) {
-      .reseller-section { flex-direction: column; gap: 40px; }
-      .pricing-info { flex: 1; width: 100%; padding: 0; }
-      .reseller-card { padding: 40px; min-height: auto; }
+      .reseller-section {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .pricing-info {
+        flex: 1;
+        width: 100%;
+        padding: 0;
+      }
+
+      .reseller-card {
+        padding: 40px;
+        min-height: auto;
+      }
     }
 
     .hero-card-wallet .token-badge {
@@ -490,70 +539,108 @@
         margin-top: 3rem;
         max-width: 260px;
       }
-      .wrapper-main { 
-        width: 200px; 
-        height: 280px; 
-        left: 50%; 
+
+      .wrapper-main {
+        width: 200px;
+        height: 280px;
+        left: 50%;
         margin-left: -100px;
       }
-      .wrapper-success { 
-        width: 150px; 
-        top: 10%; 
-        right: -20%; 
+
+      .wrapper-success {
+        width: 150px;
+        top: 10%;
+        right: -20%;
       }
-      .wrapper-wallet { 
-        width: 160px; 
-        bottom: 5%; 
-        left: -20%; 
+
+      .wrapper-wallet {
+        width: 160px;
+        bottom: 5%;
+        left: -20%;
       }
+
       /* Compact content for mobile cards */
-      .hero-card-success, .hero-card-wallet {
+      .hero-card-success,
+      .hero-card-wallet {
         padding: 15px !important;
       }
-      .hero-card h5 { font-size: 0.9rem !important; }
-      .hero-card p { font-size: 0.75rem !important; }
-      .hero-card .amount { font-size: 1.1rem !important; }
-      .hero-card .token-badge { padding: 2px 8px !important; font-size: 0.65rem !important; }
-      .success-icon { width: 30px !important; height: 30px !important; margin-bottom: 8px !important; }
+
+      .hero-card h5 {
+        font-size: 0.9rem !important;
+      }
+
+      .hero-card p {
+        font-size: 0.75rem !important;
+      }
+
+      .hero-card .amount {
+        font-size: 1.1rem !important;
+      }
+
+      .hero-card .token-badge {
+        padding: 2px 8px !important;
+        font-size: 0.65rem !important;
+      }
+
+      .success-icon {
+        width: 30px !important;
+        height: 30px !important;
+        margin-bottom: 8px !important;
+      }
     }
 
-  /* Network Heading Styles */
-  .network-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-  }
-  .network-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: #fff;
-  }
-  .network-mtn { background: #ffcc00; color: #000 !important; }
-  .network-glo { background: #00853f; }
-  .network-airtel { background: #ff0000; }
-  .network-nmobile { background: #006666; }
-  
-  .network-info h4 {
-    margin-bottom: 2px;
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
-  .network-info .badge {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 4px 8px;
-  }
-</style>
+    /* Network Heading Styles */
+    .network-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .network-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .network-mtn {
+      background: #ffcc00;
+      color: #000 !important;
+    }
+
+    .network-glo {
+      background: #00853f;
+    }
+
+    .network-airtel {
+      background: #ff0000;
+    }
+
+    .network-nmobile {
+      background: #006666;
+    }
+
+    .network-info h4 {
+      margin-bottom: 2px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .network-info .badge {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+    }
+  </style>
 </head>
 
 <body>
@@ -735,7 +822,7 @@
               electricity again.
             </h1> -->
             <p class="lead fs-lg mb-7 pe-xxl-10" style="max-width: 500px; line-height: 1.6;">
-              The smartest way to buy data, pay electricity bills, and renew subscriptions. Fast, secure, and instant.
+              The cheapest way to buy data, pay electricity bills, and renew subscriptions. Fast, secure, and instant.
             </p>
             <div class="d-flex justify-content-center justify-content-lg-start gap-3 flex-wrap">
               <a href='/register' class="btn btn-lg btn-dark-hero rounded-pill px-6 lift">Get Started</a>
@@ -761,8 +848,8 @@
                   </div>
                   <h5 class="mb-1 fw-bold">Electricity Token</h5>
                   <p class="fs-14 mb-0 text-muted">Same money. More light. ⚡
-                     <!-- <br>Why your bank dey give you small units? -->
-                    </p>
+                    <!-- <br>Why your bank dey give you small units? -->
+                  </p>
                 </div>
               </div>
 
@@ -961,7 +1048,7 @@
           <div class="reseller-card">
             <div class="blob blob-1"></div>
             <div class="blob blob-2"></div>
-            
+
             <div class="reseller-content">
               <span class="price-tag">Best Value</span>
               <h2>Start your own <br>VTU Business.</h2>
@@ -975,22 +1062,30 @@
           <div class="pricing-info">
             <div class="price-tag-large">₦45,000</div>
             <p class="price-sub">One-time setup fee.</p>
-            
+
             <ul>
               <li>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Custom Domain Name
               </li>
               <li>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Admin Dashboard
               </li>
               <li>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 API Access
               </li>
               <li>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Unlimited Transactions
               </li>
             </ul>
@@ -1365,6 +1460,8 @@
   <script data-cfasync="false" src="frontpage/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="frontpage/assets/js/plugins.js"></script>
   <script src="frontpage/assets/js/theme.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+    crossorigin="anonymous"></script>
   <!-- <script src='/assets/js/professionallocker.js'></script> -->
 
 </body>
