@@ -30,7 +30,7 @@
     <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/style.bundle5883.css" rel="stylesheet" type="text/css" />
 
-  
+
 
 </head>
 @yield('header')
@@ -53,7 +53,7 @@
         <a href="../../../../index.html">
             <img alt="Logo" src="assets/media/logos/ct_yellow.png" class="h-25px d-sm-none" />
             <img alt="Logo" src="assets/media/logos/ct_yellow.png" class="h-25px d-none d-sm-block" />
-       </a>
+        </a>
         <!--end::Logo-->
         <!--begin::Toolbar-->
         <div class="d-flex align-items-center">
@@ -5090,10 +5090,10 @@
                             <!--begin::Profile Account Information-->
                             <div id='app' class="row">
                                 <!--begin::Aside-->
-                              
+
                                 <!--end::Aside-->
                                 <!--begin::Content-->
-                             <transfer-component :user='{{ $user  }}'></transfer-component>
+                                <transfer-component :user='{{ $user  }}'></transfer-component>
                                 <!--end::Content-->
                             </div>
                             <!--end::Profile Account Information-->
@@ -6857,29 +6857,29 @@
     <script>
         $(document).ready(function() {
 
-            @if (session('message'))
-            Swal.fire('Success!',"{{ session('message') }}",'success');
-        @endif
-            $("#u_amount").on('input',function() {
-            var amount = parseInt($("#u_amount").val()) * 100;
-          
-           
-            if(parseInt($("#u_amount").val()) < 2500) {
-                $("#amount").val((amount) + (0.05 * amount));
-              
-            }
-            else {
-                $("#amount").val((amount) + (0.05 * amount) +10000);
-              
-              
-            }
-            
-            // alert($("#u_amount").val() * 100)
-        })
-        })
+            @if(session('message'))
+            Swal.fire('Success!', "{{ session('message') }}", 'success');
+            @endif
+            $("#u_amount").on('input', function() {
+                var amount = parseInt($("#u_amount").val()) * 100;
 
+
+                if (parseInt($("#u_amount").val()) < 2500) {
+                    $("#amount").val((amount) + (0.05 * amount));
+
+                } else {
+                    $("#amount").val((amount) + (0.05 * amount) + 10000);
+
+
+                }
+
+                // alert($("#u_amount").val() * 100)
+            })
+        })
     </script>
-     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+        crossorigin="anonymous"></script>
 
 </body>
 <!-- Mirrored from preview.keenthemes.com/metronic8/demo34/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 06 Feb 2023 08:02:15 GMT -->

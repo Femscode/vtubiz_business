@@ -46,25 +46,25 @@
 
   <script>
     var defaultThemeMode = "light";
-	var themeMode;
+    var themeMode;
 
-	if ( document.documentElement ) {
-		if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
-			themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
-		} else {
-			if ( localStorage.getItem("data-bs-theme") !== null ) {
-				themeMode = localStorage.getItem("data-bs-theme");
-			} else {
-				themeMode = defaultThemeMode;
-			}			
-		}
+    if (document.documentElement) {
+      if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+        themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+      } else {
+        if (localStorage.getItem("data-bs-theme") !== null) {
+          themeMode = localStorage.getItem("data-bs-theme");
+        } else {
+          themeMode = defaultThemeMode;
+        }
+      }
 
-		if (themeMode === "system") {
-			themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-		}
+      if (themeMode === "system") {
+        themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
 
-		document.documentElement.setAttribute("data-bs-theme", themeMode);
-	}            
+      document.documentElement.setAttribute("data-bs-theme", themeMode);
+    }
   </script>
   <!--end::Theme mode setup on page load-->
   <!--Begin::Google Tag Manager (noscript) -->
@@ -135,10 +135,10 @@
                           style='color:rgb(58, 58, 199)'>Biz</span></h1>
                       <!--end::Title-->
 
-                    
+
 
                     </div>
-                    
+
                     @if($errors->any())
                     <div class="alert alert-danger">
                       <p><strong>Opps Something went wrong</strong></p>
@@ -184,72 +184,72 @@
                       <div class="col-md-6">
                         <!--begin::Google link--->
                         <a href="{{ url('authorized/google') }}"
-                          class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                          <img alt="Logo" src="/assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />
-                          Sign in with Google
-                        </a>
-                        <!--end::Google link--->
-                      </div>
-                      <!--end::Col-->
-
-                      <!--begin::Col-->
-                      <div class="col-md-6">
-                        <!--begin::Google link--->
-                        <a href="#"
-                          class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                          <img alt="Logo" src="/assets/media/svg/brand-logos/apple-black.svg"
-                            class="theme-light-show h-15px me-3" />
-                          <img alt="Logo" src="/assets/media/svg/brand-logos/apple-black-dark.svg"
-                            class="theme-dark-show h-15px me-3" />
-                          Sign in with Apple
-                        </a>
-                        <!--end::Google link--->
-                      </div>
-                      <!--end::Col-->
-                    </div> --}}
-                    <!--end::Input group--->
-
-                    <!--begin::Wrapper-->
-                    <div class="text-gray-500 text-center fw-semibold fs-6">
-                      Yet to have an account?
-
-                      <a href="/register" class="link-success"> Sign up </a>
-                    </div>
-                    <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                      <!--begin::Link-->
-                      <a href="/forgot-password" class="link-primary">
-                        Forgot Password ?
-                      </a>
-                      <!--end::Link-->
-                    </div>
-                    <!--end::Wrapper-->
-
-                    <!--begin::Submit button-->
-                    <div class="d-grid mb-10">
-                      <button type="submit" class="btn btn-primary">Sign In</button>
-                    </div>
-                    <!--end::Submit button-->
-
-                    <!--begin::Sign up-->
-                  </form>
-
+                    class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+                    <img alt="Logo" src="/assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />
+                    Sign in with Google
+                    </a>
+                    <!--end::Google link--->
                 </div>
-                {{-- <login-component></login-component> --}}
+                <!--end::Col-->
+
+                <!--begin::Col-->
+                <div class="col-md-6">
+                  <!--begin::Google link--->
+                  <a href="#"
+                    class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+                    <img alt="Logo" src="/assets/media/svg/brand-logos/apple-black.svg"
+                      class="theme-light-show h-15px me-3" />
+                    <img alt="Logo" src="/assets/media/svg/brand-logos/apple-black-dark.svg"
+                      class="theme-dark-show h-15px me-3" />
+                    Sign in with Apple
+                  </a>
+                  <!--end::Google link--->
+                </div>
+                <!--end::Col-->
+              </div> --}}
+              <!--end::Input group--->
+
+              <!--begin::Wrapper-->
+              <div class="text-gray-500 text-center fw-semibold fs-6">
+                Yet to have an account?
+
+                <a href="/register" class="link-success"> Sign up </a>
               </div>
-              <!--end::Form-->
+              <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                <!--begin::Link-->
+                <a href="/forgot-password" class="link-primary">
+                  Forgot Password ?
+                </a>
+                <!--end::Link-->
+              </div>
+              <!--end::Wrapper-->
+
+              <!--begin::Submit button-->
+              <div class="d-grid mb-10">
+                <button type="submit" class="btn btn-primary">Sign In</button>
+              </div>
+              <!--end::Submit button-->
+
+              <!--begin::Sign up-->
+              </form>
 
             </div>
-            <!--end::Wrapper-->
-
-
+            {{-- <login-component></login-component> --}}
           </div>
-          <!--end::Card body-->
+          <!--end::Form-->
+
         </div>
-        <!--end::Card-->
+        <!--end::Wrapper-->
+
+
       </div>
-      <!--end::Body-->
+      <!--end::Card body-->
     </div>
-    <!--end::Authentication - Sign-in-->
+    <!--end::Card-->
+  </div>
+  <!--end::Body-->
+  </div>
+  <!--end::Authentication - Sign-in-->
   </div>
   <!--end::Root-->
   <script src="{{ asset('js/app.js') }}"></script>
@@ -274,7 +274,8 @@
   <script src="/assets/plugins/global/plugins.bundle.js"></script>
   <script src="/assets/js/scripts.bundle.js"></script>
   <!--end::Global Javascript Bundle--> --}}
-
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+    crossorigin="anonymous"></script>
 
   <!--begin::Custom Javascript(used for this page only)-->
   {{-- <script src="/assets/js/custom/authentication/sign-in/general.js"></script> --}}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>VTUBIZ | Dashboard</title>
     <meta charset="utf-8" />
@@ -14,23 +15,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&display=swap" rel="stylesheet">
-    
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Global Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
-    
+
     <style>
         :root {
-            --bg-color: #FDFCF8; 
-            --primary-dark: #001f3f; 
+            --bg-color: #FDFCF8;
+            --primary-dark: #001f3f;
             --surface: #FFFFFF;
             --text-main: #1A1A1A;
             --text-secondary: #6B6B6B;
             --text-light: #9CA3AF;
-            
+
             --accent-blue: #2F80ED;
             --accent-pink: #EB5757;
             --accent-yellow: #F2C94C;
@@ -50,10 +51,14 @@
 
             --shadow-card: 0 8px 24px rgba(15, 53, 72, 0.04);
             --shadow-hover: 0 12px 32px rgba(15, 53, 72, 0.08);
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -65,13 +70,18 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        .dashboard-container { display: flex; width: 100%; height: 100%; position: relative; }
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
 
         /* Sidebar Styles */
         .sidebar {
             width: 260px;
             background-color: var(--surface);
-            border-right: 1px solid rgba(0,0,0,0.03);
+            border-right: 1px solid rgba(0, 0, 0, 0.03);
             padding: var(--space-lg) var(--space-md);
             display: flex;
             flex-direction: column;
@@ -106,8 +116,14 @@
             padding-right: 4px;
         }
 
-        .nav-menu::-webkit-scrollbar { width: 4px; }
-        .nav-menu::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
+        .nav-menu::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .nav-menu::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
 
         .nav-section-title {
             font-size: 0.75rem;
@@ -131,9 +147,16 @@
             font-size: 0.95rem;
         }
 
-        .nav-item i { width: 20px; text-align: center; font-size: 1.1rem; }
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
 
-        .nav-item:hover { background-color: #f8f9fa; color: var(--primary-dark); }
+        .nav-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary-dark);
+        }
 
         .nav-item.active {
             background-color: var(--primary-dark);
@@ -147,7 +170,7 @@
             align-items: center;
             gap: 12px;
             padding: 16px;
-            border-top: 1px solid rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
             margin-top: 20px;
             text-decoration: none;
             color: inherit;
@@ -179,7 +202,8 @@
         .top-navbar {
             height: 70px;
             background: transparent;
-            display: none; /* Only visible on mobile */
+            display: none;
+            /* Only visible on mobile */
             align-items: center;
             padding: 0 var(--space-md);
             justify-content: space-between;
@@ -234,7 +258,10 @@
             z-index: 800;
             transition: transform 0.2s;
         }
-        #fixedbutton:hover { transform: scale(1.1); }
+
+        #fixedbutton:hover {
+            transform: scale(1.1);
+        }
 
         @media (max-width: 991px) {
             .sidebar {
@@ -244,45 +271,75 @@
                 height: 100%;
                 transform: translateX(-100%);
             }
-            .sidebar.show { transform: translateX(0); }
-            .sidebar.show + .sidebar-overlay { display: block; opacity: 1; }
-            .top-navbar { display: flex; }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar.show+.sidebar-overlay {
+                display: block;
+                opacity: 1;
+            }
+
+            .top-navbar {
+                display: flex;
+            }
         }
 
         /* Custom Scrollbar for Content */
-        .content-area::-webkit-scrollbar { width: 8px; }
-        .content-area::-webkit-scrollbar-track { background: var(--bg-color); }
-        .content-area::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
-        .content-area::-webkit-scrollbar-thumb:hover { background: #d0d0d0; }
+        .content-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-area::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        .content-area::-webkit-scrollbar-thumb {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+
+        .content-area::-webkit-scrollbar-thumb:hover {
+            background: #d0d0d0;
+        }
 
         /* Global Modal Styles */
         .modal-content {
             border-radius: var(--radius-lg);
             border: none;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .modal-header {
-            border-bottom: 1px solid rgba(0,0,0,0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             padding: var(--space-md) var(--space-lg);
             background: #FDFCF8;
         }
-        .modal-header h4, .modal-header h5 {
+
+        .modal-header h4,
+        .modal-header h5 {
             font-family: 'Fraunces', serif;
             color: var(--primary-dark);
             margin-bottom: 0;
             font-weight: 600;
         }
+
         .modal-body {
             padding: var(--space-lg);
             font-family: 'DM Sans', sans-serif;
         }
+
         .modal-footer {
-            border-top: 1px solid rgba(0,0,0,0.03);
+            border-top: 1px solid rgba(0, 0, 0, 0.03);
             padding: var(--space-md) var(--space-lg);
             background: #FDFCF8;
         }
-        .btn-close:focus { box-shadow: none; }
+
+        .btn-close:focus {
+            box-shadow: none;
+        }
 
         /* Global Form Labels & Inputs for Modals */
         .modal-body label {
@@ -292,13 +349,15 @@
             display: block;
             font-size: 0.9rem;
         }
+
         .modal-body .form-control {
             border-radius: var(--radius-md);
             padding: 12px 16px;
-            border: 1px solid rgba(0,0,0,0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             background: #F9F9F9;
             transition: all 0.2s;
         }
+
         .modal-body .form-control:focus {
             border-color: var(--primary-dark);
             background: white;
@@ -306,12 +365,12 @@
         }
 
         /* Global Vue Component Overrides to match Fintech UI */
-        #app input.form-control, 
-        #app select.form-control, 
+        #app input.form-control,
+        #app select.form-control,
         #app textarea.form-control {
             border-radius: var(--radius-md) !important;
             padding: 14px 18px !important;
-            border: 1px solid rgba(0,0,0,0.08) !important;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
             background: #F9F9F9 !important;
             font-family: 'DM Sans', sans-serif !important;
             font-size: 1rem !important;
@@ -319,7 +378,7 @@
             box-shadow: none !important;
         }
 
-        #app input.form-control:focus, 
+        #app input.form-control:focus,
         #app select.form-control:focus {
             border-color: var(--primary-dark) !important;
             background: white !important;
@@ -358,13 +417,13 @@
 
         #app .wallet-card {
             background: var(--primary-dark) !important;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(47, 128, 237, 0.2) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(235, 87, 87, 0.2) 0%, transparent 20%) !important;
         }
 
         #app .referral-card {
-            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) ;
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
         }
 
         #app label {
@@ -381,7 +440,7 @@
             /* padding: var(--space-xl) var(--space-lg); */
             padding: 15px;
             box-shadow: var(--shadow-hover);
-            border: 1px solid rgba(0,0,0,0.02);
+            border: 1px solid rgba(0, 0, 0, 0.02);
             width: 100%;
         }
 
@@ -409,7 +468,7 @@
                     <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span>
                 </a>
-                
+
                 <a href="/fundwallet" class="nav-item {{ $active == 'fundwallet' ? 'active' : '' }}">
                     <i class="fa-solid fa-wallet"></i>
                     <span>Fund Wallet</span>
@@ -421,27 +480,27 @@
                 </a>
 
                 <div class="nav-section-title">Services</div>
-                
+
                 <a href="/data" class="nav-item">
                     <i class="fa-solid fa-wifi"></i>
                     <span>Buy Data</span>
                 </a>
-                
+
                 <a href="/airtime" class="nav-item">
                     <i class="fa-solid fa-phone"></i>
                     <span>Buy Airtime</span>
                 </a>
-                
+
                 <a href="/cable" class="nav-item">
                     <i class="fa-solid fa-tv"></i>
                     <span>TV Subscription</span>
                 </a>
-                
+
                 <a href="/electricity" class="nav-item">
                     <i class="fa-solid fa-bolt"></i>
                     <span>Electricity Bill</span>
                 </a>
-                
+
                 <a href="/examination" class="nav-item">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Exam Pins</span>
@@ -533,7 +592,7 @@
             <div class="content-area">
                 @yield('content')
             </div>
-            
+
             <a href="https://wa.me/2349058744473">
                 <img src="{{ asset('assets/media/logos/whatsapp.png') }}" alt="whatsapp" id="fixedbutton">
             </a>
@@ -557,10 +616,10 @@
             const sidebar = document.getElementById('sidebar');
             const hamburger = document.querySelector('.hamburger');
             const overlay = document.querySelector('.sidebar-overlay');
-            
+
             if (window.innerWidth <= 991) {
-                if (sidebar.classList.contains('show') && 
-                    !sidebar.contains(event.target) && 
+                if (sidebar.classList.contains('show') &&
+                    !sidebar.contains(event.target) &&
                     !hamburger.contains(event.target)) {
                     sidebar.classList.remove('show');
                 }
@@ -569,47 +628,69 @@
 
         // Handle Session Messages
         @if(session('message'))
-            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('message') }}", confirmButtonColor: '#0F3548' });
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: "{{ session('message') }}",
+            confirmButtonColor: '#0F3548'
+        });
         @endif
 
         @if(session('success'))
-            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('success') }}", confirmButtonColor: '#0F3548' });
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#0F3548'
+        });
         @endif
 
         @if(session('error'))
-            Swal.fire({ icon: 'error', title: 'Error!', text: "{{ session('error') }}", confirmButtonColor: '#0F3548' });
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: "{{ session('error') }}",
+            confirmButtonColor: '#0F3548'
+        });
         @endif
 
         // Handle Notifications
         @if(isset($notification))
-            Swal.fire({
-                title: '',
-                html: `
+        Swal.fire({
+            title: '',
+            html: `
                     <img src="{{ asset('assets/img/not.jpg') }}" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 15px;">
                     <h2 style="font-family: 'Fraunces', serif; font-weight: bold; margin-bottom: 10px;">{{ $notification->title }}</h2>
                     <div style="font-size: 14px; color: #666; line-height: 1.6;">{!! $notification->description !!}</div>
                 `,
-                showCloseButton: true,
-                showConfirmButton: false,
-                customClass: { popup: 'modern-swal-popup' }
-            });
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'modern-swal-popup'
+            }
+        });
         @endif
 
         @if(isset($dod))
-            Swal.fire({
-                title: '',
-                html: `
+        Swal.fire({
+            title: '',
+            html: `
                     <img src="{{ asset('assets/img/discount.jpg') }}" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 15px;">
                     <h2 style="font-family: 'Fraunces', serif; font-weight: bold; margin-bottom: 10px;">{{ $dod->title }}</h2>
                     <div style="font-size: 18px; font-weight: 600; color: var(--primary-dark);">{!! $dod->description !!}</div>
                 `,
-                showCloseButton: true,
-                showConfirmButton: false,
-                customClass: { popup: 'modern-swal-popup' }
-            });
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'modern-swal-popup'
+            }
+        });
         @endif
     </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+        crossorigin="anonymous"></script>
 
     @yield('script')
 </body>
+
 </html>
