@@ -641,9 +641,15 @@
       padding: 4px 8px;
     }
   </style>
+  <script async custom-element="amp-auto-ads"
+    src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+  </script>
 </head>
 
 <body>
+  <amp-auto-ads type="adsense"
+    data-ad-client="ca-pub-9520357947525167">
+  </amp-auto-ads>
   <div class="content-wrapper">
     <header class="wrapper bg-soft-primary">
       <nav class="navbar navbar-expand-lg center-nav transparent navbar-light">

@@ -449,10 +449,16 @@
             margin-bottom: var(--space-xl);
         }
     </style>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
     @yield('header')
 </head>
 
 <body>
+    <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-9520357947525167">
+    </amp-auto-ads>
     <div id="app" class="dashboard-container">
         <!-- Sidebar Overlay -->
         <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -689,6 +695,7 @@
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
         crossorigin="anonymous"></script>
+
 
     @yield('script')
 </body>

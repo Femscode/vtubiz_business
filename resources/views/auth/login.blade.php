@@ -32,6 +32,9 @@
   <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
   <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
   <!--end::Global Stylesheets Bundle-->
+  <script async custom-element="amp-auto-ads"
+    src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+  </script>
 
   <!--Begin::Google Tag Manager -->
 
@@ -43,7 +46,9 @@
 
 <body id="kt_body" class="app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
   <!--begin::Theme mode setup on page load-->
-
+  <amp-auto-ads type="adsense"
+    data-ad-client="ca-pub-9520357947525167">
+  </amp-auto-ads>
   <script>
     var defaultThemeMode = "light";
     var themeMode;
