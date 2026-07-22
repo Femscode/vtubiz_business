@@ -27,8 +27,8 @@
   <meta name="google-adsense-account" content="ca-pub-9520357947525167">
 
   <!-- //google ads -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
-    crossorigin="anonymous"></script>
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+    crossorigin="anonymous"></script> -->
 
   <style>
     :root {
@@ -641,15 +641,15 @@
       padding: 4px 8px;
     }
   </style>
-  <script async custom-element="amp-auto-ads"
+  <!-- <script async custom-element="amp-auto-ads"
     src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-  </script>
+  </script> -->
 </head>
 
 <body>
-  <amp-auto-ads type="adsense"
+  <!-- <amp-auto-ads type="adsense"
     data-ad-client="ca-pub-9520357947525167">
-  </amp-auto-ads>
+  </amp-auto-ads> -->
   <div class="content-wrapper">
     <header class="wrapper bg-soft-primary">
       <nav class="navbar navbar-expand-lg center-nav transparent navbar-light">
@@ -1466,8 +1466,8 @@
   <script data-cfasync="false" src="frontpage/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="frontpage/assets/js/plugins.js"></script>
   <script src="frontpage/assets/js/theme.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
-    crossorigin="anonymous"></script>
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+    crossorigin="anonymous"></script> -->
   <!-- <script src='/assets/js/professionallocker.js'></script> -->
 
 </body>

@@ -32,9 +32,9 @@
   <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
   <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
   <!--end::Global Stylesheets Bundle-->
-  <script async custom-element="amp-auto-ads"
+  <!-- <script async custom-element="amp-auto-ads"
     src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-  </script>
+  </script> -->
 
   <!--Begin::Google Tag Manager -->
 
@@ -279,8 +279,8 @@
   <script src="/assets/plugins/global/plugins.bundle.js"></script>
   <script src="/assets/js/scripts.bundle.js"></script>
   <!--end::Global Javascript Bundle--> --}}
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
-    crossorigin="anonymous"></script>
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9520357947525167"
+    crossorigin="anonymous"></script> -->
 
   <!--begin::Custom Javascript(used for this page only)-->
   {{-- <script src="/assets/js/custom/authentication/sign-in/general.js"></script> --}}
