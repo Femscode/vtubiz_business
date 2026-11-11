@@ -2,115 +2,75 @@
 
 @section('header')
 <style>
-    .withdraw-header {
-        margin-bottom: var(--space-lg);
+    .acct-found {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #EEF9F2;
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom: 18px;
     }
-    .withdraw-header h1 {
-        font-family: 'Fraunces', serif;
-        font-size: 2.2rem;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
+
+    .acct-found i {
+        color: var(--accent-green);
     }
-    .withdraw-card {
-        background: var(--surface);
-        border-radius: var(--radius-lg);
-        padding: var(--space-lg);
-        box-shadow: var(--shadow-card);
-    }
-    .form-label-bold {
-        font-weight: 700;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
-        display: block;
-        font-size: 0.9rem;
-    }
-    .form-control-custom {
+
+    #app .acct-found input {
+        border: 0 !important;
+        background: transparent !important;
+        padding: 0 !important;
+        font-weight: 700 !important;
+        color: #1F6B41 !important;
+        font-size: 1rem !important;
         width: 100%;
-        padding: 14px 18px;
-        border-radius: var(--radius-md);
-        border: 1px solid rgba(0,0,0,0.08);
-        background: #F9F9F9;
-        font-family: 'DM Sans', sans-serif;
-        transition: all 0.2s ease;
-        margin-bottom: 15px;
-    }
-    .form-control-custom:focus {
         outline: none;
-        border-color: var(--primary-dark);
-        background: white;
-        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
     }
-    .form-select-custom {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230F3548' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 18px center;
-    }
+
     .pin-input-group {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         justify-content: center;
-        margin: 20px 0;
+        margin: 4px 0 20px;
     }
-    .pin-field {
-        width: 50px;
+
+    #app .pin-field {
+        width: 56px;
         height: 60px;
         text-align: center;
         font-size: 1.5rem;
         font-weight: 700;
-        border-radius: 12px;
-        border: 1px solid rgba(0,0,0,0.1);
-        background: #F9F9F9;
-        font-family: 'Fraunces', serif;
-    }
-    .pin-field:focus {
+        border-radius: 14px;
+        border: 1.5px solid rgba(11, 22, 37, .1);
+        background: #FAFAF8;
         outline: none;
+    }
+
+    #app .pin-field:focus {
         border-color: var(--primary-dark);
-        background: white;
-        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
-    }
-    .btn-withdraw {
-        background: var(--primary-dark);
-        color: white;
-        border: none;
-        padding: 16px;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.1s;
-        width: 100%;
-        font-size: 1rem;
-        margin-top: 20px;
-    }
-    .btn-withdraw:active { transform: scale(0.98); }
-    
-    .account-details-box {
-        background: #FDFCF8;
-        border: 1px solid rgba(0,0,0,0.03);
-        border-radius: var(--radius-md);
-        padding: 20px;
-        margin-top: 10px;
-        margin-bottom: 20px;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(0, 31, 63, .06);
     }
 </style>
 @endsection
 
 @section('content')
-<div class="withdraw-header">
-    <h1>Withdraw Funds</h1>
-    <p class="text-muted">Securely transfer funds from your wallet to your linked bank account.</p>
-</div>
+<div class="pg">
+    <div class="pg-head">
+        <div>
+            <h1>Withdraw <em>funds</em></h1>
+            <p>Send money from your wallet to any Nigerian bank account.</p>
+        </div>
+    </div>
 
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="withdraw-card">
+    <div class="grid-v main-side">
+        <div class="panel">
             <form id="make_transfer">
                 @csrf
-                <div class="row g-3">
-                    <div class="col-12">
-                        <label class="form-label-bold">Select Bank</label>
-                        <select required class='form-control-custom form-select-custom' id='bank_code'>
-                            <option value="">-- Choose your bank --</option>
+                <div class="f-group">
+                    <label class="f-label" for="bank_code">Bank</label>
+                    <select required class="f-input" id="bank_code">
+                            <option value="">Choose your bank</option>
                             <option value="120001">9mobile 9Payment Service Bank</option>
                             <option value="801">Abbey Mortgage Bank</option>
                             <option value="51204">Above Only MFB</option>
@@ -228,41 +188,45 @@
                             <option value="566">VFD Microfinance Bank Limited</option>
                             <option value="035">Wema Bank</option>
                             <option value="057">Zenith Bank</option>
-                        </select>
+                    </select>
+                </div>
+                <div class="f-group">
+                    <label class="f-label" for="account_no">Account number</label>
+                    <input type="text" inputmode="numeric" maxlength="10" name="account_no" id="account_no" class="f-input" placeholder="10-digit account number">
+                    <div class="f-hint">We'll confirm the account name automatically.</div>
+                </div>
+
+                <div id="show_details" style="display:none">
+                    <div class="acct-found">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <input type="text" id="account_name" readonly aria-label="Account name">
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label" for="amount">Amount</label>
+                        <div class="f-affix">
+                            <span class="pre">₦</span>
+                            <input required type="number" min="100" name="amount" id="amount" class="f-input f-input-lg" placeholder="0">
+                        </div>
+                        <div class="f-hint warn"><i class="fa-solid fa-circle-info"></i> A ₦100 withdrawal charge applies.</div>
+                        <input type="hidden" id="recipient_code">
                     </div>
 
-                    <div class="col-12">
-                        <label class="form-label-bold">Account Number</label>
-                        <input type="number" name="account_no" id='account_no' class="form-control-custom" placeholder="10-digit account number">
+                    <label class="f-label" style="text-align:center">Transaction PIN</label>
+                    <div id="otp" class="pin-input-group">
+                        <input class="pin-field" type="password" inputmode="numeric" id="first" maxlength="1" required />
+                        <input class="pin-field" type="password" inputmode="numeric" id="second" maxlength="1" required />
+                        <input class="pin-field" type="password" inputmode="numeric" id="third" maxlength="1" required />
+                        <input class="pin-field" type="password" inputmode="numeric" id="fourth" maxlength="1" required />
                     </div>
-
-                    <div id='show_details' style='display:none'>
-                        <div class="account-details-box">
-                            <label class="form-label-bold mb-1">Account Name</label>
-                            <input type="text" id='account_name' readonly class="form-control-custom bg-transparent border-0 p-0 mb-0 font-weight-bold" style="font-size: 1.1rem; color: var(--accent-green);">
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label-bold">Amount to Withdraw</label>
-                            <input required type="number" min='100' name="amount" id='amount' class="form-control-custom" placeholder="₦ 0.00">
-                            <p class="text-xs text-muted mb-3"><i class="fa-solid fa-circle-info"></i> A withdrawal charge of ₦100 will be applied.</p>
-                            <input type="hidden" id='recipient_code'>
-                        </div>
-
-                        <div class="col-12 text-center mt-4">
-                            <label class="form-label-bold">Enter Transaction PIN</label>
-                            <div id="otp" class="pin-input-group">
-                                <input class="pin-field" type="password" id="first" maxlength="1" required />
-                                <input class="pin-field" type="password" id="second" maxlength="1" required />
-                                <input class="pin-field" type="password" id="third" maxlength="1" required />
-                                <input class="pin-field" type="password" id="fourth" maxlength="1" required />
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn-withdraw" id="transfer_button">Process Withdrawal</button>
-                    </div>
+                    <button type="submit" class="btn-v dark block" id="transfer_button">Withdraw <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </form>
+        </div>
+
+        <div class="hero-v">
+            <div class="k">Available balance</div>
+            <div class="v" style="font-size:2rem;margin-top:8px">₦{{ number_format((float) $user->balance, 2) }}</div>
+            <div style="margin-top:18px;color:rgba(255,255,255,.7);font-size:.88rem;line-height:1.55">Withdrawals are usually instant. Double-check the account name before you confirm.</div>
         </div>
     </div>
 </div>

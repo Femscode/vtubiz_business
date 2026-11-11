@@ -18,6 +18,7 @@
                 <!--begin::Card-->
                 <div class="card card-custom">
                     <h1 class='text-center p-2'>Bulk SMS</h1>
+                    <p class="text-center text-muted" style="margin-top:-5px">Rate: <b>₦{{ number_format($rate_per_page ?? 5.00, 2) }}</b> / page</p>
                     <form method='post' class="myForm" enctype="multipart/form-data">@csrf
                         <div class="form-group p-4 m-5">
 
@@ -25,7 +26,7 @@
                             <div class="wrap-form-control validate-input" data-validate="Sender Name is required">
                                 <label>Sender's Name</label>
                                 <input name='sender_name' id='sender_name' class="form-control" type="text"
-                                    maxlength="10" name="name" placeholder="Sender's Name">
+                                    maxlength="11" placeholder="Sender's Name (max 11 chars)">
                                 <span class="shadow-form-control"></span>
                             </div>
                             <label><b>Choose Contact Type</b></label>
@@ -199,8 +200,8 @@
         var page = parseInt($("#pages").text())
         var recipient = parseInt($("#no_of_recipients").text())
         console.log(page, recipient, 'coole')
-        //charge is the amount set by the admin to be charged per each transactions
-        var charge = 4
+        //charge is the amount set by the admin in .env (SMARTSMS_COST_PER_PAGE) to be charged per page
+        var charge = {{ $rate_per_page ?? 5.00 }};
         $("#amount_field").val(page * recipient * charge )
         $("#amount").text(page * recipient * charge)
       
@@ -293,8 +294,9 @@
                         icon: 'info',
                         html:
                           `Total Recipients : <b>${response.count_recipient}</b><br> ` +
-                           
-                          ` Total Charge : <b>NGN ${response.amount}</b><br><span class='text-danger'>Input your four(4) digit PIN to proceed</span>`,
+                          `Total Pages : <b>${response.message_count}</b><br> ` +
+                          `Rate Per Page : <b>NGN ${response.rate_per_page}</b><br> ` +
+                          `Total Charge : <b>NGN ${response.amount}</b><br><span class='text-danger'>Input your four(4) digit PIN to proceed</span>`,
                         showCloseButton: true,
                         showCancelButton: true,
                         focusConfirm: false,
@@ -433,8 +435,8 @@
         var page = parseInt($("#pages").text())
         var recipient = parseInt($("#no_of_recipients").text())
         console.log(page, recipient, 'coole')
-        //charge is the amount set by the admin to be charged per each transactions
-        var charge = 4
+        //charge is the amount set by the admin in .env (SMARTSMS_COST_PER_PAGE) to be charged per page
+        var charge = {{ $rate_per_page ?? 5.00 }};
         $("#amount_field").val(page * recipient * charge )
         $("#amount").text(page * recipient * charge)
         //start copy

@@ -1,276 +1,135 @@
 @extends('dashboard.master1')
 
+@php
+    $sent = collect($transactions)->where('status', 1);
+@endphp
+
 @section('header')
+<style>
+    .sms-desc {
+        max-width: 460px;
+    }
+
+    .sms-desc small {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
 @endsection
 
 @section('content')
-
-<div class="d-flex flex-column flex-column-fluid">
-  <!--begin::Container-->
-  <div id="kt_app_content" class="app-content  flex-column-fluid ">
-    <!--begin::Profile Account Information-->
-    <div class="row">
-
-      <!--begin::Content-->
-      <div class="col-md-12">
-        <!--begin::Card-->
-        <div class="card card-custom">
-          <div class="card-header flex-wrap border-0 pt-6 pb-0">
-            <div class="card-title">
-              <h3 class="card-label">My Transactions
-                <span class="text-muted pt-2 font-size-sm d-block">{{ $user->email }}</span>
-              </h3>
-
-
-            </div>
-
-          </div>
-          <div class="card-body">
-            <div class='col-md-6'>
-              <input type="text" class="form-control" placeholder="Search..." id="searchTable">
-            </div>
-
-
-            <table class="datatable table">
-              <thead>
-                <tr>
-
-                  <th scope="col">Title</th>
-                  <th scope="col">Sender's Name</th>
-                  <th scope="col">Details</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Previous Balance</th>
-                  <th scope="col">Later Balance</th>
-
-                  <th scope="col">Status</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <input style='visibility:hidden' value='{{ $user->balance }}' id='user_amount' />
-                @foreach($transactions as $key => $tranx)
-
-                @if($tranx->status == 1)
-                <tr class='bg bg-light-success'>
-
-
-                  <td>{{ $tranx->title }}<br>
-                  
-                  </td>
-                  <td>{{ $tranx->sender }}</td>
-                  <td>{{ $tranx->description }}</td>
-                  <td>₦{{ number_format($tranx->amount,2) }}</td>
-                  <td>₦{{ number_format($tranx->before,2) }}</td>
-                  <td>₦{{ number_format($tranx->after,2) }}</td>
-
-                  <td>@if($tranx->status == 1)
-                    <span class='badge badge-light-success'>Success</span>
-                    @else
-                    <span class='badge badge-light-danger'>Failed</span>
-                    @endif
-
-                  </td>
-                  <td>
-                    <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a>
-
-                    <a class='btn btn-info btn-sm' href='/view_details/{{ $tranx->id }}'>Details</a>
-
-                  </td>
-                </tr>
-                @else
-                <tr class='bg bg-light-danger'>
-
-
-                  <td>{{ $tranx->title }}<br>
-                  
-                  </td>
-                  <td>{{ $tranx->sender }}</td>
-                  <td>{{ $tranx->description }}</td>
-                  <td>₦{{ number_format($tranx->amount,2) }}</td>
-                  <td>₦{{ number_format($tranx->before,2) }}</td>
-                  <td>₦{{ number_format($tranx->after,2) }}</td>
-
-                  <td>@if($tranx->status == 1)
-                    <span class='badge badge-light-success'>Success</span>
-                    @else
-                    <span class='badge badge-light-danger'>Failed</span>
-                    @endif
-
-                  </td>
-                  <td>
-                    {{-- <a href='/print_transaction_receipt/{{ $tranx->id }}' class='btn btn-success btn-sm'>Print</a> --}}
-                    <a onclick='return confirm("Are you sure you want to resend this SMS?")'
-                      class='btn btn-primary btn-sm' href='/resend_sms/{{ $tranx->id }}'>Resend</a>
-                    <a class='btn btn-info btn-sm' href='/view_details/{{ $tranx->id }}'>Details</a>
-
-                  </td>
-                </tr>
-                @endif
-                @endforeach
-
-              </tbody>
-            </table>
-            <!--end: Datatable-->
-          </div>
+<div class="pg">
+    <a href="/bulksms" class="pg-back"><i class="fa-solid fa-arrow-left"></i> Bulk SMS</a>
+    <div class="pg-head">
+        <div>
+            <h1>SMS <em>history</em></h1>
+            <p>Every bulk message you've sent or scheduled.</p>
         </div>
-        <!--end::Card-->
-      </div>
-      <!--end::Content-->
+        <div class="pg-actions">
+            <a href="/bulksms" class="btn-v dark"><i class="fa-solid fa-paper-plane"></i> New message</a>
+        </div>
     </div>
-    <!--end::Profile Account Information-->
-  </div>
-  <!--end::Container-->
+
+    <div class="stats-v">
+        <div class="stat-v">
+            <div class="k"><i class="t-blue fa-solid fa-message"></i> Campaigns</div>
+            <div class="v">{{ count($transactions) }}</div>
+        </div>
+        <div class="stat-v">
+            <div class="k"><i class="t-green fa-solid fa-circle-check"></i> Delivered</div>
+            <div class="v">{{ $sent->count() }}</div>
+        </div>
+        <div class="stat-v">
+            <div class="k"><i class="t-pink fa-solid fa-arrow-up"></i> Spent</div>
+            <div class="v">₦{{ number_format((float) $sent->sum('amount'), 2) }}</div>
+        </div>
+    </div>
+
+    <div class="panel panel-flush">
+        <div class="panel-head">
+            <h3>Messages</h3>
+            <div class="search-v" style="max-width:280px">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchTable" placeholder="Search sender or message">
+            </div>
+        </div>
+
+        @if(count($transactions))
+            <div class="tbl-wrap" style="margin-top:16px">
+                <table class="tbl stack" id="smsTable">
+                    <thead>
+                        <tr>
+                            <th>Message</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th class="end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($transactions as $tranx)
+                            <tr>
+                                <td class="lead">
+                                    <div class="cell-main">
+                                        <span class="ic t-ink"><i class="fa-solid fa-message"></i></span>
+                                        <div class="sms-desc">
+                                            <b>{{ $tranx->sender ?: $tranx->title }}</b>
+                                            <small>{{ $tranx->description }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Amount" class="num">₦{{ number_format((float) $tranx->amount, 2) }}</td>
+                                <td data-label="Status">
+                                    @if($tranx->status == 1)
+                                        <span class="badge-v ok">Sent</span>
+                                    @else
+                                        <span class="badge-v fail">Failed</span>
+                                    @endif
+                                </td>
+                                <td data-label="Date">
+                                    <span style="white-space:nowrap">{{ optional($tranx->created_at)->format('M d, Y') }}</span>
+                                    <div class="muted">{{ optional($tranx->created_at)->format('h:i A') }}</div>
+                                </td>
+                                <td data-label="Actions">
+                                    <div class="row-actions" style="flex-wrap:nowrap">
+                                        @if($tranx->status == 1)
+                                            <a href="/print_transaction_receipt/{{ $tranx->id }}" class="btn-v light icon" title="Receipt" aria-label="Receipt"><i class="fa-solid fa-receipt"></i></a>
+                                        @else
+                                            <a onclick="return confirm('Resend this SMS?')" href="/resend_sms/{{ $tranx->id }}" class="btn-v light xs"><i class="fa-solid fa-rotate-right"></i> Resend</a>
+                                        @endif
+                                        <a href="/view_details/{{ $tranx->id }}" class="btn-v light icon" title="Details" aria-label="Details"><i class="fa-solid fa-eye"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="empty-v">
+                <div class="ic"><i class="fa-solid fa-message"></i></div>
+                <b>No messages yet</b>
+                <span>Your bulk SMS history will show here.</span><br>
+                <a href="/bulksms" class="btn-v dark">Send your first SMS</a>
+            </div>
+        @endif
+    </div>
 </div>
 @endsection
 
 @section('script')
 <script>
-  $(document).ready(function() {
-        var oTable = $('.datatable').DataTable({
-            ordering: false,
-            searching: true
-            });   
-
-
-            $('#searchTable').on('keyup', function() {
-              oTable.search(this.value).draw();
+    (function () {
+        var input = document.getElementById('searchTable');
+        if (!input) return;
+        input.addEventListener('input', function () {
+            var q = input.value.trim().toLowerCase();
+            document.querySelectorAll('#smsTable tbody tr').forEach(function (tr) {
+                tr.style.display = !q || tr.innerText.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
             });
-
-        @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-    $("body").on('click','.redo', function() {
-        var description = $(this).data('description')
-        var title = $(this).data('title')
-        var transaction_id = $(this).data('transaction_id')
-        console.log($(this).data('amount'),  $("#user_amount").val(), 'price different' )
-       if(parseInt( $("#user_amount").val()) > parseInt($(this).data('amount'))) {
-       
-        Swal.fire({
-          title: "You are about to redo " + description,
-          html: " <span class='text-warning'>Input your four(4) digit pin to proceed</span> " ,
-          icon: "warning",
-          input: "password",
-          inputAttributes: {
-            inputmode: "numeric",
-            maxlength: 4,
-            autocomplete: "new-password",
-            name: "my-pin",
-            autocapitalize: "off",
-            pattern: "[0-9]*",
-            style: "text-align:center;font-size:24px;letter-spacing: 20px",
-          },
-          showCancelButton: true,
-          confirmButtonColor: "#ebab21",
-          cancelButtonColor: "grey",
-          confirmButtonText: "Proceed",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.textContent = "Validating ";
-            confirmButton.disabled = true;
-            confirmButton.insertAdjacentHTML(
-              "beforeend",
-              `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-            );
-            return new Promise((resolve) => {
-              // You can perform any necessary validation here, e.g. making a server call.
-              // Once validation is complete, call resolve() to close the modal.
-              setTimeout(() => {
-                resolve();
-              }, 500);
-            });
-          },
-
-          inputValidator: (text) => {
-            if (!/^\d{4}$/.test(text)) {
-              return "Please enter a four-digit PIN";
-            }
-          },
-        }).then((result) => {
-          if(result.isConfirmed == false) {
-          return;
-
-          }
-          console.log(result, 'the result')
-        
-        Swal.fire({
-          title: "Processing transaction, please wait...",
-          // html: '<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
         });
-        let fd = new FormData();
-        fd.append("transaction_id", transaction_id);
-        fd.append("pin", result.value);
-       
-      
-        axios
-          .post("/redo_transaction", fd)
-          .then((response) => {
-            console.log(response, 'the res')
-            if (response.data.success == "true") {
-              Swal.fire({
-                icon: "success",
-                title: "Purchase successful!",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  location.reload();
-                }
-              });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: response.data.message,
-                // text: "Updating...",
-                showConfirmButton: true, // updated
-                confirmButtonColor: "#3085d6", // added
-                confirmButtonText: "Ok", // added
-                allowOutsideClick: false, // added to prevent dismissing the modal by clicking outside
-                allowEscapeKey: false, // added to prevent dismissing the modal by pressing Esc key
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  // location.reload();
-                }
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error.message);
-            Swal.fire(error.message);
-          });
-        }) 
-      } else {
-        Swal.fire({
-                title: 'Insufficient balance!,',
-                icon: 'info',
-                html:
-                    'Click ' +
-                    '<a href="https://fastpay.cttaste.com/fundwallet">here</a> ' +
-                    'to fund your wallet.',
-                showCloseButton: true,
-                showCancelButton: true,
-                focusConfirm: false,
-              
-                })
-            
-
-            }
-     
-    })
-  
-        
-    })
-
+    })();
 </script>
 @endsection

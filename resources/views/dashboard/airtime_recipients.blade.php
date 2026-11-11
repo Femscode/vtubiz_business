@@ -1,154 +1,113 @@
 @extends('dashboard.master1')
-@section('header')
-<style>
-    .recipient-header {
-        margin-bottom: var(--space-lg);
-    }
-    .recipient-header h1 {
-        font-family: 'Fraunces', serif;
-        font-size: 2.2rem;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
-    }
-    .recipient-card {
-        background: var(--surface);
-        border-radius: var(--radius-lg);
-        padding: var(--space-lg);
-        box-shadow: var(--shadow-card);
-    }
-    .modern-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-    }
-    .modern-table thead th {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--text-light);
-        padding: 10px 20px;
-        font-weight: 700;
-        border: none;
-    }
-    .modern-table tbody tr {
-        background: #FDFCF8;
-        transition: transform 0.2s ease;
-    }
-    .modern-table tbody tr:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-    .modern-table tbody td {
-        padding: 16px 20px;
-        font-size: 0.9rem;
-        vertical-align: middle;
-        border: none;
-    }
-    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
-    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
-    
-    .btn-action-modern {
-        padding: 8px 16px;
-        border-radius: var(--radius-pill);
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s;
-    }
-    .btn-add { background: var(--primary-dark); color: white !important; }
-    .btn-initiate { background: rgba(47, 128, 237, 0.1); color: var(--accent-blue) !important; }
-    .btn-delete { background: rgba(235, 87, 87, 0.1); color: var(--accent-pink) !important; border: none; }
-</style>
-@endsection
 
 @section('content')
-<div class="recipient-header">
-    <div class="d-flex align-items-center justify-content-between">
+<div class="pg">
+    <a href="/airtime_group" class="pg-back"><i class="fa-solid fa-arrow-left"></i> Airtime groups</a>
+    <div class="pg-head">
         <div>
             <h1>{{ $group->name }}</h1>
-            <p class="text-muted">Total Group Value: <span class="text-dark font-weight-bold">₦{{ number_format($recipients->sum('amount')) }}</span></p>
+            <p>{{ count($recipients) }} {{ \Illuminate\Support\Str::plural('recipient', count($recipients)) }} · ₦{{ number_format((float) $recipients->sum('amount')) }} per recharge</p>
         </div>
-        <div class="d-flex gap-2">
-            <a class='btn-action-modern btn-initiate' href='/airtime_group'>← Initiate Purchase</a>
-            <button class='btn-action-modern btn-add' data-bs-toggle="modal" data-bs-target="#exampleModal">Add Recipient</button>
+        <div class="pg-actions">
+            <a class="btn-v ghost" href="/airtime_group"><i class="fa-solid fa-rotate"></i> Recharge group</a>
+            <button type="button" class="btn-v dark" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-user-plus"></i> Add recipient</button>
         </div>
+    </div>
+
+    <div class="panel panel-flush">
+        @if(count($recipients))
+            <div class="tbl-wrap">
+                <table id="myTable" class="tbl stack">
+                    <thead>
+                        <tr>
+                            <th>Recipient</th>
+                            <th>Network</th>
+                            <th>Amount</th>
+                            <th class="end"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recipients as $reci)
+                            <tr>
+                                <td class="lead">
+                                    <div class="cell-main">
+                                        <span class="ic t-amber"><i class="fa-solid fa-phone"></i></span>
+                                        <div><b>{{ $reci->name }}</b><small>{{ $reci->phone }}</small></div>
+                                    </div>
+                                </td>
+                                <td data-label="Network"><span class="badge-v neutral">{{ $reci->network_name }}</span></td>
+                                <td data-label="Amount" class="num">₦{{ number_format((float) $reci->amount) }}</td>
+                                <td data-label="">
+                                    <div class="row-actions">
+                                        <a onclick="return confirm('Remove this recipient?')" href="/delete_airtime_recipient/{{ $reci->uid }}" class="btn-v danger icon" title="Remove" aria-label="Remove recipient"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="empty-v">
+                <div class="ic"><i class="fa-solid fa-users"></i></div>
+                <b>No recipients yet</b>
+                <span>Add the people you want to top up together.</span><br>
+                <button type="button" class="btn-v dark" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-user-plus"></i> Add recipient</button>
+            </div>
+        @endif
     </div>
 </div>
 
-<div class="recipient-card">
-    <div class="table-responsive">
-        <table id='myTable' class='modern-table'>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Contact</th>
-                    <th>Network</th>
-                    <th>Amount</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($recipients as $reci)
-                <tr>
-                    <td><div style="font-weight: 600; color: var(--primary-dark);">{{ $reci->name }}</div></td>
-                    <td><div class="text-muted">{{ $reci->phone }}</div></td>
-                    <td><span class="badge" style="background: rgba(47, 128, 237, 0.1); color: var(--accent-blue); border-radius: 20px; padding: 6px 12px;">{{ $reci->network_name }}</span></td>
-                    <td style="font-family: 'Fraunces', serif; font-weight: 600; color: var(--primary-dark);">₦{{number_format($reci->amount) }}</td>
-                    <td>
-                        <a onclick='return confirm("Are you sure you want to delete this recipient?")'
-                            href='/delete_airtime_recipient/{{ $reci->uid }}'
-                            class='btn-action-modern btn-delete'>Delete</a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<!-- Add recipient modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Airtime Recipient</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add recipient</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id='create_form' method='post'>@csrf
+            <form id='create_form' method='post'>
+                @csrf
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Name</label>
-                        <input id='name' type='text' class='form-control' name='name' placeholder='e.g My Mum' required />
+                    <input id="group_id" type="hidden" value="{{ $group->id }}" />
+                    <div class="f-group">
+                        <label class="f-label" for="name">Name</label>
+                        <input id="name" type="text" class="f-input" name="name" placeholder="e.g. Mum" required />
                     </div>
-                    <input id='group_id' type='hidden' value='{{ $group->id }}' />
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Phone Number</label>
-                        <input id='phone' oninput="fetchNetwork()" type='number' class='form-control' name='phone' placeholder='08XXXXXXXXX' required />
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label" for="phone">Phone number</label>
+                            <input id="phone" oninput="fetchNetwork()" type="tel" inputmode="numeric" class="f-input" name="phone" placeholder="08012345678" required />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label" for="network">Network</label>
+                            <select required id="network" class="f-input">
+                                <option value="">Select</option>
+                                <option value="1">MTN</option>
+                                <option value="2">GLO</option>
+                                <option value="3">AIRTEL</option>
+                                <option value="4">9MOBILE</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Network</label>
-                        <select required id="network" class="form-control">
-                            <option value="">Select Network</option>
-                            <option value="1">MTN</option>
-                            <option value="2">GLO</option>
-                            <option value="3">AIRTEL</option>
-                            <option value="4">9MOBILE</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Amount</label>
-                        <input type='number' id='amount' required class="form-control" placeholder="Enter Amount" />
+                    <div class="f-group" style="margin-bottom:0">
+                        <label class="f-label" for="amount">Amount</label>
+                        <div class="f-affix">
+                            <span class="pre">₦</span>
+                            <input type="number" id="amount" required class="f-input" placeholder="0" min="50" />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btn-sm rounded-pill px-5">Create Recipient</button>
+                    <button type="button" class="btn-v light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-v dark">Add recipient</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 @endsection
+
 @section('script')
 <script>
     $(document).ready(function() {

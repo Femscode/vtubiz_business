@@ -1,393 +1,820 @@
+@php
+    $brand = $user->brand ?? null;
+    $brandName = $brand->brand_name ?? $brand->name ?? 'VTUBIZ';
+    $brandLogo = ($brand && !empty($brand->brand_logo)) ? asset($brand->brand_logo) : asset('assets/img/logo/vtulogo.png');
+    $status = (int) ($transaction->status ?? 0);
+    $statusText = $status === 1 ? 'Successful' : ($status === 2 ? 'Processing' : 'Failed');
+    $statusClass = $status === 1 ? 'status-success' : ($status === 2 ? 'status-pending' : 'status-failed');
+    $statusIcon = $status === 1 ? 'fa-circle-check' : ($status === 2 ? 'fa-clock' : 'fa-circle-xmark');
+    $amountFormatted = number_format((float) ($transaction->amount ?? 0), 2);
+    $createdDate = !empty($transaction->created_at) ? date('d M Y, h:i A', strtotime($transaction->created_at)) : 'N/A';
+@endphp
 <!DOCTYPE html>
 <html lang="en">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
-
 <head>
-    <title>VTUBIZ | RECEIPT</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Top Up, Pay Bills, Stay Connected!" />
-    <meta name="keywords" content="Quick pay with CT_Taste" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="VTUBIZ" />
-    <meta property="og:url" content="https://vtubiz.com" />
-    <meta property="og:site_name" content="VTUBIZ" />
-    <link rel="shortcut icon" href="assets/media/logos/fav_01.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{{ $brandName }} | Receipt - {{ $transaction->reference ?? 'TX' }}</title>
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/fav_01.png') }}" />
 
-
-    <link rel="stylesheet" href="assets/googlefonts/inter.css" />
-    <!--end::Fonts-->
-
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{--
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet"> --}}
-    <link href="{{ asset('assets/googlefonts/ubuntu.css')}}" rel="stylesheet">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <style>
+        :root {
+            --bg-page: #F4F3EE;
+            --bg-card: #FFFFFF;
+            --ink: #0F172A;
+            --ink-muted: #64748B;
+            --ink-light: #94A3B8;
+            --brand-primary: #001F3F;
+            --brand-accent: #FB9129;
+            --border: rgba(15, 23, 42, 0.08);
+            --border-light: rgba(15, 23, 42, 0.04);
+            --shadow-card: 0 20px 45px -15px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
 
+            --emerald-bg: #ECFDF5;
+            --emerald-text: #047857;
+            --emerald-border: #A7F3D0;
 
+            --rose-bg: #FFF1F2;
+            --rose-text: #BE123C;
+            --rose-border: #FECDD3;
+
+            --amber-bg: #FFFBEB;
+            --amber-text: #B45309;
+            --amber-border: #FDE68A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px 48px;
+        }
+
+        /* Top Action Bar */
+        .actions-bar {
+            max-width: 520px;
+            margin: 0 auto 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 9px 15px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.18s ease;
+        }
+
+        .back-link:hover {
+            background: #F8FAFC;
+            border-color: rgba(15, 23, 42, 0.16);
+            transform: translateY(-1px);
+        }
+
+        .action-buttons {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-act {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 9px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.18s ease;
+            text-decoration: none;
+        }
+
+        .btn-act.secondary {
+            background: #FFFFFF;
+            color: var(--ink);
+            border-color: var(--border);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .btn-act.secondary:hover {
+            background: #F8FAFC;
+            border-color: rgba(15, 23, 42, 0.16);
+            transform: translateY(-1px);
+        }
+
+        .btn-act.primary {
+            background: var(--brand-primary);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0, 31, 63, 0.18);
+        }
+
+        .btn-act.primary:hover {
+            opacity: 0.93;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 31, 63, 0.24);
+        }
+
+        /* The Main Receipt Card */
+        .receipt-card {
+            background: var(--bg-card);
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Header */
+        .receipt-header {
+            padding: 34px 32px 20px;
+            text-align: center;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .brand-logo {
+            max-height: 44px;
+            max-width: 180px;
+            object-fit: contain;
+        }
+
+        .receipt-title {
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 6px;
+        }
+
+        .receipt-date-sub {
+            font-size: 0.84rem;
+            color: var(--ink-light);
+        }
+
+        /* Amount & Status Section */
+        .amount-section {
+            padding: 10px 32px 26px;
+            text-align: center;
+        }
+
+        .amount-display {
+            font-family: 'Fraunces', serif;
+            font-size: 2.85rem;
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            display: inline-flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 12px;
+        }
+
+        .amount-currency {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--ink-muted);
+            margin-right: 2px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .status-success {
+            background: var(--emerald-bg);
+            color: var(--emerald-text);
+            border: 1px solid var(--emerald-border);
+        }
+
+        .status-failed {
+            background: var(--rose-bg);
+            color: var(--rose-text);
+            border: 1px solid var(--rose-border);
+        }
+
+        .status-pending {
+            background: var(--amber-bg);
+            color: var(--amber-text);
+            border: 1px solid var(--amber-border);
+        }
+
+        .tx-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink-muted);
+            margin-top: 10px;
+        }
+
+        /* Perforated Divider with Notches */
+        .receipt-divider {
+            position: relative;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            margin: 0 -1px;
+        }
+
+        .notch-left,
+        .notch-right {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-page);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .notch-left {
+            left: -11px;
+            box-shadow: inset -1px 0 0 var(--border);
+        }
+
+        .notch-right {
+            right: -11px;
+            box-shadow: inset 1px 0 0 var(--border);
+        }
+
+        .dashed-line {
+            width: 100%;
+            height: 0;
+            border-top: 2px dashed rgba(15, 23, 42, 0.12);
+        }
+
+        /* Detail List Rows */
+        .receipt-body {
+            padding: 16px 32px 28px;
+        }
+
+        .section-heading {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 14px;
+        }
+
+        .kv-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+            gap: 16px;
+        }
+
+        .kv-row:last-child {
+            border-bottom: none;
+        }
+
+        .kv-label {
+            font-size: 0.86rem;
+            color: var(--ink-muted);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .kv-value {
+            font-size: 0.9rem;
+            color: var(--ink);
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .ref-box {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.84rem;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--ink-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: all 0.15s ease;
+        }
+
+        .copy-btn:hover {
+            color: var(--brand-primary);
+            background: rgba(0, 31, 63, 0.05);
+        }
+
+        .type-tag {
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 9px;
+            border-radius: 6px;
+            background: #F1F5F9;
+            color: #475569;
+        }
+
+        .type-tag.credit {
+            background: #ECFDF5;
+            color: #065F46;
+        }
+
+        .type-tag.debit {
+            background: #FEF2F2;
+            color: #991B1B;
+        }
+
+        /* Footer & Security Seal */
+        .receipt-footer {
+            background: #FAF9F6;
+            border-top: 1px solid var(--border);
+            padding: 24px 32px;
+            text-align: center;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--emerald-text);
+            background: #FFFFFF;
+            border: 1px solid var(--emerald-border);
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+        }
+
+        .barcode-container {
+            margin: 12px auto 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .barcode-svg {
+            opacity: 0.7;
+            max-width: 200px;
+            height: 38px;
+        }
+
+        .barcode-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: var(--ink-light);
+        }
+
+        .footer-note {
+            font-size: 0.78rem;
+            color: var(--ink-muted);
+            margin-top: 10px;
+            line-height: 1.45;
+        }
+
+        .footer-note a {
+            color: var(--brand-primary);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* Toast notification */
+        .copy-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: #0F172A;
+            color: #FFFFFF;
+            font-size: 0.84rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 999px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Print Media Styles */
+        @media print {
+            body {
+                background: #FFFFFF !important;
+                padding: 0 !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .receipt-card {
+                max-width: 100% !important;
+                border: 1px solid #CBD5E1 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+            }
+
+            .notch-left,
+            .notch-right {
+                display: none !important;
+            }
+
+            .receipt-divider {
+                height: 12px !important;
+            }
+
+            .dashed-line {
+                border-top-color: #94A3B8 !important;
+            }
+
+            .receipt-footer {
+                background: #FFFFFF !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        @media (max-width: 540px) {
+            body {
+                padding: 16px 12px 36px;
+            }
+
+            .receipt-header {
+                padding: 26px 20px 16px;
+            }
+
+            .amount-section {
+                padding: 6px 20px 20px;
+            }
+
+            .amount-display {
+                font-size: 2.35rem;
+            }
+
+            .receipt-body {
+                padding: 14px 20px 22px;
+            }
+
+            .receipt-footer {
+                padding: 20px 20px;
+            }
+
+            .kv-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .kv-value {
+                text-align: left;
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
-<!--end::Head-->
+<body>
 
-<!--begin::Body-->
+    <!-- Top Action Buttons (Hidden on Print) -->
+    <div class="actions-bar no-print">
+        <a href="javascript:window.history.length > 1 ? window.history.back() : window.location.href='/mytransactions'" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
 
-<body  style='background:#F1E1D2 ' id="kt_app_body" data-kt-app-header-fixed-mobile="true" data-kt-app-toolbar-enabled="true" class="app-default">
-    <!--begin::Theme mode setup on page load-->
-
-
-    <!--begin::App-->
-    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
-        <!--begin::Page-->
-        <div class="app-page  flex-column flex-column-fluid " id="kt_app_page">
-
-
-            <!--begin::Header-->
-            <div id="kt_app_header" class="app-header " 
-                data-kt-sticky-activate="{default: false, lg: true}" data-kt-sticky-name="app-header-sticky"
-                data-kt-sticky-offset="{default: false, lg: '300px'}">
-
-                <!--begin::Header container-->
-               
-                <!--end::Header container-->
-            </div>
-            <!--end::Header-->
-            <!--begin::Wrapper-->
-            <div class="app-wrapper  flex-column flex-row-fluid " id="kt_app_wrapper">
-
-              
-
-                <!--begin::Wrapper container-->
-                <div class="app-container  container-xxl ">
-
-                    <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-
-
-                        <div class="d-flex flex-column flex-column-fluid" id="kt_content">
-                            <!--begin::Entry-->
-                            <div class="app-content flex-column-fluid">
-                                <!--begin::Container-->
-                                <div class="row">
-                                    <!--begin::Invoice-->
-                                    <div class="card card-custom position-relative overflow-hidden">
-                                        <!--begin::Shape-->
-                                        <div class="position-absolute opacity-30">
-                                            <span class="svg-icon svg-icon-10x svg-logo-white">
-                                                <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/shapes/abstract-8.svg-->
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="176" height="165"
-                                                    viewBox="0 0 176 165" fill="none">
-                                                    <g clip-path="url(#clip0)">
-                                                        <path
-                                                            d="M-10.001 135.168C-10.001 151.643 3.87924 165.001 20.9985 165.001C38.1196 165.001 51.998 151.643 51.998 135.168C51.998 118.691 38.1196 105.335 20.9985 105.335C3.87924 105.335 -10.001 118.691 -10.001 135.168Z"
-                                                            fill="#AD84FF" />
-                                                        <path
-                                                            d="M28.749 64.3117C28.749 78.7296 40.8927 90.4163 55.8745 90.4163C70.8563 90.4163 83 78.7296 83 64.3117C83 49.8954 70.8563 38.207 55.8745 38.207C40.8927 38.207 28.749 49.8954 28.749 64.3117Z"
-                                                            fill="#AD84FF" />
-                                                        <path
-                                                            d="M82.9996 120.249C82.9996 144.964 103.819 165 129.501 165C155.181 165 176 144.964 176 120.249C176 95.5342 155.181 75.5 129.501 75.5C103.819 75.5 82.9996 95.5342 82.9996 120.249Z"
-                                                            fill="#AD84FF" />
-                                                        <path
-                                                            d="M98.4976 23.2928C98.4976 43.8887 115.848 60.5856 137.249 60.5856C158.65 60.5856 176 43.8887 176 23.2928C176 2.69692 158.65 -14 137.249 -14C115.848 -14 98.4976 2.69692 98.4976 23.2928Z"
-                                                            fill="#AD84FF" />
-                                                        <path
-                                                            d="M-10.0011 8.37466C-10.0011 20.7322 0.409554 30.7493 13.2503 30.7493C26.0911 30.7493 36.5 20.7322 36.5 8.37466C36.5 -3.98287 26.0911 -14 13.2503 -14C0.409554 -14 -10.0011 -3.98287 -10.0011 8.37466Z"
-                                                            fill="#AD84FF" />
-                                                        <path
-                                                            d="M-2.24881 82.9565C-2.24881 87.0757 1.22081 90.4147 5.50108 90.4147C9.78135 90.4147 13.251 87.0757 13.251 82.9565C13.251 78.839 9.78135 75.5 5.50108 75.5C1.22081 75.5 -2.24881 78.839 -2.24881 82.9565Z"
-                                                            fill="#AD84FF" />
-                                                        <path
-                                                            d="M55.8744 12.1044C55.8744 18.2841 61.0788 23.2926 67.5001 23.2926C73.9196 23.2926 79.124 18.2841 79.124 12.1044C79.124 5.92653 73.9196 0.917969 67.5001 0.917969C61.0788 0.917969 55.8744 5.92653 55.8744 12.1044Z"
-                                                            fill="#AD84FF" />
-                                                    </g>
-                                                </svg>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                        </div>
-                                        <!--end::Shape-->
-                                        <!--begin::Invoice header-->
-                                        <div style='background-color:#ebab21 !important' class="row justify-content-center py-8 px-8 py-md-36 px-md-0 bg-primary">
-                                            <div class="col-md-9">
-                                                <div
-                                                    class="d-flex justify-content-between align-items-md-center flex-column flex-md-row">
-                                                    <div class="d-flex flex-column px-0 order-2 order-md-1">
-                                                        <!--begin::Logo-->
-                                                        <a href="#" class="mb-5 max-w-115px">
-                                                            <span class="svg-icon svg-icon-full svg-logo-white">
-                                                                <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/logos/duolingo.svg-->
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="113"
-                                                                    height="31" viewBox="0 0 113 31" fill="none">
-                                                                    <path
-                                                                        d="M26.6802 13.33V13.485C26.6802 14.9575 26.6087 15.8875 26.4659 16.275C26.2517 16.895 25.966 17.36 25.4661 17.67C25.0376 17.98 24.5377 18.1358 23.8949 18.1358C23.2529 18.1358 22.7523 17.9808 22.3245 17.67C21.8953 17.3608 21.6103 16.895 21.3954 16.275C21.1811 15.7325 21.1104 14.8025 21.1104 13.4075V5.425H17.3254V13.485C17.3968 15.345 17.5396 16.6625 17.7539 17.515C18.1824 18.9108 18.8965 19.995 19.8963 20.8483C20.8962 21.6233 22.2531 22.0108 23.8242 22.0108C25.324 22.0108 26.538 21.7008 27.5379 21.0025C28.537 20.3058 29.2511 19.375 29.7518 18.0575C30.1088 17.205 30.3231 15.655 30.3231 13.485V5.425H26.6087V13.33H26.6802ZM15.6107 0H11.897V6.2775C11.8256 6.2775 11.7542 6.2 11.6828 6.2C10.4687 5.425 9.11182 5.0375 7.75492 5.0375C5.82669 5.0375 4.1127 5.735 2.61297 7.2075C0.898984 8.9125 0.0419922 11.005 0.0419922 13.485C0.0419922 15.81 0.827568 17.825 2.3273 19.4525C3.82704 21.0808 5.68314 21.9325 7.75492 21.9325C9.18324 21.9325 10.5401 21.545 11.7542 20.8483C12.9683 20.0733 13.8967 19.065 14.6109 17.7483C15.2536 16.5858 15.54 15.345 15.6107 14.0283V13.4858V0ZM10.6823 16.895C9.89668 17.7483 8.96899 18.2125 7.7542 18.2125C6.61155 18.2125 5.61172 17.7475 4.89756 16.895C4.11199 16.0425 3.75491 14.88 3.75491 13.485C3.75491 12.1675 4.11199 11.005 4.89756 10.1525C5.68314 9.3 6.61155 8.835 7.7542 8.835C8.96828 8.835 9.89668 9.3 10.6823 10.1525C11.4685 11.005 11.8256 12.1675 11.8256 13.485C11.8256 14.88 11.4685 16.0425 10.6823 16.895ZM46.2481 9.3C45.534 7.9825 44.6049 6.975 43.3915 6.2C42.1774 5.425 40.8205 5.0375 39.4636 5.0375C37.5354 5.0375 35.8207 5.735 34.3217 7.2075C32.6077 8.9125 31.75 10.9275 31.75 13.485C31.75 15.81 32.5363 17.825 34.0353 19.4525C35.5357 21.0808 37.3918 21.9325 39.4636 21.9325C40.8919 21.9325 42.2481 21.545 43.4629 20.8483C44.677 20.0733 45.6054 19.065 46.3195 17.7483C47.0337 16.4308 47.3908 15.0358 47.3908 13.4858C47.248 12.0125 46.9623 10.6175 46.2481 9.3ZM42.3917 16.895C41.6061 17.7483 40.6777 18.2125 39.4636 18.2125C38.2495 18.2125 37.3211 17.7475 36.607 16.895C35.8214 16.0425 35.4643 14.88 35.4643 13.485C35.4643 12.1675 35.8214 11.005 36.6077 10.1525C37.3933 9.3 38.321 8.835 39.4643 8.835C40.6777 8.835 41.6068 9.3 42.3924 10.1525C43.178 11.005 43.535 12.1675 43.535 13.485C43.5336 14.88 43.1058 16.0425 42.3917 16.895ZM60.2457 21.7H64.0307V6.1225H60.2457V21.7ZM53.8182 17.515C53.3897 17.2058 53.0326 16.74 52.8898 16.12C52.747 15.655 52.6756 14.725 52.6756 13.33V0H48.9619V13.2525C49.0334 15.4225 49.1762 16.895 49.5333 17.825C50.0332 19.065 50.7473 20.0725 51.7472 20.77C52.747 21.4675 53.9618 21.7775 55.4608 21.7775H58.3174V17.98H55.3894C54.7466 17.98 54.246 17.825 53.8182 17.515ZM78.7424 9.145C78.2425 7.905 77.5283 6.8975 76.5278 6.2C75.5287 5.5025 74.3139 5.1925 72.8142 5.1925C71.1716 5.1925 69.8861 5.58 68.8863 6.355C67.8872 7.13 67.173 8.215 66.7438 9.6875C66.5296 10.4625 66.3867 11.8575 66.3153 13.7175V21.7H70.1003V13.95V13.64C70.1003 12.3225 70.1725 11.315 70.386 10.7725C70.6003 10.1525 70.8859 9.765 71.3144 9.3775C71.7429 9.0675 72.2428 8.9125 72.8856 8.9125C73.5276 8.9125 74.0282 9.0675 74.4567 9.3775C74.8852 9.6875 75.2423 10.1525 75.4558 10.7725C75.5987 11.2375 75.6701 12.1675 75.6701 13.5625V21.7H79.3837V14.88V13.64C79.3137 11.5475 79.0995 9.9975 78.7424 9.145ZM62.0311 0.31C60.9598 0.31 60.0314 1.3175 60.0314 2.48C60.0314 3.6425 60.8884 4.65 62.0311 4.65C63.1023 4.65 64.0307 3.72 64.0307 2.48C64.0307 1.24 63.1023 0.31 62.0311 0.31ZM111.951 9.455C111.237 8.1375 110.308 7.13 109.094 6.355C107.88 5.58 106.595 5.27 105.094 5.27C102.952 5.27 101.166 6.1225 99.6666 7.75C98.1661 9.3775 97.3813 11.3925 97.3813 13.7175C97.3813 16.1975 98.2383 18.2892 99.9522 19.995C101.453 21.4675 103.166 22.165 105.094 22.165C106.522 22.165 107.808 21.7775 109.022 21.0025C110.236 20.2275 111.237 19.22 111.879 17.9025C112.593 16.5858 112.95 15.19 112.95 13.7183C113.022 12.1675 112.665 10.7725 111.951 9.455ZM109.236 13.7175C109.236 15.1125 108.879 16.1975 108.094 17.05C107.308 17.9025 106.38 18.3675 105.166 18.3675C104.022 18.3675 103.023 17.9017 102.309 17.05C101.523 16.1975 101.166 15.035 101.166 13.7175C101.166 12.3225 101.523 11.16 102.309 10.3075C103.095 9.455 104.022 8.99 105.166 8.99C106.308 8.99 107.308 9.455 108.094 10.3075C108.879 11.16 109.236 12.3225 109.236 13.7175C109.236 13.64 109.236 13.64 109.236 13.7175ZM96.0965 13.02C96.0244 11.7025 95.6673 10.54 95.0967 9.3775C94.3825 8.06 93.4541 7.0525 92.3122 6.2775C91.0981 5.5025 89.8126 5.1925 88.3843 5.1925C86.2418 5.1925 84.4564 5.9675 82.9559 7.6725C81.4562 9.3 80.7421 11.315 80.7421 13.64C80.7421 16.12 81.599 18.2125 83.2416 19.84C84.7413 21.3125 86.3832 22.0108 88.3121 22.0108C89.669 22.0108 91.026 21.6233 92.24 20.8483C92.3122 20.77 92.3829 20.77 92.4543 20.6933V22.5525C92.4543 23.9483 92.0258 25.0325 91.3116 25.8858C90.526 26.7383 89.5976 27.2025 88.455 27.2025C87.3123 27.2025 86.3839 26.815 85.5983 25.9625L83.1702 28.7525L83.2416 28.83C84.7413 30.3017 86.4553 31 88.3121 31C89.669 31 91.026 30.6125 92.24 29.8375C93.4541 29.0625 94.3825 28.055 95.0967 26.7375C95.8108 25.42 96.0965 24.025 96.0965 22.5525V14.105V13.5625C96.1679 13.4075 96.1679 13.175 96.0965 13.02ZM92.4536 13.5625C92.4536 14.9575 92.0965 16.0425 91.3109 16.895C90.5253 17.7483 89.5969 18.2125 88.4543 18.2125C87.3116 18.2125 86.3832 17.7475 85.5976 16.895C84.812 16.0425 84.455 14.9575 84.455 13.5625C84.455 12.1675 84.812 11.0825 85.5976 10.1525C86.3832 9.3 87.3116 8.835 88.4543 8.835C89.5969 8.835 90.5967 9.3 91.3109 10.1525C92.0258 11.0825 92.4536 12.1675 92.4536 13.5625Z"
-                                                                        fill="#1CB0F6" />
-                                                                </svg>
-                                                                <!--end::Svg Icon-->
-                                                            </span>
-                                                        </a>
-                                                        <!--end::Logo-->
-                                                        <span
-                                                            class="d-flex flex-column font-size-h5 font-weight-bold text-white">
-                                                            <span>{{ $transaction->title }}</span>
-                                                            <span>{{ Date('jS \of F, Y',strtotime($transaction->created_at)) }}</span>
-                                                        </span>
-                                                    </div>
-                                                    <h1
-                                                        class="display-3 font-weight-boldest text-white order-1 order-md-2">
-                                                        VTUBIZ RECEIPT</h1>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end::Invoice header-->
-                                        <div class="row justify-content-center py-8 px-8 py-md-30 px-md-0">
-                                            <div class="col-md-9">
-                                                <!--begin::Invoice body-->
-                                                <div class="row pb-26">
-                                                    <div class="col-md-3 border-right-md pr-md-10 py-md-10">
-                                                        <!--begin::Invoice To-->
-                                                        <div class="text-dark-50 font-size-lg font-weight-bold mb-3">
-                                                            PAYMENT FOR:</div>
-                                                        <div class="font-size-lg font-weight-bold mb-10">{{ $transaction->description }}
-                                                        </div>
-                                                        <!--end::Invoice To-->
-                                                        <!--begin::Invoice No-->
-                                                       
-                                                         </div>
-                                                    <div class="col-md-9 py-10 pl-md-10">
-                                                        <div class="table-responsive">
-                                                            <table class="table">
-                                                               
-                                                                <tbody>
-                                                                    <tr class="font-weight-bolder font-size-lg">
-                                                                        <td
-                                                                            class="border-top-0 pl-0 pl-md-5 pt-7 d-flex align-items-center">
-                                                                            <span class="navi-icon mr-2">
-                                                                              
-                                                                            </span>REFERENCE
-                                                                        </td>
-                                                                      
-                                                                        <td
-                                                                            class="pr-0 pt-7 font-size-h6 font-weight-boldest text-right">
-                                                                            {{ $transaction->reference }}</td>
-                                                                    </tr>
-                                                                    <tr
-                                                                        class="font-weight-bolder border-bottom-0 font-size-lg">
-                                                                        <td
-                                                                            class="border-top-0 pl-0 pl-md-5 py-4 d-flex align-items-center">
-                                                                            <span class="navi-icon mr-2">
-                                                                               
-                                                                            </span>STATUS
-                                                                        </td>
-                                                                       
-                                                                        <td
-                                                                            class="border-top-0 pr-0 py-4 font-size-h6 font-weight-boldest text-right">
-                                                                           @if($transaction->status == 1)
-                                                                            <span class='badge badge-success'>Success</span>
-                                                                            @else 
-                                                                            <span class='badge badge-danger'>Failed</span>
-                                                                            @endif
-
-
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr
-                                                                        class="font-weight-bolder border-bottom-0 font-size-lg">
-                                                                        <td
-                                                                            class="border-top-0 pl-0 pl-md-5 py-4 d-flex align-items-center">
-                                                                            <span class="navi-icon mr-2">
-                                                                                
-                                                                            </span>TRANSACTION TYPE
-                                                                        </td>
-                                                                       
-                                                                        <td
-                                                                            class="border-top-0 pr-0 py-4 font-size-h6 font-weight-boldest text-right">
-                                                                            {{ $transaction->type }}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Invoice body-->
-                                                <!--begin::Invoice footer-->
-                                                <div class="row">
-                                                    <div class="col-md-5 border-top pt-14 pb-10 pb-md-18">
-                                                        <div class="d-flex flex-column flex-md-row">
-                                                            <div class="d-flex flex-column">
-                                                                <div class="font-weight-bold font-size-h6 mb-3">MORE DETAILS
-                                                                    </div>
-                                                                <div
-                                                                    class="d-flex justify-content-between font-size-lg mb-3">
-                                                                    <span class="font-weight-bold mr-15">Account
-                                                                        Name:</span>
-                                                                    <span class="text-right">{{ $user->name }}</span>
-                                                                </div>
-                                                                <div
-                                                                    class="d-flex justify-content-between font-size-lg mb-3">
-                                                                    <span class="font-weight-bold mr-15">Date
-                                                                        :</span>
-                                                                    <span class="text-right">{{ Date('jS \of F, Y',strtotime($transaction->created_at)) }}</span>
-                                                                </div>
-                                                                <div
-                                                                    class="d-flex justify-content-between font-size-lg">
-                                                                    <span class="font-weight-bold mr-15">Time:</span>
-                                                                    <span class="text-right">{{ \Carbon\Carbon::parse($transaction->created_at)->diffForHumans() }}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-7 pt-md-25">
-                                                        <div  style='background-color:#ebab21 !important'
-                                                            class="bg-primary rounded d-flex align-items-center justify-content-between text-white max-w-350px position-relative ml-auto p-7">
-                                                            <!--begin::Shape-->
-                                                            <div class="position-absolute opacity-30 top-0 right-0">
-                                                                <span
-                                                                    class="svg-icon svg-icon-2x svg-logo-white svg-icon-flip">
-                                                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo2/dist/assets/media/svg/shapes/abstract-8.svg-->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="176"
-                                                                        height="165" viewBox="0 0 176 165" fill="none">
-                                                                        <g clip-path="url(#clip0)">
-                                                                            <path
-                                                                                d="M-10.001 135.168C-10.001 151.643 3.87924 165.001 20.9985 165.001C38.1196 165.001 51.998 151.643 51.998 135.168C51.998 118.691 38.1196 105.335 20.9985 105.335C3.87924 105.335 -10.001 118.691 -10.001 135.168Z"
-                                                                                fill="#AD84FF" />
-                                                                            <path
-                                                                                d="M28.749 64.3117C28.749 78.7296 40.8927 90.4163 55.8745 90.4163C70.8563 90.4163 83 78.7296 83 64.3117C83 49.8954 70.8563 38.207 55.8745 38.207C40.8927 38.207 28.749 49.8954 28.749 64.3117Z"
-                                                                                fill="#AD84FF" />
-                                                                            <path
-                                                                                d="M82.9996 120.249C82.9996 144.964 103.819 165 129.501 165C155.181 165 176 144.964 176 120.249C176 95.5342 155.181 75.5 129.501 75.5C103.819 75.5 82.9996 95.5342 82.9996 120.249Z"
-                                                                                fill="#AD84FF" />
-                                                                            <path
-                                                                                d="M98.4976 23.2928C98.4976 43.8887 115.848 60.5856 137.249 60.5856C158.65 60.5856 176 43.8887 176 23.2928C176 2.69692 158.65 -14 137.249 -14C115.848 -14 98.4976 2.69692 98.4976 23.2928Z"
-                                                                                fill="#AD84FF" />
-                                                                            <path
-                                                                                d="M-10.0011 8.37466C-10.0011 20.7322 0.409554 30.7493 13.2503 30.7493C26.0911 30.7493 36.5 20.7322 36.5 8.37466C36.5 -3.98287 26.0911 -14 13.2503 -14C0.409554 -14 -10.0011 -3.98287 -10.0011 8.37466Z"
-                                                                                fill="#AD84FF" />
-                                                                            <path
-                                                                                d="M-2.24881 82.9565C-2.24881 87.0757 1.22081 90.4147 5.50108 90.4147C9.78135 90.4147 13.251 87.0757 13.251 82.9565C13.251 78.839 9.78135 75.5 5.50108 75.5C1.22081 75.5 -2.24881 78.839 -2.24881 82.9565Z"
-                                                                                fill="#AD84FF" />
-                                                                            <path
-                                                                                d="M55.8744 12.1044C55.8744 18.2841 61.0788 23.2926 67.5001 23.2926C73.9196 23.2926 79.124 18.2841 79.124 12.1044C79.124 5.92653 73.9196 0.917969 67.5001 0.917969C61.0788 0.917969 55.8744 5.92653 55.8744 12.1044Z"
-                                                                                fill="#AD84FF" />
-                                                                        </g>
-                                                                    </svg>
-                                                                    <!--end::Svg Icon-->
-                                                                </span>
-                                                            </div>
-                                                            <!--end::Shape-->
-                                                            <div class="font-weight-boldest font-size-h5">TOTAL AMOUNT
-                                                            </div>
-                                                            <div class="text-right d-flex flex-column">
-                                                                <span
-                                                                    class="font-weight-boldest font-size-h3 line-height-sm">NGN{{ number_format($transaction->amount,2) }}</span>
-                                                               
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Invoice footer-->
-                                            </div>
-                                        </div>
-                                        <!-- begin: Invoice action-->
-                                        <div class="row justify-content-center border-top py-8 px-8 py-md-28 px-md-0">
-                                            <div class="col-md-9">
-                                                <div class="d-flex font-size-sm flex-wrap">
-                                                    <button type="button" style='background-color:#640f11;color:#fff'
-                                                        class="btn btn-primary font-weight-bolder py-4 mr-3 mr-sm-14 my-1 m-2"
-                                                        onclick="window.print();">Print Receipt</button>
-                                                    <button type="button"
-                                                        class="btn btn-warning font-weight-bolder mr-3 my-1">Download</button>
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end: Invoice action-->
-                                    </div>
-                                    <!--end::Invoice-->
-                                </div>
-                                <!--end::Container-->
-                            </div>
-                            <!--end::Entry-->
-                        </div>
-                    </div>
-                  
-
-
-                </div>
-                <!--end::Wrapper container-->
-            </div>
-            <!--end::Wrapper-->
-
-
+        <div class="action-buttons">
+            <button type="button" class="btn-act secondary" id="btnShare" onclick="shareReceipt()" title="Share Receipt">
+                <i class="fa-solid fa-share-nodes"></i>
+                <span>Share</span>
+            </button>
+            <button type="button" class="btn-act secondary" onclick="window.print()" title="Download PDF">
+                <i class="fa-solid fa-arrow-down-to-bracket"></i>
+                <span>PDF</span>
+            </button>
+            <button type="button" class="btn-act primary" onclick="window.print()" title="Print Receipt">
+                <i class="fa-solid fa-print"></i>
+                <span>Print</span>
+            </button>
         </div>
-        <!--end::Page-->
-    </div>
-    <!--end::App-->
-
-
-
-
-    <!--end::Modal - Sitemap-->
-    <!--end::Engage modals-->
-    <!--begin::Scrolltop-->
-    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-        <span class="svg-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)"
-                    fill="currentColor" />
-                <path
-                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-                    fill="currentColor" />
-            </svg>
-        </span>
-        <!--end::Svg Icon-->
     </div>
 
+    <!-- The Classy Receipt Card -->
+    <div class="receipt-card" id="receiptCard">
 
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="assets/plugins/global/plugins.bundle.js"></script>
-    <script src="assets/js/scripts.bundle.js"></script>
-    <!--end::Global Javascript Bundle-->
+        <!-- Receipt Header -->
+        <div class="receipt-header">
+            <div class="brand-badge">
+                <img src="{{ $brandLogo }}" alt="{{ $brandName }}" class="brand-logo" onerror="this.onerror=null; this.src='{{ asset('assets/img/logo/vtulogo.png') }}';" />
+            </div>
+            <div class="receipt-title">Transaction Receipt</div>
+            <div class="receipt-date-sub">{{ $createdDate }}</div>
+        </div>
 
-    <!--begin::Vendors Javascript(used for this page only)-->
-    <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
-    <!--end::Vendors Javascript-->
+        <!-- Amount & Status Hero -->
+        <div class="amount-section">
+            <div class="amount-display">
+                <span class="amount-currency">₦</span><span>{{ $amountFormatted }}</span>
+            </div>
+            <div>
+                <span class="status-pill {{ $statusClass }}">
+                    <i class="fa-solid {{ $statusIcon }}"></i>
+                    <span>{{ $statusText }}</span>
+                </span>
+            </div>
+            @if(!empty($transaction->title))
+                <div class="tx-title">{{ $transaction->title }}</div>
+            @endif
+        </div>
 
-    <!--begin::Custom Javascript(used for this page only)-->
-    <script src="assets/js/widgets.bundle.js"></script>
-    <script src="assets/js/custom/widgets.js"></script>
-    <script src="assets/js/custom/apps/chat/chat.js"></script>
-    <script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
-    <script src="assets/js/custom/utilities/modals/new-target.js"></script>
-    <script src="assets/js/custom/utilities/modals/create-app.js"></script>
-    <script src="assets/js/custom/utilities/modals/users-search.js"></script>
-    <!--end::Custom Javascript-->
-    <!--end::Javascript-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css" />
+        <!-- Ticket Perforated Divider with Side Notches -->
+        <div class="receipt-divider">
+            <div class="notch-left"></div>
+            <div class="dashed-line"></div>
+            <div class="notch-right"></div>
+        </div>
 
-    {{--
-    <link rel='stylesheet' href='https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css' /> --}}
+        <!-- Detail Information Rows -->
+        <div class="receipt-body">
+            <div class="section-heading">Transaction Details</div>
+
+            <!-- Reference -->
+            <div class="kv-row">
+                <span class="kv-label">Reference</span>
+                <span class="kv-value">
+                    <span class="ref-box">
+                        <span>{{ $transaction->reference ?? 'N/A' }}</span>
+                        @if(!empty($transaction->reference))
+                            <button type="button" class="copy-btn no-print" onclick="copyRef('{{ $transaction->reference }}')" title="Copy Reference">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        @endif
+                    </span>
+                </span>
+            </div>
+
+            <!-- Description / Service -->
+            <div class="kv-row">
+                <span class="kv-label">Description</span>
+                <span class="kv-value">{{ $transaction->description ?? 'Transaction Record' }}</span>
+            </div>
+
+            <!-- Transaction Type -->
+            <div class="kv-row">
+                <span class="kv-label">Type</span>
+                <span class="kv-value">
+                    @php
+                        $txType = strtolower($transaction->type ?? 'debit');
+                        $tagClass = ($txType === 'credit') ? 'credit' : 'debit';
+                    @endphp
+                    <span class="type-tag {{ $tagClass }}">{{ strtoupper($transaction->type ?? 'DEBIT') }}</span>
+                </span>
+            </div>
+
+            <!-- Customer Name -->
+            <div class="kv-row">
+                <span class="kv-label">Customer</span>
+                <span class="kv-value">{{ $user->name ?? 'VTUBIZ Customer' }}</span>
+            </div>
+
+            <!-- Customer Email -->
+            @if(!empty($user->email))
+            <div class="kv-row">
+                <span class="kv-label">Email</span>
+                <span class="kv-value">{{ $user->email }}</span>
+            </div>
+            @endif
+
+            <!-- Phone Number -->
+            @if(!empty($user->phone))
+            <div class="kv-row">
+                <span class="kv-label">Phone</span>
+                <span class="kv-value">{{ $user->phone }}</span>
+            </div>
+            @endif
+
+            <!-- Timestamp -->
+            <div class="kv-row">
+                <span class="kv-label">Date & Time</span>
+                <span class="kv-value">{{ $createdDate }}</span>
+            </div>
+
+            <!-- Balance Before (if available) -->
+            @if(isset($transaction->before) && is_numeric($transaction->before) && (float)$transaction->before > 0)
+            <div class="kv-row">
+                <span class="kv-label">Wallet Before</span>
+                <span class="kv-value">₦{{ number_format((float)$transaction->before, 2) }}</span>
+            </div>
+            @endif
+
+            <!-- Balance After (if available) -->
+            @if(isset($transaction->after) && is_numeric($transaction->after))
+            <div class="kv-row">
+                <span class="kv-label">Wallet After</span>
+                <span class="kv-value">₦{{ number_format((float)$transaction->after, 2) }}</span>
+            </div>
+            @endif
+        </div>
+
+        <!-- Receipt Footer & Verification Stamp -->
+        <div class="receipt-footer">
+            <div class="security-badge">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Verified Electronic Receipt</span>
+            </div>
+
+            <!-- Decorative Clean Barcode -->
+            <div class="barcode-container">
+                <svg class="barcode-svg" viewBox="0 0 200 40" preserveAspectRatio="none">
+                    <!-- Clean Barcode Pattern -->
+                    <rect x="0" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="5" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="8" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="14" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="18" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="22" y="0" width="5" height="40" fill="#0F172A"/>
+                    <rect x="29" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="33" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="38" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="42" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="48" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="53" y="0" width="5" height="40" fill="#0F172A"/>
+                    <rect x="60" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="63" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="68" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="73" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="80" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="84" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="89" y="0" width="5" height="40" fill="#0F172A"/>
+                    <rect x="96" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="100" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="104" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="110" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="115" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="118" y="0" width="5" height="40" fill="#0F172A"/>
+                    <rect x="125" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="130" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="136" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="140" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="145" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="150" y="0" width="5" height="40" fill="#0F172A"/>
+                    <rect x="157" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="160" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="166" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="170" y="0" width="3" height="40" fill="#0F172A"/>
+                    <rect x="175" y="0" width="1" height="40" fill="#0F172A"/>
+                    <rect x="178" y="0" width="4" height="40" fill="#0F172A"/>
+                    <rect x="184" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="188" y="0" width="5" height="40" fill="#0F172A"/>
+                    <rect x="195" y="0" width="2" height="40" fill="#0F172A"/>
+                    <rect x="198" y="0" width="2" height="40" fill="#0F172A"/>
+                </svg>
+                <span class="barcode-text">{{ $transaction->reference ?? 'VTUBIZ-PAYMENT' }}</span>
+            </div>
+
+            <p class="footer-note">
+                Thank you for choosing {{ $brandName }}.<br>
+                For questions or support, contact <a href="mailto:support@vtubiz.com">support@vtubiz.com</a>.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Toast Notification for Copy -->
+    <div id="copyToast" class="copy-toast">
+        <i class="fa-solid fa-circle-check" style="color: #34D399;"></i>
+        <span id="toastMsg">Reference copied to clipboard!</span>
+    </div>
+
     <script>
-        // var oTable = $('.datatable').DataTable();   //using Capital D, which is mandatory to retrieve "api" datatables' object, latest jquery Datatable
-//    $('#myInput').keyup(function(){
-//          oTable.search($(this).val()).draw() ;
-//    });
-@if (session('message'))
-Swal.fire('Success!',"{{ session('message') }}",'success');
-@endif
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
-    </script>
-    @yield('script')
+        function showToast(message) {
+            const toast = document.getElementById('copyToast');
+            const msg = document.getElementById('toastMsg');
+            msg.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
 
+        function copyRef(reference) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(reference).then(() => {
+                    showToast('Reference copied: ' + reference);
+                }).catch(() => {
+                    fallbackCopy(reference);
+                });
+            } else {
+                fallbackCopy(reference);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Reference copied: ' + text);
+            } catch (err) {
+                showToast('Could not copy automatically');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function shareReceipt() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ $brandName }} Receipt - {{ $transaction->reference ?? "TX" }}',
+                    text: 'Transaction receipt for ₦{{ $amountFormatted }} ({{ $statusText }}).',
+                    url: window.location.href,
+                }).catch(() => {});
+            } else {
+                copyRef(window.location.href);
+                showToast('Receipt link copied to clipboard!');
+            }
+        }
+    </script>
 </body>
-<!--end::Body-->
-
-<!-- Mirrored from preview.keenthemes.com/metronic8/demo34/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 06 Feb 2023 08:02:15 GMT -->
-
 </html>

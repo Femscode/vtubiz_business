@@ -1,47 +1,17 @@
 @extends('dashboard.master1')
 
-@section('header')
-@endsection 
-
 @section('content')
-<div class="service-header">
-    <h1>Buy Airtime</h1>
-    <p class="text-muted">Instant top-up for all mobile networks.</p>
-</div>
-
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="service-card-wrapper">
-            <buyairtime-component :user='{{ $user  }}' :beneficiaries='{{ $beneficiaries }}'></buyairtime-component>
+<div class="pg">
+    <div class="pg-head">
+        <div>
+            <h1>Buy <em>airtime</em></h1>
+            <p>Instant top-up on MTN, Glo, Airtel and 9mobile.</p>
         </div>
     </div>
+
+    <buyairtime-component
+        :user='{{ json_encode($user->only(['id', 'company_id', 'balance'])) }}'
+        :beneficiaries='{{ $beneficiaries }}'
+    ></buyairtime-component>
 </div>
-@endsection 
-
-@section('script')
-<script>
-    $(document).ready(function() {
-
-        @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-        $("#u_amount").on('input',function() {
-        var amount = parseInt($("#u_amount").val()) * 100;
-      
-       
-        if(parseInt($("#u_amount").val()) < 2500) {
-            $("#amount").val((amount) + (0.05 * amount));
-          
-        }
-        else {
-            $("#amount").val((amount) + (0.05 * amount) +10000);
-          
-          
-        }
-        
-        // alert($("#u_amount").val() * 100)
-    })
-    })
-
-</script>
 @endsection

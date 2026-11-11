@@ -35,4 +35,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'smartsms' => [
+        'username' => env('SMARTSMS_USERNAME'),
+        'api_key' => env('SMARTSMS_API_KEY'),
+        'sender_name' => env('SMARTSMS_SENDER_NAME', 'AwaSkool'),
+        'cost_per_page' => env('SMARTSMS_COST_PER_PAGE', 5.00),
+    ],
+
 ];

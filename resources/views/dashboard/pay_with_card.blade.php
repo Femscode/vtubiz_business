@@ -2,99 +2,28 @@
 
 @section('header')
 <script src="https://checkout.flutterwave.com/v3.js"></script>
-<style>
-    .payment-card {
-        background: white;
-        border-radius: var(--radius-lg);
-        padding: 40px;
-        box-shadow: var(--shadow-card);
-        max-width: 500px;
-        margin: 40px auto;
-        text-align: center;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    .payment-icon {
-        width: 80px;
-        height: 80px;
-        background: rgba(251, 145, 41, 0.1);
-        color: var(--accent-orange);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        margin: 0 auto 24px;
-    }
-    .payment-title {
-        font-family: 'Fraunces', serif;
-        font-size: 1.8rem;
-        color: var(--primary-dark);
-        margin-bottom: 12px;
-    }
-    .payment-amount {
-        font-family: 'Fraunces', serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--accent-green);
-        margin: 20px 0;
-    }
-    .payment-desc {
-        color: var(--text-secondary);
-        font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 32px;
-    }
-    .btn-payment {
-        background: var(--primary-dark);
-        color: white;
-        border: none;
-        padding: 16px 32px;
-        border-radius: var(--radius-pill);
-        font-weight: 700;
-        font-size: 1.1rem;
-        width: 100%;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-    }
-    .btn-payment:hover {
-        background: var(--primary-light);
-        transform: translateY(-2px);
-        color: white;
-    }
-</style>
 @endsection
 
 @section('content')
-<div class="container">
-    <div class="payment-card">
-        <div class="payment-icon">
-            <i class="fa-solid fa-credit-card"></i>
-        </div>
-        <h2 class="payment-title">Card Payment</h2>
-        <p class="payment-desc">You are about to fund your wallet securely via Flutterwave.</p>
-        
-        <div class="payment-amount">
-            ₦{{ number_format($amount, 2) }}
-        </div>
+<div class="pg pg-narrow" style="max-width:520px">
+    <a href="/fundwallet" class="pg-back"><i class="fa-solid fa-arrow-left"></i> Fund wallet</a>
 
-        <input id='phone' value='{{ $user->phone }}' type='hidden' />
-        <input id='name' value='{{ $user->name }}' type='hidden' />
-        <input id='email' value='{{ $user->email }}' type='hidden' />
-        <input id='amount' value='{{ $amount }}' type='hidden' />
-        <input id='redirect_url' value='{{ $callback_url }}' type='hidden' />
-        <input id='public_key' value='{{ $public_key }}' type='hidden' />
+    <div class="hero-v" style="text-align:center;padding:34px 26px">
+        <div class="k">You're adding</div>
+        <div class="v" style="font-size:2.8rem;margin:8px 0 6px">₦{{ number_format((float) $amount, 2) }}</div>
+        <div style="color:rgba(255,255,255,.65);font-size:.9rem">to your VTUBIZ wallet</div>
+    </div>
 
-        <button class="btn btn-payment" onclick="makePayment()">
-            <span>Proceed to Payment</span>
-            <i class="fa-solid fa-arrow-right"></i>
-        </button>
-        
-        <div class="mt-4">
-            <img src="https://flutterwave.com/images/flutterwave-badge.png" alt="Flutterwave Secured" style="height: 30px; opacity: 0.7;">
-        </div>
+    <div class="panel" style="margin-top:16px;text-align:center">
+        <input id="phone" value="{{ $user->phone }}" type="hidden" />
+        <input id="name" value="{{ $user->name }}" type="hidden" />
+        <input id="email" value="{{ $user->email }}" type="hidden" />
+        <input id="amount" value="{{ $amount }}" type="hidden" />
+        <input id="redirect_url" value="{{ $callback_url }}" type="hidden" />
+        <input id="public_key" value="{{ $public_key }}" type="hidden" />
+
+        <button type="button" class="btn-v dark block" onclick="makePayment()"><i class="fa-regular fa-credit-card"></i> Pay with card or USSD</button>
+        <div class="f-hint" style="justify-content:center;margin-top:14px"><i class="fa-solid fa-lock"></i> Secured by Flutterwave. We never see your card details.</div>
     </div>
 </div>
 @endsection

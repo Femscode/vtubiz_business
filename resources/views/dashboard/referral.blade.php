@@ -1,235 +1,190 @@
 @extends('dashboard.master1')
 
+@php
+    $refLink = 'https://vtubiz.com/register?referral_code=' . $user->brand_name;
+    $waLink = function ($phone) {
+        $digits = preg_replace('/\D+/', '', (string) $phone);
+        return 'https://wa.me/' . (str_starts_with($digits, '234') ? $digits : '234' . ltrim($digits, '0'));
+    };
+    $shareText = rawurlencode('Buy cheap data, airtime and pay bills on VTUBIZ. Sign up with my link: ' . $refLink);
+@endphp
+
 @section('header')
 <style>
-    .referral-header {
-        margin-bottom: var(--space-lg);
-    }
-    .referral-header h1 {
-        font-family: 'Fraunces', serif;
-        font-size: 2.2rem;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
-    }
-    .referral-card {
-        background: var(--surface) !important;
-        border-radius: var(--radius-lg);
-        padding: var(--space-lg);
-        box-shadow: var(--shadow-card);
-    }
-    .referral-link-box {
-        background: #FDFCF8;
-        border: 1px dashed rgba(15, 53, 72, 0.2);
-        border-radius: var(--radius-md);
-        padding: 20px;
+    .ref-link-v {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        margin-bottom: var(--space-lg);
+        gap: 8px;
+        background: rgba(255, 255, 255, .08);
+        border: 1px dashed rgba(255, 255, 255, .25);
+        border-radius: 14px;
+        padding: 6px 6px 6px 14px;
+        margin: 18px 0 14px;
     }
-    .referral-url {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.95rem;
-        color: var(--primary-dark);
-        word-break: break-all;
-        font-weight: 500;
-    }
-    .copy-btn-large {
-        background: var(--primary-dark);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        cursor: pointer;
+
+    .ref-link-v span {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
-        transition: transform 0.1s;
+        font-size: .88rem;
+        color: rgba(255, 255, 255, .85);
     }
-    .copy-btn-large:active { transform: scale(0.95); }
 
-    .stat-box {
-        background: #FDFCF8;
-        border: 1px solid rgba(0,0,0,0.03);
-        border-radius: var(--radius-md);
-        padding: 25px;
-        text-align: center;
-        height: 100%;
-    }
-    .stat-icon-circle {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: rgba(15, 53, 72, 0.05);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 15px;
-        font-size: 1.25rem;
-        color: var(--primary-dark);
-    }
-    .stat-value-large {
+    .hero-v h2 {
         font-family: 'Fraunces', serif;
+        font-weight: 400;
         font-size: 1.8rem;
-        font-weight: 600;
-        color: var(--primary-dark);
-        margin-bottom: 5px;
+        color: #fff;
+        margin: 8px 0 6px;
+        line-height: 1.15;
     }
-    .stat-label-large {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+
+    .hero-v h2 em {
+        color: var(--brand-orange);
+    }
+
+    .hero-v p {
+        color: rgba(255, 255, 255, .7);
+        font-size: .92rem;
+        margin: 0;
+        max-width: 420px;
+    }
+
+    .earn-card {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .earn-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .earn-row div {
+        background: #FAFAF8;
+        border-radius: 16px;
+        padding: 14px 16px;
+    }
+
+    .earn-row small {
+        display: block;
+        font-size: .76rem;
         color: var(--text-secondary);
-    }
-
-    .modern-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 8px;
-    }
-    .modern-table thead th {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--text-light);
-        padding: 10px 20px;
-        font-weight: 700;
-    }
-    .modern-table tbody tr {
-        background: #FDFCF8;
-        transition: transform 0.2s;
-    }
-    .modern-table tbody td {
-        padding: 15px 20px;
-        font-size: 0.9rem;
-        vertical-align: middle;
-    }
-    .modern-table tbody td:first-child { border-radius: 12px 0 0 12px; }
-    .modern-table tbody td:last-child { border-radius: 0 12px 12px 0; }
-
-    .btn-message {
-        background: rgba(47, 128, 237, 0.1);
-        color: var(--accent-blue);
-        padding: 6px 14px;
-        border-radius: 20px;
-        text-decoration: none;
-        font-size: 0.8rem;
         font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .earn-row b {
+        font-family: 'Fraunces', serif;
+        font-weight: 500;
+        font-size: 1.55rem;
+        color: var(--ink);
     }
 </style>
 @endsection
 
 @section('content')
-<div class="referral-header">
-    <h1>Referral Program</h1>
-    <p class="text-muted">Invite your friends and earn rewards for every purchase they make.</p>
-</div>
-
-<div class="row g-5">
-    <!-- Top Stats -->
-    <div class="col-lg-8">
-        <div class="referral-card">
-            <h4 class="serif mb-4">Your Referral Link</h4>
-            <p class="text-sm text-muted mb-3">Share this link with your friends and earn an enticing 5% cashback on every purchase they make!</p>
-            
-            <div class="referral-link-box">
-                <span class="referral-url" id="referralUrl">https://vtubiz.com/register?referral_code={{ $user->brand_name }}</span>
-                <button class="copy-btn-large" id="copyBtn2">Copy Link</button>
-            </div>
-
-            <div class="row g-4 mt-2">
-                <div class="col-md-6">
-                    <div class="stat-box">
-                        <div class="stat-icon-circle"><i class="fa-solid fa-users"></i></div>
-                        <div class="stat-value-large">{{ count($users) }}</div>
-                        <div class="stat-label-large">Total Referrals</div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="stat-box">
-                        <div class="stat-icon-circle" style="color: var(--accent-green); background: rgba(39, 174, 96, 0.05);"><i class="fa-solid fa-coins"></i></div>
-                        <div class="stat-value-large">₦{{ number_format($earnings) }}</div>
-                        <div class="stat-label-large">Total Earnings</div>
-                        <a onclick='return confirm("Are you sure you want to remit earnings?")' href="/remitearning" class="btn btn-sm mt-3" style="background: var(--accent-green); color: white; border-radius: 20px; font-weight: 600; padding: 5px 15px;">Remit to Wallet</a>
-                    </div>
-                </div>
-            </div>
+<div class="pg">
+    <div class="pg-head">
+        <div>
+            <h1>Refer &amp; <em>earn</em></h1>
+            <p>Invite friends and earn on every purchase they make.</p>
         </div>
     </div>
 
-    <!-- Referral List -->
-    <div class="col-lg-12">
-        <div class="referral-card">
-            <h4 class="serif mb-4">Referred Users</h4>
-            
-            <div class="table-responsive">
-                <table class="datatable modern-table">
+    <div class="grid-v main-side" style="margin-bottom:20px">
+        <div class="hero-v">
+            <div class="k">Your referral link</div>
+            <h2>Earn <em>5%</em> on every purchase.</h2>
+            <p>Share your link. When friends sign up and buy, you get a cut of each purchase.</p>
+
+            <div class="ref-link-v">
+                <span id="referralUrl">{{ $refLink }}</span>
+                <button type="button" class="btn-v sm" style="background:#fff;color:var(--primary-dark)" id="copyBtn2"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <a href="https://wa.me/?text={{ $shareText }}" target="_blank" rel="noopener" class="btn-v sm" style="background:#25D366;color:#fff"><i class="fa-brands fa-whatsapp"></i> Share on WhatsApp</a>
+        </div>
+
+        <div class="panel earn-card">
+            <div class="earn-row">
+                <div><small>Referrals</small><b>{{ number_format(count($users)) }}</b></div>
+                <div><small>Earnings</small><b>₦{{ number_format((float) $earnings) }}</b></div>
+            </div>
+            <a onclick="return confirm('Move your earnings to your wallet?')" href="/remitearning" class="btn-v dark block {{ (float) $earnings > 0 ? '' : 'disabled' }}"
+                @if((float) $earnings <= 0) style="pointer-events:none;opacity:.45" aria-disabled="true" @endif>
+                <i class="fa-solid fa-arrow-down"></i> Move to wallet
+            </a>
+            <div class="f-hint" style="justify-content:center;margin:0">Earnings are added to your main wallet balance.</div>
+        </div>
+    </div>
+
+    <div class="panel panel-flush">
+        <div class="panel-head">
+            <h3>People you referred</h3>
+        </div>
+        @if(count($users))
+            <div class="tbl-wrap" style="margin-top:16px">
+                <table class="tbl stack">
                     <thead>
                         <tr>
-                            <th>User Details</th>
-                            <th>Total Earnings</th>
-                            <th>Actions</th>
+                            <th>Friend</th>
+                            <th>You earned</th>
+                            <th class="end">Contact</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($users as $ref)
-                        <tr>
-                            <td>
-                                <div style="font-weight: 600; color: var(--primary-dark);">{{ $ref->name }}</div>
-                                <div class="text-xs text-muted">{{ $ref->phone }}</div>
-                            </td>
-                            <td style="font-family: 'Fraunces', serif; font-weight: 600; color: var(--accent-green);">
-                                ₦{{ number_format($ref->earnings, 2) }}
-                            </td>
-                            <td>
-                                <a href='https://wa.me/234{{ substr($ref->phone, 1) }}' class="btn-message">
-                                    <i class="fab fa-whatsapp me-1"></i> Message
-                                </a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="lead">
+                                    <div class="cell-main">
+                                        <span class="ic t-ink" style="font-family:'Fraunces',serif;font-weight:600">{{ strtoupper(substr($ref->name, 0, 1)) }}</span>
+                                        <div><b>{{ $ref->name }}</b><small>{{ $ref->phone }}</small></div>
+                                    </div>
+                                </td>
+                                <td data-label="You earned" class="num" style="color:var(--accent-green)">₦{{ number_format((float) $ref->earnings, 2) }}</td>
+                                <td data-label="Contact">
+                                    <div class="row-actions">
+                                        <a href="{{ $waLink($ref->phone) }}" target="_blank" rel="noopener" class="btn-v success xs"><i class="fa-brands fa-whatsapp"></i> Message</a>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-        </div>
+        @else
+            <div class="empty-v">
+                <div class="ic"><i class="fa-solid fa-user-plus"></i></div>
+                <b>No referrals yet</b>
+                <span>Share your link to start earning.</span>
+            </div>
+        @endif
     </div>
 </div>
 @endsection
 
 @section('script')
 <script>
-    $(document).ready(function() {
-       
-        // var oTable = $('.datatable').DataTable({
-        //     ordering: false,
-        //     searching: true
-        // });
-
-        $('#copyBtn2').on('click', function() {
-            // alert('heh')
-            var url = $('#referralUrl').text();
-            var $temp = $("<input>");
-            $("body").append($temp);
-            $temp.val(url).select();
-            
-            try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    var $btn = $(this);
-                    $btn.text('Copied!').css('background', '#27ae60');
-                    setTimeout(function() {
-                        $btn.text('Copy Link').css('background', 'var(--primary-dark)');
-                    }, 2000);
-                }
-            } catch (err) {
-                console.error('jQuery Fallback: Unable to copy', err);
+    (function () {
+        var btn = document.getElementById('copyBtn2');
+        btn.addEventListener('click', function () {
+            var text = document.getElementById('referralUrl').innerText.trim();
+            var done = function () {
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+                setTimeout(function () { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 1600);
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(done);
+            } else {
+                var t = document.createElement('textarea');
+                t.value = text; document.body.appendChild(t); t.select();
+                document.execCommand('copy'); document.body.removeChild(t); done();
             }
-            $temp.remove();
         });
-
-        @if(session('message'))
-            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('message') }}", confirmButtonColor: '#0F3548' });
-        @endif
-    });
+    })();
 </script>
 @endsection

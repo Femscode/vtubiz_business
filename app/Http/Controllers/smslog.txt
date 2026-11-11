@@ -1,1 +1,25 @@
-"-2910""-2910""-2910""-2910""-2910""-2910""\nOK""\nOK 3.2"
+"-2910""-2910""-2910""-2910""-2910""-2910""\nOK""\nOK 3.2""<html>\r\n<head><title>404 Not Found<\/title><\/head>\r\n<body>\r\n<center><h1>404 Not Found<\/h1><\/center>\r\n<hr><center>nginx\/1.28.3 (Ubuntu)<\/center>\r\n<\/body>\r\n<\/html>\r\n""<html>\r\n<head><title>404 Not Found<\/title><\/head>\r\n<body>\r\n<center><h1>404 Not Found<\/h1><\/center>\r\n<hr><center>nginx\/1.28.3 (Ubuntu)<\/center>\r\n<\/body>\r\n<\/html>\r\n"2026-11-11 20:21:22 - SmartSMS Request:
+{
+    "SMS": {
+        "auth": {
+            "username": "fasanyafemi@gmail.com",
+            "apikey": "fe376f21f3f8f75506fee57860133700be9e4176"
+        },
+        "message": {
+            "sender": "Pelz",
+            "messagetext": "Hi, good evening. How are you doing today?",
+            "flash": "0"
+        },
+        "recipients": {
+            "gsm": [
+                {
+                    "msidn": "2349058744473",
+                    "msgid": "msg_1794424881_3GUBWj_1"
+                }
+            ]
+        }
+    }
+}
+Response (200):
+{"response":{"status":"SUCCESS","totalsent":1,"cost":3}}
+----------------------------------------

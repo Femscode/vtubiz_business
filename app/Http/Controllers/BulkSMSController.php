@@ -23,6 +23,7 @@ class BulkSMSController extends Controller
         // return the default page
         $data['user'] = $user = Auth::user();
         $data['contacts'] = ContactGroup::where('user_id', $user->id)->latest()->get();
+        $data['rate_per_page'] = floatval(config('services.smartsms.cost_per_page') ?? env('SMARTSMS_COST_PER_PAGE', 5.00));
         return view('bulksms.index', $data);
     }
     public function adminContactGroup()
@@ -156,384 +157,454 @@ class BulkSMSController extends Controller
     }
 
 
+    public function formatPhoneNumber($phone)
+    {
+        $cleaned = preg_replace('/[^0-9]/', '', trim((string)$phone));
+
+        if (empty($cleaned)) {
+            return null;
+        }
+
+        // 13 or 14 digits starting with 234 (e.g. 2348012345678)
+        if (str_starts_with($cleaned, '234') && strlen($cleaned) >= 13) {
+            return $cleaned;
+        }
+
+        // 11 digits starting with 0 (e.g. 08012345678)
+        if (str_starts_with($cleaned, '0') && strlen($cleaned) === 11) {
+            return '234' . substr($cleaned, 1);
+        }
+
+        // 10 digits (e.g. 8012345678)
+        if (strlen($cleaned) === 10) {
+            return '234' . $cleaned;
+        }
+
+        // Other international formats between 10 and 15 digits
+        if (strlen($cleaned) >= 10 && strlen($cleaned) <= 15) {
+            return $cleaned;
+        }
+
+        return null;
+    }
+
     public function submitSMSForm(Request $rq)
     {
-        // dd($rq->all());
-        //function to get the details of the SMS about to send
+        // Validation for the incoming SMS request
         $this->validate($rq, [
             'sender_name' => 'required',
             'contact_type' => 'required',
             'message' => 'required',
             'message_type' => 'required',
-
         ]);
-        // dd($rq->all());
+
         $user = Auth::user();
-        // dd($rq->all());
-        if ($rq->contact_type == 'import_file') {
-            $contacts =  Excel::toArray(new ContactImport($user->id, $rq->sender_name, $rq->message),  $rq->import_file)[0];
-            $contact = [];
-            $contact_count = 0;
-            foreach ($contacts as $subContact) {
-                foreach ($subContact as $value) {
-                    if (Str::length($value) == 10) {
-                        $value = "0" . $value;
-                        $contact[] = $value;
-                        $contact_count += 1;
-                    } elseif (Str::length($value) == 11 || Str::length($value) == 13 || Str::length($value) == 14) {
-                        $contact[] = $value;
-                        $contact_count += 1;
-                    } else {
-                        $value = null;
+
+        // Extract contacts based on type
+        $raw_contacts = [];
+        if ($rq->contact_type == 'import_file' && $rq->hasFile('import_file')) {
+            $importedData = Excel::toArray(new ContactImport($user->id, $rq->sender_name, $rq->message), $rq->file('import_file'))[0] ?? [];
+            foreach ($importedData as $row) {
+                if (is_array($row)) {
+                    foreach ($row as $cell) {
+                        if (!empty($cell)) {
+                            $raw_contacts[] = (string)$cell;
+                        }
                     }
+                } elseif (!empty($row)) {
+                    $raw_contacts[] = (string)$row;
                 }
             }
-            $unique_contact = array_unique($contact);
-            $formatted_contacts = implode(',', $unique_contact);
         } elseif ($rq->contact_type == 'select_group') {
-            $contact = ContactGroup::find($rq->selected_group);
-            if ($contact->type == 'manual') {
-
-                $rq_contacts = $contact->contacts;
-                $contacts = explode(',', $rq_contacts);
-
-                $r_contacts = [];
-                $contact_count = 0;
-                foreach ($contacts as $value) {
-
-                    if (Str::length($value) == 10) {
-                        $value = "0" . $value;
-                        $r_contacts[] = $value;
-                        $contact_count += 1;
-                    } elseif (Str::length($value) == 11 || Str::length($value) == 13 || Str::length($value) == 14) {
-                        $r_contacts[] = $value;
-                        $contact_count += 1;
-                    } else {
-                        $value = null;
+            $contactGroup = ContactGroup::find($rq->selected_group);
+            if ($contactGroup) {
+                if ($contactGroup->type == 'manual') {
+                    $raw_contacts = preg_split('/[\r\n,\s]+/', $contactGroup->contacts, -1, PREG_SPLIT_NO_EMPTY);
+                } else {
+                    $unserialized = @unserialize($contactGroup->contacts);
+                    if (is_array($unserialized)) {
+                        foreach ($unserialized as $item) {
+                            if (!empty($item)) {
+                                $raw_contacts[] = (string)$item;
+                            }
+                        }
                     }
                 }
-                $unique_contact = array_unique($r_contacts);
-                $formatted_contacts = implode(',', $unique_contact);
-            } else {
-                $contacts = unserialize($contact->contacts);
-
-                $contact = [];
-                $contact_count = 0;
-                foreach ($contacts as $value) {
-
-                    if (Str::length($value) == 10) {
-                        $value = "0" . $value;
-                        $contact[] = $value;
-                        $contact_count += 1;
-                    } elseif (Str::length($value) == 11 || Str::length($value) == 13 || Str::length($value) == 14) {
-                        $contact[] = $value;
-                        $contact_count += 1;
-                    } else {
-                        $value = null;
-                    }
-                }
-
-                $unique_contact = array_unique($contact);
-                $formatted_contacts = implode(',', $unique_contact);
             }
         } else {
-            $rq_contacts = $rq->contact_field;
-            $contacts = explode(',', $rq_contacts);
-            // dd($contacts);
-            $r_contacts = [];
-            $contact_count = 0;
-            foreach ($contacts as $value) {
+            // manual_input
+            $inputVal = $rq->contact_field ?? $rq->manual_contact ?? '';
+            $raw_contacts = preg_split('/[\r\n,\s]+/', $inputVal, -1, PREG_SPLIT_NO_EMPTY);
+        }
 
-                if (Str::length($value) == 10) {
-                    $value = "0" . $value;
-                    $r_contacts[] = $value;
-                    $contact_count += 1;
-                } elseif (Str::length($value) == 11 || Str::length($value) == 13 || Str::length($value) == 14) {
-                    $r_contacts[] = $value;
-                    $contact_count += 1;
-                } else {
-                    $value = null;
-                }
+        // Normalize phone numbers to international format (e.g. 23480...)
+        $formatted_contacts = [];
+        foreach ($raw_contacts as $item) {
+            $formatted = $this->formatPhoneNumber($item);
+            if (!empty($formatted)) {
+                $formatted_contacts[] = $formatted;
             }
-            $unique_contact = array_unique($r_contacts);
-            $formatted_contacts = implode(',', $unique_contact);
-        }
-        //calculate the charge before sending as a second validation for the amount to be charged, 160 words per page and get the total numnber of recipients.
-
-        //check the user balance 
-        $message_count  = ceil(Str::length($rq->message) / 160);
-        if ($message_count == 0) {
-            $message_count = 1;
         }
 
+        $unique_contact = array_values(array_unique($formatted_contacts));
+        $contact_count = count($unique_contact);
 
-        $company = User::where('id', $user->company_id)->first();
-        $company_amount = $company->bulksms_price;
-        $real_amount =  number_format(3.8 * intval($contact_count) * $message_count, 2);
-
-        $amount = number_format($company_amount * intval($contact_count) * $message_count, 2); //3.95 should be changed to the admin specified amount.
-        // dd($amount,$real_amount,$company_amount,$contact_count,$formatted_contacts,$message_count);
-        // dd($amount,$contact_count, $rq->all());
-        if ($user->balance < $amount || $company->balance < $amount) {
-            $response = [
+        if ($contact_count === 0) {
+            return response()->json([
                 'success' => false,
-                'message' => 'Insufficient Funds!',
-
-            ];
-
-            return response()->json($response);
+                'message' => 'No valid recipient phone numbers found. Please check your contacts.',
+            ]);
         }
 
+        // Calculate pages (160 characters per page)
+        $message_length = mb_strlen($rq->message);
+        $message_count = max(1, (int)ceil($message_length / 160));
 
-        // $count_recipient = count(explode(',', $formatted_contacts));
-        // dd(count($count_recipient));
+        if ($message_count > 6) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Message is too long. SmartSMS supports a maximum of 6 pages (up to 918 characters).',
+            ]);
+        }
+
+        // Load rate strictly from env (SMARTSMS_COST_PER_PAGE)
+        $rate_per_page = floatval(config('services.smartsms.cost_per_page') ?? env('SMARTSMS_COST_PER_PAGE', 5.00));
+        $total_charge = $rate_per_page * $contact_count * $message_count;
+        $amount = number_format($total_charge, 2, '.', '');
+
+        // Verify balance
+        if ($user->balance < $total_charge) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient Funds! Required: ₦' . number_format($total_charge, 2) . ', Available: ₦' . number_format($user->balance, 2),
+            ]);
+        }
+
+        $defaultSender = env('SMARTSMS_SENDER_NAME', config('services.smartsms.sender_name', 'AwaSkool'));
+        $sender = trim($rq->sender_name ?: $defaultSender);
+        if (strlen($sender) > 11) {
+            $sender = substr($sender, 0, 11);
+        }
+
         $response = [
             'success' => true,
             'message' => 'Details Fetched!',
             'sms' => $rq->message,
-            'contacts' => $formatted_contacts,
+            'contacts' => implode(',', $unique_contact),
             'amount' => $amount,
-            'real_amount' => $real_amount,
+            'rate_per_page' => number_format($rate_per_page, 2, '.', ''),
+            'real_amount' => $amount,
             'message_type' => $rq->message_type,
-            'sender_name' => $rq->sender_name,
+            'sender_name' => $sender,
             'count_recipient' => $contact_count,
             'message_count' => $message_count,
         ];
 
         if ($rq->schedule_date) {
-            $response['schedule'] = $rq->schedule_date . ' ' . $rq->schedule_time;
+            $response['schedule'] = trim($rq->schedule_date . ' ' . ($rq->schedule_time ?? '00:00'));
         }
-
-        // Now $response contains all the common data, and you conditionally add 'schedule_date' if needed.
-
 
         return response()->json($response);
     }
 
-
-
     public function sendSMS2(Request $rq)
     {
-        $this->validate($rq, ['amount' => ['required', 'min:3', 'numeric']]);
+        $this->validate($rq, [
+            'amount' => ['required', 'numeric', 'min:0'],
+            'pin' => ['required'],
+            'contacts' => ['required'],
+            'message' => ['required'],
+        ]);
 
         $user = Auth::user();
         $hashed_pin = hash('sha256', $rq->pin);
         if ($user->pin !== $hashed_pin) {
-            $response = [
+            return response()->json([
                 'success' => false,
-                'message' => 'Incorrect Pin!',
+                'message' => 'Incorrect PIN!',
                 'auto_refund_status' => 'Nil'
-            ];
-
-            return response()->json($response);
+            ]);
         }
-        $details = "Bulk SMS to" . $rq->contacts;
-        $check = $this->check_duplicate('check', $user->id, $rq->amount, "Bulk SMS", $details);
+
+        $amount = floatval($rq->amount);
+        if ($user->balance < $amount) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient funds in your account!',
+                'auto_refund_status' => 'Nil'
+            ]);
+        }
+
+        $details = "Bulk SMS to " . Str::limit($rq->contacts, 100);
+        $check = $this->check_duplicate('check', $user->id, $amount, "Bulk SMS", $details);
 
         if ($check[0] == true) {
-            $response = [
+            return response()->json([
                 'type' => 'duplicate',
                 'success' => false,
                 'message' => 'Please confirm the success of ' . $check[1]->details . ' before resuming service usage.',
                 'auto_refund_status' => 'Nil'
-            ];
-
-            return response()->json($response);
+            ]);
         }
 
-        // $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
-        // $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
+        $username = env('SMARTSMS_USERNAME', config('services.smartsms.username'));
+        $apiKey = env('SMARTSMS_API_KEY', config('services.smartsms.api_key'));
+        $defaultSender = env('SMARTSMS_SENDER_NAME', config('services.smartsms.sender_name', 'AwaSkool'));
 
-        $username = env('SMS_USERNAME');
-        $password = env('SMS_PASSWORD');
+        $sender = trim($rq->sender_name ?: $defaultSender);
+        if (strlen($sender) > 11) {
+            $sender = substr($sender, 0, 11);
+        }
 
-
-        $sender = $rq->sender_name;
-        $recipient = $rq->contacts;
+        $recipient_string = $rq->contacts;
         $message = $rq->message;
-        $amount = $rq->amount;
-        $real_amount = $rq->real_amount;
-        $message_type = $rq->message_type;
+        $real_amount = $rq->real_amount ?? $amount;
+        $message_type = $rq->message_type ?? 'Normal SMS';
+        $flash = ($message_type === 'Flash SMS') ? '1' : '0';
 
-        // THE API URL with parameters
-        if ($rq->schedule) {
-            $schedule = $rq->schedule;
-            // $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message&dnd=true";
-            $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message&schedule=$schedule";
-        } else {
-            $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message";
+        // Parse recipients and build GSM array for SmartSMS
+        $contacts_array = array_filter(array_map('trim', explode(',', $recipient_string)));
+        $gsm = [];
+        $valid_contacts = [];
+
+        foreach ($contacts_array as $idx => $phone) {
+            $formatted = $this->formatPhoneNumber($phone);
+            if (!empty($formatted)) {
+                $valid_contacts[] = $formatted;
+                $gsm[] = [
+                    'msidn' => $formatted,
+                    'msgid' => 'msg_' . time() . '_' . Str::random(6) . '_' . ($idx + 1),
+                ];
+            }
         }
+
+        if (empty($gsm)) {
+            $this->check_duplicate("Delete", $user->id);
+            return response()->json([
+                'success' => false,
+                'message' => 'No valid recipient phone numbers provided.',
+            ]);
+        }
+
+        $messagePayload = [
+            'sender' => $sender,
+            'messagetext' => $message,
+            'flash' => $flash,
+        ];
+
+        if ($rq->filled('schedule')) {
+            $messagePayload['schedule'] = $rq->schedule;
+        }
+
+        $smartSMSPayload = [
+            'SMS' => [
+                'auth' => [
+                    'username' => $username,
+                    'apikey' => $apiKey,
+                ],
+                'message' => $messagePayload,
+                'recipients' => [
+                    'gsm' => $gsm,
+                ],
+            ],
+        ];
+
+        $apiUrl = "https://www.smartsms.ng/api/sendsms.json";
 
         try {
-            $response = Http::get($apiUrl);
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->timeout(30)->post($apiUrl, $smartSMSPayload);
+
             $statusCode = $response->status();
-            $responseData = $response->body();
-            $responseCode = abs($response->json());
-            //try and save all the response in txt file for references.
-            file_put_contents(__DIR__ . '/smslog.txt', json_encode($responseData, JSON_PRETTY_PRINT), FILE_APPEND);
+            $responseData = $response->json();
+            $responseBody = $response->body();
 
-            // dd($response, $statusCode,  $responseData, $responseCode);
+            // Log detailed response to smslog.txt
+            @file_put_contents(
+                __DIR__ . '/smslog.txt',
+                date('Y-m-d H:i:s') . " - SmartSMS Request:\n" . json_encode($smartSMSPayload, JSON_PRETTY_PRINT) . "\nResponse (" . $statusCode . "):\n" . ($responseBody) . "\n----------------------------------------\n",
+                FILE_APPEND
+            );
 
+            $statusString = strtoupper($responseData['response']['status'] ?? '');
+            $isSuccess = ($response->successful() && $statusString === 'SUCCESS');
 
-            if ($statusCode == 200 && $responseCode == 0) {
-                if ($rq->schedule) {
+            if ($isSuccess) {
+                if ($rq->filled('schedule')) {
                     $title = 'Successful Scheduled Bulk SMS';
-                    $details = 'Scheduled Bulk SMS to be sent to ' . $recipient . ' by ' . $rq->schedule . ', Amount: NGN' . $amount . '. Message: ' . $message;
+                    $details = 'Scheduled Bulk SMS to be sent to ' . implode(',', $valid_contacts) . ' by ' . $rq->schedule . ', Amount: NGN' . number_format($amount, 2) . '. Message: ' . $message;
                 } else {
                     $title = 'Successful Instant Bulk SMS';
-                    $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
+                    $details = 'Bulk SMS sent to ' . implode(',', $valid_contacts) . ', Amount: NGN' . number_format($amount, 2) . '. Message: ' . $message;
                 }
-                //save the record for succesfully sent SMS
-                $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, $amount, 1, $statusCode, null, $message_type, $real_amount);
-                $response = [
+
+                $this->create_bulksms_transaction($title, $details, $sender, $message, implode(',', $valid_contacts), $amount, 1, $statusCode, $rq->schedule ?? null, $message_type, $real_amount);
+                $this->check_duplicate("Delete", $user->id);
+
+                return response()->json([
                     'success' => true,
-                    'message' => 'Sent Successfully!',
-
-
-                ];
-                $this->check_duplicate("Delete", $user->id);
-                return response()->json($response);
+                    'message' => $rq->filled('schedule') ? 'Bulk SMS Scheduled Successfully!' : 'Sent Successfully!',
+                    'schedule' => $rq->schedule ?? null,
+                ]);
             } else {
-                $statusCode = 0;
                 $title = "Failed Bulk SMS";
-                $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
-                //save the record for non successfully sent SMS due to error from the API
-                $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type, $real_amount);
-                $response = [
-                    'success' => false,
-                    'message' => 'Unable to send SMS, Try again later!',
-
-
-                ];
+                $details = 'Failed Bulk SMS, recipient: ' . implode(',', $valid_contacts) . ' Amount: NGN0.00, Message: ' . $message;
+                $this->create_bulksms_transaction($title, $details, $sender, $message, implode(',', $valid_contacts), 0, 0, $statusCode, $rq->schedule ?? null, $message_type, $real_amount);
                 $this->check_duplicate("Delete", $user->id);
-                return response()->json($response);
+
+                // User-friendly error message without leaking provider units or internals
+                $userMsg = 'Unable to send SMS, please try again later or contact support!';
+                if ($statusString === 'INVALID_MESSAGE') {
+                    $userMsg = 'The message text is invalid or exceeds the allowed length.';
+                } elseif ($statusString === 'INVALID_SENDER') {
+                    $userMsg = 'The sender name is invalid. Alphanumeric sender names must not exceed 11 characters.';
+                } elseif ($statusString === 'MISSING_RECIPIENT') {
+                    $userMsg = 'No valid recipient phone numbers found.';
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $userMsg,
+                ]);
             }
         } catch (\Exception $e) {
-            $statusCode = 0;
-            // Handle any exceptions or errors here
+            @file_put_contents(
+                __DIR__ . '/smslog.txt',
+                date('Y-m-d H:i:s') . " - SmartSMS Exception:\n" . $e->getMessage() . "\n----------------------------------------\n",
+                FILE_APPEND
+            );
+
             $title = "Failed Bulk SMS";
-            $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
-            // Save the record for non successully sent SMS due to an internal error from the application.
-            $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient, 0, 0, $statusCode, null, $message_type, $real_amount);
-
-            $response = [
-                'success' => false,
-                // 'message' => $e->getMessage(),
-                'message' => 'Unable to send SMS, Try again later!',
-
-
-            ];
+            $details = 'Failed Bulk SMS, recipient: ' . $recipient_string . ' Amount: NGN0.00, Message: ' . $message;
+            $this->create_bulksms_transaction($title, $details, $sender, $message, $recipient_string, 0, 0, 500, $rq->schedule ?? null, $message_type, $real_amount);
             $this->check_duplicate("Delete", $user->id);
-            return response()->json($response);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to send SMS, please try again later or contact support!',
+            ]);
         }
     }
 
     public function resendSMS($id)
     {
-        $tranx = Transaction::find($id);
-        $user = Auth::user();
-        if($user->id !== $tranx->user_id) {
-            return redirect()->back()->with('message','Access Denied');
+        $tranx = BulkSMSTransaction::find($id) ?? Transaction::find($id);
+        if (!$tranx) {
+            return redirect()->back()->with('error', 'Transaction not found');
         }
-        // dd($tranx);
+
+        $user = Auth::user();
+        if ($user->id !== $tranx->user_id) {
+            return redirect()->back()->with('message', 'Access Denied');
+        }
+
         $the_work = $this->sendSMS($tranx->sender, $tranx->recipient, $tranx->message, $tranx->amount, $tranx->message_type);
 
-        if ($the_work == true) {
-            //sms sent successfully
+        if ($the_work === true) {
             return redirect()->back()->with('message', 'Bulk SMS sent successfully!');
-        } elseif ($the_work == false) {
-            //sms not sent due to an error encountered from the API
-            return redirect()->back()->with('error', 'Error encountered while sending SMS!');
         } else {
-            return redirect()->back()->with('error', 'Internal Error, kindly contact the administrator!');
-            // INTERNAL ERROR FROM ME
-            dd($the_work);
+            return redirect()->back()->with('error', 'Error encountered while sending SMS!');
         }
     }
 
     public function sendSMS($sender, $recipient, $message, $amount, $message_type)
     {
-        // dd($rq->all());
-        // $username = User::where('email', 'fasanyafemi@gmail.com')->first()->account_name;
-        // $password = User::where('email', 'fasanyafemi@gmail.com')->first()->bank_name;
+        $username = env('SMARTSMS_USERNAME', config('services.smartsms.username'));
+        $apiKey = env('SMARTSMS_API_KEY', config('services.smartsms.api_key'));
+        $defaultSender = env('SMARTSMS_SENDER_NAME', config('services.smartsms.sender_name', 'AwaSkool'));
 
+        $sender = trim($sender ?: $defaultSender);
+        if (strlen($sender) > 11) {
+            $sender = substr($sender, 0, 11);
+        }
 
-        $username = env('SMS_USERNAME');
-        $password = env('SMS_PASSWORD');
+        $flash = ($message_type === 'Flash SMS') ? '1' : '0';
+        $contacts_array = array_filter(array_map('trim', explode(',', $recipient)));
+        $gsm = [];
+        $valid_contacts = [];
 
+        foreach ($contacts_array as $idx => $phone) {
+            $formatted = $this->formatPhoneNumber($phone);
+            if (!empty($formatted)) {
+                $valid_contacts[] = $formatted;
+                $gsm[] = [
+                    'msidn' => $formatted,
+                    'msgid' => 'msg_' . time() . '_' . Str::random(6) . '_' . ($idx + 1),
+                ];
+            }
+        }
 
-        // THE API URL with parameters
+        if (empty($gsm)) {
+            return false;
+        }
 
-        $apiUrl = "http://www.estoresms.com/smsapi.php?username=$username&password=$password&sender=$sender&recipient=$recipient&message=$message";
-
+        $smartSMSPayload = [
+            'SMS' => [
+                'auth' => [
+                    'username' => $username,
+                    'apikey' => $apiKey,
+                ],
+                'message' => [
+                    'sender' => $sender,
+                    'messagetext' => $message,
+                    'flash' => $flash,
+                ],
+                'recipients' => [
+                    'gsm' => $gsm,
+                ],
+            ],
+        ];
 
         try {
-            $response = Http::get($apiUrl);
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->timeout(30)->post("https://www.smartsms.ng/api/sendsms.json", $smartSMSPayload);
+
             $statusCode = $response->status();
-            $responseData = $response->body();
-            $responseCode = abs($response->json());
-            //try and save all the response in txt file for references.
-            file_put_contents(__DIR__ . '/smslog.txt', json_encode($responseData, JSON_PRETTY_PRINT), FILE_APPEND);
+            $responseData = $response->json();
 
-            // dd($response, $statusCode,  $responseData, $responseCode);
+            @file_put_contents(
+                __DIR__ . '/smslog.txt',
+                date('Y-m-d H:i:s') . " - SmartSMS sendSMS Response (" . $statusCode . "):\n" . $response->body() . "\n----------------------------------------\n",
+                FILE_APPEND
+            );
 
-
-            if ($statusCode == 200 && $responseCode == 0) {
-
-                $title = 'Successful Instant Bulk SMS';
-                $details = 'Bulk SMS sent to ' . $recipient . ', Amount: NGN' . $amount . '. Message: ' . $message;
-                $ref = Str::random(7);
+            $statusString = strtoupper($responseData['response']['status'] ?? '');
+            if ($response->successful() && $statusString === 'SUCCESS') {
                 $user = Auth::user();
-                //save the record for succesfully sent SMS
-                $this->create_transaction('Bulk SMS',$ref, $details, 'debit',$amount, $user->id, 1);
-                $response = [
-                    'success' => true,
-                    'message' => 'Sent Successfully!',
-
-
-                ];
-                return response()->json($response);
+                $ref = Str::random(7);
+                $details = 'Bulk SMS sent to ' . implode(',', $valid_contacts) . ', Amount: NGN' . number_format($amount, 2) . '. Message: ' . $message;
+                $this->create_transaction('Bulk SMS', $ref, $details, 'debit', $amount, $user->id, 1);
+                return true;
             } else {
-                $statusCode = 0;
-                $title = "Failed Bulk SMS";
-                $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
-                //save the record for non successfully sent SMS due to error from the API
-                $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 0, $statusCode, null, $message_type);
-                $response = [
-                    'success' => false,
-                    'message' => 'Unable to send SMS, Try again later!',
-
-
-                ];
-                return response()->json($response);
+                $user = Auth::user();
+                $ref = Str::random(7);
+                $details = 'Failed Bulk SMS, recipient: ' . implode(',', $valid_contacts) . ' Amount: NGN0.00, Message: ' . $message;
+                $this->create_transaction('Failed Bulk SMS', $ref, $details, 'debit', 0, $user->id, 0);
+                return false;
             }
         } catch (\Exception $e) {
-            $statusCode = 0;
-            // Handle any exceptions or errors here
-            $title = "Failed Bulk SMS";
-            $details = 'Failed Bulk SMS, recipient: ' . $recipient . ' Amount: NGN0.00, Message: ' . $message;
-            // Save the record for non successully sent SMS due to an internal error from the application.
-            $this->create_transaction($title, $details, $sender, $message, $recipient, $amount, 0, $statusCode, null, $message_type);
-
-            $response = [
-                'success' => false,
-                'message' => $e->getMessage(),
-
-
-            ];
-            return response()->json($response);
+            @file_put_contents(
+                __DIR__ . '/smslog.txt',
+                date('Y-m-d H:i:s') . " - SmartSMS sendSMS Exception:\n" . $e->getMessage() . "\n----------------------------------------\n",
+                FILE_APPEND
+            );
+            return false;
         }
     }
-
 
     public function create_bulksms_transaction($title, $details, $sender, $message, $recipient, $amount, $status, $statusCode, $schedule, $message_type, $real_amount)
     {
         $user = Auth::user();
         $company = User::where('id', $user->company_id)->first();
-        //create the transaction
-        $tranx =  BulkSMSTransaction::create([
+
+        // Create the transaction
+        $tranx = BulkSMSTransaction::create([
             'user_id' => $user->id,
-            'company_id' => $user->company_id,
+            'company_id' => $user->company_id ?? $user->id,
             'title' => $title,
             'description' => $details,
             'sender' => $sender,
@@ -544,29 +615,25 @@ class BulkSMSController extends Controller
             'status_code' => $statusCode,
             'scheduled_for' => $schedule,
             'before' => $user->balance,
-            'admin_before' => $company->balance,
+            'admin_before' => $company ? $company->balance : null,
             'message_type' => $message_type
-
         ]);
-        //charging the user
+
+        // Charging the user
         if ($status == 1) {
             $user->balance -= $amount;
             $user->save();
             $tranx->after = $user->balance;
 
-            //charging the admin       
-            // $profit = $amount - floatval($real_amount);
-            // $company->balance += $profit;
-            // $tranx->admin_after = $company->balance;
             $tranx->save();
-            $company->save();
+            if ($company) {
+                $company->save();
+            }
         } else {
-
             $tranx->after = $user->balance;
-
-            //charging the admin       
-
-            $tranx->admin_after = $company->balance;
+            if ($company) {
+                $tranx->admin_after = $company->balance;
+            }
             $tranx->save();
         }
     }

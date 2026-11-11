@@ -160,7 +160,16 @@ class HomeController extends Controller
                 $data['notification2'] = $notification2;
             }
 
-            $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->take(5)->get();
+            $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->take(6)->get();
+
+            // Monthly summary for the dashboard
+            $monthTx = Transaction::where('user_id', $user->id)
+                ->where('status', 1)
+                ->where('created_at', '>=', now()->startOfMonth());
+            $data['month_spent'] = (clone $monthTx)->where('type', 'debit')->sum('amount');
+            $data['month_funded'] = (clone $monthTx)->where('type', 'credit')->sum('amount');
+            $data['month_count'] = (clone $monthTx)->where('type', 'debit')->count();
+            $data['referral_count'] = User::where('referred_by', $user->brand_name)->count();
 
             // dd($data);
             return response()->view('dashboard.index', $data);

@@ -1,206 +1,149 @@
 @extends('dashboard.master1')
-@section('header')
-@endsection
+
+@php
+    $isRaffle = in_array($giveaway->type, ['raffle_data', 'raffle_airtime', 'raffle_cash']);
+    $lucky = $giveaway->lucky_numbers ?? [];
+    $luckyConfirm = $giveaway->lucky_numbers_confirm ?? [];
+    $prize = trim(($giveaway->data_price ?? '') . ' ' . ($giveaway->airtime_price ?? ''));
+    $waLink = function ($phone) {
+        $digits = preg_replace('/\D+/', '', (string) $phone);
+        return 'https://wa.me/' . (str_starts_with($digits, '234') ? $digits : '234' . ltrim($digits, '0'));
+    };
+@endphp
+
 @section('content')
-
-
-<div class="container-fluid">
-
-
-
-
-    <div class="row mt-4">
-
-        <div class="card mb-xl-10" style="border-left:5px solid #001f3f;background-color: hsl(210, 90%, 95%)">
-            <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                <div class="card-title">
-                    <h2 class="fw-bolder">{{ $giveaway->name }} Details <span style='color:red'>(NGN{{
-                            $giveaway->estimated_amount }})</span>
-                    </h2>
-                </div>
-
-            </div>
-            @if($giveaway->type == 'raffle_data' || $giveaway->type == 'raffle_airtime' || $giveaway->type ==
-            'raffle_cash' )
-            <div class="card-body">
-                <div class="d-flex">
-                    <div class="flex-grow-1">
-                        <h4 class="mb-0">{{ count($giveaway->all_numbers ?? []) }} / {{ $giveaway->part_no }}</h4>
-                        <a class="text-muted fw-medium">Total Participants</a>
-                        <h4 class="mb-0">{{ count($giveaway->lucky_numbers) - count($giveaway->lucky_numbers_confirm) }}
-                            / {{
-                            count($giveaway->lucky_numbers) }}</h4>
-                        <a class="text-muted fw-medium">Total Claimed Giveaway</a>
-                        <h4 class="mb-0">
-                            @foreach($giveaway->lucky_numbers as $luk)
-                            {{ $luk }},
-                            @endforeach
-                        </h4>
-                        <a class="text-muted fw-medium">Lucky Numbers</a>
-                        <h4 class="mb-0"> {{ $giveaway->data_price }} {{ $giveaway->airtime_price }}</h4>
-                        <a class="text-muted fw-medium">Giveaway Prize</a>
-                        <h4 class="mb-0"> NGN{{ number_format($giveaway->entry_fee) }}</h4>
-                        <a class="text-muted fw-medium">Entry Fee</a>
-
-
-                    </div>
-
-
-                </div>
-            </div>
-
-
-
-            @else
-            <div class="card-body">
-                <div class="d-flex">
-                    <div class="flex-grow-1">
-                        <h4 class="mb-0">{{ $giveaway->no_of_winners - $giveaway->max_winners }}/{{
-                            $giveaway->no_of_winners }}</h4>
-                        <a class="text-muted fw-medium">Total Winners</a>
-
-                        <h4 class="mb-0">
-                            {{ count($giveaway->all_questions->all()) }}
-                        </h4>
-                        <a class="text-muted fw-medium">Total Questions</a>
-                        <h4 class="mb-0">
-                            {{ $giveaway->time }} Mins
-                        </h4>
-                        <a class="text-muted fw-medium">Assessment Duration</a>
-                        <h4 class="mb-0"> {{ $giveaway->data_price }} {{ $giveaway->airtime_price }}</h4>
-                        <a class="text-muted fw-medium">Giveaway Prize</a>
-
-
-                    </div>
-
-
-                </div>
-            </div>
-
-            @endif
+<div class="pg">
+    <a href="/my-giveaway" class="pg-back"><i class="fa-solid fa-arrow-left"></i> My giveaways</a>
+    <div class="pg-head">
+        <div>
+            <h1>{{ $giveaway->name }}</h1>
+            <p>
+                <span class="badge-v neutral">{{ $isRaffle ? 'Raffle' : 'Quiz' }}</span>
+                &nbsp;Worth ₦{{ number_format((float) $giveaway->estimated_amount) }}
+            </p>
         </div>
-        <div class="card mb-xl-10">
-            <div class="card-header flex-wrap border-0 pt-6 pb-0">
-              
-                    <h2 class="fw-bolder">{{ $giveaway->name }} Participants
-                    </h2>
-                    <div>
-                        <a href='/giveaway_transactions/{{ $giveaway->slug }}' class='btn btn-success'>View Transactions</a>
-                        <a href='/my-giveaway' class='btn btn-secondary'>Back</a>
-                    </div>
-               
+        <div class="pg-actions">
+            @unless($isRaffle)
+                <a href="/add_question/{{ $giveaway->slug }}" class="btn-v ghost"><i class="fa-solid fa-circle-question"></i> Questions</a>
+            @endunless
+            <a href="/giveaway_transactions/{{ $giveaway->slug }}" class="btn-v dark"><i class="fa-solid fa-receipt"></i> Transactions</a>
+        </div>
+    </div>
 
+    <div class="stats-v">
+        @if($isRaffle)
+            <div class="stat-v">
+                <div class="k"><i class="t-blue fa-solid fa-users"></i> Participants</div>
+                <div class="v">{{ count($giveaway->all_numbers ?? []) }} / {{ $giveaway->part_no }}</div>
             </div>
-            <div class="card-body">
-                <div style='overflow-x:auto;max-width: 100%'>
-                    <table style='width:100%' class="datatable table table-responsive mb-0 fixed-solution">
-                        <thead>
-                            <tr>
+            <div class="stat-v">
+                <div class="k"><i class="t-green fa-solid fa-trophy"></i> Claimed</div>
+                <div class="v">{{ count($lucky) - count($luckyConfirm) }} / {{ count($lucky) }}</div>
+            </div>
+            <div class="stat-v">
+                <div class="k"><i class="t-amber fa-solid fa-gift"></i> Prize</div>
+                <div class="v">{{ $prize ?: '—' }}</div>
+            </div>
+            <div class="stat-v">
+                <div class="k"><i class="t-ink fa-solid fa-ticket"></i> Entry fee</div>
+                <div class="v">₦{{ number_format((float) $giveaway->entry_fee) }}</div>
+            </div>
+        @else
+            <div class="stat-v">
+                <div class="k"><i class="t-green fa-solid fa-trophy"></i> Winners</div>
+                <div class="v">{{ $giveaway->no_of_winners - $giveaway->max_winners }} / {{ $giveaway->no_of_winners }}</div>
+            </div>
+            <div class="stat-v">
+                <div class="k"><i class="t-purple fa-solid fa-circle-question"></i> Questions</div>
+                <div class="v">{{ count($giveaway->all_questions->all()) }}</div>
+            </div>
+            <div class="stat-v">
+                <div class="k"><i class="t-blue fa-regular fa-clock"></i> Duration</div>
+                <div class="v">{{ $giveaway->time }} {{ \Illuminate\Support\Str::plural('min', (int) $giveaway->time) }}</div>
+            </div>
+            <div class="stat-v">
+                <div class="k"><i class="t-amber fa-solid fa-gift"></i> Prize</div>
+                <div class="v">{{ $prize ?: '—' }}</div>
+            </div>
+        @endif
+    </div>
 
-                                <th scope="col">Name</th>
-                                <th scope="col">Phone </th>
-                                @if($giveaway->type == 'raffle_data' || $giveaway->type == 'raffle_airtime' ||
-                                $giveaway->type == 'raffle_cash' )
+    @if($isRaffle && count($lucky))
+        <div class="panel" style="margin-bottom:20px">
+            <div class="panel-head" style="margin-bottom:12px"><h3>Lucky numbers</h3></div>
+            <div class="chips-v" style="margin:0">
+                @foreach($lucky as $luk)
+                    <span class="chip-v" style="cursor:default">{{ $luk }}</span>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
-                                <th scope="col">Lucky Number</th>
-                                @endif
-                                <th>Actions</th>
+    <div class="panel panel-flush">
+        <div class="panel-head">
+            <h3>Participants <span class="badge-v neutral" style="font-family:'DM Sans'">{{ count($participants) }}</span></h3>
+            <div class="search-v" style="max-width:280px">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchTable" placeholder="Search name or phone">
+            </div>
+        </div>
 
-                            </tr>
-                        </thead>
-
-                        @foreach($participants as $key => $tranx)
-                        @if($tranx->is_win == 1)
-                        <tr class='alert alert-success'>
-
-                            <td>{{ $tranx->name }}(Winner)</td>
-                            <td>{{ $tranx->phone }}</td>
-                            @if($giveaway->type == 'raffle_data' || $giveaway->type == 'raffle_airtime' ||
-                            $giveaway->type == 'raffle_cash' )
-
-                            <td>{{ $tranx->lucky_number }}</td>
-                            @endif
-                            <td><a class='btn btn-success' href='https://wa.me/234{{ $tranx->phone }}'>Message</a>
-                            </td>
-
-                        </tr>
-                        @else
+        @if(count($participants))
+            <div class="tbl-wrap" style="margin-top:16px">
+                <table class="tbl stack" id="partTable">
+                    <thead>
                         <tr>
-
-                            <td>{{ $tranx->name }}</td>
-                            <td>{{ $tranx->phone }}</td>
-                            @if($giveaway->type == 'raffle_data' || $giveaway->type == 'raffle_airtime' ||
-                            $giveaway->type == 'raffle_cash' )
-
-                            <td>{{ $tranx->lucky_number }}</td>
-                            @endif
-                            <td><a class='btn btn-success' href='https://wa.me/234{{ $tranx->phone }}'>Message</a>
-                            </td>
-
+                            <th>Name</th>
+                            <th>Phone</th>
+                            @if($isRaffle)<th>Lucky number</th>@endif
+                            <th class="end">Contact</th>
                         </tr>
-                        @endif
-
-
+                    </thead>
+                    <tbody>
+                        @foreach($participants as $tranx)
+                            <tr>
+                                <td class="lead">
+                                    <b>{{ $tranx->name }}</b>
+                                    @if($tranx->is_win == 1)
+                                        <span class="badge-v ok" style="margin-left:6px">Winner</span>
+                                    @endif
+                                </td>
+                                <td data-label="Phone">{{ $tranx->phone }}</td>
+                                @if($isRaffle)
+                                    <td data-label="Lucky number" class="num">{{ $tranx->lucky_number }}</td>
+                                @endif
+                                <td data-label="Contact">
+                                    <div class="row-actions">
+                                        <a class="btn-v success xs" href="{{ $waLink($tranx->phone) }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Message</a>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
-
-
-
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
-
-
-        </div>
-
+        @else
+            <div class="empty-v">
+                <div class="ic"><i class="fa-solid fa-users"></i></div>
+                <b>No participants yet</b>
+                <span>Share your giveaway link to get people in.</span>
+            </div>
+        @endif
     </div>
 </div>
-<!-- end row -->
+@endsection
 
-
-
-<!-- end row -->
-</div>
 @section('script')
 <script>
-    $(document).ready(function() {
-       
-        var oTable = $('.datatable').DataTable({
-            ordering: false,
-            searching: true
-            });   
-
-      
-
-
-            $('#searchTable').on('keyup', function() {
-              oTable.search(this.value).draw();
+    (function () {
+        var input = document.getElementById('searchTable');
+        if (!input) return;
+        input.addEventListener('input', function () {
+            var q = input.value.trim().toLowerCase();
+            document.querySelectorAll('#partTable tbody tr').forEach(function (tr) {
+                tr.style.display = !q || tr.innerText.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
             });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
         });
-        const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-                })
-                @if (session('success'))
-        Toast.fire({
-                        icon: 'success',
-                        title: '{{ session("success") }}'
-                        }) 
-           
-        @endif
-      
-
-    })
+    })();
 </script>
-@endsection
 @endsection

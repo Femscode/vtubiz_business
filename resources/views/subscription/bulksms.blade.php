@@ -2,216 +2,239 @@
 
 @section('header')
 <style>
-    .service-header {
-        margin-bottom: var(--space-lg);
+    .ctype {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
     }
-    .service-header h1 {
-        font-family: 'Fraunces', serif;
-        font-size: 2.2rem;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
+
+    .ctype .choice {
+        margin: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px;
     }
-    .service-card-wrapper {
-        background: var(--surface);
-        border-radius: var(--radius-lg);
-        padding: var(--space-lg);
-        box-shadow: var(--shadow-card);
+
+    .ctype .choice input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
     }
-    .form-label-bold {
-        font-weight: 700;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
-        display: block;
-        font-size: 0.9rem;
+
+    .ctype .choice {
+        position: relative;
     }
-    .form-control-custom {
-        width: 100%;
-        padding: 12px 16px;
-        border-radius: var(--radius-md);
-        border: 1px solid rgba(0,0,0,0.08);
-        background: #F9F9F9;
-        font-family: 'DM Sans', sans-serif;
-        transition: all 0.2s ease;
-        margin-bottom: 15px;
-    }
-    .form-control-custom:focus {
-        outline: none;
-        border-color: var(--primary-dark);
-        background: white;
-        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
-    }
-    .radio-group-custom {
+
+    .counter-row {
         display: flex;
-        gap: 20px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-    }
-    .radio-item-custom {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-    }
-    .radio-item-custom input {
-        accent-color: var(--primary-dark);
-        width: 18px;
-        height: 18px;
-    }
-    .radio-item-custom span {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--text-main);
-    }
-    .btn-send {
-        background: var(--primary-dark);
-        color: white;
-        border: none;
-        padding: 14px 28px;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.1s;
-    }
-    .btn-schedule {
-        background: rgba(39, 174, 96, 0.1);
-        color: var(--accent-green);
-        border: none;
-        padding: 14px 28px;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.1s;
-    }
-    .char-count-box {
-        font-size: 0.8rem;
-        margin-top: 5px;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: .8rem;
         color: var(--text-secondary);
+        margin-top: 8px;
+    }
+
+    .counter-row b {
+        color: var(--ink);
+    }
+
+    /* Phone preview */
+    .sms-phone {
+        background: #F2F1EC;
+        border-radius: 22px;
+        padding: 18px;
+    }
+
+    .sms-from {
+        text-align: center;
+        font-size: .78rem;
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+    }
+
+    .sms-from b {
+        display: block;
+        color: var(--ink);
+        font-size: .95rem;
+        letter-spacing: .02em;
+    }
+
+    .sms-bubble {
+        background: #fff;
+        border-radius: 18px 18px 18px 6px;
+        padding: 12px 14px;
+        font-size: .9rem;
+        line-height: 1.5;
+        color: var(--ink);
+        white-space: pre-wrap;
+        word-break: break-word;
+        box-shadow: var(--shadow-sm);
+        max-height: 260px;
+        overflow: auto;
+    }
+
+    .sms-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .sms-stats div {
+        background: #FAFAF8;
+        border-radius: 14px;
+        padding: 12px 14px;
+    }
+
+    .sms-stats small {
+        display: block;
+        font-size: .72rem;
+        color: var(--text-secondary);
+        font-weight: 600;
+    }
+
+    .sms-stats b {
+        font-family: 'Fraunces', serif;
+        font-size: 1.3rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+        .ctype {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ctype .choice {
+            flex-direction: row;
+            align-items: center;
+        }
     }
 </style>
-@endsection 
+@endsection
 
 @section('content')
-<div class="service-header">
-    <h1>Bulk SMS</h1>
-    <p class="text-muted">Reach thousands of people instantly with our reliable SMS gateway.</p>
-</div>
+<div class="pg">
+    <div class="pg-head">
+        <div>
+            <h1>Bulk <em>SMS</em></h1>
+            <p>Reach thousands of people in one send.</p>
+        </div>
+        <div class="pg-actions">
+            <a href="/contact_group" class="btn-v ghost"><i class="fa-solid fa-address-book"></i> Contact groups</a>
+            <a href="/bulksms_transactions" class="btn-v ghost"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+        </div>
+    </div>
 
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="service-card-wrapper">
-            <form method='post' class="myForm" enctype="multipart/form-data">@csrf
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label class="form-label-bold">Sender's Name</label>
-                        <input required name='sender_name' id='sender_name' class="form-control-custom" type="text" maxlength="11" placeholder="Max 11 characters">
+    <div class="grid-v main-side">
+        <div class="panel">
+            <form method="post" class="myForm" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" id="schedule_date" name="schedule_date" />
+                <input type="hidden" id="schedule_time" name="schedule_time" />
+
+                <div class="f-row">
+                    <div class="f-group">
+                        <label class="f-label" for="sender_name">Sender name</label>
+                        <input required name="sender_name" id="sender_name" class="f-input" type="text" maxlength="11" placeholder="Up to 11 characters">
                     </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label-bold">Message Type</label>
-                        <select id='message_type' required class="form-control-custom" name="message_type">
-                            <option value='Normal SMS'>Normal SMS</option>
-                            <option value='Flash SMS'>Flash SMS</option>
-                            <option value='Unicode SMS'>Unicode SMS</option>
+                    <div class="f-group">
+                        <label class="f-label" for="message_type">Message type</label>
+                        <select id="message_type" required class="f-input" name="message_type">
+                            <option value="Normal SMS">Normal SMS</option>
+                            <option value="Flash SMS">Flash SMS</option>
+                            <option value="Unicode SMS">Unicode SMS</option>
                         </select>
                     </div>
+                </div>
 
-                    <div class="col-12">
-                        <label class="form-label-bold">Choose Contact Method</label>
-                        <div class="radio-group-custom">
-                            <label class="radio-item-custom">
-                                <input class='contact_type' type="radio" name="contact_type" id="manual_input" value="manual_input" checked>
-                                <span>Manual Input</span>
-                            </label>
-                            <label class="radio-item-custom">
-                                <input class='contact_type' type="radio" name="contact_type" id="import_csv" value="import_file">
-                                <span>Import CSV/Excel</span>
-                            </label>
-                            <label class="radio-item-custom">
-                                <input class='contact_type' type="radio" name="contact_type" id="select_group" value="select_group">
-                                <span>Select Group</span>
-                            </label>
-                        </div>
+                <div class="f-group">
+                    <label class="f-label">Recipients</label>
+                    <div class="ctype">
+                        <label class="choice" for="manual_input">
+                            <input class="contact_type" type="radio" name="contact_type" id="manual_input" value="manual_input" checked>
+                            <span class="ic t-blue"><i class="fa-solid fa-keyboard"></i></span>
+                            <span><b>Type numbers</b><small>Paste or type</small></span>
+                        </label>
+                        <label class="choice" for="import_csv">
+                            <input class="contact_type" type="radio" name="contact_type" id="import_csv" value="import_file">
+                            <span class="ic t-green"><i class="fa-solid fa-file-arrow-up"></i></span>
+                            <span><b>Upload file</b><small>CSV or Excel</small></span>
+                        </label>
+                        <label class="choice" for="select_group">
+                            <input class="contact_type" type="radio" name="contact_type" id="select_group" value="select_group">
+                            <span class="ic t-purple"><i class="fa-solid fa-address-book"></i></span>
+                            <span><b>Contact group</b><small>Saved lists</small></span>
+                        </label>
                     </div>
+                </div>
 
-                    <input type='hidden' id='schedule_date' name='schedule_date' />
-                    <input type='hidden' id='schedule_time' name='schedule_time' />
-
-                    <div class="col-12">
-                        <div id='import_field' style='display:none'>
-                            <label class="form-label-bold">Upload File</label>
-                            <input accept=".xls, .xlsx, .csv" type="file" class="form-control-custom" name='import_file' id='import_file'>
-                        </div>
-
-                        <div id='select_group_field' style='display:none'>
-                            <label class="form-label-bold">Select Contact Group</label>
-                            <select id='selected_group' class="form-control-custom" name='selected_group'>
-                                <option value=''>-- Choose a group --</option>
-                                @foreach($contacts as $contact)
-                                <option value='{{ $contact->id }}'>{{ $contact->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div id='manual_input_field'>
-                            <label class="form-label-bold">Recipients</label>
-                            <textarea class="form-control-custom" style="min-height: 100px;" name="manual_contact" id='contact_field' placeholder="Type numbers separated by comma or space..."></textarea>
-                            <div class="char-count-box">
-                                <i class="fa-solid fa-users me-1"></i> Total Recipients: <span id='no_of_recipients' class="fw-bold">0</span>
-                            </div>
-                        </div>
+                <div class="f-group">
+                    <div id="manual_input_field">
+                        <textarea class="f-input" style="min-height:96px" name="manual_contact" id="contact_field" placeholder="08012345678, 08098765432"></textarea>
+                        <div class="counter-row"><span>Separate numbers with commas, spaces or new lines.</span><span><b id="no_of_recipients">0</b> recipients</span></div>
                     </div>
-
-                    <div class="col-12">
-                        <label class="form-label-bold">Message Content</label>
-                        <textarea required class="form-control-custom" style="min-height: 150px;" name="message" id='sms' placeholder="Type your message here..."></textarea>
-                        <div class="d-flex justify-content-between char-count-box">
-                            <span><span id='pages' class="fw-bold">0</span> Page(s)</span>
-                            <span class='text-danger'>Remaining: <span id='character' class="fw-bold">160</span> characters</span>
-                        </div>
+                    <div id="import_field" style="display:none">
+                        <input accept=".xls, .xlsx, .csv" type="file" class="f-input" name="import_file" id="import_file">
+                        <div class="f-hint"><i class="fa-solid fa-circle-info"></i> One phone number per row in the first column.</div>
                     </div>
-
-                    <div class="col-12 pt-3">
-                        <div class="d-flex gap-3">
-                            <button type="submit" class="btn-send flex-grow-1">Send SMS Now</button>
-                            <button id='scheduleSend' type="button" class="btn-schedule">Schedule Later</button>
-                        </div>
+                    <div id="select_group_field" style="display:none">
+                        <select id="selected_group" class="f-input" name="selected_group">
+                            <option value="">Choose a group</option>
+                            @foreach($contacts as $contact)
+                                <option value="{{ $contact->id }}">{{ $contact->name }}</option>
+                            @endforeach
+                        </select>
+                        @if(count($contacts) === 0)
+                            <div class="f-hint"><i class="fa-solid fa-circle-info"></i> No groups yet. <a href="/contact_group" style="font-weight:600">Create one</a></div>
+                        @endif
                     </div>
+                </div>
+
+                <div class="f-group">
+                    <label class="f-label" for="sms">Message</label>
+                    <textarea required class="f-input" style="min-height:150px" name="message" id="sms" placeholder="Type your message"></textarea>
+                    <div class="counter-row"><span><b id="pages">0</b> page(s)</span><span><b id="character">160</b> characters left on this page</span></div>
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button type="submit" class="btn-v dark" style="flex:1;padding:15px 22px"><i class="fa-solid fa-paper-plane"></i> Send now</button>
+                    <button id="scheduleSend" type="button" class="btn-v ghost" style="padding:15px 22px"><i class="fa-regular fa-calendar"></i> Schedule</button>
                 </div>
             </form>
         </div>
+
+        <div class="panel">
+            <div class="panel-head" style="margin-bottom:14px"><h3>Preview & Cost</h3></div>
+            <div class="sms-phone">
+                <div class="sms-from">From<b id="preview_sender">SENDER</b></div>
+                <div class="sms-bubble" id="preview_text">Your message will appear here.</div>
+            </div>
+            <div class="sms-stats">
+                <div>
+                    <small>RATE PER PAGE</small>
+                    <b id="preview_rate">₦{{ number_format($rate_per_page ?? 5.00, 2) }}</b>
+                </div>
+                <div>
+                    <small>ESTIMATED TOTAL</small>
+                    <b id="preview_total">₦0.00</b>
+                </div>
+            </div>
+            <div class="note-v info" style="margin-top:14px">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>Rate: <b>₦{{ number_format($rate_per_page ?? 5.00, 2) }}</b> per page. You'll see the total cost and confirm with your PIN before anything is sent.</div>
+            </div>
+        </div>
     </div>
 </div>
-@endsection 
+@endsection
 
 @section('script')
 <script>
     $(document).ready(function() {
-
-        @if (session('message'))
-        Swal.fire('Success!',"{{ session('message') }}",'success');
-    @endif
-        $("#u_amount").on('input',function() {
-        var amount = parseInt($("#u_amount").val()) * 100;
-      
-       
-        if(parseInt($("#u_amount").val()) < 2500) {
-            $("#amount").val((amount) + (0.05 * amount));
-          
-        }
-        else {
-            $("#amount").val((amount) + (0.05 * amount) +10000);
-          
-          
-        }
-        
-        // alert($("#u_amount").val() * 100)
-    })
-    })
-
-</script>
-<script>
-    $(document).ready(function() {
       // Swal.fire('very nice work')
+      const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3500, timerProgressBar: true });
+
       $.ajaxSetup({
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -240,27 +263,29 @@
         $("#select_group_field").show()
         $("#import_field").hide()
       })
+      const ratePerPage = {{ $rate_per_page ?? 5.00 }};
+
+      function updateCostPreview() {
+        var len = $("#sms").val().length;
+        var pages = len === 0 ? 0 : Math.ceil(len / 160);
+        var recipients = parseInt($("#no_of_recipients").text()) || 0;
+        var est = (pages * recipients * ratePerPage).toFixed(2);
+        $("#preview_total").text('₦' + Number(est).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+      }
+
       $("#sms").on('input', function() {
-        var page = parseInt($("#pages").text())
-        var recipient = parseInt($("#no_of_recipients").text())
-        console.log(page, recipient, 'coole')
-        //charge is the amount set by the admin to be charged per each transactions
-        var charge = 4
-        $("#amount_field").val(page * recipient * charge )
-        $("#amount").text(page * recipient * charge)
-      
-        var sms_length = parseInt($("#sms").val().length / page)
-        console.log(sms_length, 'the sms length')
-        if(sms_length < 160) {
-            $("#character").text(160 - sms_length)
-            console.log(sms_length)
-           } else {
-          
-            $("#pages").text(page + 1)
-            $("#character").text('')
-          
-        }
+        var len = $("#sms").val().length;
+        var pages = len === 0 ? 0 : Math.ceil(len / 160);
+        $("#pages").text(pages);
+        $("#character").text(pages === 0 ? 160 : pages * 160 - len);
+        $("#preview_text").text($("#sms").val() || 'Your message will appear here.');
+        updateCostPreview();
       })
+
+      $("#sender_name").on('input', function() {
+        $("#preview_sender").text($(this).val() || 'SENDER');
+      })
+
       $("#scheduleSend").click(function() {
         scheduleSend()
       })
@@ -339,8 +364,8 @@
                         html:
                           `Total Recipients : <b>${response.count_recipient}</b><br> ` +
                           `Total Pages : <b>${response.message_count}</b><br> ` +
-                           
-                          ` Total Charge : <b>NGN ${response.amount}</b><br><span class='text-danger'>Input your four(4) digit PIN to proceed</span>`,
+                          `Rate Per Page : <b>NGN ${response.rate_per_page}</b><br> ` +
+                          `Total Charge : <b>NGN ${response.amount}</b><br><span class='text-danger'>Input your four(4) digit PIN to proceed</span>`,
                         showCloseButton: true,
                         showCancelButton: true,
                         focusConfirm: false,
@@ -476,13 +501,6 @@
 
       $('#contact_field').on('input', function(e) {
         // Get the input value
-        var page = parseInt($("#pages").text())
-        var recipient = parseInt($("#no_of_recipients").text())
-        console.log(page, recipient, 'coole')
-        //charge is the amount set by the admin to be charged per each transactions
-        var charge = 4
-        $("#amount_field").val(page * recipient * charge )
-        $("#amount").text(page * recipient * charge)
         //start copy
         let inputText = e.target.value;
         // var inputText = $(this).val();
@@ -517,6 +535,7 @@
 
         // Update the count
         $("#no_of_recipients").text(phoneNumbers.length);
+        updateCostPreview();
         //end copy
 
     });

@@ -443,6 +443,9 @@ class FundingController extends Controller
         $tranx = Transaction::where('reference', $client_reference)
             ->orderByDesc('created_at')
             ->first();
+        if (!$tranx || $tranx->status == 1) {
+            return;
+        }
         $tranx->reference = $reference;
         // $tranx->description = $message;
         $user = User::find($tranx->user_id);
@@ -462,7 +465,9 @@ class FundingController extends Controller
         $tranx->redo = 1;
         $tranx->save();
         $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
-        $duplicate->delete();
+        if ($duplicate) {
+            $duplicate->delete();
+        }
     }
     public function run_failed($client_reference, $reference, $message)
     {
@@ -470,12 +475,17 @@ class FundingController extends Controller
         $tranx = Transaction::where('reference', $client_reference)
             ->orderByDesc('created_at')
             ->first();
+        if (!$tranx || $tranx->status == 1) {
+            return;
+        }
         $tranx->reference = $reference;
         $tranx->description = $message;
         $tranx->status = 0;
         $tranx->save();
         $duplicate = DuplicateTransaction::where('reference', $client_reference)->latest()->first();
-        $duplicate->delete();
+        if ($duplicate) {
+            $duplicate->delete();
+        }
     }
     public function webhook_payment(Request $request)
     {

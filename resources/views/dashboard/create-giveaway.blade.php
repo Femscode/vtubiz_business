@@ -2,287 +2,235 @@
 
 @section('header')
 <style>
-    .giveaway-header {
-        margin-bottom: var(--space-lg);
+    .charge-box {
+        background: linear-gradient(150deg, #04284d 0%, var(--primary-dark) 60%);
+        color: #fff;
+        border-radius: 18px;
+        padding: 16px 18px;
+        margin: 4px 0 16px;
+    }
+
+    .charge-box .row-c {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
     }
-    .giveaway-header h1 {
+
+    .charge-box small {
+        color: rgba(255, 255, 255, .65);
+        font-weight: 600;
+        font-size: .82rem;
+    }
+
+    .charge-box .amt {
         font-family: 'Fraunces', serif;
-        font-size: 2.2rem;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
+        font-size: 1.5rem;
+        color: var(--brand-orange);
     }
-    .giveaway-card {
-        background: var(--surface);
-        border-radius: var(--radius-lg);
-        padding: var(--space-lg);
-        box-shadow: var(--shadow-card);
+
+    .steps-v {
+        counter-reset: s;
+        display: grid;
+        gap: 14px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
     }
-    .type-toggle {
+
+    .steps-v li {
         display: flex;
-        background: #FDFCF8;
-        padding: 6px;
-        border-radius: var(--radius-pill);
-        border: 1px solid rgba(0,0,0,0.05);
-        margin-bottom: var(--space-lg);
+        gap: 12px;
+        font-size: .9rem;
+        color: #374151;
+        line-height: 1.5;
     }
-    .type-btn {
-        flex: 1;
-        padding: 12px;
-        border-radius: var(--radius-pill);
-        border: none;
-        background: transparent;
-        color: var(--text-secondary);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: 'DM Sans', sans-serif;
-    }
-    .type-btn.active {
+
+    .steps-v li::before {
+        counter-increment: s;
+        content: counter(s);
+        width: 26px;
+        height: 26px;
+        border-radius: 9px;
         background: var(--primary-dark);
-        color: white;
-        box-shadow: 0 4px 12px rgba(15, 53, 72, 0.15);
-    }
-    .guide-box {
-        background: #FFF9E6;
-        border: 1px dashed var(--accent-yellow);
-        border-radius: var(--radius-md);
-        padding: 20px;
-        margin-bottom: var(--space-md);
-    }
-    .form-label-bold {
+        color: #fff;
         font-weight: 700;
-        color: var(--primary-dark);
-        margin-bottom: 8px;
-        display: block;
-        font-size: 0.9rem;
+        font-size: .78rem;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
     }
-    .form-control-custom {
-        width: 100%;
-        padding: 14px 18px;
-        border-radius: var(--radius-md);
-        border: 1px solid rgba(0,0,0,0.08);
-        background: #F9F9F9;
-        font-family: 'DM Sans', sans-serif;
-        transition: all 0.2s ease;
-        margin-bottom: 15px;
-    }
-    .form-control-custom:focus {
-        outline: none;
-        border-color: var(--primary-dark);
-        background: white;
-        box-shadow: 0 0 0 4px rgba(15, 53, 72, 0.05);
-    }
-    .btn-create-final {
-        background: var(--primary-dark);
-        color: white;
-        border: none;
-        padding: 16px;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.1s;
-        width: 100%;
-        margin-top: 10px;
-        font-size: 1rem;
-    }
-    .accordion-custom .accordion-item {
-        border: none;
-        background: transparent;
-        margin-bottom: 10px;
-    }
-    .accordion-custom .accordion-button {
-        background: white;
-        border-radius: 12px !important;
-        box-shadow: none;
-        padding: 15px 20px;
-        font-weight: 600;
-        color: var(--primary-dark);
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    .accordion-custom .accordion-button:not(.collapsed) {
-        color: var(--primary-dark);
-        background: white;
-        border-color: var(--primary-dark);
+
+    .mode-note {
+        font-size: .86rem;
+        color: var(--text-secondary);
+        margin: 0 0 18px;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="giveaway-header">
-    <div>
-        <h1>Create Giveaway</h1>
-        <p class="text-muted">Set up a fun giveaway for your audience.</p>
+<div class="pg">
+    <a href="/my-giveaway" class="pg-back"><i class="fa-solid fa-arrow-left"></i> My giveaways</a>
+    <div class="pg-head">
+        <div>
+            <h1>New <em>giveaway</em></h1>
+            <p>Reward your audience in a few clicks.</p>
+        </div>
     </div>
-    <a href='/my-giveaway' class="btn btn-light" style="border-radius: 20px; padding: 10px 20px; font-weight: 600;">
-        <i class="fa-solid fa-arrow-left me-2"></i> Back
-    </a>
-</div>
 
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="giveaway-card">
-            <div class="type-toggle">
-                <button id='raffle_btn_new' class="type-btn active">Raffle Draw</button>
-                <button id='q_and_a_btn_new' class="type-btn">Questions & Answers</button>
+    <div class="grid-v main-side">
+        <div class="panel">
+            <div class="seg" style="margin-bottom:22px">
+                <button type="button" id="raffle_btn_new" class="active">Raffle draw</button>
+                <button type="button" id="q_and_a_btn_new">Quiz (Q&amp;A)</button>
             </div>
 
-            <!-- Raffle Form -->
-            <div id='raffle_section'>
-                <div class="guide-box">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="serif mb-0" style="color: #856404;"><i class="fa-solid fa-lightbulb me-2"></i> Raffle Draw Guide</h5>
-                        <button class="btn btn-sm" id="raffle_guide_toggle" style="color: #856404; font-weight: 600;">Show Guide</button>
+            <!-- Raffle -->
+            <div id="raffle_section">
+                <p class="mode-note">Each participant gets a number and winners are picked at random.</p>
+                <form id="raffle_form">
+                    <div class="f-group">
+                        <label class="f-label" for="raffle_name">Giveaway name</label>
+                        <input required id="raffle_name" class="f-input" type="text" placeholder="e.g. Weekend special" />
                     </div>
-                    <div id="raffle_guide_content" style="display: none;" class="mt-3">
-                        <div class="accordion accordion-custom" id="raffleAccordion">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#r1">How does it work?</button></h2>
-                                <div id="r1" class="accordion-collapse collapse" data-bs-parent="#raffleAccordion"><div class="accordion-body text-sm">Assigns each participant a random number and picks winners randomly.</div></div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#r2">How to create?</button></h2>
-                                <div id="r2" class="accordion-collapse collapse" data-bs-parent="#raffleAccordion"><div class="accordion-body text-sm">Fill the fields, generate a link, and share with your audience.</div></div>
-                            </div>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label" for="raffle_part_no">Participants</label>
+                            <input required id="raffle_part_no" class="f-input" type="number" min="1" placeholder="Max people" />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label" for="raffle_no_of_winners">Winners</label>
+                            <input required id="raffle_no_of_winners" class="f-input" type="number" min="1" placeholder="How many win" />
                         </div>
                     </div>
-                </div>
-
-                <form id='raffle_form'>
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label-bold">Giveaway Name</label>
-                            <input required id='raffle_name' class="form-control-custom" type="text" placeholder="e.g. Weekend Special Giveaway" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Total Participants</label>
-                            <input required id='raffle_part_no' class="form-control-custom" type="number" placeholder="Max people" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Number of Winners</label>
-                            <input required id='raffle_no_of_winners' class="form-control-custom" type="number" placeholder="Expected winners" />
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label-bold">Entry Fee (Optional)</label>
-                            <input id='raffle_entry_fee' class="form-control-custom" type="number" placeholder="Amount to charge participants" value="0" />
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Giveaway Type</label>
-                            <select class='form-control-custom' id='type'>
-                                <option value='Data'>Data Giveaway</option>
-                                <option value='Airtime'>Airtime Giveaway</option>
-                                <option value='Cash'>Cash Prize</option>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label" for="type">Prize type</label>
+                            <select class="f-input" id="type">
+                                <option value="Data">Data</option>
+                                <option value="Airtime">Airtime</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </div>
-                        
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Prize Value</label>
-                            <div id='data_plan_select'>
-                                <select id='raffle_winner_price' class="form-control-custom">
+                        <div class="f-group">
+                            <label class="f-label">Prize per winner</label>
+                            <div id="data_plan_select">
+                                <select id="raffle_winner_price" class="f-input">
                                     <option data-price="180" value="500MB">500MB</option>
-                                    <option data-price='290' value="1GB">1GB</option>
-                                    <option data-price='590' value="2GB">2GB</option>
-                                    <option data-price='850' value="3GB">3GB</option>
-                                    <option data-price='1550' value="5GB">5GB</option>
-                                    <option data-price='2900' value="10GB">10GB</option>
+                                    <option data-price="290" value="1GB">1GB</option>
+                                    <option data-price="590" value="2GB">2GB</option>
+                                    <option data-price="850" value="3GB">3GB</option>
+                                    <option data-price="1550" value="5GB">5GB</option>
+                                    <option data-price="2900" value="10GB">10GB</option>
                                 </select>
                             </div>
-                            <div id='airtime_plan_input' style='display:none'>
-                                <input id='raffle_airtime_price' class='form-control-custom' type='number' placeholder='Amount' min='100' />
+                            <div id="airtime_plan_input" style="display:none">
+                                <input id="raffle_airtime_price" class="f-input" type="number" placeholder="₦ amount" min="100" />
                             </div>
-                            <div id='cash_plan_input' style='display:none'>
-                                <input id='raffle_cash_price' class='form-control-custom' type='number' placeholder='Amount' min='500' />
+                            <div id="cash_plan_input" style="display:none">
+                                <input id="raffle_cash_price" class="f-input" type="number" placeholder="₦ amount" min="500" />
                             </div>
                         </div>
                     </div>
-
-                    <div id='raffle_charge_display' style='display:none' class='alert alert-success py-3 mt-3' style="border-radius: 12px; border: none; background: rgba(39, 174, 96, 0.1); color: var(--accent-green);">
-                        <input type='hidden' id='raffle_amount' />
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="font-weight-bold">Total Charge:</span>
-                            <span class="serif font-weight-bold" style="font-size: 1.2rem;">₦<span id='raffle_estimated_amount'>0</span></span>
+                    <div class="f-group">
+                        <label class="f-label" for="raffle_entry_fee">Entry fee <span style="color:var(--text-light);font-weight:500">(optional)</span></label>
+                        <div class="f-affix">
+                            <span class="pre">₦</span>
+                            <input id="raffle_entry_fee" class="f-input" type="number" min="0" placeholder="0" value="0" />
                         </div>
                     </div>
 
-                    <button type='submit' class='btn-create-final'>Create Raffle Giveaway</button>
+                    <div id="raffle_charge_display" class="charge-box" style="display:none">
+                        <input type="hidden" id="raffle_amount" />
+                        <div class="row-c">
+                            <small>You'll be charged</small>
+                            <span class="amt">₦<span id="raffle_estimated_amount">0</span></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-v dark block">Create raffle <i class="fa-solid fa-arrow-right"></i></button>
                 </form>
             </div>
 
-            <!-- Q&A Section -->
-            <div id='q_and_a_section' style='display:none'>
-                <div class="guide-box">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="serif mb-0" style="color: #856404;"><i class="fa-solid fa-lightbulb me-2"></i> Q & A Guide</h5>
-                        <button class="btn btn-sm" id="q_guide_toggle" style="color: #856404; font-weight: 600;">Show Guide</button>
+            <!-- Q&A -->
+            <div id="q_and_a_section" style="display:none">
+                <p class="mode-note">Participants answer your questions; the fastest correct answers win.</p>
+                <form id="q_form">
+                    <div class="f-group">
+                        <label class="f-label" for="q_name">Giveaway name</label>
+                        <input required id="q_name" class="f-input" type="text" placeholder="e.g. Business quiz" />
                     </div>
-                    <div id="q_guide_content" style="display: none;" class="mt-3">
-                        <p class="text-sm opacity-80">Participants must answer questions correctly to claim prizes. First come, first served.</p>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label" for="q_no_of_winners">Winners</label>
+                            <input required id="q_no_of_winners" class="f-input" type="number" min="1" placeholder="How many win" />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label" for="q_time">Time limit (mins)</label>
+                            <input required id="q_time" class="f-input" type="number" min="1" placeholder="Quiz duration" />
+                        </div>
                     </div>
-                </div>
-
-                <form id='q_form'>
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label-bold">Giveaway Name</label>
-                            <input required id='q_name' class="form-control-custom" type="text" placeholder="e.g. Business Quiz" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Number of Winners</label>
-                            <input required id='q_no_of_winners' class="form-control-custom" type="number" placeholder="Max winners" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Time Limit (Mins)</label>
-                            <input required id='q_time' class="form-control-custom" type="number" placeholder="Quiz duration" />
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label-bold">Entry Fee (Optional)</label>
-                            <input id='q_entry_fee' class="form-control-custom" type="number" placeholder="0" value="0" />
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Giveaway Type</label>
-                            <select class='form-control-custom' id='qtype'>
-                                <option value='Data'>Data Giveaway</option>
-                                <option value='Airtime'>Airtime Giveaway</option>
-                                <option value='Cash'>Cash Prize</option>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label" for="qtype">Prize type</label>
+                            <select class="f-input" id="qtype">
+                                <option value="Data">Data</option>
+                                <option value="Airtime">Airtime</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </div>
-                        
-                        <div class="col-md-6">
-                            <label class="form-label-bold">Prize Value</label>
-                            <div id='q_data_plan_select'>
-                                <select id='q_winner_price' class="form-control-custom">
+                        <div class="f-group">
+                            <label class="f-label">Prize per winner</label>
+                            <div id="q_data_plan_select">
+                                <select id="q_winner_price" class="f-input">
                                     <option data-price="180" value="500MB">500MB</option>
-                                    <option data-price='290' value="1GB">1GB</option>
-                                    <option data-price='590' value="2GB">2GB</option>
-                                    <option data-price='850' value="3GB">3GB</option>
-                                    <option data-price='1550' value="5GB">5GB</option>
-                                    <option data-price='2900' value="10GB">10GB</option>
+                                    <option data-price="290" value="1GB">1GB</option>
+                                    <option data-price="590" value="2GB">2GB</option>
+                                    <option data-price="850" value="3GB">3GB</option>
+                                    <option data-price="1550" value="5GB">5GB</option>
+                                    <option data-price="2900" value="10GB">10GB</option>
                                 </select>
                             </div>
-                            <div id='q_airtime_plan_input' style='display:none'>
-                                <input id='q_airtime_price' class='form-control-custom' type='number' placeholder='Amount' min='100' />
+                            <div id="q_airtime_plan_input" style="display:none">
+                                <input id="q_airtime_price" class="f-input" type="number" placeholder="₦ amount" min="100" />
                             </div>
-                            <div id='q_cash_plan_input' style='display:none'>
-                                <input id='q_cash_price' class='form-control-custom' type='number' placeholder='Amount' min='500' />
+                            <div id="q_cash_plan_input" style="display:none">
+                                <input id="q_cash_price" class="f-input" type="number" placeholder="₦ amount" min="500" />
                             </div>
                         </div>
                     </div>
-
-                    <div id='q_charge_display' style='display:none' class='alert alert-success py-3 mt-3' style="border-radius: 12px; border: none; background: rgba(39, 174, 96, 0.1); color: var(--accent-green);">
-                        <input type='hidden' id='q_amount' />
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="font-weight-bold">Total Charge:</span>
-                            <span class="serif font-weight-bold" style="font-size: 1.2rem;">₦<span id='q_estimated_amount'>0</span></span>
+                    <div class="f-group">
+                        <label class="f-label" for="q_entry_fee">Entry fee <span style="color:var(--text-light);font-weight:500">(optional)</span></label>
+                        <div class="f-affix">
+                            <span class="pre">₦</span>
+                            <input id="q_entry_fee" class="f-input" type="number" min="0" placeholder="0" value="0" />
                         </div>
                     </div>
 
-                    <button type='submit' class='btn-create-final'>Create Q&A Giveaway</button>
+                    <div id="q_charge_display" class="charge-box" style="display:none">
+                        <input type="hidden" id="q_amount" />
+                        <div class="row-c">
+                            <small>You'll be charged</small>
+                            <span class="amt">₦<span id="q_estimated_amount">0</span></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-v dark block">Create quiz <i class="fa-solid fa-arrow-right"></i></button>
                 </form>
             </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head">
+                <h3>How it works</h3>
+            </div>
+            <ol class="steps-v">
+                <li>Choose a raffle or a quiz, then set the prize and number of winners.</li>
+                <li>Confirm with your PIN. The total prize value is charged to your wallet.</li>
+                <li>For quizzes, add your questions to activate the link.</li>
+                <li>Share the link. Winners receive their prize automatically.</li>
+            </ol>
         </div>
     </div>
 </div>

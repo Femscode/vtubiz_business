@@ -587,6 +587,7 @@ class BusinessController extends Controller
         if ($user->user_type == 'customer') {
             return redirect('/my-dashboard');
         }
+        $data['rate_per_page'] = floatval(config('services.smartsms.cost_per_page') ?? env('SMARTSMS_COST_PER_PAGE', 5.00));
 
         return view('business_backend.bulksms_price', $data);
     }

@@ -1,786 +1,691 @@
 <template>
-  <div class="purchase-page">
-    <!-- Purchase Type Toggle -->
-    <div class="tabs-container">
-      <button 
-        @click="purchaseType = 'single'" 
-        :class="['tab', { active: purchaseType === 'single' }]"
-      >Single Purchase</button>
-      <button 
-        @click="purchaseType = 'group'" 
-        :class="['tab', { active: purchaseType === 'group' }]"
-      >Group Purchase</button>
+  <div class="vx-buy">
+    <!-- Mode -->
+    <div class="vx-tabs" role="tablist">
+      <button type="button" role="tab" :aria-selected="String(mode === 'single')" :class="['vx-tab', { on: mode === 'single' }]" @click="mode = 'single'">
+        <i class="fa-solid fa-user"></i> Single
+      </button>
+      <button type="button" role="tab" :aria-selected="String(mode === 'group')" :class="['vx-tab', { on: mode === 'group' }]" @click="mode = 'group'">
+        <i class="fa-solid fa-users"></i> Group
+      </button>
     </div>
 
-    <div class="grid-layout">
-      <!-- Main Form Section -->
-      <div class="form-section">
-        
-        <!-- Single Purchase Flow -->
-        <div v-if="purchaseType === 'single'">
-          
-          <!-- 1. Beneficiary list first -->
-          <div class="section-group" v-if="beneficiaries.length > 0">
-            <h3 class="section-label">SAVED BENEFICIARIES</h3>
-            <div class="beneficiary-scroll">
-              <div class="beneficiary-pills-container">
-                <div 
-                  v-for="ben in beneficiaries" 
-                  :key="ben.id" 
-                  class="beneficiary-pill"
-                  @click="useBeneficiary(ben)"
-                >
-                  <div class="b-avatar">{{ ben.name.substring(0,2).toUpperCase() }}</div>
-                  <span class="b-name">{{ ben.name }}</span>
+    <div class="vx-grid">
+      <div class="vx-main">
+        <!-- ============ SINGLE ============ -->
+        <div v-if="mode === 'single'" class="vx-card">
+          <!-- Saved beneficiaries -->
+          <section v-if="beneficiaries.length" class="vx-step vx-step-bens">
+            <div class="vx-step-head">
+              <h3 class="vx-step-title">Quick pick</h3>
+              <span class="vx-step-meta">Saved beneficiaries</span>
+            </div>
+            <div class="vx-bens">
+              <button
+                v-for="ben in beneficiaries"
+                :key="ben.id"
+                type="button"
+                :class="['vx-ben', { on: samePhone(ben.phone, phone) }]"
+                @click="useBeneficiary(ben)"
+              >
+                <span class="vx-ben-av">{{ initials(ben.name) }}</span>
+                <span class="vx-ben-txt">
+                  <span class="vx-ben-name">{{ ben.name }}</span>
+                  <span class="vx-ben-phone">{{ formatPhone(ben.phone) }}</span>
+                </span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 1. Network -->
+          <section :class="['vx-step', { done: !!network }]">
+            <div class="vx-step-head">
+              <h3 class="vx-step-title"><span class="vx-step-num"><span>1</span></span>Choose network</h3>
+            </div>
+            <network-picker v-model="network" :detected="detected" />
+          </section>
+
+          <!-- 2. Plan -->
+          <section :class="['vx-step', { done: !!selectedPlan }]">
+            <div class="vx-step-head">
+              <h3 class="vx-step-title"><span class="vx-step-num"><span>2</span></span>Pick a plan</h3>
+              <span class="vx-step-meta" v-if="network && currentPlans.length">{{ currentPlans.length }} plans</span>
+            </div>
+
+            <div v-if="!network" class="vx-empty">Select a network above to see available plans.</div>
+
+            <div v-else-if="loading[network]" class="vx-plan-grid">
+              <div v-for="n in 6" :key="n" class="vx-skel" style="height: 108px"></div>
+            </div>
+
+            <div v-else-if="planError[network]" class="vx-empty">
+              {{ planError[network] }}
+              <div><button type="button" class="vx-link-btn" @click="loadPlans(network, true)">Retry</button></div>
+            </div>
+
+            <div v-else-if="!currentPlans.length" class="vx-empty">No plans are available for {{ networkName(network) }} right now.</div>
+
+            <template v-else>
+              <div class="vx-plan-tools">
+                <div class="vx-chips" v-if="planTypes.length > 1">
+                  <button type="button" :class="['vx-chip', { on: planType === 'all' }]" @click="planType = 'all'">All</button>
+                  <button v-for="t in planTypes" :key="t" type="button" :class="['vx-chip', { on: planType === t }]" @click="planType = t">{{ t }}</button>
+                </div>
+                <div class="vx-field vx-plan-search" v-if="currentPlans.length > 8">
+                  <span class="vx-field-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input v-model.trim="planQuery" type="search" class="vx-input has-icon" placeholder="Search e.g. 2GB, 30 days" />
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- 2. Network select field second -->
-          <div class="section-group">
-            <h3 class="section-label">SELECT NETWORK</h3>
-            <div class="input-group">
-              <select 
-                v-model="network" 
-                @change="fetchPlan()"
-                class="input-field"
-              >
-                <option value="">-- Choose Network --</option>
-                <option v-for="net in networks" :key="net.id" :value="net.id">
-                  {{ net.name }}
-                </option>
-              </select>
-            </div>
-          </div>
+              <div class="vx-plan-grid" role="radiogroup" aria-label="Data plans">
+                <button
+                  v-for="p in filteredPlans"
+                  :key="p.id"
+                  type="button"
+                  role="radio"
+                  :aria-checked="String(selectedPlanId == p.id)"
+                  :class="['vx-plan', { on: selectedPlanId == p.id }]"
+                  @click="selectedPlanId = p.id"
+                >
+                  <span v-if="p._meta.type" class="vx-plan-type">{{ p._meta.type }}</span>
+                  <span class="vx-plan-size">{{ p._meta.size || p.plan_name }}</span>
+                  <span class="vx-plan-valid">{{ p._meta.validity || (p._meta.size ? p.plan_name : '') }}</span>
+                  <span class="vx-plan-price">₦{{ fmt(p.admin_price) }}</span>
+                </button>
+              </div>
+              <div v-if="!filteredPlans.length" class="vx-empty">No plans match “{{ planQuery }}”.</div>
+            </template>
+          </section>
 
-          <!-- 3. Plan select field third -->
-          <div class="section-group" v-if="network">
-            <h3 class="section-label">SELECT PLAN</h3>
-            <div class="input-group">
-              <select 
-                v-model="selectedPlan" 
-                class="input-field"
-                :disabled="plans.length === 0"
-              >
-                <option value="">-- Choose Plan --</option>
-                <option v-for="plan in plans" :key="plan.id" :value="plan.id">
-                  {{ plan.plan_name }} (₦{{ numberFormat(plan.admin_price) }})
-                </option>
-              </select>
+          <!-- 3. Recipient -->
+          <section :class="['vx-step', { done: phoneValid }]">
+            <div class="vx-step-head">
+              <h3 class="vx-step-title"><span class="vx-step-num"><span>3</span></span>Recipient number</h3>
             </div>
-          </div>
-
-          <!-- 4. Phone number fourth -->
-          <div class="section-group">
-            <h3 class="section-label">RECIPIENT</h3>
-            <div class="input-group">
-              <label class="input-label">Phone Number</label>
-              <input 
-                type="tel" 
-                v-model="phone_number" 
-                @input="fetchNetwork()"
+            <div class="vx-field">
+              <span class="vx-field-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+              <input
+                v-model="phone"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                maxlength="16"
                 placeholder="0803 000 0000"
-                class="input-field"
-              >
+                :class="['vx-input', 'has-icon', { invalid: phoneTouched && phone && !phoneValid }]"
+                @blur="phoneTouched = true"
+              />
+              <span class="vx-field-suffix" v-if="detecting"><span class="vx-spin"></span></span>
             </div>
-            
-            <div class="save-beneficiary-check">
-              <input type="checkbox" id="save-bene" @change="saveBeneficiary">
-              <label for="save-bene">Save as beneficiary</label>
-            </div>
-          </div>
 
+            <p v-if="phoneTouched && phone && !phoneValid" class="vx-hint err">Enter a valid 11-digit Nigerian number.</p>
+            <div v-else-if="mismatch" class="vx-hint warn">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>This looks like a {{ networkName(detected) }} number. Ported? Keep {{ networkName(network) }}, or</span>
+              <button type="button" class="vx-link-btn" @click="network = detected">switch to {{ networkName(detected) }}</button>
+            </div>
+            <p v-else-if="phoneValid && detected" class="vx-hint ok"><i class="fa-solid fa-circle-check"></i> {{ networkName(detected) }} number</p>
+
+            <div v-if="knownBeneficiary" class="vx-saved-tag"><i class="fa-solid fa-bookmark"></i> Saved as <b>{{ knownBeneficiary.name }}</b></div>
+            <template v-else>
+              <label class="vx-switch">
+                <input type="checkbox" v-model="saveBen" />
+                <span class="vx-switch-track"></span>
+                Save as beneficiary
+              </label>
+              <input
+                v-if="saveBen"
+                v-model.trim="benName"
+                type="text"
+                maxlength="40"
+                class="vx-input vx-ben-name-input"
+                placeholder="Name, e.g. Mum's line"
+              />
+            </template>
+          </section>
         </div>
 
-        <!-- Group Recipients (Group Purchase) -->
-        <div class="section-group" v-if="purchaseType === 'group'">
-          <h3 class="section-label">MULTI-NETWORK RECIPIENTS</h3>
-          <div class="recipient-list-scroll">
-            <div class="recipient-list">
-              <div class="recipient-header d-none d-md-grid">
-                <div>PHONE NUMBER</div>
-                <div>NETWORK</div>
-                <div>SELECT PLAN</div>
-                <div></div>
-              </div>
-              <div v-for="(rec, index) in groupRecipients" :key="index" class="recipient-row stacked-mobile">
-                <div class="mobile-label d-md-none">RECIPIENT {{ index + 1 }}</div>
-                <div class="input-wrapper">
-                  <span class="field-icon d-md-none">📱</span>
-                  <input 
-                    type="tel" 
-                    v-model="rec.phone" 
-                    class="table-input" 
-                    placeholder="Phone Number"
-                    @input="autoDetectNetworkForRow(index)"
-                  >
+        <!-- ============ GROUP ============ -->
+        <div v-else class="vx-card">
+          <section class="vx-step vx-step-flat">
+            <div class="vx-step-head">
+              <h3 class="vx-step-title">Recipients</h3>
+              <span class="vx-step-meta">{{ groupReadyCount }} of {{ group.length }} ready</span>
+            </div>
+
+            <div class="vx-rows">
+              <div v-for="(row, i) in group" :key="row.uid" :class="['vx-row', { ready: rowReady(row) }]">
+                <div class="vx-row-top">
+                  <span class="vx-row-idx">{{ i + 1 }}</span>
+                  <div class="vx-field vx-row-phone">
+                    <input
+                      v-model="row.phone"
+                      type="tel"
+                      inputmode="numeric"
+                      maxlength="16"
+                      placeholder="Phone number"
+                      :class="['vx-input', { invalid: row.phone && normalize(row.phone).length >= 11 && !validPhone(row.phone) }]"
+                      @input="onRowPhone(row)"
+                    />
+                    <span class="vx-field-suffix" v-if="row.detecting"><span class="vx-spin"></span></span>
+                  </div>
+                  <button type="button" class="vx-row-x" :aria-label="'Remove recipient ' + (i + 1)" @click="removeRow(i)">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
                 </div>
-                <div class="input-wrapper">
-                  <span class="field-icon d-md-none">🌐</span>
-                  <select v-model="rec.network_id" class="table-select" @change="fetchPlansForRow(index)">
-                    <option value="">Network</option>
-                    <option v-for="net in networks" :key="net.id" :value="net.id">{{ net.name }}</option>
-                  </select>
-                </div>
-                <div class="input-wrapper">
-                  <span class="field-icon d-md-none">📦</span>
-                  <select v-model="rec.plan_id" class="table-select" :disabled="!rec.network_id">
-                    <option value="">-- Select Plan --</option>
-                    <option v-for="plan in (cachedPlans[rec.network_id] || [])" :key="plan.id" :value="plan.id">
-                      {{ plan.plan_name }} (₦{{ numberFormat(plan.admin_price) }})
+
+                <network-picker :value="row.network_id" :detected="row.detected" compact @input="setRowNetwork(row, $event)" />
+
+                <div class="vx-row-plan">
+                  <select v-model="row.plan_id" class="vx-input vx-select" :disabled="!row.network_id || loading[row.network_id]">
+                    <option value="">{{ !row.network_id ? 'Choose a network first' : (loading[row.network_id] ? 'Loading plans…' : 'Select a plan') }}</option>
+                    <option v-for="p in plansFor(row.network_id)" :key="p.id" :value="p.id">
+                      {{ p.plan_name }} — ₦{{ fmt(p.admin_price) }}
                     </option>
                   </select>
-                </div>
-                <div @click="removeRecipient(index)" class="remove-icon">
-                  <span class="d-md-none mr-2">Remove Recipient</span> ×
+                  <span class="vx-row-price" v-if="rowPlan(row)">₦{{ fmt(rowPlan(row).admin_price) }}</span>
                 </div>
               </div>
             </div>
-          </div>
-          <button @click="addRecipient" class="add-row-btn">+ Add another recipient</button>
+
+            <div class="vx-row-actions">
+              <button type="button" class="vx-add" @click="addRow()"><i class="fa-solid fa-plus"></i> Add recipient</button>
+              <button type="button" class="vx-add ghost" @click="pasteOpen = !pasteOpen"><i class="fa-regular fa-clipboard"></i> Paste numbers</button>
+            </div>
+
+            <div v-if="pasteOpen" class="vx-paste">
+              <textarea v-model="pasteText" rows="4" class="vx-input" placeholder="Paste numbers separated by commas, spaces or new lines"></textarea>
+              <div class="vx-paste-foot">
+                <span class="vx-step-meta">{{ pastedNumbers.length }} valid number(s) found</span>
+                <button type="button" class="vx-chip on" :disabled="!pastedNumbers.length" @click="importPasted">Add to list</button>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
-      <!-- Summary Sidebar -->
-      <div class="summary-column">
-        <div class="summary-card">
-          <h3 class="section-label">Purchase Summary</h3>
-          
-          <div class="summary-row">
-            <span>Network</span>
-            <span class="summary-value">{{ getNetworkName(network) }}</span>
-          </div>
-          
-          <div class="summary-row">
-            <span>Plan</span>
-            <span class="summary-value">{{ getSelectedPlanName() }}</span>
-          </div>
-          
-          <div class="summary-row">
-            <span>Recipient</span>
-            <span class="summary-value">{{ phone_number || '---' }}</span>
-          </div>
+      <!-- ============ SUMMARY ============ -->
+      <aside class="vx-side">
+        <div class="vx-summary">
+          <span class="vx-sum-eyebrow">Order summary</span>
 
-          <div class="total-section">
-            <span class="total-label">Total Pay</span>
-            <span class="total-amount">₦{{ numberFormat(calculateTotal()) }}</span>
-          </div>
+          <template v-if="mode === 'single'">
+            <div class="vx-sum-hero">
+              <span :class="['vx-sum-logo', netKey(network)]">{{ netMono(network) }}</span>
+              <div>
+                <div class="vx-sum-big">{{ selectedPlan ? (selectedPlan._meta.size || selectedPlan.plan_name) : 'Data bundle' }}</div>
+                <div class="vx-sum-small">{{ selectedPlan ? (selectedPlan._meta.validity || networkName(network)) : 'Choose a network & plan' }}</div>
+              </div>
+            </div>
+            <ul class="vx-sum-rows">
+              <li><span>Network</span><strong>{{ networkName(network) || '—' }}</strong></li>
+              <li><span>Plan</span><strong :title="selectedPlan && selectedPlan.plan_name">{{ selectedPlan ? selectedPlan.plan_name : '—' }}</strong></li>
+              <li><span>Recipient</span><strong>{{ phoneValid ? formatPhone(phone) : '—' }}</strong></li>
+            </ul>
+          </template>
 
-          <button 
-            class="btn-primary" 
-            :disabled="!isReady"
-            @click="buyData()"
-          >
-            Buy Now
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
+          <template v-else>
+            <div class="vx-sum-hero">
+              <span class="vx-sum-logo"><i class="fa-solid fa-users"></i></span>
+              <div>
+                <div class="vx-sum-big">{{ groupReadyCount }} recipient{{ groupReadyCount === 1 ? '' : 's' }}</div>
+                <div class="vx-sum-small">Group data purchase</div>
+              </div>
+            </div>
+            <ul class="vx-sum-rows">
+              <li v-for="n in groupNetworkBreakdown" :key="n.id"><span>{{ n.name }}</span><strong>{{ n.count }} × · ₦{{ fmt(n.amount) }}</strong></li>
+              <li v-if="!groupNetworkBreakdown.length"><span>Recipients</span><strong>—</strong></li>
+            </ul>
+          </template>
+
+          <div class="vx-sum-total"><span>Total</span><strong>₦{{ fmt(total) }}</strong></div>
+
+          <button type="button" class="vx-cta" :disabled="!isReady" @click="openCheckout">
+            {{ ctaLabel }}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
-          
-         
+          <p class="vx-cta-hint" v-if="!isReady">{{ missingHint }}</p>
+
+          <div v-if="balance !== null" :class="['vx-balance', { low: total > balance }]">
+            <span><i class="fa-solid fa-wallet"></i>&nbsp; Wallet ₦{{ fmt(balance) }}</span>
+            <a href="/fundwallet">Top up</a>
+          </div>
         </div>
-      </div>
+      </aside>
     </div>
+
+    <!-- Mobile pay bar -->
+    <div class="vx-paybar">
+      <div class="vx-paybar-total"><small>{{ isReady ? 'Total' : missingHint }}</small><strong>₦{{ fmt(total) }}</strong></div>
+      <button type="button" class="vx-cta" :disabled="!isReady" @click="openCheckout">Buy now</button>
+    </div>
+
+    <checkout-sheet
+      :open="sheetOpen"
+      :title="mode === 'single' ? 'Buy data' : 'Group data purchase'"
+      noun="data"
+      :items="sheetItems"
+      :total="total"
+      :balance="balance"
+      :submit="submitPurchase"
+      @close="sheetOpen = false"
+      @done="finish"
+    />
   </div>
 </template>
 
 <script>
+import NetworkPicker from './purchase/NetworkPicker.vue';
+import CheckoutSheet from './purchase/CheckoutSheet.vue';
+import {
+  NETWORKS, networkById, normalizePhone, isValidPhone, formatPhone, fmt,
+  detectNetwork, parsePlan, isSuccess, errorMessage,
+} from './purchase/helpers';
+
+let uid = 0;
+const newRow = (phone = '') => ({ uid: ++uid, phone, network_id: '', plan_id: '', detected: null, detecting: false });
+
 export default {
-  props: ["user", "company", "beneficiaries"],
+  components: { NetworkPicker, CheckoutSheet },
+  props: {
+    user: { type: Object, default: () => ({}) },
+    beneficiaries: { type: Array, default: () => [] },
+  },
   data() {
     return {
-      purchaseType: 'single',
-      phone_number: "",
-      network: "",
-      selectedPlan: "",
-      plans: [],
-      cachedPlans: {},
-      ben_name: "",
-      transfer_status: false,
-      groupRecipients: [{ phone: '', network_id: '', plan_id: '' }],
-      networks: [
-        { id: "1", name: "MTN" },
-        { id: "2", name: "GLO" },
-        { id: "3", name: "Airtel" },
-        { id: "4", name: "9Mobile" }
-      ]
+      mode: 'single',
+      network: '',
+      phone: '',
+      phoneTouched: false,
+      detected: null,
+      detecting: false,
+      selectedPlanId: '',
+      planType: 'all',
+      planQuery: '',
+      plansByNetwork: {},
+      loading: {},
+      planError: {},
+      saveBen: false,
+      benName: '',
+      group: [newRow()],
+      pasteOpen: false,
+      pasteText: '',
+      sheetOpen: false,
     };
   },
   computed: {
-    isReady() {
-      if (this.purchaseType === 'single') {
-        return this.network && this.selectedPlan && this.phone_number.length >= 10;
-      }
-      return this.groupRecipients.length > 0 && 
-             this.groupRecipients.every(r => r.phone.length >= 10 && r.network_id && r.plan_id);
-    }
-  },
-  methods: {
-    autoDetectNetworkForRow(index) {
-      const rec = this.groupRecipients[index];
-      if (rec.phone.length >= 10 && rec.phone.length <= 12) {
-        axios.get("/fetchnetwork/" + rec.phone)
-          .then((response) => {
-            if (response.data !== 0) {
-              rec.network_id = response.data.toString();
-              this.fetchPlansForRow(index);
-            }
-          });
-      }
+    balance() {
+      const b = this.user ? parseFloat(this.user.balance) : NaN;
+      return isNaN(b) ? null : b;
     },
-    fetchPlansForRow(index) {
-      const netId = this.groupRecipients[index].network_id;
-      if (netId && !this.cachedPlans[netId]) {
-        axios.get("/fetchplan/" + netId)
-          .then((response) => {
-            if (response.data !== false) {
-              this.$set(this.cachedPlans, netId, response.data);
-            }
-          });
-      }
+    phoneValid() {
+      return isValidPhone(this.phone);
     },
-    useBeneficiary(ben) {
-      this.phone_number = ben.phone;
-      this.fetchNetwork();
+    mismatch() {
+      return this.phoneValid && this.detected && this.network && this.detected != this.network;
     },
-    getNetworkName(id) {
-      const net = this.networks.find(n => n.id == id);
-      return net ? net.name : '---';
+    knownBeneficiary() {
+      if (!this.phoneValid) return null;
+      return this.beneficiaries.find((b) => this.samePhone(b.phone, this.phone)) || null;
     },
-    getPlanName(id, netId = null) {
-      if (!id) return '';
-      const plans = netId ? (this.cachedPlans[netId] || []) : this.plans;
-      const plan = plans.find(p => p.id == id);
-      return plan ? plan.plan_name : '';
+    currentPlans() {
+      return this.plansFor(this.network);
     },
-    getSelectedPlanName() {
-      if (this.purchaseType === 'single') {
-        const plan = this.plans.find(p => p.id == this.selectedPlan);
-        return plan ? plan.plan_name : '---';
-      }
-      const selectedCount = this.groupRecipients.filter(r => r.plan_id).length;
-      return `${selectedCount} Item(s) in Group`;
+    planTypes() {
+      const set = [];
+      this.currentPlans.forEach((p) => {
+        if (p._meta.type && set.indexOf(p._meta.type) === -1) set.push(p._meta.type);
+      });
+      return set;
     },
-    calculateTotal() {
-      if (this.purchaseType === 'single') {
-        const plan = this.plans.find(p => p.id == this.selectedPlan);
-        return plan ? Number(plan.admin_price) : 0;
-      } else {
-        return this.groupRecipients.reduce((total, r) => {
-          if (!r.network_id || !r.plan_id) return total;
-          const plans = this.cachedPlans[r.network_id] || [];
-          const plan = plans.find(p => p.id == r.plan_id);
-          return total + (plan ? Number(plan.admin_price) : 0);
-        }, 0);
-      }
-    },
-    numberFormat(val) {
-      return new Intl.NumberFormat().format(val || 0);
-    },
-    addRecipient() {
-      this.groupRecipients.push({ phone: '', network_id: '', plan_id: '' });
-    },
-    removeRecipient(index) {
-      if (this.groupRecipients.length > 1) {
-        this.groupRecipients.splice(index, 1);
-      } else {
-        this.groupRecipients[0].phone = '';
-        this.groupRecipients[0].network_id = '';
-        this.groupRecipients[0].plan_id = '';
-      }
-    },
-    fetchNetwork() {
-      if (this.phone_number.length >= 10 && this.phone_number.length <= 12) {
-        axios.get("/fetchnetwork/" + this.phone_number)
-          .then((response) => {
-            if (response.data !== 0) {
-              this.network = response.data;
-              this.fetchPlan();
-              this.transfer_status = true;
-            }
-          })
-          .catch((error) => {
-            this.transfer_status = false;
-          });
-      } else {
-        this.selectedPlan = null;
-        this.plans = [];
-        this.network = null;
-        this.transfer_status = false;
-      }
-    },
-    fetchPlan() {
-      if (this.network) {
-        this.selectedPlan = ""; // Reset selected plan on network change
-        axios.get("/fetchplan/" + this.network)
-          .then((response) => {
-            if (response.data !== false) {
-              this.plans = response.data;
-              this.transfer_status = true;
-            }
-          })
-          .catch((error) => {
-            this.transfer_status = false;
-          });
-      } else {
-        this.plans = [];
-        this.selectedPlan = "";
-      }
-    },
-    buyData() {
-      if (!this.isReady) return;
-      
-      const totalAmount = this.calculateTotal();
-      const planName = this.getSelectedPlanName();
-      const recipientsCount = this.purchaseType === 'single' ? 1 : this.groupRecipients.length;
-      
-      Swal.fire({
-        title: "Confirm Purchase",
-        text: this.purchaseType === 'single' 
-          ? `You are about to buy ${planName} for ${this.phone_number}. Total: ₦${this.numberFormat(totalAmount)}. Enter PIN to proceed.`
-          : `You are about to buy ${this.getSelectedPlanName()} for ${recipientsCount} recipients. Total: ₦${this.numberFormat(totalAmount)}. Enter PIN to proceed.`,
-        icon: "warning",
-        input: "password",
-        inputAttributes: {
-          inputmode: "numeric",
-          maxlength: 4,
-          style: "text-align:center;font-size:24px;letter-spacing: 20px",
-        },
-        showCancelButton: true,
-        confirmButtonColor: "#0F3548",
-        confirmButtonText: "Buy Now",
-        inputValidator: (text) => {
-          if (!/^\d{4}$/.test(text)) return "Please enter a 4-digit PIN";
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({ title: "Processing...", didOpen: () => { Swal.showLoading(); } });
-          
-          let fd = new FormData();
-          
-          if (this.purchaseType === 'single') {
-            const actualPlan = this.plans.find(p => p.id == this.selectedPlan);
-            fd.append("network", this.network);
-            fd.append("plan", actualPlan ? actualPlan.plan_id : this.selectedPlan);
-            fd.append("phone_number", this.phone_number);
-          } else {
-            const recipientsWithDetails = this.groupRecipients.map(r => {
-              const plans = this.cachedPlans[r.network_id] || [];
-              const actualPlan = plans.find(p => p.id == r.plan_id);
-              return {
-                phone: r.phone,
-                network: r.network_id,
-                plan: actualPlan ? actualPlan.plan_id : r.plan_id
-              };
-            });
-            fd.append("recipients", JSON.stringify(recipientsWithDetails));
-          }
-          
-          fd.append("pin", result.value);
-          fd.append("purchase_type", this.purchaseType);
-
-          const endpoint = this.purchaseType === 'single' ? "/buydata" : "/bulk_buydata";
-
-          axios.post(endpoint, fd).then((response) => {
-            if (response.data.success == "true" || response.data.status == "success") {
-              Swal.fire("Success", response.data.message || "Purchase successful!", "success").then(() => location.reload());
-            } else {
-              Swal.fire("Error", response.data.message, "error");
-            }
-          }).catch(err => Swal.fire("Error", err.message, "error"));
-        }
+    filteredPlans() {
+      const q = this.planQuery.toLowerCase();
+      return this.currentPlans.filter((p) => {
+        if (this.planType !== 'all' && p._meta.type !== this.planType) return false;
+        return !q || String(p.plan_name).toLowerCase().indexOf(q) !== -1;
       });
     },
-    saveBeneficiary(event) {
-      if (event.target.checked && this.phone_number.length >= 10) {
-        Swal.fire({
-          title: "Beneficiary Name",
-          input: "text",
-          inputPlaceholder: "e.g. My Main Sim",
-          showCancelButton: true,
-        }).then(result => {
-          if (result.isConfirmed && result.value) {
-            let fd = new FormData();
-            fd.append("phone", this.phone_number);
-            fd.append("name", result.value);
-            axios.post("/saveBeneficiary", fd).then(res => {
-              if (res.data.success) Swal.fire("Saved!", "", "success");
-            });
-          }
-        });
+    selectedPlan() {
+      return this.currentPlans.find((p) => p.id == this.selectedPlanId) || null;
+    },
+    groupReadyCount() {
+      return this.group.filter(this.rowReady).length;
+    },
+    groupNetworkBreakdown() {
+      const out = {};
+      this.group.filter(this.rowReady).forEach((r) => {
+        const n = networkById(r.network_id);
+        if (!out[n.id]) out[n.id] = { id: n.id, name: n.name, count: 0, amount: 0 };
+        out[n.id].count++;
+        out[n.id].amount += Number(this.rowPlan(r).admin_price) || 0;
+      });
+      return Object.values(out);
+    },
+    total() {
+      if (this.mode === 'single') return this.selectedPlan ? Number(this.selectedPlan.admin_price) || 0 : 0;
+      return this.groupNetworkBreakdown.reduce((s, n) => s + n.amount, 0);
+    },
+    isReady() {
+      if (this.mode === 'single') return !!(this.network && this.selectedPlan && this.phoneValid);
+      return this.group.length > 0 && this.group.every(this.rowReady);
+    },
+    missingHint() {
+      if (this.mode === 'single') {
+        if (!this.network) return 'Choose a network';
+        if (!this.selectedPlan) return 'Pick a data plan';
+        if (!this.phoneValid) return 'Enter the recipient number';
+        return '';
       }
-    }
-  }
+      const pending = this.group.length - this.groupReadyCount;
+      return pending ? `Complete ${pending} recipient${pending === 1 ? '' : 's'}` : '';
+    },
+    ctaLabel() {
+      if (!this.isReady) return 'Buy data';
+      return `Pay ₦${fmt(this.total)}`;
+    },
+    sheetItems() {
+      if (this.mode === 'single') {
+        if (!this.selectedPlan) return [];
+        const items = [
+          { label: 'Network', value: this.networkName(this.network) },
+          { label: 'Plan', value: this.selectedPlan.plan_name },
+          { label: 'Recipient', value: formatPhone(this.phone) },
+        ];
+        if (this.knownBeneficiary) items.push({ label: 'Beneficiary', value: this.knownBeneficiary.name });
+        return items;
+      }
+      return [
+        { label: 'Recipients', value: String(this.groupReadyCount) },
+        ...this.groupNetworkBreakdown.map((n) => ({ label: n.name, value: `${n.count} × · ₦${fmt(n.amount)}` })),
+      ];
+    },
+    pastedNumbers() {
+      const seen = {};
+      return String(this.pasteText)
+        .split(/[\s,;]+/)
+        .map(normalizePhone)
+        .filter((p) => isValidPhone(p) && !seen[p] && (seen[p] = true));
+    },
+  },
+  watch: {
+    network(id) {
+      this.selectedPlanId = '';
+      this.planType = 'all';
+      this.planQuery = '';
+      if (id) this.loadPlans(id);
+    },
+    phone() {
+      if (!this.phoneValid) {
+        this.detected = null;
+        return;
+      }
+      const p = normalizePhone(this.phone);
+      this.detecting = true;
+      detectNetwork(p).then((id) => {
+        if (normalizePhone(this.phone) !== p) return; // user kept typing
+        this.detecting = false;
+        this.detected = id;
+        // Only fill the network in when the user hasn't chosen one; never silently override (ported numbers).
+        if (id && !this.network) this.network = id;
+      });
+    },
+  },
+  methods: {
+    fmt,
+    formatPhone,
+    normalize: normalizePhone,
+    validPhone: isValidPhone,
+    networkName(id) {
+      const n = networkById(id);
+      return n ? n.name : '';
+    },
+    netKey(id) {
+      const n = networkById(id);
+      return n ? n.key : '';
+    },
+    netMono(id) {
+      const n = networkById(id);
+      return n ? n.mono : '?';
+    },
+    initials(name) {
+      return String(name || '?').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+    },
+    samePhone(a, b) {
+      return !!a && !!b && normalizePhone(a) === normalizePhone(b);
+    },
+    plansFor(id) {
+      return (id && this.plansByNetwork[id]) || [];
+    },
+    loadPlans(id, force = false) {
+      if (!id || this.loading[id] || (this.plansByNetwork[id] && !force)) return;
+      this.$set(this.loading, id, true);
+      this.$set(this.planError, id, '');
+      axios
+        .get('/fetchplan/' + id)
+        .then((r) => {
+          const list = Array.isArray(r.data) ? r.data : [];
+          this.$set(this.plansByNetwork, id, list.map((p) => Object.assign({}, p, { _meta: parsePlan(p) })));
+        })
+        .catch(() => this.$set(this.planError, id, "We couldn't load plans."))
+        .then(() => this.$set(this.loading, id, false));
+    },
+    useBeneficiary(ben) {
+      this.phone = normalizePhone(ben.phone);
+      this.phoneTouched = true;
+    },
+
+    // ----- group -----
+    rowPlan(row) {
+      return this.plansFor(row.network_id).find((p) => p.id == row.plan_id) || null;
+    },
+    rowReady(row) {
+      return isValidPhone(row.phone) && !!row.network_id && !!this.rowPlan(row);
+    },
+    setRowNetwork(row, id) {
+      if (row.network_id == id) return;
+      row.network_id = id;
+      row.plan_id = '';
+      this.loadPlans(id);
+    },
+    onRowPhone(row) {
+      if (!isValidPhone(row.phone)) {
+        row.detected = null;
+        return;
+      }
+      const p = normalizePhone(row.phone);
+      row.detecting = true;
+      detectNetwork(p).then((id) => {
+        row.detecting = false;
+        if (normalizePhone(row.phone) !== p) return;
+        row.detected = id;
+        if (id && !row.network_id) this.setRowNetwork(row, id);
+      });
+    },
+    addRow(phone = '') {
+      const row = newRow(phone);
+      this.group.push(row);
+      if (phone) this.onRowPhone(row);
+      return row;
+    },
+    removeRow(i) {
+      if (this.group.length > 1) this.group.splice(i, 1);
+      else this.group.splice(0, 1, newRow());
+    },
+    importPasted() {
+      this.group = this.group.filter((r) => r.phone);
+      const existing = this.group.map((r) => normalizePhone(r.phone));
+      this.pastedNumbers.filter((p) => existing.indexOf(p) === -1).forEach((p) => this.addRow(p));
+      if (!this.group.length) this.group.push(newRow());
+      this.pasteText = '';
+      this.pasteOpen = false;
+    },
+
+    // ----- checkout -----
+    openCheckout() {
+      if (this.isReady) this.sheetOpen = true;
+    },
+    submitPurchase(pin) {
+      const fd = new FormData();
+      fd.append('pin', pin);
+      fd.append('purchase_type', this.mode);
+      let endpoint = '/buydata';
+
+      if (this.mode === 'single') {
+        fd.append('network', this.network);
+        fd.append('plan', this.selectedPlan.plan_id);
+        fd.append('phone_number', normalizePhone(this.phone));
+      } else {
+        endpoint = '/bulk_buydata';
+        const recipients = this.group.map((r) => ({
+          phone: normalizePhone(r.phone),
+          network: r.network_id,
+          plan: this.rowPlan(r).plan_id,
+        }));
+        fd.append('recipients', JSON.stringify(recipients));
+      }
+
+      return axios
+        .post(endpoint, fd)
+        .then((res) => {
+          const d = res.data || {};
+          if (!isSuccess(d)) return { ok: false, message: d.message || 'Transaction failed.' };
+          this.maybeSaveBeneficiary();
+          if (this.mode === 'group') {
+            return { ok: true, title: 'Group purchase complete', message: d.message, results: d.results || [] };
+          }
+          return {
+            ok: true,
+            message: d.message || `${this.selectedPlan.plan_name} sent to ${formatPhone(this.phone)}.`,
+          };
+        })
+        .catch((err) => ({ ok: false, message: errorMessage(err) }));
+    },
+    maybeSaveBeneficiary() {
+      if (this.mode !== 'single' || !this.saveBen || !this.benName || this.knownBeneficiary) return;
+      const fd = new FormData();
+      fd.append('phone', normalizePhone(this.phone));
+      fd.append('name', this.benName);
+      fd.append('type', 'data');
+      axios.post('/saveBeneficiary', fd).catch(() => {});
+    },
+    finish() {
+      this.sheetOpen = false;
+      window.location.reload();
+    },
+  },
 };
 </script>
 
+<style src="./purchase/purchase.css"></style>
+
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+.vx-step-bens { padding-bottom: 8px; }
+.vx-step-bens .vx-step-head { margin-bottom: 10px; }
 
-.purchase-page {
-  padding: 0;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  overflow-x: hidden;
-  --c-text-main: #0F172A;
-  --c-text-sec: #64748B;
-  --c-border: #E2E8F0;
-  --c-orange: #E85D04; 
-  --c-orange-light: #FFF1EB;
-  --c-green: #00BFA5; 
-  --c-green-light: #E0F2F1;
-  --c-yellow: #F7DC6F; 
-  --c-yellow-light: #FEF9E7;
-  --c-purple: #7D79D0; 
-  --c-purple-light: #EEEDF9;
-  --r-pill: 999px;
-  --r-card: 24px;
-  --r-input: 16px;
-  
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: var(--c-text-main);
-}
+/* Plans */
+.vx-plan-tools { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+.vx-plan-search .vx-input { padding-top: 12px; padding-bottom: 12px; font-size: .95rem; }
 
-.tabs-container {
-  background: white;
-  padding: 6px;
-  border-radius: var(--r-pill);
-  display: inline-flex;
-  border: 1px solid var(--c-border);
-  margin-bottom: 32px;
-}
-
-.tab {
-  padding: 10px 24px;
-  border-radius: var(--r-pill);
-  border: none;
-  background: transparent;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--c-text-sec);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.tab.active {
-  background: var(--c-text-main);
-  color: white;
-}
-
-.tab.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.coming-soon {
-  background: rgba(251, 145, 41, 0.1);
-  color: #fb9129;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 50px;
-  margin-left: 8px;
-}
-
-.grid-layout {
+.vx-plan-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 400px;
-  gap: 40px;
-  align-items: start;
-  width: 100%;
-}
-
-.form-section {
-  min-width: 0; /* Allow the form section to shrink correctly if needed */
-}
-
-.summary-column {
-  width: 380px;
-}
-
-.section-label {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--c-text-sec);
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-
-.input-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--c-text-main); }
-
-.beneficiary-section { margin-bottom: 20px; }
-.beneficiary-scroll {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin-bottom: 1rem;
-}
-
-.beneficiary-pills-container {
-  display: inline-flex;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 12px;
-  padding: 4px 0;
-  min-width: 100%;
-}
-
-.beneficiary-pill {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 16px 8px 8px;
-  background: white;
-  border: 1px solid var(--c-border);
-  border-radius: var(--r-pill);
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-
-.beneficiary-pill:hover { border-color: #5DADE2; transform: translateY(-1px); }
-.b-avatar {
-  width: 28px;
-  height: 28px;
-  background: #F1F5F9;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--c-text-sec);
-}
-.b-name { font-size: 13px; font-weight: 600; }
-
-.input-field {
-  width: 100%;
-  padding: 16px 20px;
-  font-size: 16px;
-  border: 1px solid var(--c-border);
-  border-radius: var(--r-input);
-  background: white;
-  transition: border-color 0.2s;
-  font-weight: 500;
-  color: var(--c-text-main);
-}
-.input-field:focus { outline: none; border-color: var(--c-orange); }
-
-.save-beneficiary-check {
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.save-beneficiary-check input { accent-color: var(--c-orange); width: 16px; height: 16px; }
-.save-beneficiary-check label { font-size: 14px; font-weight: 500; color: var(--c-text-sec); cursor: pointer; }
-
-.recipient-list-scroll {
-  max-height: 300px;
+  max-height: 460px;
   overflow-y: auto;
-  border: 1px solid var(--c-border);
-  border-radius: 20px;
-  background: white;
+  padding: 4px;
+  margin: -4px;
 }
 
-.recipient-list { overflow: hidden; }
-.recipient-header {
-  display: grid;
-  grid-template-columns: 2fr 1fr 40px;
-  gap: 16px;
-  padding: 12px 24px;
-  background: #F8FAFC;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--c-text-sec);
-}
-
-.recipient-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr 40px;
-  gap: 16px;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--c-border);
-  align-items: center;
-}
-.recipient-row:last-child { border-bottom: none; }
-
-.input-wrapper {
+.vx-plan {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.mobile-label {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--c-orange);
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
-}
-
-.field-icon {
-  font-size: 14px;
-  width: 24px;
-  text-align: center;
-}
-
-.table-input { border:none; background:transparent; font-weight:600; font-size:14px; width:100%; outline: none; }
-.table-select {
-  border: 1px solid var(--c-border);
-  background: #F8FAFC;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--c-text-main);
-  outline: none;
-  width: 100%;
-}
-.table-select:focus { border-color: var(--c-orange); background: white; }
-.accent-text { font-size:14px; font-weight:600; color:var(--c-orange); }
-.remove-icon { color: #EF4444; cursor: pointer; text-align: center; font-size: 20px; font-weight: 800; display: flex; align-items: center; justify-content: flex-end; }
-
-@media (max-width: 768px) {
-  .recipient-header { display: none !important; }
-  .recipient-row.stacked-mobile {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 20px;
-    background: #fcfcfd;
-    margin-bottom: 10px;
-    border: 1px solid var(--c-border);
-    border-radius: 16px;
-  }
-  .table-select, .table-input {
-    background: white;
-    border: 1px solid var(--c-border);
-    padding: 12px;
-    border-radius: 10px;
-  }
-  .remove-icon {
-    justify-content: center;
-    padding-top: 10px;
-    border-top: 1px dashed var(--c-border);
-    font-size: 14px;
-    margin-top: 5px;
-  }
-}
-
-.add-row-btn {
-  background: none;
-  border: 1px dashed var(--c-border);
-  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 108px;
   padding: 16px;
-  border-radius: var(--r-pill);
-  color: var(--c-text-sec);
-  font-weight: 600;
+  text-align: left;
+  background: #fff;
+  border: 1.5px solid var(--vx-line);
+  border-radius: 18px;
   cursor: pointer;
-  margin-top: 16px;
-  transition: all 0.2s;
+  font-family: inherit;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
 }
-.add-row-btn:hover { border-color: var(--c-green); color: var(--c-green); }
-
-#app .summary-card {
-  background: #001f3f !important;
-  color: #fff !important;
-  padding: 32px;
-  border-radius: 32px;
-  position: sticky;
-  top: 40px;
+.vx-plan:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -14px rgba(11, 22, 37, .35); }
+.vx-plan.on { border-color: var(--vx-navy); background: linear-gradient(160deg, #fff 40%, #FFF6EC); box-shadow: 0 0 0 4px rgba(0, 31, 63, .07); }
+.vx-plan.on::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--vx-navy) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 10px no-repeat;
 }
+.vx-plan-type { font-size: .64rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--vx-orange-2); background: #FFF3E6; padding: 2px 7px; border-radius: 6px; margin-bottom: 6px; }
+.vx-plan-size { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 500; letter-spacing: -.02em; color: var(--vx-ink); line-height: 1.15; word-break: break-word; }
+.vx-plan-valid { font-size: .78rem; color: var(--vx-sec); line-height: 1.3; }
+.vx-plan-price { margin-top: auto; padding-top: 8px; font-weight: 700; font-size: .95rem; color: var(--vx-ink); }
 
-.summary-row {
+/* Group */
+.vx-step-flat { padding-left: 0; }
+.vx-rows { display: flex; flex-direction: column; gap: 12px; }
+.vx-row {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-}
-.summary-value { font-weight: 700; color: #fff; }
-
-.total-section {
-  background: rgba(251, 145, 41, 0.1);
-  padding: 24px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1.5px solid var(--vx-line);
   border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
+  background: #fff;
+  transition: border-color .2s;
+}
+.vx-row.ready { border-color: rgba(31, 157, 87, .35); }
+.vx-row-top { display: flex; align-items: center; gap: 10px; }
+.vx-row-idx { width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; font-size: .75rem; font-weight: 700; background: #F3F3EF; color: var(--vx-sec); }
+.vx-row.ready .vx-row-idx { background: #1F9D57; color: #fff; }
+.vx-row-phone { flex: 1; min-width: 0; }
+.vx-row-phone .vx-input, .vx-row-plan .vx-input { padding: 12px 14px; font-size: .95rem; border-radius: 12px; }
+.vx-row-x { width: 36px; height: 36px; flex-shrink: 0; border: 0; border-radius: 50%; background: #FEF2F2; color: #DC2626; cursor: pointer; }
+.vx-row-x:hover { background: #FEE4E2; }
+.vx-row-plan { position: relative; }
+.vx-select { appearance: none; -webkit-appearance: none; padding-right: 90px !important; cursor: pointer; text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; }
+.vx-select:disabled { cursor: not-allowed; opacity: .7; }
+.vx-row-price { position: absolute; right: 38px; top: 50%; transform: translateY(-50%); font-weight: 700; font-size: .9rem; pointer-events: none; }
+
+.vx-row-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.vx-add {
+  flex: 1;
+  min-width: 160px;
+  display: inline-flex;
   align-items: center;
-  margin-top: 16px;
-  margin-bottom: 32px;
-}
-
-.total-label {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fb9129;
-}
-
-.total-amount {
-  font-size: 28px;
-  font-weight: 800;
-  color: #fb9129;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 18px;
-  background-color: var(--c-orange) !important;
-  color: white;
-  border: none;
-  border-radius: var(--r-pill);
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  transition: transform 0.1s, background-color 0.2s;
-  display: flex;
   justify-content: center;
-  align-items: center;
   gap: 8px;
+  padding: 14px;
+  border-radius: 999px;
+  border: 1.5px dashed rgba(11, 22, 37, .2);
+  background: transparent;
+  color: var(--vx-ink);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
 }
-.btn-primary:hover:not(:disabled) { background-color: #D35400; transform: scale(1.02); }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.vx-add:hover { border-color: var(--vx-orange); color: var(--vx-orange-2); background: #FFF8F0; }
+.vx-add.ghost { border-style: solid; border-color: var(--vx-line); color: var(--vx-sec); }
 
-.secure-text { text-align: center; margin-top: 16px; font-size: 12px; color: var(--c-text-sec); }
+.vx-paste { margin-top: 12px; }
+.vx-paste textarea { font-size: .95rem; resize: vertical; }
+.vx-paste-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.vx-paste-foot .vx-chip:disabled { opacity: .4; cursor: not-allowed; }
 
-@media (max-width: 1024px) {
-  .grid-layout { 
-    grid-template-columns: 100%; 
-    gap: 20px;
-  }
-  .summary-column {
-    width: 100%;
-    order: 1; /* Show summary at bottom on mobile */
-  }
-  .summary-card {
-    position: relative;
-    top: 0;
-    margin-bottom: 30px;
-  }
-}
-
-@media (max-width: 600px) {
-  .tabs-container {
-    display: flex;
-    width: 100%;
-    overflow-x: auto;
-  }
-  .tab {
-    flex: 1;
-    white-space: nowrap;
-    padding: 10px 15px;
-  }
-  .purchase-page {
-    padding: 0;
-  }
-  .summary-card, .form-section {
-    padding: 15px;
-  }
+@media (max-width: 575px) {
+  .vx-plan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .vx-plan { min-height: 100px; padding: 14px; }
+  .vx-plan-size { font-size: 1.2rem; }
+  .vx-row { padding: 12px; }
 }
 </style>

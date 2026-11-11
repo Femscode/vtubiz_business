@@ -1,166 +1,154 @@
 @extends('dashboard.master1')
-@section('header')
-@endsection
 
-<!--begin::Content wrapper-->
-@section('content')
-<div class="d-flex flex-column flex-column-fluid">
-
-
-    <!--begin::Content-->
-    <div id="kt_app_content" class="app-content  flex-column-fluid ">
-        <!--begin::Row-->
-        <div class="row g-5 g-xl-8">
-            <!--begin::Col-->
-            <div class="col-xl-12">
-
-                <!--begin::Misc Widget 1-->
-
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black' @if($user->total_spent < 10000) class='alert alert-warning' @else class='alert alert-dark' @endif>
-                        <h4>Starter</h4>
-                        <p>Requirement : Registration</p>
-                        <ul>
-                            <li>Free access to all data plans.</li>
-                        </ul>
-                </div>
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black'
-                    @if($user->total_spent >= 10000 && $user->total_spent < 50000)
-                        class='alert alert-warning'
-                        @else
-                        class='alert alert-dark'
-                        @endif>
-                        <h4>Enthusiast</h4>
-                        <p>Requirement : Perform transactions worth N10,000 and above</p>
-                        <ul>
-                            <li>Free access to all data plans</li>
-                            <li>Schedule Purchase</li>
-                            <li>Bulk Purchase</li>
-                        </ul>
-                </div>
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black'
-                    @if($user->total_spent >= 50000 && $user->total_spent < 200000)
-                        class='alert alert-warning'
-                        @else
-                        class='alert alert-dark'
-                        @endif>
-                        <h4>Loyal</h4>
-                        <p>Requirement : Perform transactions worth N50,000 and above</p>
-                        <ul>
-                            <li>Free access to all data plans</li>
-                            <li>Schedule Purchase</li>
-                            <li>Bulk Purchase</li>
-                            <li>Ability to create giveaways</li>
-                            <li>Free data worth 100MB weekly</li>
-                        </ul>
-                </div>
-
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black'
-                    @if($user->total_spent >= 200000 && $user->total_spent < 1000000)
-                        class='alert alert-warning'
-                        @else
-                        class='alert alert-dark'
-                        @endif>
-                        <h4>Pro</h4>
-                        <p>Requirement : Perform transactions worth N200,000 and above</p>
-                        <ul>
-                            <li>Free access to all data plans</li>
-                            <li>Schedule Purchase</li>
-                            <li>Bulk Purchase</li>
-                            <li>Ability to create and partake in giveaways</li>
-                            <li>Free data worth 200MB weekly</li>
-                            <li>Get all products at a reseller price</li>
-                        </ul>
-                </div>
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #856404;border:1px dashed black'
-                    @if($user->total_spent >= 1000000 && $user->total_spent < 5000000)
-                        class='alert alert-warning'
-                        @else
-                        class='alert alert-dark'
-                        @endif>
-                        <h4>Elite</h4>
-                        <p>Requirement : Perform transactions worth N500,000 and above</p>
-                        <ul>
-                            <li>Free access to all data plans</li>
-                            <li>Schedule Purchase</li>
-                            <li>Bulk Purchase</li>
-                            <li>Ability to create and partake in giveaways</li>
-                            <li>Free data worth 500MB weekly</li>
-                            <li>Get all products at a reseller price</li>
-                            <li>A free VTU Website</li>
-                        </ul>
-                </div>
-
-                <div style='font-size:17px; font-weight:300; border-top:10px solid #d4af37;border:1px dashed black'
-                    @if($user->total_spent >= 500000)
-                    class='alert alert-warning'
-                    @else
-                    class='alert alert-dark'
-                    @endif>
-                    <h4>Legend</h4>
-                    <p>Requirement : Perform transactions worth N1,000,000 and above</p>
-                    <ul>
-                        <li>Free access to all data plans</li>
-                        <li>Schedule Purchase</li>
-                        <li>Bulk Purchase</li>
-                        <li>Ability to create and partake in giveaways</li>
-                        <li>Free data worth 1GB weekly</li>
-                        <li>Get all products at a reseller price</li>
-                        <li>A free VTU Website</li>
-                        <li>Free data worth 1GB weekly</li>
-                        <li>Exclusive customer support</li>
-                        <li>Priority access to new features and services</li>
-                    </ul>
-                </div>
-
-
-
-
-
-
-
-
-            </div>
-            <!--end::Col-->
-
-        </div>
-        <!--end::Row-->
-    </div>
-    <!--end::Content-->
-</div>
-@endsection
-<!--end::Content wrapper-->
-
-
-
-@section('script')
-<script>
-    function confirmUpgrade() {
-        Swal.fire({
-            title: 'What does a business account entails?',
-            html: `
-        <ul>
-            <li>A free website.</li>
-            <li>Discount in all data plan prices.</li>
-            <li>Customizing your own data prices..</li>
-            <li>Email marketing.</li>
-        </ul>
-        <p style='color:red'>Please note: Upgrading to a business account incurs a charge of NGN3,500.</p>
-    `,
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, upgrade!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // User clicked "Yes, upgrade!" button, navigate to the upgrade page
-                window.location.href = "/upgrade/{{ $user->id }}";
-            }
-        });
-
-
-        // Prevent the default anchor tag behavior (navigation) until confirmation
-        return false;
+@php
+    $tiers = [
+        ['name' => "Starter", 'min' => 0, 'icon' => "fa-seedling", 'tone' => "t-ink", 'req' => "Registration", 'perks' => ["Access to all data plans"]],
+        ['name' => "Enthusiast", 'min' => 10000, 'icon' => "fa-star", 'tone' => "t-blue", 'req' => "₦10,000 in transactions", 'perks' => ["Access to all data plans", "Schedule purchases", "Bulk purchases"]],
+        ['name' => "Loyal", 'min' => 50000, 'icon' => "fa-heart", 'tone' => "t-pink", 'req' => "₦50,000 in transactions", 'perks' => ["Access to all data plans", "Schedule purchases", "Bulk purchases", "Create giveaways", "100MB free data weekly"]],
+        ['name' => "Pro", 'min' => 200000, 'icon' => "fa-rocket", 'tone' => "t-purple", 'req' => "₦200,000 in transactions", 'perks' => ["Access to all data plans", "Schedule purchases", "Bulk purchases", "Create and join giveaways", "200MB free data weekly", "Reseller prices on all products"]],
+        ['name' => "Elite", 'min' => 500000, 'icon' => "fa-gem", 'tone' => "t-teal", 'req' => "₦500,000 in transactions", 'perks' => ["Access to all data plans", "Schedule purchases", "Bulk purchases", "Create and join giveaways", "500MB free data weekly", "Reseller prices on all products", "A free VTU website"]],
+        ['name' => "Legend", 'min' => 1000000, 'icon' => "fa-crown", 'tone' => "t-amber", 'req' => "₦1,000,000 in transactions", 'perks' => ["Access to all data plans", "Schedule purchases", "Bulk purchases", "Create and join giveaways", "1GB free data weekly", "Reseller prices on all products", "A free VTU website", "Exclusive customer support", "Priority access to new features"]]
+    ];
+    $spent = (float) $user->total_spent;
+    $currentIdx = 0;
+    foreach ($tiers as $i => $t) {
+        if ($spent >= $t['min']) $currentIdx = $i;
     }
-</script>
+    $next = $tiers[$currentIdx + 1] ?? null;
+    $progress = $next ? min(100, round(($spent - $tiers[$currentIdx]['min']) / max(1, $next['min'] - $tiers[$currentIdx]['min']) * 100)) : 100;
+@endphp
+
+@section('header')
+<style>
+    .tier-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+    }
+
+    .tier {
+        position: relative;
+    }
+
+    .tier.locked {
+        opacity: .62;
+    }
+
+    .tier.current {
+        border-color: var(--primary-dark);
+        box-shadow: 0 0 0 3px rgba(0, 31, 63, .08), var(--shadow-card);
+        opacity: 1;
+    }
+
+    .tier-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .tier-top .ic {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+    }
+
+    .tier-top b {
+        display: block;
+        font-family: 'Fraunces', serif;
+        font-weight: 500;
+        font-size: 1.2rem;
+    }
+
+    .tier-top small {
+        color: var(--text-secondary);
+        font-size: .8rem;
+    }
+
+    .tier ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+    }
+
+    .tier li {
+        display: flex;
+        gap: 8px;
+        font-size: .88rem;
+        color: #374151;
+    }
+
+    .tier li i {
+        color: var(--accent-green);
+        margin-top: 4px;
+        font-size: .75rem;
+    }
+
+    .progress-v {
+        height: 8px;
+        background: rgba(255, 255, 255, .12);
+        border-radius: 99px;
+        overflow: hidden;
+        margin: 16px 0 8px;
+    }
+
+    .progress-v span {
+        display: block;
+        height: 100%;
+        background: var(--brand-orange);
+        border-radius: 99px;
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="pg">
+    <div class="pg-head">
+        <div>
+            <h1>Your <em>rewards</em></h1>
+            <p>The more you transact, the more you unlock.</p>
+        </div>
+    </div>
+
+    <div class="hero-v" style="margin-bottom:20px">
+        <div class="k">Current level</div>
+        <div class="v" style="font-size:2rem;margin-top:6px">{{ $tiers[$currentIdx]['name'] }}</div>
+        <div class="progress-v"><span style="width: {{ $progress }}%"></span></div>
+        <div style="color:rgba(255,255,255,.7);font-size:.88rem">
+            @if($next)
+                ₦{{ number_format(max(0, $next['min'] - $spent)) }} more to reach <b style="color:#fff">{{ $next['name'] }}</b>
+            @else
+                You've reached the top level. Thank you!
+            @endif
+        </div>
+    </div>
+
+    <div class="tier-grid">
+        @foreach($tiers as $i => $t)
+            <div class="panel tier {{ $i === $currentIdx ? 'current' : ($i > $currentIdx ? 'locked' : '') }}">
+                <div class="tier-top">
+                    <span class="ic {{ $t['tone'] }}"><i class="fa-solid {{ $t['icon'] }}"></i></span>
+                    <div>
+                        <b>{{ $t['name'] }}</b>
+                        <small>{{ $t['req'] }}</small>
+                    </div>
+                    @if($i === $currentIdx)
+                        <span class="badge-v ok" style="margin-left:auto">You</span>
+                    @elseif($i > $currentIdx)
+                        <i class="fa-solid fa-lock" style="margin-left:auto;color:var(--text-light)"></i>
+                    @endif
+                </div>
+                <ul>
+                    @foreach($t['perks'] as $perk)
+                        <li><i class="fa-solid fa-check"></i>{{ $perk }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endforeach
+    </div>
+</div>
 @endsection
